@@ -1,7 +1,5 @@
 package uk.ac.qub.eeecs.game.spaceDemo;
 
-import java.util.Random;
-
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.particle.Emitter;
 import uk.ac.qub.eeecs.gage.engine.particle.ParticleSystemManager;
@@ -76,12 +74,6 @@ public class Seeker extends SpaceEntity {
 
         // Define the appearance of the seeker
         mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Spaceship2");
-
-        //Sets a random width and height of the aiSpaceship between a minimum of 25 and maximum of 50
-        Random rand = new Random();
-        int size = rand.nextInt(25)+25; //Generates random number between 0 and 25, then adds 25 to it. (min=25, max=50)
-        setWidth(size);
-        setHeight(size);
 
         // Create an offset for the movement emitter based on the size of the spaceship
         movementEmitterOffset = new Vector2(-DEFAULT_RADIUS, 0.0f);
