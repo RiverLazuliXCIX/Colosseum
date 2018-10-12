@@ -38,8 +38,8 @@ public class SpaceshipDemoScreen extends GameScreen {
     /**
      * Width and height of the level
      */
-    private final float LEVEL_WIDTH = 1000.0f;
-    private final float LEVEL_HEIGHT = 1000.0f;
+    private final float LEVEL_WIDTH = 2000.0f; // User Story 7 - Double the size of the level
+    private final float LEVEL_HEIGHT = 2000.0f; // User Story 7 - Double the size of the level
 
     /**
      * Define a viewport for the game objects (spaceships, asteroids)
@@ -59,9 +59,9 @@ public class SpaceshipDemoScreen extends GameScreen {
     /**
      * Define the number of objects in the game world
      */
-    private final int NUM_ASTEROIDS = 20;
-    private final int NUM_SEEKERS = 20;
-    private final int NUM_TURRETS = 10;
+    private final int NUM_ASTEROIDS = 80; // User Story 7: Four times as many asteroids
+    private final int NUM_SEEKERS = 80; // // User Story 7: Four times as many seekers
+    private final int NUM_TURRETS = 40; // // User Story 7: Four times as many turrets
 
     /**
      * Define storage for the space entities (non-player)
