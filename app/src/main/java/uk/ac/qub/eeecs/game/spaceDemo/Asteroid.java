@@ -36,7 +36,7 @@ public class Asteroid extends SpaceEntity {
      * @param gameScreen Gamescreen to which asteroid belongs
      */
     public Asteroid(float startX, float startY, GameScreen gameScreen) {
-        super(startX, startY, DEFAULT_RADIUS*1.0f, DEFAULT_RADIUS*2.0f, null, gameScreen);
+        super(startX, startY, DEFAULT_RADIUS*2.0f, DEFAULT_RADIUS*2.0f, null, gameScreen);
 
         Random random = new Random();
         float aMin = 25;
