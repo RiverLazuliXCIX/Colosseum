@@ -36,9 +36,13 @@ public class Asteroid extends SpaceEntity {
      * @param gameScreen Gamescreen to which asteroid belongs
      */
     public Asteroid(float startX, float startY, GameScreen gameScreen) {
-        super(startX, startY, DEFAULT_RADIUS*2.0f, DEFAULT_RADIUS*2.0f, null, gameScreen);
+        super(startX, startY, DEFAULT_RADIUS*1.0f, DEFAULT_RADIUS*2.0f, null, gameScreen);
 
         Random random = new Random();
+        float aMin = 25;
+        float aMax = 50;
+        setWidth(random.nextFloat()*(aMax-aMin)+aMin);
+        setHeight(random.nextFloat()*(aMax-aMin)+aMin);
 
         mBitmap = gameScreen.getGame().getAssetManager()
                 .getBitmap(random.nextBoolean() ? "Asteroid1" : "Asteroid2");
