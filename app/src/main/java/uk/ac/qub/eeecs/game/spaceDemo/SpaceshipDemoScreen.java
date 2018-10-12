@@ -151,6 +151,9 @@ public class SpaceshipDemoScreen extends GameScreen {
                 LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
                 .getAssetManager().getBitmap("SpaceBackground"), this);
 
+        //Load in background music for User Story 12
+        getGame().getAssetManager().loadAndAddMusic("SpaceBgMusic", "sound/SpaceMusic.mp3");
+
         // Create the player spaceship
         mPlayerSpaceship = new PlayerSpaceship(100, 100, this);
 
@@ -267,13 +270,13 @@ public class SpaceshipDemoScreen extends GameScreen {
     }
 
     /**
-     * Play background music,
+     * Play background music - updated for User Story 12
      */
     private void playBackgroundMusic() {
         AudioManager audioManager = getGame().getAudioManager();
         if(!audioManager.isMusicPlaying())
             audioManager.playMusic(
-                    getGame().getAssetManager().getMusic("SpaceBackgroundMusic"));
+                    getGame().getAssetManager().getMusic("SpaceBgMusic"));
     }
 
     /**
