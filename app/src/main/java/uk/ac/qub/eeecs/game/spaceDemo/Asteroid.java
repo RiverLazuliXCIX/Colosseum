@@ -38,11 +38,13 @@ public class Asteroid extends SpaceEntity {
     public Asteroid(float startX, float startY, GameScreen gameScreen) {
         super(startX, startY, DEFAULT_RADIUS*2.0f, DEFAULT_RADIUS*2.0f, null, gameScreen);
 
+        //User Story 2 Asteroid Size Variety [D1]
         Random random = new Random();
-        float aMin = 25;
-        float aMax = 50;
-        setWidth(random.nextFloat()*(aMax-aMin)+aMin);
-        setHeight(random.nextFloat()*(aMax-aMin)+aMin);
+        float aMin = 25; //Sets a minimum size of the asteroid
+        float aMax = 50; //Sets a maximum size of the asteroid
+        setWidth(random.nextFloat()*(aMax-aMin)+aMin); //Sets a width that will be randomly between the max and min sizes
+        setHeight(random.nextFloat()*(aMax-aMin)+aMin); //Sets a height that will be randomly between the max and min sizes
+        //Allows for different width and heights of an asteroid that is randomly assigned, not a perfect "square" each time.
 
         mBitmap = gameScreen.getGame().getAssetManager()
                 .getBitmap(random.nextBoolean() ? "Asteroid1" : "Asteroid2");

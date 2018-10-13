@@ -300,6 +300,28 @@ public class SpaceshipDemoScreen extends GameScreen {
         else if (playerBound.getTop() > LEVEL_HEIGHT)
             mPlayerSpaceship.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
 
+        //User Story 9: Keeping Spaceships in the World [D3]
+        for(int entityIdx = 0; entityIdx < mSpaceEntities.size(); entityIdx++) {
+            //Setup for loop which iterates through all Space entities (not just seekers, also asteroids and turrets)
+           SpaceEntity entityFindSeeker = mSpaceEntities.get(entityIdx);
+           //Create iteration of Space entity "entityFindSeeker" to store a result for this loop
+           BoundingBox seekerBound = entityFindSeeker.getBound();
+           //Gets the boundaries of the seeker (and also the other Space entities)
+
+            if (seekerBound.getLeft() < 0)
+                entityFindSeeker.position.x -= seekerBound.getLeft();
+            else if (seekerBound.getRight() > LEVEL_WIDTH)
+                entityFindSeeker.position.x -= (seekerBound.getRight() - LEVEL_WIDTH);
+            //Ensures the Space entities cannot leave the left or right side of the level
+
+            if (seekerBound.getBottom() < 0)
+                entityFindSeeker.position.y -= seekerBound.getBottom();
+            else if (seekerBound.getTop() > LEVEL_HEIGHT)
+                entityFindSeeker.position.y -= (seekerBound.getTop() - LEVEL_HEIGHT);
+            //Ensures the space entities cannot leave the top or bottom of the level
+
+        }
+
         // Focus the layer viewport on the player
         mSpaceLayerViewport.x = mPlayerSpaceship.position.x;
         mSpaceLayerViewport.y = mPlayerSpaceship.position.y;
