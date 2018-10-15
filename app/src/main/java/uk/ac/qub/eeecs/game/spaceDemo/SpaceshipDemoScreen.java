@@ -55,7 +55,8 @@ public class SpaceshipDemoScreen extends GameScreen {
      * Define the player's spaceship
      */
     private PlayerSpaceship mPlayerSpaceship;
-
+    private boolean engineStartPlayed = false; // User Story 13: Stores whether engine start sound has played.(Preventing looping on game state update)
+    private boolean engineStopPlayed = false; // User Story 13: Stores whether engine stop sound has played.(Preventing looping on game state update)
     /**
      * Define the number of objects in the game world
      */
@@ -156,6 +157,10 @@ public class SpaceshipDemoScreen extends GameScreen {
 
         // Create the player spaceship
         mPlayerSpaceship = new PlayerSpaceship(100, 100, this);
+
+        //User Story 13: Loads and adds start and stop movement sounds to space game asset manager on object setup.
+        getGame().getAssetManager().loadAndAddSound("EngineStart", "sound/EngineStart.wav");
+        getGame().getAssetManager().loadAndAddSound("EngineStop", "sound/EngineStop.wav");
 
         // Create storage for the space entities
         mSpaceEntities = new ArrayList<>(NUM_ASTEROIDS+NUM_SEEKERS+NUM_TURRETS);
@@ -396,6 +401,21 @@ public class SpaceshipDemoScreen extends GameScreen {
 
         // Update the bar's displayed value
         mMovementSpeedBar.update(elapsedTime);
+
+        // User Story 13: Start and Stop Movement Sounds [D2]---------------------------------------
+        // If the speed bar increases from 0, and engineStartPlayed is false, a sound is played
+        if (mMovementSpeedBar.getValue()>0 && !engineStartPlayed){
+            getGame().getAssetManager().getSound("EngineStart").play();
+            engineStartPlayed=true; // Setting it to true prevents sound from looping on update
+            engineStopPlayed=false; // Setting it to false allows the stop sound to play again, now the engine has started.
+        }
+        // If the speed bar reads 0 after previously playing the start sound, the stop sound plays.
+        if(mMovementSpeedBar.getValue()==0 && !engineStopPlayed && engineStartPlayed){
+            getGame().getAssetManager().getSound("EngineStop").play();
+            engineStopPlayed=true; // Setting it to true prevents sound from looping on update
+            engineStartPlayed=false; // Setting it to false allows the start sound to play again, now the engine has stopped.
+        }
+        // -----------------------------------------------------------------------------------------
     }
 
     // /////////////////////////////////////////////////////////////////////////
