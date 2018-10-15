@@ -17,6 +17,16 @@
     },
     {
       "type": "Bitmap",
+      "name": "Asteroid3",
+      "file": "img/Asteroid3.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Asteroid4",
+      "file": "img/Asteroid4.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "Spaceship1",
       "file": "img/Spaceship1.png"
     },

@@ -47,7 +47,7 @@ public class Asteroid extends SpaceEntity {
         //Allows for different width and heights of an asteroid that is randomly assigned, not a perfect "square" each time.
 
         mBitmap = gameScreen.getGame().getAssetManager()
-                .getBitmap(random.nextBoolean() ? "Asteroid1" : "Asteroid2");
+                .getBitmap("Asteroid" + Integer.toString(random.nextInt(4) + 1));
 
         mRadius = DEFAULT_RADIUS;
         mMass = 1000.0f;
