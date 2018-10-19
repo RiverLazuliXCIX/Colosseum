@@ -2,9 +2,13 @@ package uk.ac.qub.eeecs.game.platformDemo;
 
 import java.util.List;
 
+import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.animation.Animation;
 import uk.ac.qub.eeecs.gage.engine.animation.AnimationManager;
+import uk.ac.qub.eeecs.gage.engine.audio.AudioManager;
+import uk.ac.qub.eeecs.gage.engine.audio.Sound;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.util.CollisionDetector;
 import uk.ac.qub.eeecs.gage.util.CollisionDetector.CollisionType;
@@ -100,6 +104,7 @@ public class Player extends Sprite {
         mAnimationManager.addAnimation("txt/animation/AdventurerRunning.JSON");
         mAnimationManager.addAnimation("txt/animation/AdventurerJumping.JSON");
         mAnimationManager.setCurrentAnimation("AdventurerIdle");
+
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -142,6 +147,8 @@ public class Player extends Sprite {
 
             // Play the jump animation
             mAnimationManager.play("AdventurerJumping", elapsedTime);
+            //getAssetManager().getSound("JumpSound").play();
+
         }
 
         // Call the sprite's update method to apply the defined accelerations

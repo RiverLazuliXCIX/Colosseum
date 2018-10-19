@@ -13,6 +13,7 @@ import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.BoundingBox;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.gage.engine.AssetManager;
 
 /**
  * A simple platform-style demo that generates a number of platforms and
@@ -57,6 +58,7 @@ public class PlatformDemoScreen extends GameScreen {
      * Define the player
      */
     private Player mPlayer;
+    private boolean isSoundPlaying;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -72,6 +74,10 @@ public class PlatformDemoScreen extends GameScreen {
 
         // Load in the assets used by this layer
         mGame.getAssetManager().loadAssets("txt/assets/PlatformDemoScreenAssets.JSON");
+
+        //User Story 24: Loads JumpSound into AssetManager, and creates a value to show that JUMPSOUND is not playing
+        mGame.getAssetManager().loadAndAddSound("JumpSound", "sound/JumpSound.wav");
+        isSoundPlaying = false;
 
         // Create the layer viewport used to display the platforms (and other game
         // objects). The default, inherited, layer viewport will be used to display
@@ -148,6 +154,16 @@ public class PlatformDemoScreen extends GameScreen {
         // Update the player
         mPlayer.update(elapsedTime, moveLeft.isPushed(),
                 moveRight.isPushed(), jumpUp.isPushed(), mPlatforms);
+
+        //If player jumps, play sound
+        if (mPlayer.velocity.y > 20 && (!isSoundPlaying)) {
+            mGame.getAssetManager().getSound("JumpSound").play();
+            isSoundPlaying = true;
+        }
+
+        if (mPlayer.velocity.y < 20) {
+            isSoundPlaying = false;
+        }
 
         // Ensure the player cannot leave the confines of the world
         BoundingBox playerBound = mPlayer.getBound();
