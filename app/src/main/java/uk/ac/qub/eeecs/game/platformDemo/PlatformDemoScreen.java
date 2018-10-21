@@ -192,6 +192,8 @@ public class PlatformDemoScreen extends GameScreen {
         else if (playerBound.getTop() > LEVEL_HEIGHT)
             mPlayer.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
 
+        checkOverLapping();
+
         // Focus the layer viewport on the player's x location
         mPlatformLayerViewport.x = mPlayer.position.x;
 
