@@ -11,6 +11,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.BoundingBox;
+import uk.ac.qub.eeecs.gage.util.CollisionDetector;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
@@ -134,6 +135,20 @@ public class PlatformDemoScreen extends GameScreen {
                     platformWidth : platformWidth + random.nextFloat()*platformWidth);
         }
     }
+
+    //User Story 18: Detecting Overlapping Platforms - Dearbhaile.
+    public boolean checkOverLapping() {
+        boolean isOverlapping = false;
+            for (int i = 0; i < mPlatforms.size(); i++) {
+                if (CollisionDetector.isCollision(mPlatforms.get(i).getBound(), mPlatforms.get(mPlatforms.size() - 1).getBound())) {
+                    isOverlapping = true;
+                    break;
+                }
+            }
+            return isOverlapping;
+        }
+
+
 
     // /////////////////////////////////////////////////////////////////////////
     // Update and Draw
