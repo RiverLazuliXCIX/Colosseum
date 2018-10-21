@@ -63,6 +63,7 @@ public class SpaceshipDemoScreen extends GameScreen {
     private final int NUM_ASTEROIDS = 80; // User Story 7: Four times as many asteroids
     private final int NUM_SEEKERS = 80; // // User Story 7: Four times as many seekers
     private final int NUM_TURRETS = 40; // // User Story 7: Four times as many turrets
+    private final int NUM_AVOIDERS = 20; // User story 10: Sets number of avoiders to include in the game world
 
     /**
      * Define storage for the space entities (non-player)
@@ -163,7 +164,7 @@ public class SpaceshipDemoScreen extends GameScreen {
         getGame().getAssetManager().loadAndAddSound("EngineStop", "sound/EngineStop.wav");
 
         // Create storage for the space entities
-        mSpaceEntities = new ArrayList<>(NUM_ASTEROIDS+NUM_SEEKERS+NUM_TURRETS);
+        mSpaceEntities = new ArrayList<>(NUM_ASTEROIDS+NUM_SEEKERS+NUM_TURRETS+NUM_AVOIDERS);
 
         // Create a number of randomly positioned asteroids
         Random random = new Random();
@@ -174,6 +175,11 @@ public class SpaceshipDemoScreen extends GameScreen {
         // Create a number of randomly positioned AI controlled seekers
         for (int idx = 0; idx < NUM_SEEKERS; idx++)
             mSpaceEntities.add(new Seeker(random.nextFloat() * LEVEL_WIDTH,
+                    random.nextFloat() * LEVEL_HEIGHT, this));
+
+        // User Story 10: Create a number of randomly positioned AI controlled avoiders
+        for (int idx = 0; idx < NUM_AVOIDERS; idx++)
+            mSpaceEntities.add(new Avoider(random.nextFloat() * LEVEL_WIDTH,
                     random.nextFloat() * LEVEL_HEIGHT, this));
 
         // Create a number of randomly positioned AI controlled turrets
