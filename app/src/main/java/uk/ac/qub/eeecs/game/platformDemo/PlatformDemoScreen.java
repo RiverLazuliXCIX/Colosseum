@@ -8,6 +8,7 @@ import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.audio.AudioManager;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.BoundingBox;
@@ -61,6 +62,8 @@ public class PlatformDemoScreen extends GameScreen {
     private Player mPlayer;
     private boolean isSoundPlaying;
 
+    private AudioManager am;
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -79,6 +82,10 @@ public class PlatformDemoScreen extends GameScreen {
         //User Story 24: Loads JumpSound into AssetManager, and creates a value to show that JUMPSOUND is not playing
         mGame.getAssetManager().loadAndAddSound("JumpSound", "sound/JumpSound.wav");
         isSoundPlaying = false;
+
+        // US23: Loads background music to the asset manager and creates an audio manager to play/pause/resume/stop music
+        mGame.getAssetManager().loadAndAddMusic("BckgrndMsc","sound/PlatformBckgrndMsc.mp3");
+        am = getGame().getAudioManager();
 
         // Create the layer viewport used to display the platforms (and other game
         // objects). The default, inherited, layer viewport will be used to display
@@ -148,6 +155,18 @@ public class PlatformDemoScreen extends GameScreen {
             return isOverlapping;
         }
 
+    // US23: Checks if the music is already playing before playing it
+    // I believe that something happens to the game's audio manager (destroyed/disposed) whenever
+    // the song finishes playing. The song ending will then cause the game to crash without
+    // some exception handling. Until a fix is found, this is in place.
+    public void playBckgrndMsc() {
+        try {
+            if (!am.isMusicPlaying()) {
+                am.playMusic(getGame().getAssetManager().getMusic("BckgrndMsc"));
+            }
+        } catch (Exception ex) {
+        }
+    }
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -161,6 +180,9 @@ public class PlatformDemoScreen extends GameScreen {
      */
     @Override
     public void update(ElapsedTime elapsedTime) {
+
+        // US23
+        playBckgrndMsc();
 
         // Update the touch buttons checking for player input
         for (PushButton control : mControls)
@@ -231,4 +253,31 @@ public class PlatformDemoScreen extends GameScreen {
         for (PushButton control : mControls)
             control.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
+
+
+    // US23 Pause, Resume, and Stop music when required
+    @Override
+    public void pause() {
+        try {
+            am.pauseMusic();
+        } catch (Exception ex) {
+        }
+    }
+
+    @Override
+    public void resume() {
+        try {
+            am.resumeMusic();
+        } catch (Exception ex) {
+        }
+    }
+
+    @Override
+    public void dispose() {
+        try {
+            am.stopMusic();
+        } catch (Exception ex) {
+        }
+    }
+
 }
