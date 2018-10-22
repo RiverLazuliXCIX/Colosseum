@@ -40,11 +40,15 @@ public class Player extends Sprite {
      * Acceleration with which the player can move along the x-axis
      */
     private final float RUN_ACCELERATION = 150.0f;
+    //User Story 20 variable for boosted running movement
+    private final float RUN_ACCELERATION_BOOST = 300.0f;
 
     /**
      * Maximum velocity of the player along the x-axis
      */
     private final float MAX_X_VELOCITY = 200.0f;
+    //User Story 20 variable for boosted running movement
+    private final float MAX_X_VELOCITY_BOOST = 400.0f;
 
     /**
      * Scale factor that is applied to the x-velocity when the player is not
@@ -57,6 +61,8 @@ public class Player extends Sprite {
      * the scale factor applied to the x velocity when the player jumps
      */
     private final float JUMP_Y_VELOCITY = 450.0f;
+    //User Story 20 variable for boosted jumping movement
+    private final float JUMP_Y_VELOCITY_BOOST = 600.0f;
     private final float JUMP_X_MULTIPLIER = 10.0f;
 
     /**
@@ -126,38 +132,19 @@ public class Player extends Sprite {
         // Apply gravity to the y-axis acceleration
         acceleration.y = GRAVITY;
 
-        // Depending upon the left and right movement touch controls set an
-        // appropriate x-acceleration. If the user does not want to move left or
-        // right, then the x-acceleration is zero and the velocity decays towards zero.
-        if (moveLeft && !moveRight) {
-            acceleration.x = -RUN_ACCELERATION;
-        } else if (moveRight && !moveLeft) {
-            acceleration.x = RUN_ACCELERATION;
-        } else {
-            acceleration.x = 0.0f;
-            velocity.x *= RUN_DECAY;
-        }
-
-        // Check if the user wants to and can jump
-        if (jumpUp && (velocity.y > -JUMP_VELOCITY_THRESHOLD
-                && velocity.y < JUMP_VELOCITY_THRESHOLD)) {
-            // Provide a suitable velocity boost
-            velocity.y = JUMP_Y_VELOCITY;
-            velocity.x *= JUMP_X_MULTIPLIER;
-
-            // Play the jump animation
-            mAnimationManager.play("AdventurerJumping", elapsedTime);
-            //getAssetManager().getSound("JumpSound").play();
-
-        }
+        //User Story 20 - Status of powerUp, default set to false until User Story 21 is implemented
+        boolean powerUpStatus = true;
+        //Calling method for User Story 20
+        powerUpMovement(powerUpStatus, moveLeft, moveRight);
+        //Calling method for User Story 20
+        powerUpJump(powerUpStatus, jumpUp, elapsedTime);
 
         // Call the sprite's update method to apply the defined accelerations
         // and velocities to provide a new position.
         super.update(elapsedTime);
 
-        // The player is constrained by a max x-velocity, test this is not exceeded.
-        if (Math.abs(velocity.x) > MAX_X_VELOCITY)
-            velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
+        //Calling method for User Story 20
+        powerUpMaxVelocity(powerUpStatus);
 
         // Check that our new position has not collided with any of
         // the defined platforms. If so, then remove any overlap and
@@ -187,6 +174,70 @@ public class Player extends Sprite {
         // Update the current animation
         mAnimationManager.update(elapsedTime);
     }
+
+
+    //User Story 20 method 'powerUpMovement'
+    private void powerUpMovement(boolean powerUpStatus, boolean moveLeft, boolean moveRight){
+        // Depending upon the left and right movement touch controls set an
+        // appropriate x-acceleration. If the user does not want to move left or
+        // right, then the x-acceleration is zero and the velocity decays towards zero.
+
+        //If the power up is active, then run accelaration is boosted, else it is normal values.
+        if(powerUpStatus) {
+            if (moveLeft && !moveRight) {
+                acceleration.x = -RUN_ACCELERATION_BOOST;
+            } else if (moveRight && !moveLeft) {
+                acceleration.x = RUN_ACCELERATION_BOOST;
+            } else {
+                acceleration.x = 0.0f;
+                velocity.x *= RUN_DECAY;
+            }
+        } else if(!powerUpStatus) {
+            if (moveLeft && !moveRight) {
+                acceleration.x = -RUN_ACCELERATION;
+            } else if (moveRight && !moveLeft) {
+                acceleration.x = RUN_ACCELERATION;
+            } else {
+                acceleration.x = 0.0f;
+                velocity.x *= RUN_DECAY;
+            }
+        }
+    }
+
+    //User Story 20 method 'powerUpJump'
+    private void powerUpJump(boolean powerUpStatus, boolean jumpUp, ElapsedTime elapsedTime){
+        // Check if the user wants to and can jump
+        if (jumpUp && (velocity.y > -JUMP_VELOCITY_THRESHOLD && velocity.y < JUMP_VELOCITY_THRESHOLD)) {
+            // Provide a suitable velocity boost
+            //If the power up is active, then jump velocity is boosted, else it is normal values.
+            if(powerUpStatus){
+                velocity.y = JUMP_Y_VELOCITY_BOOST;
+            } else if(!powerUpStatus){
+                velocity.y = JUMP_Y_VELOCITY;
+            }
+            velocity.x *= JUMP_X_MULTIPLIER;
+
+            // Play the jump animation
+            mAnimationManager.play("AdventurerJumping", elapsedTime);
+        }
+    }
+
+    //User Story 20 method 'powerUpMaxVelocity'
+    private void powerUpMaxVelocity(boolean powerUpStatus){
+        // The player is constrained by a max x-velocity, test this is not exceeded.
+        //If the power up is active, the max velocity is boosted, else it is normal values.
+        if(powerUpStatus)
+        {
+            if (Math.abs(velocity.x) > MAX_X_VELOCITY_BOOST) {
+                velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY_BOOST;
+            }
+        } else if(!powerUpStatus){
+            if (Math.abs(velocity.x) > MAX_X_VELOCITY) {
+                velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
+            }
+        }
+    }
+
 
     /**
      * Check for and then resolve any collision between the player and the
