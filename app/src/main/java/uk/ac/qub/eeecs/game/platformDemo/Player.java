@@ -127,16 +127,16 @@ public class Player extends Sprite {
      * @param platforms   Array of platforms in the world
      */
     public void update(ElapsedTime elapsedTime, boolean moveLeft,
-                       boolean moveRight, boolean jumpUp, List<Platform> platforms) {
+                       boolean moveRight, boolean jumpUp, List<Platform> platforms, boolean powerUpStatus) {
 
         // Apply gravity to the y-axis acceleration
         acceleration.y = GRAVITY;
 
-        //User Story 20 - Status of powerUp, default set to false until User Story 21 is implemented
-        boolean powerUpStatus = true;
-        //Calling method for User Story 20
+        //User Story 21 - Scott - powerUpStatus should be defaulted false until pressed
+        //When the powerUp button is held down, the powerUpStatus is true until the player lets go
+        //Calling method for User Story 20 - Scott
         powerUpMovement(powerUpStatus, moveLeft, moveRight);
-        //Calling method for User Story 20
+        //Calling method for User Story 20 -  Scott
         powerUpJump(powerUpStatus, jumpUp, elapsedTime);
 
         // Call the sprite's update method to apply the defined accelerations

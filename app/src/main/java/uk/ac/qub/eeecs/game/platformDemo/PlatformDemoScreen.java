@@ -47,8 +47,9 @@ public class PlatformDemoScreen extends GameScreen {
 
     /**
      * Create three simple touch controls for player input
+     * Create a powerUp button for User Story 21
      */
-    private PushButton moveLeft, moveRight, jumpUp;
+    private PushButton moveLeft, moveRight, jumpUp, powerUp;
     private List<PushButton> mControls;
 
     /**
@@ -109,7 +110,10 @@ public class PlatformDemoScreen extends GameScreen {
         jumpUp = new PushButton((layerWidth - 35.0f), 30.0f, 50.0f, 50.0f,
                 "UpArrow", "UpArrowSelected", this);
         mControls.add(jumpUp);
-
+        //User story 21 - Scott
+        powerUp = new PushButton((layerWidth - 100.0f), 30.0f, 50.0f, 50.0f,
+                "PowerUp", "PowerUpSelected", this);
+        mControls.add(powerUp);
         // Create and position the game objects (relative to the platform viewport)
 
         // Create the player
@@ -188,9 +192,9 @@ public class PlatformDemoScreen extends GameScreen {
         for (PushButton control : mControls)
             control.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        // Update the player
+        // Update the player - User story 21 Added powerUp button - Scott
         mPlayer.update(elapsedTime, moveLeft.isPushed(),
-                moveRight.isPushed(), jumpUp.isPushed(), mPlatforms);
+                moveRight.isPushed(), jumpUp.isPushed(), mPlatforms, powerUp.isPushed());
 
         //If player jumps, play sound
         if (mPlayer.velocity.y > 20 && (!isSoundPlaying)) {

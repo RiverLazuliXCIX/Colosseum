@@ -30,6 +30,16 @@
       "name": "LeftArrowSelected",
       "file": "img/LeftArrowSelected.png"
     },
+    {//User story 21 Scott
+      "type": "Bitmap",
+      "name": "PowerUp",
+      "file": "img/PowerUp.PNG"
+    },
+    {//User story 21 Scott
+      "type": "Bitmap",
+      "name": "PowerUpSelected",
+      "file": "img/PowerUpSelected.png"
+    },
     {
       "type": "Bitmap",
       "name": "UpArrow",
