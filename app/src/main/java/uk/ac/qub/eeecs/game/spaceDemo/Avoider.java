@@ -84,7 +84,10 @@ public class Avoider extends SpaceEntity {
 
         // Define the appearance of the Avoider Spaceship
         // The avoider spaceship image has been set to Spaceship3 for the purpose of behaviour testing and can be changed to something different later with further implementations of user stories.
-        mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Spaceship3");
+        //Story 5: AI Spaceship Visual Variety [D2]
+        Random random = new Random();
+        //Using Spaceships 4 and 5 for the Avoider
+        mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Spaceship" + Integer.toString(random.nextInt(2) + 4));
 
         //Sets a random width and height of the AvoiderSpaceship between a minimum of 25 and maximum of 50
         Random rand = new Random();

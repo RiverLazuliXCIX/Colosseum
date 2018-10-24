@@ -42,8 +42,23 @@
     },
     {
       "type": "Bitmap",
-      "name": "Turret",
-      "file": "img/Turret.png"
+      "name": "Spaceship4",
+      "file": "img/Spaceship4.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Spaceship5",
+      "file": "img/Spaceship5.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Turret1",
+      "file": "img/Turret1.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Turret2",
+      "file": "img/Turret2.png"
     },
     {
       "type": "Music",

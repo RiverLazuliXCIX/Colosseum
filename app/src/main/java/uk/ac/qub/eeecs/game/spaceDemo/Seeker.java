@@ -75,7 +75,10 @@ public class Seeker extends SpaceEntity {
         mMass = 10.0f;
 
         // Define the appearance of the seeker
-        mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Spaceship2");
+        //Story 5: AI Spaceship Visual Variety [D2]
+        Random random = new Random();
+        //Using Spaceships 2 and 3 for the Seeker
+        mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Spaceship" + Integer.toString(random.nextInt(2) + 2));
 
         // -----------------------------------------------------------------------------------------
         //User Story 4: Sets a random width and height of the aiSpaceship between a minimum of 25 and maximum of 50
