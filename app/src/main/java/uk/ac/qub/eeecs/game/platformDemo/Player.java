@@ -111,6 +111,7 @@ public class Player extends Sprite {
         mAnimationManager.addAnimation("txt/animation/AdventurerJumping.JSON");
         mAnimationManager.setCurrentAnimation("AdventurerIdle");
 
+        mGameScreen.getGame().getAssetManager().loadAndAddSound("CollisionSound", "sound/CollisionSound.mp3");
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -257,15 +258,24 @@ public class Player extends Sprite {
             // Current the player doesn't 'bounce' following any collision - they just stop
             switch (collisionType) {
                 case Top:
+                    if (velocity.y > 20)
+                        mGameScreen.getGame().getAssetManager().getSound("CollisionSound").play();
+
                     velocity.y = -0.0f * velocity.y;
                     break;
                 case Bottom:
                     velocity.y = -0.0f * velocity.y;
                     break;
                 case Left:
+                    if (Math.abs(velocity.x) > 20)
+                        mGameScreen.getGame().getAssetManager().getSound("CollisionSound").play();
+
                     velocity.x = -0.0f * velocity.x;
                     break;
                 case Right:
+                    if (Math.abs(velocity.x) > 20)
+                        mGameScreen.getGame().getAssetManager().getSound("CollisionSound").play();
+
                     velocity.x = -0.0f * velocity.x;
                     break;
                 case None:
