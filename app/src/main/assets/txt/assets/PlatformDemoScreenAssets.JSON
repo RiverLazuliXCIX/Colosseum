@@ -5,6 +5,16 @@
       "name": "Platform",
       "file": "img/Platform1.png"
     },
+    {//User story 15 Diarmuid
+      "type": "Bitmap",
+      "name": "Platform2",
+      "file": "img/Platform2.jpg"
+    },
+    {//User story 15 Diarmuid
+      "type": "Bitmap",
+      "name": "Platform3",
+      "file": "img/Platform3.png"
+    },
     {
       "type": "Bitmap",
       "name": "Ground",
