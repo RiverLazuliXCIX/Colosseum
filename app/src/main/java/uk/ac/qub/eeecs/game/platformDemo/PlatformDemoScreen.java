@@ -133,7 +133,11 @@ public class PlatformDemoScreen extends GameScreen {
         // the first 200 units of the level to avoid overlap with the player.
         // A simple (but not that useful) approach is used to position the platforms
         // to avoid overlapping.
+        //User story 16 - Random number generator to generate which platform will be used - Diarmuid
+        // Integer.toString(randPlatform) used to add the number from the random number genorator
+        // to the end of the name to used that image for the game instance
         Random random = new Random();
+        int randPlatform = random.nextInt(3)+1;
         int numPlatforms = 30, platformOffset = 200;
         float platformWidth = 70, platformHeight = 70, platformX, platformY = platformHeight;
         for (int idx = 0; idx < numPlatforms; idx++) {
@@ -141,7 +145,7 @@ public class PlatformDemoScreen extends GameScreen {
             if(random.nextFloat() > 0.33f)
                 platformY = (random.nextFloat() * (LEVEL_HEIGHT - platformHeight));
             mPlatforms.add(new Platform( platformX, platformY, platformWidth, platformHeight,
-                    "Platform", this));
+                    "Platform" + Integer.toString(randPlatform), this));
             platformOffset += (random.nextFloat() > 0.5f ?
                     platformWidth : platformWidth + random.nextFloat()*platformWidth);
         }
