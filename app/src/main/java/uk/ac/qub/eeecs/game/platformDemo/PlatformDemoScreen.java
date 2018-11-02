@@ -22,7 +22,7 @@ import uk.ac.qub.eeecs.gage.engine.AssetManager;
  * provides a player controlled entity that can move about the images.
  * <p>
  * Illustrates button based user input, animations and collision handling.
- *
+ * <p>
  * Note: See the course documentation for extension/refactoring stories
  * for this class.
  *
@@ -44,6 +44,11 @@ public class PlatformDemoScreen extends GameScreen {
      * Define the layer viewport used to display the platforms
      */
     private LayerViewport mPlatformLayerViewport;
+    // US26
+    private final float IVP_WIDTH = 240; // initial viewport width
+    private final float IVP_HEIGHT = 160; // initial viewport height
+    private final float MAXVP_WIDTH = 480; // maximum viewport width
+    private final float MAXVP_HEIGHT = 320; // maximum viewport height
 
     /**
      * Create three simple touch controls for player input
@@ -85,14 +90,14 @@ public class PlatformDemoScreen extends GameScreen {
         isSoundPlaying = false;
 
         // US23: Loads background music to the asset manager and creates an audio manager to play/pause/resume/stop music
-        mGame.getAssetManager().loadAndAddMusic("BckgrndMsc","sound/PlatformBckgrndMsc.mp3");
+        mGame.getAssetManager().loadAndAddMusic("BckgrndMsc", "sound/PlatformBckgrndMsc.mp3");
         am = getGame().getAudioManager();
 
         // Create the layer viewport used to display the platforms (and other game
         // objects). The default, inherited, layer viewport will be used to display
         // movement controls and the default, inherited, screen viewport will be used
         // to define the drawable region on the screen.
-        mPlatformLayerViewport = new LayerViewport(240, 160, 240, 160);
+        mPlatformLayerViewport = new LayerViewport(240, 160, IVP_WIDTH, IVP_HEIGHT); // US26, update arguments with constants
 
         // Create and position the touch controls (relative to the default layer viewport)
 
@@ -104,7 +109,7 @@ public class PlatformDemoScreen extends GameScreen {
         moveLeft = new PushButton(35.0f, 30.0f, 50.0f, 50.0f,
                 "LeftArrow", "LeftArrowSelected", this);
         mControls.add(moveLeft);
-        moveRight = new PushButton(100.0f, 30.0f,50.0f, 50.0f,
+        moveRight = new PushButton(100.0f, 30.0f, 50.0f, 50.0f,
                 "RightArrow", "RightArrowSelected", this);
         mControls.add(moveRight);
         jumpUp = new PushButton((layerWidth - 35.0f), 30.0f, 50.0f, 50.0f,
@@ -137,31 +142,31 @@ public class PlatformDemoScreen extends GameScreen {
         // Integer.toString(randPlatform) used to add the number from the random number genorator
         // to the end of the name to used that image for the game instance
         Random random = new Random();
-        int randPlatform = random.nextInt(3)+1;
+        int randPlatform = random.nextInt(3) + 1;
         int numPlatforms = 30, platformOffset = 200;
         float platformWidth = 70, platformHeight = 70, platformX, platformY = platformHeight;
         for (int idx = 0; idx < numPlatforms; idx++) {
             platformX = platformOffset;
-            if(random.nextFloat() > 0.33f)
+            if (random.nextFloat() > 0.33f)
                 platformY = (random.nextFloat() * (LEVEL_HEIGHT - platformHeight));
-            mPlatforms.add(new Platform( platformX, platformY, platformWidth, platformHeight,
+            mPlatforms.add(new Platform(platformX, platformY, platformWidth, platformHeight,
                     "Platform" + Integer.toString(randPlatform), this));
             platformOffset += (random.nextFloat() > 0.5f ?
-                    platformWidth : platformWidth + random.nextFloat()*platformWidth);
+                    platformWidth : platformWidth + random.nextFloat() * platformWidth);
         }
     }
 
     //User Story 18: Detecting Overlapping Platforms - Dearbhaile.
     public boolean checkOverLapping() {
         boolean isOverlapping = false;
-            for (int i = 0; i < mPlatforms.size(); i++) {
-                if (CollisionDetector.isCollision(mPlatforms.get(i).getBound(), mPlatforms.get(mPlatforms.size() - 1).getBound())) {
-                    isOverlapping = true;
-                    break;
-                }
+        for (int i = 0; i < mPlatforms.size(); i++) {
+            if (CollisionDetector.isCollision(mPlatforms.get(i).getBound(), mPlatforms.get(mPlatforms.size() - 1).getBound())) {
+                isOverlapping = true;
+                break;
             }
-            return isOverlapping;
         }
+        return isOverlapping;
+    }
 
     // US23: Checks if the music is already playing before playing it
     // I believe that something happens to the game's audio manager (destroyed/disposed) whenever
@@ -224,6 +229,18 @@ public class PlatformDemoScreen extends GameScreen {
 
         checkOverLapping();
 
+        // US26
+        if (Math.abs(mPlayer.velocity.x) <= 20) { // set the viewport to the initial settings
+            mPlatformLayerViewport.set(mPlatformLayerViewport.x, mPlatformLayerViewport.y, IVP_WIDTH, IVP_HEIGHT);
+        } else if (Math.abs(mPlayer.velocity.x) >= 400) { // set the viewport to the max settings
+            mPlatformLayerViewport.set(mPlatformLayerViewport.x, mPlatformLayerViewport.y, MAXVP_WIDTH, MAXVP_HEIGHT);
+        } else {
+            float ratio = (Math.abs(mPlayer.velocity.x) - 20) / 380; // work out the ratio of current to max speed.
+            float newVPWidth = ratio * (MAXVP_WIDTH - IVP_WIDTH) + IVP_WIDTH; // calculate new width
+            float newVPHeight = ratio * (MAXVP_HEIGHT - IVP_HEIGHT) + IVP_HEIGHT; // calculate new height
+            mPlatformLayerViewport.set(mPlatformLayerViewport.x, mPlatformLayerViewport.y, newVPWidth, newVPHeight); // set the viewport accordingly
+        }
+
         // Focus the layer viewport on the player's x location
         mPlatformLayerViewport.x = mPlayer.position.x;
 
@@ -233,10 +250,11 @@ public class PlatformDemoScreen extends GameScreen {
         else if (mPlatformLayerViewport.getRight() > LEVEL_WIDTH)
             mPlatformLayerViewport.x -= (mPlatformLayerViewport.getRight() - LEVEL_WIDTH);
 
-        if (mPlatformLayerViewport.getBottom() < 0)
-            mPlatformLayerViewport.y -= mPlatformLayerViewport.getBottom();
-        else if (mPlatformLayerViewport.getTop() > LEVEL_HEIGHT)
-            mPlatformLayerViewport.y -= (mPlatformLayerViewport.getTop() - LEVEL_HEIGHT);
+        // US26 comment these lines out to stop viewport being restrained in y axis and causing camera problems
+        //if (mPlatformLayerViewport.getBottom() < 0)
+        //    mPlatformLayerViewport.y -= mPlatformLayerViewport.getBottom();
+        //else if (mPlatformLayerViewport.getTop() > LEVEL_HEIGHT)
+        //    mPlatformLayerViewport.y -= (mPlatformLayerViewport.getTop() - LEVEL_HEIGHT);
     }
 
     /**
