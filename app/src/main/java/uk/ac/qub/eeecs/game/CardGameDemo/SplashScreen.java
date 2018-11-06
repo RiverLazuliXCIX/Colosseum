@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.BoardGameDemo;
+package uk.ac.qub.eeecs.game.CardGameDemo;
 
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import android.graphics.Color;
