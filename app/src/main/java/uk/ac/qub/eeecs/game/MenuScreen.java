@@ -35,6 +35,7 @@ public class MenuScreen extends GameScreen {
     private PushButton mPlatformDemoButton;
     private PushButton mCardDemoButton;
     private PushButton mDemosButton;
+    private PushButton mPerformanceButton; // User story P2: Defines button for performance screen
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -58,6 +59,9 @@ public class MenuScreen extends GameScreen {
         assetManager.loadAndAddBitmap("PlatformDemoIconSelected", "img/PlatformDemoIconSelected.png");
         assetManager.loadAndAddBitmap("DemosIcon", "img/DemosIcon.png");
         assetManager.loadAndAddBitmap("DemosIconSelected", "img/DemosIconSelected.png");
+        // User Story P2: Loading and adding button bitmaps
+        assetManager.loadAndAddBitmap("PerformanceIcon", "img/PerformanceIcon.png");
+        assetManager.loadAndAddBitmap("PerformanceIconSelected", "img/PerformanceIconSelected.png");
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int)mDefaultLayerViewport.getWidth() / 5;
@@ -65,21 +69,27 @@ public class MenuScreen extends GameScreen {
 
         // Create the trigger buttons
         mSpaceshipDemoButton = new PushButton(
-                spacingX * 0.50f, spacingY * 1.5f, spacingX, spacingY,
+                spacingX * 0.50f, spacingY * 2.0f, spacingX, spacingY,
                 "SpaceDemoIcon", "SpaceDemoIconSelected",this);
         mSpaceshipDemoButton.setPlaySounds(true, true);
         mPlatformDemoButton = new PushButton(
-                spacingX * 1.83f, spacingY * 1.5f, spacingX, spacingY,
+                spacingX * 1.83f, spacingY * 2.0f, spacingX, spacingY,
                 "PlatformDemoIcon", "PlatformDemoIconSelected", this);
         mPlatformDemoButton.setPlaySounds(true, true);
         mCardDemoButton = new PushButton(
-                spacingX * 3.17f, spacingY * 1.5f, spacingX, spacingY,
+                spacingX * 3.17f, spacingY * 2.0f, spacingX, spacingY,
                 "CardDemoIcon", "CardDemoIconSelected", this);
         mCardDemoButton.setPlaySounds(true, true);
         mDemosButton = new PushButton(
-                spacingX * 4.50f, spacingY * 1.5f, spacingX, spacingY,
+                spacingX * 4.50f, spacingY * 2.0f, spacingX, spacingY,
                 "DemosIcon", "DemosIconSelected", this);
         mDemosButton.setPlaySounds(true, true);
+
+        // User Story P2: Creating performance trigger button (Note: I chose to add a second row for buttons, this one is set to appear at the leftmost position in the rows)
+        mPerformanceButton = new PushButton(
+                spacingX * 0.5f, spacingY * 0.75f, spacingX, spacingY,
+                "PerformanceIcon", "PerformanceIconSelected", this);
+        mPerformanceButton.setPlaySounds(true, true);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -105,6 +115,7 @@ public class MenuScreen extends GameScreen {
             mCardDemoButton.update(elapsedTime);
             mPlatformDemoButton.update(elapsedTime);
             mDemosButton.update(elapsedTime);
+            mPerformanceButton.update(elapsedTime); // User Story P2: Updates performance button
 
             if (mSpaceshipDemoButton.isPushTriggered())
                 mGame.getScreenManager().addScreen(new SpaceshipDemoScreen(mGame));
@@ -114,6 +125,8 @@ public class MenuScreen extends GameScreen {
                 mGame.getScreenManager().addScreen(new PlatformDemoScreen(mGame));
             else if (mDemosButton.isPushTriggered())
                 mGame.getScreenManager().addScreen(new DemoMenuScreen(mGame));
+            else if (mPerformanceButton.isPushTriggered()) // User story P2
+                mGame.getScreenManager().addScreen(new PerformanceScreen(mGame));
         }
     }
 
@@ -133,5 +146,6 @@ public class MenuScreen extends GameScreen {
         mPlatformDemoButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         mDemosButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         mCardDemoButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        mPerformanceButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport); // User Story P2: Draws the new button to the screen
     }
 }
