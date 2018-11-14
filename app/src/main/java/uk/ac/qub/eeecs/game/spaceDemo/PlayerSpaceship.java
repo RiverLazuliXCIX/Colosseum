@@ -65,7 +65,7 @@ public class PlayerSpaceship extends SpaceEntity {
 
         // Define the maximum velocities and accelerations of the spaceship
         maxAcceleration = 600.0f;
-        maxVelocity = 100.0f;
+        maxVelocity = 200.0f;
         maxAngularVelocity = 1440.0f;
         maxAngularAcceleration = 1440.0f;
 

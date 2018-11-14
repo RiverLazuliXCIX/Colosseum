@@ -23,9 +23,9 @@ public class Card extends Sprite {
     /**
      * Create a player controlled spaceship
      *
-     * @param startX     x location of the player spaceship
-     * @param startY     y location of the player spaceship
-     * @param gameScreen Gamescreen to which spaceship belongs
+     * @param startX     x location of the player card
+     * @param startY     y location of the player card
+     * @param gameScreen Gamescreen to which card belongs
      * @param attack     attack power of this card
      * @param defence    defence power of this card
      * @param type       what type of card this is

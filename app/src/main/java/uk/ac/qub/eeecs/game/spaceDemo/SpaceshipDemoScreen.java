@@ -401,7 +401,7 @@ public class SpaceshipDemoScreen extends GameScreen {
     private void updateGUIGameObjects(ElapsedTime elapsedTime) {
         // Update the bar's value
         float spaceShipPercentageSpeed =
-                mPlayerSpaceship.velocity.length() / mPlayerSpaceship.maxVelocity;
+                mPlayerSpaceship.acceleration.length() / mPlayerSpaceship.maxAcceleration;
         mMovementSpeedBar.setValue(Math.round(
                 mMovementSpeedBar.getMaxValue() * spaceShipPercentageSpeed));
 
