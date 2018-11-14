@@ -7,6 +7,8 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.CardGameDemo.Card;
 
 /**
  * Starter class for Card game stories
@@ -14,6 +16,20 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
  * @version 1.0
  */
 public class CardDemoScreen extends GameScreen {
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Properties: Table Related
+    // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Define a viewport for the game objects (cards etc)
+     */
+    private LayerViewport mTableLayerViewport;
+
+    /**
+     * Define the player's card
+     */
+    private Card mCard;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -25,7 +41,18 @@ public class CardDemoScreen extends GameScreen {
      * @param game Game to which this screen belongs
      */
     public CardDemoScreen(Game game) {
-        super("CardScreen", game);
+        super("CardDemoScreen", game);
+
+        //Viewports!
+        /// Setup the screen viewport to use the full screen.
+        mTableLayerViewport = new LayerViewport(240, 160, 240, 160);
+
+        //Objects!
+        // Load in the assets used by the steering demo
+        mGame.getAssetManager().loadAssets("txt/assets/CardDemoAssets.JSON");
+
+        // Create the player card
+        mCard = new Card(240, 160, this, 1, 1, 'A');
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -51,6 +78,12 @@ public class CardDemoScreen extends GameScreen {
      */
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
+
+        // Create the screen to black and define a clip based on the viewport
         graphics2D.clear(Color.WHITE);
+        graphics2D.clipRect(mDefaultScreenViewport.toRect());
+
+        // Draw the player
+        mCard.draw(elapsedTime, graphics2D, mTableLayerViewport, mDefaultScreenViewport);
     }
 }

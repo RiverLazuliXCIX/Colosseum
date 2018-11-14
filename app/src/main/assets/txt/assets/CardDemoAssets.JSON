@@ -1,0 +1,9 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "CardFront",
+      "file": "img/CardFront.png"
+    }
+    ]
+}
