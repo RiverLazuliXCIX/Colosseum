@@ -1,0 +1,9 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "CardGameBackground",
+      "file": "img/ColosseumSplashScreen.png"
+    }
+  ]
+}
