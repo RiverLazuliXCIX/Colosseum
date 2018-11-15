@@ -1,0 +1,19 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "BackArrow",
+      "file": "img/BackArrow.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "BackArrowSelected",
+      "file": "img/BackArrowSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "OptionsBackground",
+      "file": "img/OptionsBackground.png"
+    }
+    ]
+}
