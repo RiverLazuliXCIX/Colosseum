@@ -11,6 +11,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.audio.AudioManager;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
+import uk.ac.qub.eeecs.gage.ui.ToggleButton;
 import uk.ac.qub.eeecs.gage.util.BoundingBox;
 import uk.ac.qub.eeecs.gage.util.CollisionDetector;
 import uk.ac.qub.eeecs.gage.util.GraphicsHelper;
@@ -55,8 +56,10 @@ public class PlatformDemoScreen extends GameScreen {
      * Create three simple touch controls for player input
      * Create a powerUp button for User Story 21
      */
-    private PushButton moveLeft, moveRight, jumpUp, powerUp;
+    private PushButton moveLeft, moveRight, jumpUp;
+    private ToggleButton powerUp;
     private List<PushButton> mControls;
+    private List<ToggleButton> mControlToggle;
 
     /**
      * Define an array of sprites to populate the game world
@@ -107,6 +110,7 @@ public class PlatformDemoScreen extends GameScreen {
 
         // Create and position the touch buttons
         mControls = new ArrayList<>();
+        mControlToggle = new ArrayList<>();
         moveLeft = new PushButton(35.0f, 30.0f, 50.0f, 50.0f,
                 "LeftArrow", "LeftArrowSelected", this);
         mControls.add(moveLeft);
@@ -117,9 +121,9 @@ public class PlatformDemoScreen extends GameScreen {
                 "UpArrow", "UpArrowSelected", this);
         mControls.add(jumpUp);
         //User story 21 - Scott
-        powerUp = new PushButton((layerWidth - 100.0f), 30.0f, 50.0f, 50.0f,
+        powerUp = new ToggleButton((layerWidth - 100.0f), 30.0f, 50.0f, 50.0f,
                 "PowerUp", "PowerUpSelected", this);
-        mControls.add(powerUp);
+        mControlToggle.add(powerUp);
         // Create and position the game objects (relative to the platform viewport)
 
         // Create the player
@@ -211,9 +215,12 @@ public class PlatformDemoScreen extends GameScreen {
         for (PushButton control : mControls)
             control.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
 
+        for (ToggleButton control : mControlToggle)
+            control.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
+
         // Update the player - User story 21 Added powerUp button - Scott
         mPlayer.update(elapsedTime, moveLeft.isPushed(),
-                moveRight.isPushed(), jumpUp.isPushed(), mPlatforms, powerUp.isPushed());
+                moveRight.isPushed(), jumpUp.isPushed(), mPlatforms, powerUp.isToggledOn());
 
         //If player jumps, play sound
         if (mPlayer.velocity.y > 20 && (!isSoundPlaying)) {
@@ -288,6 +295,10 @@ public class PlatformDemoScreen extends GameScreen {
         // Draw the controls last of all
         for (PushButton control : mControls)
             control.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
+        for (ToggleButton control : mControlToggle)
+            control.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
     }
 
 
