@@ -36,6 +36,7 @@ public class MenuScreen extends GameScreen {
     private PushButton mCardDemoButton;
     private PushButton mDemosButton;
     private PushButton mPerformanceButton; // User story P2: Defines button for performance screen
+    private PushButton mOptionsButton; // User Story O2: "...include a button that will permit transfer to the options screen."
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -90,6 +91,9 @@ public class MenuScreen extends GameScreen {
                 spacingX * 0.5f, spacingY * 0.75f, spacingX, spacingY,
                 "PerformanceIcon", "PerformanceIconSelected", this);
         mPerformanceButton.setPlaySounds(true, true);
+
+
+        //User Story O2: Extend the MenuScreen to include a button that will permit transfer to the options screen.
     }
 
     // /////////////////////////////////////////////////////////////////////////
