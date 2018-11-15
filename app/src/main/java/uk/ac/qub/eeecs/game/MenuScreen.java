@@ -13,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.CardGameDemo.CardDemoScreen;
+import uk.ac.qub.eeecs.game.CardGameDemo.OptionsScreen;
 import uk.ac.qub.eeecs.game.miscDemos.DemoMenuScreen;
 import uk.ac.qub.eeecs.game.platformDemo.PlatformDemoScreen;
 import uk.ac.qub.eeecs.game.spaceDemo.SpaceshipDemoScreen;
@@ -63,6 +64,9 @@ public class MenuScreen extends GameScreen {
         // User Story P2: Loading and adding button bitmaps
         assetManager.loadAndAddBitmap("PerformanceIcon", "img/PerformanceIcon.png");
         assetManager.loadAndAddBitmap("PerformanceIconSelected", "img/PerformanceIconSelected.png");
+        //User Story O2: Loading and adding Options bitmaps
+        assetManager.loadAndAddBitmap("OptionsIcon", "img/cog2.png");
+        //assetManager.loadAndAddBitmap("OptionsIconSelected", "");
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int)mDefaultLayerViewport.getWidth() / 5;
@@ -94,6 +98,10 @@ public class MenuScreen extends GameScreen {
 
 
         //User Story O2: Extend the MenuScreen to include a button that will permit transfer to the options screen.
+       mOptionsButton = new PushButton(
+                spacingX * 1.83f, spacingY * 0.75f, spacingX, spacingY,
+                "OptionsIcon", "OptionsIcon", this);
+        mOptionsButton.setPlaySounds(true, true);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -119,7 +127,7 @@ public class MenuScreen extends GameScreen {
             mCardDemoButton.update(elapsedTime);
             mPlatformDemoButton.update(elapsedTime);
             mDemosButton.update(elapsedTime);
-            mPerformanceButton.update(elapsedTime); // User Story P2: Updates performance button
+            mPerformanceButton.update(elapsedTime);
 
             if (mSpaceshipDemoButton.isPushTriggered())
                 mGame.getScreenManager().addScreen(new SpaceshipDemoScreen(mGame));
@@ -131,6 +139,8 @@ public class MenuScreen extends GameScreen {
                 mGame.getScreenManager().addScreen(new DemoMenuScreen(mGame));
             else if (mPerformanceButton.isPushTriggered()) // User story P2
                 mGame.getScreenManager().addScreen(new PerformanceScreen(mGame));
+            else if (mOptionsButton.isPushTriggered()) // User Story O2
+                mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
         }
     }
 
@@ -151,5 +161,6 @@ public class MenuScreen extends GameScreen {
         mDemosButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         mCardDemoButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         mPerformanceButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport); // User Story P2: Draws the new button to the screen
+        mOptionsButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport); // User Story O2
     }
 }
