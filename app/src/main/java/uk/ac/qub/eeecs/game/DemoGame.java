@@ -32,7 +32,7 @@ public class DemoGame extends Game {
         super.onCreate(savedInstanceState);
 
         // Go with a default 20 UPS/FPS
-        setTargetFramesPerSecond(20);
+        setTargetFramesPerSecond(60); // US P4: Changed target fps from 20 to 60
     }
 
     @Override

@@ -3,6 +3,7 @@ package uk.ac.qub.eeecs.game.CardGameDemo;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.Sprite;
 
+
 public class Card extends Sprite {
 
     // /////////////////////////////////////////////////////////////////////////
@@ -15,6 +16,7 @@ public class Card extends Sprite {
      */
     private static final float CARD_WIDTH = 150.0f;
     private static final float CARD_HEIGHT = 205.0f;
+
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors

@@ -4,26 +4,29 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
+import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.io.FileIO;
+import uk.ac.qub.eeecs.game.CardGameDemo.CardDemoScreen;
 import uk.ac.qub.eeecs.game.DemoGame;
-import uk.ac.qub.eeecs.game.spaceDemo.PlayerSpaceship;
-import uk.ac.qub.eeecs.game.spaceDemo.SpaceshipDemoScreen;
 
-import static junit.framework.Assert.assertNotNull;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
- * Example instrumentation tests, which will execute on an Android device.
+ * Example instrumentation tests, which will execute on an Anpdroid device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class CardGameDemoTest {
 
     // /////////////////////////////////////////////////////////////////////////
     // Example Instrumented Test
@@ -55,15 +58,19 @@ public class ExampleInstrumentedTest {
         game.mScreenManager = new ScreenManager(game);
     }
 
+    //@Mock
+
     @Test
-    public void example_gameObjectCreation() throws Exception {
-        // Create the spaceship steering demo
-        SpaceshipDemoScreen steeringDemoGameScreen = new SpaceshipDemoScreen(game);
+    public void test_checkCardNotOutOfBounds_InBound(){
+        //Setup
+        CardDemoScreen cardDemoScreen = new CardDemoScreen(game);
+        ElapsedTime elapsedTime = new ElapsedTime();
 
-        // Test that we can extract the player spaceship from the demo
-        PlayerSpaceship playerSpaceship = steeringDemoGameScreen.getPlayerSpaceship();
-        assertNotNull(playerSpaceship);
+        //Execute
+        cardDemoScreen.checkCardNotOutOfBounds(elapsedTime);
+
+        //Check outcome
+        //Assert.assertTrue();
+
     }
-
-
 }
