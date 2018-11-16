@@ -32,16 +32,16 @@ public class OptionsScreen extends GameScreen {
     public OptionsScreen(Game game) {
         super("OptionScreen", game);
 
-        // Load in the bitmap used for the back button, this could later be moved to a seperate "optionscreenassets.json" file
-        //if it is needed for other options menu assets
+        //Load in a newly created "OptionScreenAssets.JSON" file which stores assets and their properties - Story O3 and O6 Scott Barham
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
 
+        // Load in the bitmap used for the back button, from a newly created "optionscreenassets.json" file - Story O6
         mBackButton = new PushButton(
                 mDefaultLayerViewport.getWidth() * 0.88f, mDefaultLayerViewport.getHeight() * 0.10f,
                 mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
                 "BackArrow", "BackArrowSelected", this);
         mButtons.add(mBackButton);
-
+        //Load in the background for the options menu Story O3
         mOptionBackground = new GameObject(mDefaultLayerViewport.getWidth()/ 2.0f,
                 mDefaultLayerViewport.getHeight()/ 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), getGame()
@@ -64,6 +64,7 @@ public class OptionsScreen extends GameScreen {
         // Process any touch events occurring since the last update
         Input input = mGame.getInput();
 
+        //Story O6
         List<TouchEvent> touchEvents = input.getTouchEvents();
         if (touchEvents.size() > 0) {
 
@@ -71,7 +72,7 @@ public class OptionsScreen extends GameScreen {
             for (PushButton button : mButtons)
                 button.update(elapsedTime);
 
-            if (mBackButton.isPushTriggered()) {
+            if (mBackButton.isPushTriggered()) { //Story O6, if the back button is pressed, go back to previous screen (menu screen)
                 mGame.getScreenManager().removeScreen(this);
             }
         }
@@ -87,10 +88,11 @@ public class OptionsScreen extends GameScreen {
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         graphics2D.clear(Color.WHITE);
 
-        // Draw the background first of all
+        // Draw the background first of all - Story O3
         mOptionBackground.draw(elapsedTime, graphics2D, mDefaultLayerViewport,
                 mDefaultScreenViewport);
 
+        //Then draw the back button in (and any other buttons if added later) - Story O6
         for (PushButton button : mButtons)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
