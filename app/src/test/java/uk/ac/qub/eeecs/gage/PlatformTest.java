@@ -92,5 +92,5 @@ public class PlatformTest {
 
         assert (!checkIfCollision());
     }
-    
+
 }

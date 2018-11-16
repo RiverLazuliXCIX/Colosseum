@@ -2,9 +2,12 @@ package uk.ac.qub.eeecs.game;
 
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.ColorSpace;
 import android.graphics.LightingColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +111,7 @@ public class OptionsScreen extends GameScreen {
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         graphics2D.clear(Color.WHITE);
 
-        // Draw the background first of all - Story O3
+        //Draw the background first - Story O3
         mOptionBackground.draw(elapsedTime, graphics2D, mDefaultLayerViewport,
                 mDefaultScreenViewport);
 
@@ -120,3 +123,6 @@ public class OptionsScreen extends GameScreen {
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 }
+
+//Extend how the options screen background is drawn so it cycles between a range of colour tints,
+//e.g. the blue colour channel intensity varies cycles between 256 and 200 (use draw Color instance).
