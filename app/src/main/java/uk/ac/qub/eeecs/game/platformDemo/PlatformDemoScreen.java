@@ -170,16 +170,24 @@ public class PlatformDemoScreen extends GameScreen {
         }
     }
 
-    //User Story 18: Detecting Overlapping Platforms - Dearbhaile.
-    public boolean checkOverLapping() {
+    //US18: "...method will return true if a given Platform is overlapping with any other Platform instance"
+    public boolean checkIfCollision() {
         boolean isOverlapping = false;
-        for (int i = 0; i < mPlatforms.size(); i++) {
-            if (CollisionDetector.isCollision(mPlatforms.get(i).getBound(), mPlatforms.get(mPlatforms.size() - 1).getBound())) {
-                isOverlapping = true;
-                break;
-            }
+
+        if (mPlatforms.size() == 0) {
+            return false;
         }
-        return isOverlapping;
+
+        if (mPlatforms.size() == 1) {
+            return false;
+        }
+
+        for (int i = 0; i < mPlatforms.size(); i++) {
+                isOverlapping = false;
+                if (CollisionDetector.isCollision(mPlatforms.get(i).getBound(), mPlatforms.get(mPlatforms.size() - 1).getBound())) {
+                    isOverlapping = true;
+                }
+        } return isOverlapping;
     }
 
     // US23: Checks if the music is already playing before playing it
@@ -232,6 +240,9 @@ public class PlatformDemoScreen extends GameScreen {
             isSoundPlaying = false;
         }
 
+        //Calling method from User Story 18
+        checkIfCollision();
+
         // Ensure the player cannot leave the confines of the world
         BoundingBox playerBound = mPlayer.getBound();
         if (playerBound.getLeft() < 0)
@@ -243,8 +254,6 @@ public class PlatformDemoScreen extends GameScreen {
             mPlayer.position.y -= playerBound.getBottom();
         else if (playerBound.getTop() > LEVEL_HEIGHT)
             mPlayer.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
-
-        checkOverLapping();
 
         // US26
         if (Math.abs(mPlayer.velocity.x) <= 20) { // set the viewport to the initial settings

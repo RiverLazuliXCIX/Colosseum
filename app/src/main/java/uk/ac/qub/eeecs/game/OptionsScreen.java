@@ -1,6 +1,10 @@
 package uk.ac.qub.eeecs.game;
 
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +15,16 @@ import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
+import uk.ac.qub.eeecs.gage.ui.ToggleButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 
 public class OptionsScreen extends GameScreen {
 
     private PushButton mBackButton;
+    private ToggleButton mColourToggle;
     private List<PushButton> mButtons = new ArrayList<>();
+    private List<ToggleButton> mToggle = new ArrayList<>();
     private GameObject mOptionBackground;
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -46,6 +53,12 @@ public class OptionsScreen extends GameScreen {
                 mDefaultLayerViewport.getHeight()/ 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+        //Load in the bitmap used for the Toggle Colour button
+        mColourToggle = new ToggleButton(
+                mDefaultLayerViewport.getWidth() * 0.85f, mDefaultLayerViewport.getHeight() * 0.85f,
+                mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
+                "ColourButton", "ColourButtonSelected", this);
+        mToggle.add(mColourToggle);
     }
 
 
@@ -72,8 +85,15 @@ public class OptionsScreen extends GameScreen {
             for (PushButton button : mButtons)
                 button.update(elapsedTime);
 
+            for (ToggleButton button : mToggle)
+                button.update(elapsedTime);
+
             if (mBackButton.isPushTriggered()) { //Story O6, if the back button is pressed, go back to previous screen (menu screen)
                 mGame.getScreenManager().removeScreen(this);
+            }
+
+            if (mColourToggle.isToggledOn()) {
+                ;
             }
         }
     }
@@ -94,6 +114,9 @@ public class OptionsScreen extends GameScreen {
 
         //Then draw the back button in (and any other buttons if added later) - Story O6
         for (PushButton button : mButtons)
+            button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
+        for (ToggleButton button : mToggle)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 }

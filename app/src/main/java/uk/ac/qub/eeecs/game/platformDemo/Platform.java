@@ -76,6 +76,7 @@ public class Platform extends GameObject {
         mTileYCount = tileYCount;
     }
 
+
     // /////////////////////////////////////////////////////////////////////////
     // Methods
     // /////////////////////////////////////////////////////////////////////////
@@ -95,6 +96,10 @@ public class Platform extends GameObject {
      * @param screenViewport Screen viewport
      */
     @Override
+
+
+
+
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
                      LayerViewport layerViewport, ScreenViewport screenViewport) {
 

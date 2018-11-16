@@ -65,7 +65,7 @@ public class MenuScreen extends GameScreen {
         assetManager.loadAndAddBitmap("PerformanceIconSelected", "img/PerformanceIconSelected.png");
         //User Story O2: Loading and adding Options bitmaps
         assetManager.loadAndAddBitmap("OptionsIcon", "img/cog2.png");
-        //assetManager.loadAndAddBitmap("OptionsIconSelected", "");
+        assetManager.loadAndAddBitmap("OptionsIconSelected", "img/cog2selected.png");
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int)mDefaultLayerViewport.getWidth() / 5;
@@ -99,7 +99,7 @@ public class MenuScreen extends GameScreen {
         //User Story O2: Extend the MenuScreen to include a button that will permit transfer to the options screen.
        mOptionsButton = new PushButton(
                 spacingX * 1.83f, spacingY * 0.75f, spacingX, spacingY,
-                "OptionsIcon", "OptionsIcon", this);
+                "OptionsIcon", "OptionsIconSelected", this);
         mOptionsButton.setPlaySounds(true, true);
     }
 
