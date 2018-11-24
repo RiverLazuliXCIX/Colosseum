@@ -12,6 +12,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.TitleImage;
 
 public class MenuScreen extends GameScreen {
 
@@ -20,6 +21,7 @@ public class MenuScreen extends GameScreen {
     // /////////////////////////////////////////////////////////////////////////
     private GameObject mMenuBackground;
     private LayerViewport mMenuViewport;
+    private TitleImage mMenuTitle;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -29,19 +31,11 @@ public class MenuScreen extends GameScreen {
         super("MenuScreen", game);
 
         setupViewports();
-        setUpMenuObjects();
-
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
-    }
 
-    // /////////////////////////////////////////////////////////////////////////
-    // Methods
-    // /////////////////////////////////////////////////////////////////////////
-
-    private void setUpMenuObjects() {
         // Load in the assets e.g. background image
         mGame.getAssetManager().loadAssets("txt/assets/MenuScreenAssets.JSON");
 
@@ -50,7 +44,15 @@ public class MenuScreen extends GameScreen {
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("ColMenuScreen"), this);
+
+        // Create the title image
+
+        mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
     }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Methods
+    // /////////////////////////////////////////////////////////////////////////
 
     private void setupViewports() {
         // Setup the screen viewport to use the full screen.
@@ -69,9 +71,7 @@ public class MenuScreen extends GameScreen {
 
         // Process any touch events occurring since the update
         Input input = mGame.getInput();
-
     }
-
 
     /**
      * Draw the menu screen
@@ -90,6 +90,8 @@ public class MenuScreen extends GameScreen {
         mMenuBackground.draw(elapsedTime, graphics2D, mMenuViewport,
                 mDefaultScreenViewport);
 
+        //Draw the title image
+        mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 
 }
