@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.coliseum;
+package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Color;
 
@@ -13,7 +13,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
  *
  * @version 1.0
  */
-public class coliseumDemoScreen extends GameScreen {
+public class colosseumDemoScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -24,7 +24,7 @@ public class coliseumDemoScreen extends GameScreen {
      *
      * @param game Game to which this screen belongs
      */
-    public coliseumDemoScreen(Game game) {
+    public colosseumDemoScreen(Game game) {
         super("CardScreen", game);
     }
 

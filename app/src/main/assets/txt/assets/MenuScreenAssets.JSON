@@ -1,0 +1,14 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "ColMenuScreen",
+      "file": "img/col_menu_screen.jpg"
+    },
+    {
+      "type": "Bitmap",
+      "name": "MenuText",
+      "file": "img/menu_text.png"
+    }
+  ]
+}

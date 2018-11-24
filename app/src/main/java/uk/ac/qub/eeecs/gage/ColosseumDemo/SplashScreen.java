@@ -12,7 +12,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 public class SplashScreen extends GameScreen {
 
     /**
-     * Create ingthe 'Splash Screen' screen
+     * Creating the 'Splash Screen' screen
      * @param game Game to which this screen belongs
      */
 
@@ -32,7 +32,7 @@ public class SplashScreen extends GameScreen {
     }
 
     /**
-     * Draw the 'Splah Screen' screen
+     * Draw the 'Splash Screen' screen
      * @param elapsedTime Elapsed time information
      * @param graphics2D  Graphics instance
      */
