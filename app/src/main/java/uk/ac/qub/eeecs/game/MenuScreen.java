@@ -46,7 +46,6 @@ public class MenuScreen extends GameScreen {
                 .getAssetManager().getBitmap("ColMenuScreen"), this);
 
         // Create the title image
-
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
     }
 
