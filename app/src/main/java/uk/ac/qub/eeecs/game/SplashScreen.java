@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.gage.ColosseumDemo;
+package uk.ac.qub.eeecs.game;
 
 import android.graphics.Color;
 
