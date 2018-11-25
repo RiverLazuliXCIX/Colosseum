@@ -41,11 +41,9 @@ public class DemoGame extends Game {
         // Call the Game's onCreateView to get the view to be returned.
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // Create and add a stub game screen to the screen manager. We don't
-        // want to do this within the onCreate method as the menu screen
-        // will layout the buttons based on the size of the view.
-        MenuScreen stubMenuScreen = new MenuScreen(this);
-        mScreenManager.addScreen(stubMenuScreen);
+        // Create and add a stub game screen to the screen manager. 
+        SplashScreen stubSplashScreen = new SplashScreen(this);
+        mScreenManager.addScreen(stubSplashScreen);
 
         return view;
     }
