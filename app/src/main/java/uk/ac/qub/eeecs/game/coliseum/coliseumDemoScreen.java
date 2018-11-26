@@ -1,8 +1,10 @@
 package uk.ac.qub.eeecs.game.coliseum;
 
 import android.graphics.Color;
+import android.widget.ImageView;
 
 import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -16,6 +18,15 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 public class coliseumDemoScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
+    // Properties
+    // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Define the player's spaceship
+     */
+    private Card card;
+
+    // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
 
@@ -26,6 +37,11 @@ public class coliseumDemoScreen extends GameScreen {
      */
     public coliseumDemoScreen(Game game) {
         super("CardScreen", game);
+
+        ImageView card1 = new ImageView(getGame().getContext());
+        card1.setImageBitmap(card.getBitmap());
+        card1.setX(100);
+        card1.setY(100);
     }
 
     // /////////////////////////////////////////////////////////////////////////
