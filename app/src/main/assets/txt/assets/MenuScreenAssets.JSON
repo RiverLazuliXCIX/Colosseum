@@ -1,0 +1,19 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "ColMenuScreen",
+      "file": "img/col_menu_screen.jpg"
+    },
+    {
+      "type": "Bitmap",
+      "name": "MenuText",
+      "file": "img/menu_text_2.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "PlayButton",
+      "file": "img/PlayGameButton.png"
+    }
+  ]
+}

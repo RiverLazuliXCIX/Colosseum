@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.coliseum;
+package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Color;
 import android.widget.ImageView;
@@ -15,7 +15,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
  *
  * @version 1.0
  */
-public class coliseumDemoScreen extends GameScreen {
+public class colosseumDemoScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
@@ -35,7 +35,7 @@ public class coliseumDemoScreen extends GameScreen {
      *
      * @param game Game to which this screen belongs
      */
-    public coliseumDemoScreen(Game game) {
+    public colosseumDemoScreen(Game game) {
         super("CardScreen", game);
 
         ImageView card1 = new ImageView(getGame().getContext());

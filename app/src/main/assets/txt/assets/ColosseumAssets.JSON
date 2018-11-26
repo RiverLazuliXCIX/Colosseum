@@ -1,0 +1,14 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "CardFront",
+      "file": "img/CardFront.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "SplashScreenBackground",
+      "file": "img/ColosseumSplashScreen.png"
+    }
+    ]
+}
