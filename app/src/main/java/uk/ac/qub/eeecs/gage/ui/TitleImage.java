@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.Colosseum;
+package uk.ac.qub.eeecs.gage.ui;
 
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;

@@ -13,7 +13,7 @@ import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.TitleImage;
+import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class MenuScreen extends GameScreen {
@@ -24,6 +24,8 @@ public class MenuScreen extends GameScreen {
     private GameObject mMenuBackground;
     private LayerViewport mMenuViewport;
     private TitleImage mMenuTitle;
+
+    //Buttons for accessing different screens
     private PushButton mPlayGameButton;
 
     // /////////////////////////////////////////////////////////////////////////
@@ -53,7 +55,7 @@ public class MenuScreen extends GameScreen {
 
         //Create the push buttons
         mPlayGameButton = new PushButton(
-                spacingX * 4, spacingY * 8.5f, spacingX*7.5f, spacingY*7.5f,
+                spacingX * 0.5f, spacingY * 0.75f, spacingX*1.0f, spacingY*1.0f,
                 "PlayButton", "PlayButton",this);
     }
 
@@ -90,8 +92,9 @@ public class MenuScreen extends GameScreen {
 
             mPlayGameButton.update(elapsedTime);
 
-            if (mPlayGameButton.isPushTriggered())
+            if (mPlayGameButton.isPushTriggered()) {
                 mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
+            }
         }
     }
 
@@ -116,7 +119,7 @@ public class MenuScreen extends GameScreen {
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         //Draw the buttons
-        mPlayGameButton.draw(elapsedTime, graphics2D);
+        mPlayGameButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 
 }
