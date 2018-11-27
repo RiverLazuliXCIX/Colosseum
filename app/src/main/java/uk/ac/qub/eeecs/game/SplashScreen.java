@@ -112,5 +112,4 @@ public class SplashScreen extends GameScreen {
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
     }
-
 }
