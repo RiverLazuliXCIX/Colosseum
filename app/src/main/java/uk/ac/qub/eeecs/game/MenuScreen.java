@@ -90,8 +90,10 @@ public class MenuScreen extends GameScreen {
 
             mPlayGameButton.update(elapsedTime);
 
-            if (mPlayGameButton.isPushTriggered())
+            if (mPlayGameButton.isPushTriggered()) {
+                mGame.getScreenManager().removeScreen(this.getName());
                 mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
+            }
         }
     }
 

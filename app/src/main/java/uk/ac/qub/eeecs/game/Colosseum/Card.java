@@ -1,9 +1,14 @@
-package uk.ac.qub.eeecs.game.coliseum;
+package uk.ac.qub.eeecs.game.Colosseum;
 
+import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
+import uk.ac.qub.eeecs.gage.engine.input.Input;
+import uk.ac.qub.eeecs.gage.util.BoundingBox;
+import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.Sprite;
 
-public class Card extends Sprite {
+public class Card extends GameObject {
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
@@ -14,8 +19,8 @@ public class Card extends Sprite {
      * size and an appropriate width/height ratio.
      */
 
-    private static final float CARD_WIDTH = 150.0f;
-    private static final float CARD_HEIGHT = 205.0f;
+    private static final float CARD_WIDTH = 100.0f;
+    private static final float CARD_HEIGHT = 150.0f;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors

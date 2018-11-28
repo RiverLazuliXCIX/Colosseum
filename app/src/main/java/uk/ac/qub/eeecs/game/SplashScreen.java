@@ -12,12 +12,13 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 
 public class SplashScreen extends GameScreen {
 
     // Properties
-    final private long SPLASH_TIMEOUT = 8000;
+    final private long SPLASH_TIMEOUT = 4000;
     private long timeOnCreate, currentTime;
     private GameObject mSplashBackground;
     private LayerViewport mSplashLayerViewport;
@@ -44,7 +45,7 @@ public class SplashScreen extends GameScreen {
         mSplashBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), getGame()
-                .getAssetManager().getBitmap("SplashScreenBackground"), this);
+                .getAssetManager().getBitmap("ColosseumSplashScreen"), this);
     }
 
     private void setupViewports() {
@@ -84,7 +85,7 @@ public class SplashScreen extends GameScreen {
 
     public void goToMenuScreen() {
         mGame.getScreenManager().removeScreen(this.getName());
-        mGame.getScreenManager().addScreen(new MenuScreen(mGame));
+        mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
     }
 
     /**
