@@ -5,6 +5,7 @@ import android.graphics.Color;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -13,7 +14,7 @@ import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.TitleImage;
+import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class MenuScreen extends GameScreen {
@@ -24,6 +25,8 @@ public class MenuScreen extends GameScreen {
     private GameObject mMenuBackground;
     private LayerViewport mMenuViewport;
     private TitleImage mMenuTitle;
+
+    //Buttons for accessing different screens
     private PushButton mPlayGameButton;
 
     // /////////////////////////////////////////////////////////////////////////
@@ -40,20 +43,21 @@ public class MenuScreen extends GameScreen {
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         // Load in the assets e.g. background image
-        mGame.getAssetManager().loadAssets("txt/assets/MenuScreenAssets.JSON");
+        AssetManager assetManager = mGame.getAssetManager();
+        assetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
+        assetManager.loadAndAddSound("ButtonPress", "sound/ButtonSword.mp3");
 
         // Create the background
         mMenuBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(), getGame()
-                .getAssetManager().getBitmap("ColMenuScreen"), this);
+                mDefaultLayerViewport.getHeight(), assetManager.getBitmap("ColMenuScreen"), this);
 
         // Create the title image
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
 
         //Create the push buttons
         mPlayGameButton = new PushButton(
-                spacingX * 4, spacingY * 8.5f, spacingX*7.5f, spacingY*7.5f,
+                spacingX * 1.1f, spacingY * 1.5f , spacingX*1.8f, spacingY*1.8f,
                 "PlayButton", "PlayButton",this);
     }
 
@@ -91,7 +95,7 @@ public class MenuScreen extends GameScreen {
             mPlayGameButton.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                mGame.getScreenManager().removeScreen(this.getName());
+                mGame.getAssetManager().getSound("ButtonPress").play();
                 mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
             }
         }
@@ -118,7 +122,7 @@ public class MenuScreen extends GameScreen {
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         //Draw the buttons
-        mPlayGameButton.draw(elapsedTime, graphics2D);
+        mPlayGameButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 
 }
