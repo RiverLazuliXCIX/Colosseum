@@ -50,8 +50,10 @@ public class DemoGame extends Game {
 
     @Override
     public boolean onBackPressed() {
-        // If we are already at the menu screen then exit
+        // If we are already at the menu screen or the splash screen then exit
         if (mScreenManager.getCurrentScreen().getName().equals("MenuScreen"))
+            return false;
+        else if (mScreenManager.getCurrentScreen().getName().equals("SplashScreen"))
             return false;
 
         // Stop any playing music
