@@ -106,9 +106,11 @@ public class colosseumDemoScreen extends GameScreen{
                     mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
 
             //Move the card
-            if (touchType == TouchEvent.TOUCH_DRAGGED) mCard.position = touchLocation;
-            //Flip the card
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP) {
+            if (touchType == TouchEvent.TOUCH_DRAGGED
+                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)) mCard.position = touchLocation;
+            //Flip the card - C5
+            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)) {
                 Bitmap b = mCard.getBitmap();
                 Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
                 Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
@@ -116,7 +118,7 @@ public class colosseumDemoScreen extends GameScreen{
                 else if (b == back) mCard.setBitmap(front);
             }
 
-            //Bound the card
+            //Bound the card - Story C3
             if (mCard.getBound().getLeft() < 0)
                 mCard.position.x = mCard.getBound().halfWidth;
             if (mCard.getBound().getBottom() < 0)
