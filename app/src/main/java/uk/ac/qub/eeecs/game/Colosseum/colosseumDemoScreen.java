@@ -80,10 +80,10 @@ public class colosseumDemoScreen extends GameScreen{
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
+
     // /////////////////////////////////////////////////////////////////////////
     // Methods
     // /////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Update the card demo screen
@@ -92,45 +92,8 @@ public class colosseumDemoScreen extends GameScreen{
      */
     @Override
     public void update(ElapsedTime elapsedTime) {
-        cardDrag();
+        mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport,  mGame);
     }
-
-    public void cardDrag() {
-        mInput = this.getGame().getInput();
-
-        for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
-            Vector2 touchLocation = new Vector2(0, 0);
-
-            int touchType = mInput.getTouchEvents().get(i).type;
-            ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
-                    mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
-
-            //Move the card
-            if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)) mCard.position = touchLocation;
-            //Flip the card - C5
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)) {
-                Bitmap b = mCard.getBitmap();
-                Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
-                Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
-                if (b == front) mCard.setBitmap(back);
-                else if (b == back) mCard.setBitmap(front);
-            }
-
-            //Bound the card - Story C3
-            if (mCard.getBound().getLeft() < 0)
-                mCard.position.x = mCard.getBound().halfWidth;
-            if (mCard.getBound().getBottom() < 0)
-                mCard.position.y = mCard.getBound().halfHeight;
-            if (mCard.getBound().getRight() > mGameViewport.getRight())
-                mCard.position.x = mGameViewport.getRight() - mCard.getBound().halfWidth;
-            if (mCard.getBound().getTop() > mGameViewport.getTop())
-                mCard.position.y = mGameViewport.getTop() - mCard.getBound().halfHeight;
-        }
-    }
-
-
 
     /**
      * Draw the card demo screen
