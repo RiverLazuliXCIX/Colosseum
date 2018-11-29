@@ -13,7 +13,6 @@ import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 
 /**
  * Starter class for Card game stories
@@ -27,7 +26,6 @@ public class colosseumDemoScreen extends GameScreen{
     // /////////////////////////////////////////////////////////////////////////
 
     private LayerViewport mGameViewport;
-    private Vector2 lastTouchDownLocation;
     private Input mInput;
 
     /**
@@ -71,7 +69,6 @@ public class colosseumDemoScreen extends GameScreen{
         mCard = new Card(240, 120, this, 1, 1, 'A');
     }
 
-
     private void setupViewports() {
         // Setup the screen viewport to use the full screen.
         mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
@@ -101,24 +98,33 @@ public class colosseumDemoScreen extends GameScreen{
     public void cardDrag() {
         mInput = this.getGame().getInput();
 
-        if(mInput.getTouchEvents().size() > 0) {
-            for(int i = 0; i < mInput.getTouchEvents().size(); i++) {
-                Vector2 touchLocation = new Vector2(0,0);
-                int touchType = mInput.getTouchEvents().get(i).type;
-                ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
-                        mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
+        for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
+            Vector2 touchLocation = new Vector2(0, 0);
 
-                //Move the card
-                if(touchType == TouchEvent.TOUCH_DRAGGED) mCard.position = touchLocation;
-                //Flip the card
-                if(touchType == TouchEvent.TOUCH_SINGLE_TAP) {
-                    Bitmap b = mCard.getBitmap();
-                    Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
-                    Bitmap back = mGame.getAssetManager().getBitmap("ColosseumSplashScreen");
-                    if(b == front) mCard.setBitmap(back);
-                    else if (b == back) mCard.setBitmap(front);
-                }
+            int touchType = mInput.getTouchEvents().get(i).type;
+            ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
+                    mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
+
+            //Move the card
+            if (touchType == TouchEvent.TOUCH_DRAGGED) mCard.position = touchLocation;
+            //Flip the card
+            if (touchType == TouchEvent.TOUCH_SINGLE_TAP) {
+                Bitmap b = mCard.getBitmap();
+                Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
+                Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
+                if (b == front) mCard.setBitmap(back);
+                else if (b == back) mCard.setBitmap(front);
             }
+
+            //Bound the card
+            if (mCard.getBound().getLeft() < 0)
+                mCard.position.x = mCard.getBound().halfWidth;
+            if (mCard.getBound().getBottom() < 0)
+                mCard.position.y = mCard.getBound().halfHeight;
+            if (mCard.getBound().getRight() > mGameViewport.getRight())
+                mCard.position.x = mGameViewport.getRight() - mCard.getBound().halfWidth;
+            if (mCard.getBound().getTop() > mGameViewport.getTop())
+                mCard.position.y = mGameViewport.getTop() - mCard.getBound().halfHeight;
         }
     }
 

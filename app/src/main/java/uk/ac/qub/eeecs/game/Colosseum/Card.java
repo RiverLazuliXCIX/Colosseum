@@ -19,8 +19,8 @@ public class Card extends GameObject {
      * size and an appropriate width/height ratio.
      */
 
-    private static final float CARD_WIDTH = 100.0f;
-    private static final float CARD_HEIGHT = 150.0f;
+    private static final float CARD_WIDTH = 50.0f;
+    private static final float CARD_HEIGHT = 70.0f;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors

@@ -7,6 +7,11 @@
     },
     {
       "type": "Bitmap",
+      "name": "CardBack",
+      "file": "img/CardBack.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "ColosseumSplashScreen",
       "file": "img/ColosseumSplashScreen.png"
     },
