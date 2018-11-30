@@ -66,7 +66,11 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
 
-        mCard = new Card(240, 120, this, 1, 1, 'A');
+        //Create a single sample card
+        mCard = new Card(240, 120, this);
+        mCard.setAttack(1);
+        mCard.setDefence(4);
+        mCard.setMana(5);
     }
 
     private void setupViewports() {

@@ -1,15 +1,24 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.text.TextPaint;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.icu.text.CollationKey;
 
 import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.util.BoundingBox;
+import uk.ac.qub.eeecs.gage.util.GraphicsHelper;
 import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
@@ -31,6 +40,20 @@ public class Card extends GameObject {
     private static final float CARD_WIDTH = 50.0f;
     private static final float CARD_HEIGHT = 70.0f;
 
+    // Define the card digit images
+    private Bitmap[] mCardDigits = new Bitmap[10];
+
+    // Define the attack and defence values
+    private int attack, defence, mana;
+
+    //Set offset and scale values for positioning
+    private Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
+    private Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
+    private Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
+    private Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
+    private Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
+    private Vector2 mManaScale = new Vector2(0.1f, 0.1f);
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -41,13 +64,13 @@ public class Card extends GameObject {
      * @param startX     x location of the player card
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
-     * @param attack     attack power of this card
-     * @param defence    defence power of this card
-     * @param type       what type of card this is
      */
-    public Card(float startX, float startY, GameScreen gameScreen, int attack, int defence, char type) {
+    public Card(float startX, float startY, GameScreen gameScreen) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
+        // Store each of the damage/health digits
+        for(int digit = 0; digit <= 9; digit++)
+            mCardDigits[digit] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(digit));
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -103,7 +126,72 @@ public class Card extends GameObject {
     }
 
     @Override
-    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
-        //TODO
+    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
+                     LayerViewport layerViewport, ScreenViewport screenViewport) {
+
+        //Draw the base frame
+        super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+
+        //Draw the attack on the card
+        drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+
+        //Draw the defence on the card
+        drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+
+        //Draw the mana on the card
+        drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+    }
+
+
+    private BoundingBox bound;
+    private void drawBitmap(Bitmap bitmap, Vector2 offset, Vector2 scale, IGraphics2D graphics2D,
+                            LayerViewport layerViewport, ScreenViewport screenViewport) {
+
+        bound = new BoundingBox(position.x + mBound.halfWidth * offset.x,
+                                position.y + mBound.halfHeight * offset.y,
+                                mBound.halfWidth * scale.x,
+                                mBound.halfHeight * scale.y);
+
+        if (GraphicsHelper.getSourceAndScreenRect(
+                bound, bitmap, layerViewport, screenViewport, drawSourceRect, drawScreenRect)) {
+
+            Matrix drawMatrix = new Matrix();
+
+            // Build an appropriate transformation matrix
+            drawMatrix.reset();
+
+            float scaleX = (float) drawScreenRect.width() / (float) drawSourceRect.width();
+            float scaleY = (float) drawScreenRect.height() / (float) drawSourceRect.height();
+            drawMatrix.postScale(scaleX, scaleY);
+
+            drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
+
+            // Draw the bitmap
+            graphics2D.drawBitmap(bitmap, drawMatrix, null);
+        }
+    }
+
+    public void setAttack(int attack){
+        this.attack = attack;
+    }
+
+    public void setDefence(int defence){
+        this.defence = defence;
+    }
+
+    public void setMana(int mana){
+        this.mana = mana;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefence() {
+        return defence;
+    }
+
+    public int getMana() {
+        return mana;
     }
 }

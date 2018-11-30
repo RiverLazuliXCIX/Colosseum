@@ -19,6 +19,56 @@
       "type": "Bitmap",
       "name": "ArenaFloor",
       "file": "img/ArenaFloor.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no0",
+      "file": "img/numbers/no0.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no1",
+      "file": "img/numbers/no1.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no2",
+      "file": "img/numbers/no2.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no3",
+      "file": "img/numbers/no3.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no4",
+      "file": "img/numbers/no4.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no5",
+      "file": "img/numbers/no5.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no6",
+      "file": "img/numbers/no6.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no7",
+      "file": "img/numbers/no7.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no8",
+      "file": "img/numbers/no8.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "no9",
+      "file": "img/numbers/no9.png"
     }
     ]
 }
