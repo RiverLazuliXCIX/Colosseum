@@ -13,15 +13,12 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
  * @version 1.0
  */
 public abstract class FPSCounter extends GameObject {
-    //Story P5 Measuring Performance -Scott Barham
+    //Story P1 Measuring Performance -Scott Barham
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
     // /////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Specify if the button will be processed in layer space or screen space
-     */
 
     private static int totalFrames = 0; //create a total frames property to calculate the average fps
     private static int recentFrames = 0; //create a recentFrames to calculate current fps
@@ -33,7 +30,7 @@ public abstract class FPSCounter extends GameObject {
     private static long firstTime = -1; //Used to capture the system time of the first iteration
 
     private float x,y;
-    GameScreen gameScreen;
+    private GameScreen gameScreen;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -72,9 +69,11 @@ public abstract class FPSCounter extends GameObject {
         }
 
         if(ONE_SECOND < System.nanoTime() - sinceLastUpdate) { //If one second passes
+            //Story P1
             sinceLastUpdate = System.nanoTime(); //update the sinceLastUpdate variable with the new time
             updateAmount++; //update the amount of iterations(seconds) that this has been going
             FPScurrent = recentFrames; //make the current fps update to the amount of recent frames
+            //Story P2
             totalFrames += recentFrames; //make the total frames equal to total frames + recent frames
             recentFrames = 0; //reset recent frames back to 0
             FPSaverage = totalFrames / updateAmount; //calculate an average using total frames/total amount of times iterated (seconds).
@@ -89,8 +88,10 @@ public abstract class FPSCounter extends GameObject {
         float textHeight = screenHeight / 30.0f;
         textPaint.setTextSize(textHeight); //create a appropriate sizing of text
         //Draw fps on screen
+        //Story P1
         graphics2D.drawText("Current FPS = ", x, y+80, textPaint); //draw the text "Current FPS = "
         graphics2D.drawText(String.valueOf(FPScurrent), x+250, y +80, textPaint); //draw the text of the current fps value
+        //Story P2
         graphics2D.drawText("Average FPS = ", x, y+110, textPaint); //draw the text "Average FPS = "
         graphics2D.drawText(String.valueOf(FPSaverage), x+250, y +110, textPaint); //draw the text of the average fps value
     }
