@@ -25,7 +25,6 @@ public class Player extends GameObject {
     private int attack = 0;                // Current attack of player character (Through weapons, abilities etc.)
     private int weaponDurability = 0;      // Durability of player's equipped weapon, once it reaches zero weapon is destroyed, player can no longer use it to attack
 
-
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -47,6 +46,66 @@ public class Player extends GameObject {
     // Methods
     // /////////////////////////////////////////////////////////////////////////
 
-    // TODO Implement methods that handle damage being dealt, healed, status effects etc.
+    /**
+     * Methods for retrieving the current health and mana of the player.
+     */
+
+    public int getCurrentHealth(){return currentHealth;}
+
+    public int getCurrentMana(){return currentMana;}
+
+    /**
+     * Method for subtracting both health and armor when the player character/portrait
+     * takes damage. Damage is dealt to armor first, before being dealt to player health
+     * eg. A player with 3 armor and 30 health is hit for 4 damage, 3 damage is is dealt to the
+     * player armor (also removing the 3 armor), and 1 damage is dealt directly to the player health
+     * leaving them with 0 armor and 29 health.
+     *
+     * @param damageReceived amount of damage received in an attack.
+     */
+    public void receiveDamage(int damageReceived){
+
+        if(damageReceived > armor){
+            damageReceived -= armor;
+            armor = 0;
+            currentHealth -= damageReceived;
+        }else{
+            armor -= damageReceived;
+        }
+
+    }
+
+    /**
+     * Method for healing health back to the player character/portrait. Health can not exceed the
+     * player's maxHealth of 30.
+     *
+     * @param amountToHeal amount of health attempting to be restored.
+     */
+    public void heal(int amountToHeal){
+
+        if(currentHealth + amountToHeal > maxHealth){
+            currentHealth = maxHealth;
+        } else{ currentHealth += amountToHeal;}
+
+    }
+
+    /**
+     * Method to deduct mana. If the mana attempting to be deducted exceeds the current player mana
+     * the action can not be completed.
+     *  TODO Add functionality to prevent cards being played if the mana cost cant be covered
+     *
+     * @param manaReduction amount of mana attempting to be reduced.
+     */
+    public void reduceMana(int manaReduction){
+
+        // Currently, mana will only be reduced if the mana reduction can be covered by the player's
+        // current mana, but until further card functionality is added (card costs, ability to play cards etc.)
+        // this method is limited.
+
+        if(manaReduction <= currentMana ){
+            currentMana-=manaReduction;
+        }
+
+    }
 
 }
