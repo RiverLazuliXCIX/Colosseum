@@ -18,12 +18,17 @@
     {
       "type": "Bitmap",
       "name": "cog2",
-      "file": "img/cog2.png"
+      "file": "img/cog3.png"
     },
     {
       "type": "Bitmap",
       "name": "cog2selected",
       "file": "img/cog2selected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "QuitBtn",
+      "file": "img/quit.png"
     }
   ]
 }

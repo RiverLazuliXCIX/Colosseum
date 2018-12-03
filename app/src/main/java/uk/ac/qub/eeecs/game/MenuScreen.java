@@ -28,9 +28,10 @@ public class MenuScreen extends GameScreen {
     private TitleImage mMenuTitle;
 
     //Buttons for accessing different screens
+    private List<PushButton> mButtons = new ArrayList<>();
     private PushButton mPlayGameButton;
     private PushButton mOptionsButton;
-    private List<PushButton> mButtons = new ArrayList<>();
+    private PushButton mQuitButton;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -59,15 +60,22 @@ public class MenuScreen extends GameScreen {
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
 
         //Create the push buttons
+        //Create the Play Game button
         mPlayGameButton = new PushButton(
-                spacingX * 1.1f, spacingY * 1.5f , spacingX*1.8f, spacingY*1.8f,
+                spacingX * 1.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
                 "PlayButton", "PlayButton",this);
         mButtons.add(mPlayGameButton);
-        //Create the option button - Story O1 Scott Barham
+        //Create the Option button
         mOptionsButton = new PushButton(
-                spacingX * 4.0f, spacingY * 1.5f , spacingX*1.8f, spacingY*1.8f,
+                spacingX * 2.5f, spacingY * 1.5f , spacingX*1.2f, spacingY*1.2f,
                 "cog2", "cog2selected",this);
         mButtons.add(mOptionsButton);
+        //Create the Quit button
+        mQuitButton = new PushButton(
+                spacingX * 4.0f, spacingY * 1.5f , spacingX*1.4f, spacingY*1.4f,
+                "QuitBtn", "QuitBtn",this);
+        mButtons.add(mQuitButton);
+
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -110,6 +118,9 @@ public class MenuScreen extends GameScreen {
             } else if (mOptionsButton.isPushTriggered()) {
                 mGame.getAssetManager().getSound("ButtonPress").play();
                 mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
+            } else if (mQuitButton.isPushTriggered()) {
+                mGame.getAssetManager().getSound("ButtonPress").play();
+
             }
         }
     }
