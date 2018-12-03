@@ -2,6 +2,7 @@ package uk.ac.qub.eeecs.game;
 
 import android.graphics.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
@@ -28,6 +29,8 @@ public class MenuScreen extends GameScreen {
 
     //Buttons for accessing different screens
     private PushButton mPlayGameButton;
+    private PushButton mOptionsButton;
+    private List<PushButton> mButtons = new ArrayList<>();
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -59,6 +62,12 @@ public class MenuScreen extends GameScreen {
         mPlayGameButton = new PushButton(
                 spacingX * 1.1f, spacingY * 1.5f , spacingX*1.8f, spacingY*1.8f,
                 "PlayButton", "PlayButton",this);
+        mButtons.add(mPlayGameButton);
+        //Create the option button - Story O1 Scott Barham
+        mOptionsButton = new PushButton(
+                spacingX * 4.0f, spacingY * 1.5f , spacingX*1.8f, spacingY*1.8f,
+                "cog2", "cog2selected",this);
+        mButtons.add(mOptionsButton);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -92,11 +101,15 @@ public class MenuScreen extends GameScreen {
         List<TouchEvent> touchEvents = input.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            mPlayGameButton.update(elapsedTime);
+            for (PushButton button : mButtons)
+                button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
                 mGame.getAssetManager().getSound("ButtonPress").play();
                 mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
+            } else if (mOptionsButton.isPushTriggered()) {
+                mGame.getAssetManager().getSound("ButtonPress").play();
+                mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
             }
         }
     }
@@ -121,8 +134,9 @@ public class MenuScreen extends GameScreen {
         //Draw the title image
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        //Draw the buttons
-        mPlayGameButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        //Draw the buttons using enhanced for loop
+        for (PushButton button : mButtons)
+            button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 
 }

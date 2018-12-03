@@ -14,6 +14,16 @@
       "type": "Bitmap",
       "name": "PlayButton",
       "file": "img/PlayGameButton.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "cog2",
+      "file": "img/cog2.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "cog2selected",
+      "file": "img/cog2selected.png"
     }
   ]
 }

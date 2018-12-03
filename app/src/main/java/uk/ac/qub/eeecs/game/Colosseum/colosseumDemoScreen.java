@@ -32,7 +32,7 @@ public class colosseumDemoScreen extends GameScreen{
      * Define the player's spaceship
      */
     private Card mCard;
-
+    private Card mCard2;
     /**
      * Define the background board
      */
@@ -66,11 +66,14 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
 
-        //Create a single sample card
         mCard = new Card(240, 120, this);
         mCard.setAttack(1);
         mCard.setDefence(4);
         mCard.setMana(5);
+        mCard2 = new Card(280, 180, this);
+        mCard2.setAttack(3);
+        mCard2.setDefence(2);
+        mCard2.setMana(4);
     }
 
     private void setupViewports() {
@@ -97,6 +100,7 @@ public class colosseumDemoScreen extends GameScreen{
     @Override
     public void update(ElapsedTime elapsedTime) {
         mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport,  mGame);
+        mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport,  mGame);
     }
 
     /**
@@ -115,5 +119,7 @@ public class colosseumDemoScreen extends GameScreen{
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        mCard2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
     }
 }
