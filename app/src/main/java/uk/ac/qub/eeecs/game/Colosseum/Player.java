@@ -47,12 +47,14 @@ public class Player extends GameObject {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Methods for retrieving the current health and mana of the player.
+     * Methods for retrieving the current health, armor and mana of the player.
      */
 
     public int getCurrentHealth(){return currentHealth;}
 
     public int getCurrentMana(){return currentMana;}
+
+    public int getCurrentArmor(){return armor;}
 
     /**
      * Method for subtracting both health and armor when the player character/portrait
@@ -108,4 +110,14 @@ public class Player extends GameObject {
 
     }
 
+    /**
+     * Method for increasing the player character's armor. Armor is a secondary source of health
+     * and is reduced prior to the player's currentHealth.
+     *
+     * @param armorAdded amount of armor attempting to be added.
+     */
+
+    public void increaseArmor(int armorAdded){
+        armor+=armorAdded;
+    }
 }
