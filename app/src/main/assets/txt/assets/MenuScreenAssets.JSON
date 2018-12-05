@@ -17,8 +17,18 @@
     },
     {
       "type": "Bitmap",
+      "name": "PlayButton-Select",
+      "file": "img/PlayGameButton-selected.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "cog2",
       "file": "img/cog3.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Options-Select",
+      "file": "img/options-select.png"
     },
     {
       "type": "Bitmap",
@@ -29,6 +39,11 @@
       "type": "Bitmap",
       "name": "QuitBtn",
       "file": "img/quit.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Quit-Select",
+      "file": "img/door-select.png"
     }
   ]
 }

@@ -63,17 +63,17 @@ public class MenuScreen extends GameScreen {
         //Create the Play Game button
         mPlayGameButton = new PushButton(
                 spacingX * 1.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
-                "PlayButton", "PlayButton",this);
+                "PlayButton", "PlayButton-Select",this);
         mButtons.add(mPlayGameButton);
         //Create the Option button
         mOptionsButton = new PushButton(
-                spacingX * 2.5f, spacingY * 1.5f , spacingX*1.2f, spacingY*1.2f,
-                "cog2", "cog2selected",this);
+                spacingX * 2.5f, spacingY * 1.5f , spacingX*1.4f, spacingY*1.4f,
+                "cog2", "Options-Select",this);
         mButtons.add(mOptionsButton);
         //Create the Quit button
         mQuitButton = new PushButton(
-                spacingX * 4.0f, spacingY * 1.5f , spacingX*1.4f, spacingY*1.4f,
-                "QuitBtn", "QuitBtn",this);
+                spacingX * 4.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
+                "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
 
     }
@@ -120,7 +120,7 @@ public class MenuScreen extends GameScreen {
                 mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {
                 mGame.getAssetManager().getSound("ButtonPress").play();
-
+                System.exit(0);
             }
         }
     }
