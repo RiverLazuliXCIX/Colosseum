@@ -23,6 +23,8 @@ public class SplashScreen extends GameScreen {
     private GameObject mSplashBackground;
     private LayerViewport mSplashLayerViewport;
     private TitleImage mMenuTitle;
+    private TitleImage mTouchToContinue;
+    private TitleImage mTeamLogo;
     private int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
     private int spacingY = (int) mDefaultLayerViewport.getHeight() / 4;
 
@@ -52,6 +54,8 @@ public class SplashScreen extends GameScreen {
 
         // Create the title image for the splash screens
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "SplashScreenTitle",this);
+        mTouchToContinue = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 0.5f, spacingX * 2.0f, spacingY / 2.2f, "TouchToContinue", this);
+        mTeamLogo = new TitleImage(mDefaultLayerViewport.getWidth() / 11.0f, spacingY * 3.0f,spacingX * 0.43f, spacingY / 1.5f, "TeamLogo", this);
     }
 
     private void setupViewports() {
@@ -110,6 +114,7 @@ public class SplashScreen extends GameScreen {
                 mDefaultScreenViewport);
 
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-
+        mTouchToContinue.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        mTeamLogo.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 }
