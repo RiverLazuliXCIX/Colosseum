@@ -18,17 +18,22 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
+//Menu Screen implemented by Dearbhaile.
+
 public class MenuScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
     // /////////////////////////////////////////////////////////////////////////
+
+    //Different objects required for this screen to function
     private GameObject mMenuBackground;
     private LayerViewport mMenuViewport;
     private TitleImage mMenuTitle;
 
-    //Buttons for accessing different screens
+    //Array List to hold the PushButtons
     private List<PushButton> mButtons = new ArrayList<>();
+    //Push buttons for accessing different screens
     private PushButton mPlayGameButton;
     private PushButton mOptionsButton;
     private PushButton mQuitButton;
@@ -36,6 +41,12 @@ public class MenuScreen extends GameScreen {
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Create the 'Options Screen' screen
+     *
+     * @param game Game to which this screen belongs
+     */
 
     public MenuScreen(Game game) {
         super("MenuScreen", game);
@@ -46,10 +57,9 @@ public class MenuScreen extends GameScreen {
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
-        // Load in the assets e.g. background image
+        // Load in the assets from an external .JSON file
         AssetManager assetManager = mGame.getAssetManager();
         assetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
-        assetManager.loadAndAddSound("ButtonPress", "sound/ButtonSword.mp3");
 
         // Create the background
         mMenuBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
@@ -59,13 +69,13 @@ public class MenuScreen extends GameScreen {
         // Create the title image
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
 
-        //Create the push buttons
+        //Create the Push Buttons
         //Create the Play Game button
         mPlayGameButton = new PushButton(
                 spacingX * 1.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
                 "PlayButton", "PlayButton-Select",this);
         mButtons.add(mPlayGameButton);
-        //Create the Option button
+        //Create the Options button
         mOptionsButton = new PushButton(
                 spacingX * 2.5f, spacingY * 1.5f , spacingX*1.4f, spacingY*1.4f,
                 "cog2", "Options-Select",this);
@@ -83,7 +93,7 @@ public class MenuScreen extends GameScreen {
     // /////////////////////////////////////////////////////////////////////////
 
     private void setupViewports() {
-        // Setup the screen viewport to use the full screen.
+        // Setup the screen viewport to use the full screen:
         mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
 
         // Calculate the layer height that will preserved the screen aspect ratio

@@ -44,6 +44,11 @@
       "type": "Bitmap",
       "name": "Quit-Select",
       "file": "img/door-select.png"
+    },
+    {
+      "type": "Sound",
+      "name": "ButtonPress",
+      "file": "sound/ButtonSword.mp3"
     }
   ]
 }
