@@ -43,7 +43,7 @@ public class MenuScreen extends GameScreen {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Create the 'Options Screen' screen
+     * Create the 'Menu Screen' screen
      *
      * @param game Game to which this screen belongs
      */
