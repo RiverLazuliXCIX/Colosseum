@@ -118,7 +118,6 @@ public class MenuScreen extends GameScreen {
     //Method that controls button sounds
     public void playButtonSound() {
         mGame.getAssetManager().getSound("ButtonPress").play();
-            mGame.getAssetManager().getSound("ButtonPress").play();
     }
 
     /**
