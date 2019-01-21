@@ -96,7 +96,7 @@ public class MenuScreen extends GameScreen {
     // Methods
     // /////////////////////////////////////////////////////////////////////////
 
-    private void setupViewports() {
+    public void setupViewports() {
         // Setup the screen viewport to use the full screen:
         mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
 
@@ -109,19 +109,16 @@ public class MenuScreen extends GameScreen {
     }
 
     //Method that controls background music
-    private void playBackgroundMusic() {
+    public void playBackgroundMusic() {
         while (!assetManager.getMusic("Menu-Music").isPlaying()) {
             assetManager.getMusic("Menu-Music").play();
         }
-        
     }
 
     //Method that controls button sounds
-    private void playButtonSound() {
-        mGame.getAssetManager().getMusic("ButtonPress").play();
-        if (!mGame.getAssetManager().getMusic("ButtonPress").isPlaying()) {
-            mGame.getAssetManager().getMusic("ButtonPress").stop();
-        }
+    public void playButtonSound() {
+        mGame.getAssetManager().getSound("ButtonPress").play();
+            mGame.getAssetManager().getSound("ButtonPress").play();
     }
 
     /**

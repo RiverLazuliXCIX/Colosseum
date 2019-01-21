@@ -14,6 +14,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.engine.io.FileIO;
 import uk.ac.qub.eeecs.game.DemoGame;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -38,31 +39,24 @@ public class MenuScreenTest {
     }
 
     //**Tests on my 'playBackgroundMusic' method**
-
     @Test
     public void playBackgroundMusic_ValidData() {
-    // This test is to ensure that if valid data is submitted, the music will play:
-    String assetName = "Menu-Music", assetPath = "sound/Benedictus.mp3";
-    assetManager.loadAndAddMusic(assetName, assetPath);
+        // This test is to ensure that if valid data is submitted, the music will play:
+        String assetName = "Menu-Music", assetPath = "sound/Benedictus.mp3";
+        assetManager.loadAndAddMusic(assetName, assetPath);
 
-    //Attempt to play music, and then assert that "Music Playing" flag is true:
-    assetManager.getMusic("Menu-Music").play();
-    assertTrue(assetManager.getMusic("Menu-Music").isPlaying());
+        //Attempt to play music, and then assert that "Music Playing" flag is true:
+        assetManager.getMusic(assetName).play();
+        assertTrue(assetManager.getMusic(assetName).isPlaying());
     }
 
     @Test(expected = RuntimeException.class)
     public void playBackgroundMusic_InvalidData() {
-     //This test is to ensure that when invalid data is submitted, when my program
-     //is instructed to play said data, it throws up a Runtime exception instead.
-     String assetName = "DoesNotExist", assetPath = "img/ThisMusicIsFake.mp3";
-     assetManager.loadAndAddMusic(assetName, assetPath);
+        //This test is to ensure that when invalid data is submitted, when my program
+        //is instructed to play said data, it throws up a Runtime exception instead.
+        String assetName = "DoesNotExist", assetPath = "img/ThisMusicIsFake.mp3";
+        assetManager.loadAndAddMusic(assetName, assetPath);
 
-     assetManager.getMusic("DoesNotExist").play();
+        assetManager.getMusic(assetName).play();
     }
-
-    //**Tests on my 'playButtonSound' method**
-    // This test is to ensure that if valid data is submitted, the sound will play:
-
-
-
 }

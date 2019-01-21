@@ -46,7 +46,7 @@
       "file": "img/door-select.png"
     },
     {
-      "type": "Music",
+      "type": "Sound",
       "name": "ButtonPress",
       "file": "sound/ButtonSword.mp3"
     },
