@@ -46,9 +46,13 @@
       "file": "img/door-select.png"
     },
     {
-      "type": "Sound",
+      "type": "Music",
       "name": "ButtonPress",
       "file": "sound/ButtonSword.mp3"
-    }
+    },
+    {
+      "type": "Music",
+      "name": "Menu-Music",
+      "file": "sound/Benedictus.mp3"}
   ]
 }

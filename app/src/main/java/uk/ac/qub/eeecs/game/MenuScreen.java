@@ -1,5 +1,6 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.audio.Music;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
@@ -38,6 +40,9 @@ public class MenuScreen extends GameScreen {
     private PushButton mOptionsButton;
     private PushButton mQuitButton;
 
+    //Asset manager, where necessary assets are stored
+    AssetManager assetManager = mGame.getAssetManager();
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -51,15 +56,15 @@ public class MenuScreen extends GameScreen {
     public MenuScreen(Game game) {
         super("MenuScreen", game);
 
+        // Load in the required assets from an external .JSON file
+        assetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
+
         setupViewports();
+        playBackgroundMusic();
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
-
-        // Load in the assets from an external .JSON file
-        AssetManager assetManager = mGame.getAssetManager();
-        assetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
 
         // Create the background
         mMenuBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
@@ -69,7 +74,7 @@ public class MenuScreen extends GameScreen {
         // Create the title image
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
 
-        //Create the Push Buttons
+        //PUSH BUTTONS:
         //Create the Play Game button
         mPlayGameButton = new PushButton(
                 spacingX * 1.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
@@ -85,7 +90,6 @@ public class MenuScreen extends GameScreen {
                 spacingX * 4.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
                 "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
-
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -102,6 +106,22 @@ public class MenuScreen extends GameScreen {
 
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mMenuViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+    }
+
+    //Method that controls background music
+    private void playBackgroundMusic() {
+        while (!assetManager.getMusic("Menu-Music").isPlaying()) {
+            assetManager.getMusic("Menu-Music").play();
+        }
+        
+    }
+
+    //Method that controls button sounds
+    private void playButtonSound() {
+        mGame.getAssetManager().getMusic("ButtonPress").play();
+        if (!mGame.getAssetManager().getMusic("ButtonPress").isPlaying()) {
+            mGame.getAssetManager().getMusic("ButtonPress").stop();
+        }
     }
 
     /**
@@ -123,13 +143,13 @@ public class MenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                mGame.getAssetManager().getSound("ButtonPress").play();
+                playButtonSound();
                 mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
             } else if (mOptionsButton.isPushTriggered()) {
-                mGame.getAssetManager().getSound("ButtonPress").play();
+                playButtonSound();
                 mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {
-                mGame.getAssetManager().getSound("ButtonPress").play();
+                playButtonSound();
                 System.exit(0);
             }
         }
@@ -158,6 +178,6 @@ public class MenuScreen extends GameScreen {
         //Draw the buttons using enhanced for loop
         for (PushButton button : mButtons)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-    }
 
+    }
 }
