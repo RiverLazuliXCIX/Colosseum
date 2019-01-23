@@ -1,0 +1,109 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "Card_Aegis",
+      "file": "img/AegisOfKabar.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Archer",
+      "file": "img/Archer.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Battleshout",
+      "file": "img/Battleshout.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Cavalry",
+      "file": "img/CavalrysGuardian.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Centurion",
+      "file": "img/Centurion.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Commander",
+      "file": "img/CommandersAssault.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Touch",
+      "file": "img/DecayingTouch.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Aurora",
+      "file": "img/DomainOfAurora.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Hasta",
+      "file": "img/Hasta.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Lion",
+      "file": "img/Lion.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_LionWarCry",
+      "file": "img/LionWarCry.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Axe",
+      "file": "img/MightyAxe.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Cerberus",
+      "file": "img/Cerberus.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Rete",
+      "file": "img/Rete.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Scourge",
+      "file": "img/Scourge.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Strike",
+      "file": "img/SearingStrike.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Bow",
+      "file": "img/TalonBow.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Veles",
+      "file": "img/Veles.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Veteran",
+      "file": "img/VeteranFighter.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Elephant",
+      "file": "img/WarElephant.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Hound",
+      "file": "img/WarHound.png"
+    }
+  ]
+}
