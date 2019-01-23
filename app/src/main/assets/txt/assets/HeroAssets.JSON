@@ -1,0 +1,34 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "HeroBrutalus",
+      "file": "img/Brutalus – Barbarian.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HeroEmperorCommodus",
+      "file": "img/Emperor Commodus – Rogue.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HeroHircine",
+      "file": "img/Hircine - Hunter.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HeroMars",
+      "file": "img/Mars Roman god of war – Warrior.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HeroMeridia",
+      "file": "img/Meridia – Priest.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HeroSagira",
+      "file": "img/Sagira – Guardian.png"
+    }
+  ]
+}
