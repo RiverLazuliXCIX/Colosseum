@@ -53,6 +53,16 @@
     {
       "type": "Music",
       "name": "Menu-Music",
-      "file": "sound/Benedictus.mp3"}
+      "file": "sound/Benedictus.mp3"},
+    {
+      "type": "Bitmap",
+      "name": "Play_BTN",
+      "file": "img/PLAYBTN.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Pause_BTN",
+      "file": "img/PAUSEBTN.png"
+    }
   ]
 }

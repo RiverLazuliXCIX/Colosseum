@@ -9,11 +9,14 @@ import java.util.List;
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.audio.Music;
+import uk.ac.qub.eeecs.gage.engine.audio.Sound;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
+import uk.ac.qub.eeecs.gage.ui.ToggleButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -35,32 +38,44 @@ public class MenuScreen extends GameScreen {
 
     //Array List to hold the PushButtons
     private List<PushButton> mButtons = new ArrayList<>();
+
+    //Array List to hold the ToggleButtons
+    private List<ToggleButton> mToggles = new ArrayList<>();
+
     //Push buttons for accessing different screens
     private PushButton mPlayGameButton;
     private PushButton mOptionsButton;
     private PushButton mQuitButton;
 
-    //Asset manager, where necessary assets are stored
-    AssetManager assetManager = mGame.getAssetManager();
+    //Toggle buttons for play-pause and mute-unmute
+    private ToggleButton mPlayPause, mMuteUnmute;
+
+    //Asset manager, where necessary assets are stored:
+    AssetManager mAssetManager = mGame.getAssetManager();
+
+    //Screen manager, used throughout the MenuScreen Class:
+    ScreenManager mScreenManager = mGame.getScreenManager();
+
+    //Declares the background music
+    private Music mBgMusicMenu;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Create the 'Menu Screen' screen
-     *
-     * @param game Game to which this screen belongs
-     */
+     *  Create the 'Menu Screen' screen
+     **/
 
     public MenuScreen(Game game) {
         super("MenuScreen", game);
 
         // Load in the required assets from an external .JSON file
-        assetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
+        mAssetManager.loadAssets("txt/assets/MenuScreenAssets.JSON");
 
+        //Set up viewports, and set up background music to play
         setupViewports();
-        playBackgroundMusic();
+        playBackgroundMusic("Menu-Music");
 
         // Define the spacing that will be used to position the buttons
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -69,7 +84,7 @@ public class MenuScreen extends GameScreen {
         // Create the background
         mMenuBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(), assetManager.getBitmap("ColMenuScreen"), this);
+                mDefaultLayerViewport.getHeight(), mAssetManager.getBitmap("ColMenuScreen"), this);
 
         // Create the title image
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "MenuText",this);
@@ -90,6 +105,12 @@ public class MenuScreen extends GameScreen {
                 spacingX * 4.0f, spacingY * 1.5f , spacingX*1.5f, spacingY*1.5f,
                 "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
+
+        //TOGGLE BUTTONS:
+        mPlayPause = new ToggleButton(
+                spacingX * 4.5f, spacingY * 2.5f , spacingX*0.3f, spacingY*0.3f,
+                "Pause_BTN", "Play_BTN",this);
+        mToggles.add(mPlayPause);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -108,24 +129,28 @@ public class MenuScreen extends GameScreen {
         mMenuViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-    //Method that controls background music
-    public void playBackgroundMusic() {
-        while (!assetManager.getMusic("Menu-Music").isPlaying()) {
-            assetManager.getMusic("Menu-Music").play();
+    //Methods that control background music
+    public void playBackgroundMusic(String assetName) {
+        while (!mAssetManager.getMusic(assetName).isPlaying()) {
+            mBgMusicMenu = mAssetManager.getMusic(assetName);
+            mBgMusicMenu.setLopping(true);
+            mBgMusicMenu.play();
         }
     }
 
-    //Method that controls button sounds
-    public void playButtonSound() {
-        mGame.getAssetManager().getSound("ButtonPress").play();
+    public void stopBackgroundMusic(String assetName) {
+        if (mAssetManager.getMusic(assetName).isPlaying()) {
+            mBgMusicMenu.pause();
+        }
     }
 
-    /**
-     * Update the menu screen
-     *
-     * @param elapsedTime Elapsed time information
-     */
+    //'New Screen' button functions:
+    public void newScreenButtonPress(GameScreen screen) {
+        mAssetManager.getSound("ButtonPress").play();
+        mScreenManager.addScreen(screen);
+    }
 
+    //Method to update MenuScreen:
     @Override
     public void update(ElapsedTime elapsedTime) {
 
@@ -139,24 +164,24 @@ public class MenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                playButtonSound();
-                mGame.getScreenManager().addScreen(new colosseumDemoScreen(mGame));
+                newScreenButtonPress(new colosseumDemoScreen(mGame));
             } else if (mOptionsButton.isPushTriggered()) {
-                playButtonSound();
-                mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
+                newScreenButtonPress(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {
-                playButtonSound();
                 System.exit(0);
+            }
+
+            mPlayPause.update(elapsedTime);
+
+            if (mPlayPause.isToggledOn()) {
+                stopBackgroundMusic("Menu-Music");
+            } else {
+                playBackgroundMusic("Menu-Music");
             }
         }
     }
 
-    /**
-     * Draw the menu screen
-     *
-     * @param elapsedTime Elapsed time information
-     * @param graphics2D  Graphics instance
-     */
+    //Method to draw the MenuScreen
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
 
@@ -171,9 +196,12 @@ public class MenuScreen extends GameScreen {
         //Draw the title image
         mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        //Draw the buttons using enhanced for loop
+        //Draw the buttons using enhanced for loops
         for (PushButton button : mButtons)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
+        for (ToggleButton toggle : mToggles)
+            toggle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
     }
 }

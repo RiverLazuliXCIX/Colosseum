@@ -1,20 +1,23 @@
 package uk.ac.qub.eeecs.gage;
 
-
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.runner.RunWith;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
-import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.io.FileIO;
+import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.DemoGame;
+import uk.ac.qub.eeecs.game.MenuScreen;
+import uk.ac.qub.eeecs.game.OptionsScreen;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -29,6 +32,7 @@ public class MenuScreenTest {
     private Context context;
     private DemoGame game;
     AssetManager assetManager;
+    MenuScreen mMenuScreen;
 
     @Before
     public void setUp() {
@@ -42,21 +46,37 @@ public class MenuScreenTest {
     @Test
     public void playBackgroundMusic_ValidData() {
         // This test is to ensure that if valid data is submitted, the music will play:
-        String assetName = "Menu-Music", assetPath = "sound/Benedictus.mp3";
-        assetManager.loadAndAddMusic(assetName, assetPath);
+        assetManager.loadAndAddMusic("Menu-Music", "sound/Benedictus.mp3");
 
         //Attempt to play music, and then assert that "Music Playing" flag is true:
-        assetManager.getMusic(assetName).play();
-        assertTrue(assetManager.getMusic(assetName).isPlaying());
+        assertTrue(assetManager.getMusic("Menu-Music").isPlaying());
     }
 
     @Test(expected = RuntimeException.class)
     public void playBackgroundMusic_InvalidData() {
         //This test is to ensure that when invalid data is submitted, when my program
-        //is instructed to play said data, it throws up a Runtime exception instead.
-        String assetName = "DoesNotExist", assetPath = "img/ThisMusicIsFake.mp3";
+        //is instructed to play said data, it throws up a Runtime exception instead:
+        String assetName = "DoesNotExist", assetPath = "sound/ThisMusicIsFake.mp3";
         assetManager.loadAndAddMusic(assetName, assetPath);
 
+        //Attempt to play music, and expect a Runtime exception:
         assetManager.getMusic(assetName).play();
+    }
+
+    //**Test on my stopBackgroundMusic method**
+    @Test
+    public void stopBackgroundMusic_StopCheck() {
+        //This test is to ensure that when I call the 'stopBackgroundMusic'
+        //method, the music does actually stop playing:
+        String assetName = "Menu-Music", assetPath = "sound/Benedictus.mp3";
+        assetManager.loadAndAddMusic(assetName, assetPath);
+
+        //Method body:
+        if (assetManager.getMusic(assetName).isPlaying()) {
+            assetManager.getMusic("Menu-Music").stop();
+        }
+
+        //Check has music stopped:
+        assertFalse(assetManager.getMusic(assetName).isPlaying());
     }
 }
