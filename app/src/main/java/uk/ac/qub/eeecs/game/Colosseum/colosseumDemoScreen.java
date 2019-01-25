@@ -2,12 +2,20 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
@@ -38,6 +46,15 @@ public class colosseumDemoScreen extends GameScreen{
      */
     private GameObject mGameBackground;
 
+    //Array List to hold the PushButtons
+    private List<PushButton> mButtons = new ArrayList<>();
+
+    //Push button for ending player's turn
+    private PushButton mEndTurnButton;
+
+    //Paint item that will be used to tint the 'End Turn' button
+    private Paint mButtonTint;
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -66,6 +83,19 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
 
+        //Create the Push Buttons:
+        // Spacing that will be used to position the buttons:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+
+        mEndTurnButton = new PushButton(
+                spacingX * 21.0f, spacingY * 7.0f , spacingX*2.5f, spacingY*2.0f,
+                "EndTurn", this);
+        mButtons.add(mEndTurnButton);
+
+        Paint mButtonTint = new Paint();
+
+        //Setting up demo cards:
         mCard = new Card(240, 120, this);
         mCard.setAttack(1);
         mCard.setDefence(4);
@@ -92,6 +122,13 @@ public class colosseumDemoScreen extends GameScreen{
     // Methods
     // /////////////////////////////////////////////////////////////////////////
 
+    public void endPlayerTurn() {
+        //When player ends turn, a 'YourTurn' variable on the player should turn to false
+        //This will prevent player from attempting to draw from their deck, or playing a card
+        //It will also trigger the AI to make a move
+    }
+
+
     /**
      * Update the card demo screen
      *
@@ -101,6 +138,10 @@ public class colosseumDemoScreen extends GameScreen{
     public void update(ElapsedTime elapsedTime) {
         mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport,  mGame);
         mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport,  mGame);
+
+        for (PushButton button : mButtons) {
+            button.update(elapsedTime);
+        }
     }
 
     /**
@@ -118,8 +159,13 @@ public class colosseumDemoScreen extends GameScreen{
         // Draw the background first of all
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+        //Draw the cards onscreen
         mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         mCard2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+        //Draw PushButtons onscreen:
+        for (PushButton button : mButtons) {
+            button.draw(elapsedTime, graphics2D);
+        }
     }
 }

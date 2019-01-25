@@ -69,6 +69,11 @@
       "type": "Bitmap",
       "name": "no9",
       "file": "img/numbers/no9.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "EndTurn",
+      "file": "img/End_Turn_Button.png"
     }
     ]
 }

@@ -25,6 +25,8 @@ public class Player extends GameObject {
     private int attack = 0;                // Current attack of player character (Through weapons, abilities etc.)
     private int weaponDurability = 0;      // Durability of player's equipped weapon, once it reaches zero weapon is destroyed, player can no longer use it to attack
 
+    private boolean yourTurn; // Will be false or true depending on whether or not it is the player's turn
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,9 @@ public class Player extends GameObject {
 
     public int getCurrentWeaponDurability() {return weaponDurability;}
     public void setCurrentWeaponDurability(int weaponDurability) {this.weaponDurability = weaponDurability;}
+
+    public boolean getYourTurn() {return yourTurn;}
+    public void setYourTurn(boolean newTurnValue) {this.yourTurn = newTurnValue;}
 
     /**
      * Method for subtracting both health and armor when the player character/portrait

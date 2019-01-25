@@ -54,7 +54,7 @@ public class MenuScreen extends GameScreen {
     private Music mBgMusicMenu;
 
     //Paint item that will be used to draw text beside music controls
-    private Paint musicText;
+    private Paint mMusicText;
 
 
     // Constructors
@@ -111,12 +111,12 @@ public class MenuScreen extends GameScreen {
 
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
-        musicText = new Paint();
+        mMusicText = new Paint();
         int screenHeight = mDefaultScreenViewport.height;
         float textHeight = screenHeight / 12.0f;
-        musicText.setTextSize(textHeight);
-        musicText.setColor(Color.rgb(255,140,0));
-        musicText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
+        mMusicText.setTextSize(textHeight);
+        mMusicText.setColor(Color.rgb(255,140,0));
+        mMusicText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
 
 
         //TOGGLE BUTTON:
@@ -216,6 +216,6 @@ public class MenuScreen extends GameScreen {
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
-        graphics2D.drawText("MUSIC:", spacingX * 17.0f, spacingY * 1.5f, musicText);
+        graphics2D.drawText("MUSIC:", spacingX * 17.0f, spacingY * 1.5f, mMusicText);
     }
 }
