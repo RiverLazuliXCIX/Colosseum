@@ -63,6 +63,16 @@
       "type": "Bitmap",
       "name": "Pause_BTN",
       "file": "img/PAUSEBTN.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Mute_BTN",
+      "file": "img/mute-speaker.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Unmute_BTN",
+      "file": "img/unmute-speaker.png"
     }
   ]
 }
