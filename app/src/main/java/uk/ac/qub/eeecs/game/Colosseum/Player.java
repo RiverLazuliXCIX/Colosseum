@@ -1,8 +1,13 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
+
+import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 
 public class Player extends GameObject {
 
@@ -42,6 +47,8 @@ public class Player extends GameObject {
 
     public Player(float startX, float startY, GameScreen gameScreen, Bitmap portraitImage, char hero){
         super(startX, startY, PORTRAIT_WIDTH, PORTRAIT_HEIGHT, portraitImage, gameScreen);
+        // Create new game objects for the portrait when constructor called, used to be drawn to screen
+        // call the draw methods of those opbjects within the draw call of the player class.
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -206,4 +213,13 @@ public class Player extends GameObject {
         }
         // Else if zero display message or some sort of feedback to the player
     }
+
+    @Override
+    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
+                     ScreenViewport screenViewport){
+        // Draw elements associated with the player class, such as health, character portrait,
+        // ability icon etc.
+
+    }
+
 }
