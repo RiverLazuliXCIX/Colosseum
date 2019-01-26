@@ -72,8 +72,19 @@
     },
     {
       "type": "Bitmap",
+      "name": "Test",
+      "file": "img/TestBitmap.png"
+    }
+    ,
+    {
+      "type": "Bitmap",
       "name": "EndTurn",
-      "file": "img/End_Turn_Button.png"
+      "file": "img/END-TURN-OFF.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "EndTurn2",
+      "file": "img/END-TURN-ON.png"
     }
     ]
 }
