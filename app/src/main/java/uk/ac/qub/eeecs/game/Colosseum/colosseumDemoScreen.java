@@ -6,6 +6,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.icu.util.Output;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,23 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
 
+        //Deciding who starts first, Story 16 Sprint 4 - Scott
+        switch(coinFlipStart()){
+            case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
+                // tails - player starts
+                break;
+            case 1: //dCards.add(generateRandomDeck()); //heads - ai starts
+                //dCards.add(generateRandomDeck());
+                break;
+            case 2:
+                //dCards.add(generateRandomDeck());
+                //dCards.add(generateRandomDeck());
+                //dCards.add(generateRandomDeck());//edge of coin - set opponent health to 0, auto win game.
+                break;
+            default: //output an error
+                break;
+        }
+        
         //Create the Push Buttons:
         // Spacing that will be used to position the buttons:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -155,13 +173,26 @@ public class colosseumDemoScreen extends GameScreen{
                 (int)mDefaultLayerViewport.getWidth()-75)+35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
                 RANDOM.nextInt((int)mDefaultLayerViewport.getHeight()-75)+35, //-75, +35 to prevent cards spawning outside the top/bottom regions of the screen.
                 this);
-        dCard.setAttack(RANDOM.nextInt(9)); //limit of values 0-9
-        dCard.setDefence(RANDOM.nextInt(9)); //limit of values 0-9
-        dCard.setMana(RANDOM.nextInt(9)); //limit of values 0-9
+        dCard.setAttack(RANDOM.nextInt(10)); //limit of values 0-9
+        dCard.setDefence(RANDOM.nextInt(10)); //limit of values 0-9
+        dCard.setMana(RANDOM.nextInt(10)); //limit of values 0-9
 
         return dCard;
     }
 
+    private int coinFlipStart() { //Scott, User Story 16, Sprint 4
+        int flip = RANDOM.nextInt(6001);
+        if(flip==6000) { //side of coin (1/6000 chance to auto-win)
+            return 2;
+        }else
+        if(flip>=3000 && flip<6000){ //heads (ai starts)
+            return 1;
+        }else
+        if(flip>=0 && flip<3000){ //tails (user starts)
+            return 0;
+        }
+        return -1; //for error testing only
+    }
 
     /**
      * Update the card demo screen
