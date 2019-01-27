@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -36,7 +37,7 @@ public class colosseumDemoScreen extends GameScreen{
 
     private LayerViewport mGameViewport;
     private Input mInput;
-
+    private static final Random RANDOM = new Random();
     /**
      * Define cards
      **/
@@ -49,6 +50,9 @@ public class colosseumDemoScreen extends GameScreen{
 
     //Array List to hold the Toggle Button ('End Turn')
     private List<ToggleButton> mButtons = new ArrayList<>();
+
+    //Array list to hold a deck of cards - Story 7 Sprint 4
+    private List<Card> dCards = new ArrayList<>();
 
     //Push button for ending player's turn
     private ToggleButton mEndTurnButton;
@@ -110,6 +114,12 @@ public class colosseumDemoScreen extends GameScreen{
         mCard2.setDefence(2);
         mCard2.setMana(4);
 
+        //User Story 7, Sprint 4 - Scott
+        dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
+        //for(int i = 0; i<30; i++) {   //creates a mass of cards for testing purposes, un-comment at your own demise.
+        //    dCards.add(generateRandomDeck());
+        //}
+
         //Setting up demo player:
         Bitmap p2bit = mGame.getAssetManager().getBitmap("Test");
         Player p2 = new Player(spacingX * 5.0f, spacingY * 5.0f, this, p2bit, 'a');
@@ -139,6 +149,19 @@ public class colosseumDemoScreen extends GameScreen{
         //It will also trigger the AI to make a move
     }
 
+    private Card generateRandomDeck() { //Scott Barham, Story 7 Sprint 4
+        Card dCard;
+        dCard = new Card(RANDOM.nextInt(
+                (int)mDefaultLayerViewport.getWidth()-75)+35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
+                RANDOM.nextInt((int)mDefaultLayerViewport.getHeight()-75)+35, //-75, +35 to prevent cards spawning outside the top/bottom regions of the screen.
+                this);
+        dCard.setAttack(RANDOM.nextInt(9)); //limit of values 0-9
+        dCard.setDefence(RANDOM.nextInt(9)); //limit of values 0-9
+        dCard.setMana(RANDOM.nextInt(9)); //limit of values 0-9
+
+        return dCard;
+    }
+
 
     /**
      * Update the card demo screen
@@ -155,6 +178,10 @@ public class colosseumDemoScreen extends GameScreen{
 
             mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport, mGame);
             mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
+
+            for(Card deckOfCards: dCards){ //updates each card held within the "dCards" variable, Sprint 4 Story 7
+                deckOfCards.cardDrag(deckOfCards, mDefaultScreenViewport, mGameViewport, mGame);
+            }
 
             mEndTurnButton.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
 
@@ -182,6 +209,10 @@ public class colosseumDemoScreen extends GameScreen{
         //Draw the cards onscreen
         mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         mCard2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        for(Card deckOfCards: dCards){ //draws each card held within the "dCards" variable, Sprint 4 Story 7
+            deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        }
 
         //Draw PushButtons onscreen:
         for (ToggleButton button : mButtons) {
