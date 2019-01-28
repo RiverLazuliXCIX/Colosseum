@@ -65,6 +65,9 @@ public class colosseumDemoScreen extends GameScreen{
     private Player p2;
     private Bitmap p2bit;
 
+    protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+    protected boolean edgeCase = false;
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -94,7 +97,10 @@ public class colosseumDemoScreen extends GameScreen{
                 mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
 
         //Deciding who starts first, Story 16 Sprint 4 - Scott
-        switch(coinFlipStart()){
+        if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+            edgeCaseTest();
+        } else {
+        switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
             case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
                 // tails - player starts
                 break;
@@ -109,6 +115,7 @@ public class colosseumDemoScreen extends GameScreen{
             default: //output an error
                 break;
         }
+    }
         
         //Create the Push Buttons:
         // Spacing that will be used to position the buttons:
@@ -194,6 +201,24 @@ public class colosseumDemoScreen extends GameScreen{
         return -1; //for error testing only
     }
 
+    private void edgeCaseTest() { //Testing for the edge case scenario of the coin flip, User Story 18.1, Sprint 4 - Scott
+        boolean i = true;
+        while(i){
+            edgeCounter++;
+            switch(coinFlipStart()){
+                case 0://tails - player starts
+                    break;
+                case 1: //heads - ai starts
+                    break;
+                case 2: //edge of coin - set opponent health to 0, auto win game.
+                    i=false;
+                    break;
+                default: //output an error
+                    break;
+            }
+        }
+    }
+
     /**
      * Update the card demo screen
      *
@@ -228,6 +253,9 @@ public class colosseumDemoScreen extends GameScreen{
      * @param elapsedTime Elapsed time information
      * @param graphics2D  Graphics instance
      */
+
+    private Paint textPaint = new Paint();
+
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         // Clear the screen
@@ -240,6 +268,14 @@ public class colosseumDemoScreen extends GameScreen{
         //Draw the cards onscreen
         mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         mCard2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
+            int screenHeight = graphics2D.getSurfaceHeight();
+            float textHeight = screenHeight / 30.0f;
+            textPaint.setTextSize(textHeight); //create a appropriate sizing of text
+            graphics2D.drawText("Iterations to reach Edge Case:", 100.0f, 50.0f, textPaint); //draw the text "Iterations to reach Edge Case:"
+            graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
+        }
 
         for(Card deckOfCards: dCards){ //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
