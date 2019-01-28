@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -146,6 +147,31 @@ public class PlayerClassTest {
         // Test that after taking damage health is not decreased, and armor is reduced to zero
         assertEquals(expectedHealth,player.getCurrentHealth());
         assertEquals(expectedArmor,player.getCurrentArmor());
+    }
+
+    /*
+     * Placeholder test for opponent method **TEMP: next sprint add new test class for opponent **
+     */
+    @Test
+    public void OppArmorTest() {
+        // Define expected properties
+        int expectedHealth = 30;
+        int expectedArmor = 1;
+        float startX = 10.0f;
+        float startY = 10.0f;
+        char hero = 'c';
+
+
+        AIOpponent opponent = new AIOpponent(startX,startY,gameScreen,bitmap,hero);
+
+        // Increases player armor by 3 from it's default value of 0
+        opponent.increaseArmor(5);
+        // Damage the player character, from default health of 30
+        opponent.receiveDamage(4);
+
+        // Test that after taking damage health is not decreased, and armor is reduced to zero
+        assertEquals(expectedHealth,opponent.getCurrentHealth());
+        assertEquals(expectedArmor,opponent.getCurrentArmor());
     }
 
 }

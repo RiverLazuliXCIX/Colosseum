@@ -3,32 +3,32 @@
     {
       "type": "Bitmap",
       "name": "HeroBrutalus",
-      "file": "img/Brutalus – Barbarian.png"
+      "file": "img/hero/BrutalusBarbarian.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroEmperorCommodus",
-      "file": "img/Emperor Commodus – Rogue.png"
+      "file": "img/hero/EmperorCommodusRogue.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroHircine",
-      "file": "img/Hircine - Hunter.png"
+      "file": "img/hero/HircineHunter.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroMars",
-      "file": "img/Mars Roman god of war – Warrior.png"
+      "file": "img/hero/MarsWarrior.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroMeridia",
-      "file": "img/Meridia – Priest.png"
+      "file": "img/hero/MeridiaPriest.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroSagira",
-      "file": "img/Sagira – Guardian.png"
+      "file": "img/hero/SagiraGuardian.png"
     }
   ]
 }

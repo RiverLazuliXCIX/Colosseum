@@ -87,6 +87,8 @@ public class colosseumDemoScreen extends GameScreen{
     private void setUpGameObjects() {
         // Load in the assets used by the steering demo
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
+        mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
+
 
         // Create the background
         Bitmap mBackgroundBitmap = getGame()
@@ -146,8 +148,9 @@ public class colosseumDemoScreen extends GameScreen{
         //}
 
         //Setting up demo player:
-        Bitmap p2bit = mGame.getAssetManager().getBitmap("Test");
-        Player p2 = new Player(spacingX * 5.0f, spacingY * 5.0f, this, p2bit, 'a');
+        //Bitmap p2bit = mGame.getAssetManager().getBitmap("Test");
+        //Player p2 = new Player(spacingX * 5.0f, spacingY * 5.0f, this, p2bit, "Hircine");
+        p2=new Player(this,"Hircine");
     }
 
     private void setupViewports() {
@@ -264,6 +267,9 @@ public class colosseumDemoScreen extends GameScreen{
 
         // Draw the background first of all
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        // Draw the player portrait (Just for testing, still working on it)
+        p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the cards onscreen
         mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);

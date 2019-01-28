@@ -16,12 +16,16 @@ public class Player extends GameObject {
     // /////////////////////////////////////////////////////////////////////////
 
     // Stores the character portrait height and width
+    // TODO Portrait width stores temporary values, needs to make it scale
     private static final float PORTRAIT_WIDTH = 50.0f;
-    private static final float PORTRAIT_HEIGHT = 100.0f;
+    private static final float PORTRAIT_HEIGHT = 50.0f;
 
     // Sets a cap on the maximum health and mana a player can have at once
     private static final int maxHealth = 30;
     private static final int maxMana = 10;
+
+    // Stores numbers used by hero stats (health, mana, durability, armor etc.)
+    private Bitmap[] heroStatNumbers = new Bitmap[10];
 
     private int currentHealth = maxHealth; // Current health at initialisation should be set to max.
     private int currentManaCap = 1;        // Initial mana cap should be set to one, and will increase by one each turn, until it reaches maxMana upon which it stops increasing (outside of potential card effects).
@@ -32,23 +36,36 @@ public class Player extends GameObject {
 
     private boolean yourTurn; // Will be false or true depending on whether or not it is the player's turn
 
+    // Add variables for storing player's active cards, deck, hand etc.
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
 
     /**
      *
-     * @param startX           Starting x coordinate of the player character portrait
-     * @param startY           Starting y coordinate of the player character portrait
+     //* @param startX           Starting x coordinate of the player character portrait
+     //* @param startY           Starting y coordinate of the player character portrait
      * @param gameScreen       Gamescreen upon which the portrait will be displayed
      * @param hero             The player's hero, different heroes have different abilities etc.
-     * @param portraitImage    Bitmap of the player's chosen character to be displayed.
+     //* @param portraitImage    Bitmap of the player's chosen character to be displayed.
      */
 
-    public Player(float startX, float startY, GameScreen gameScreen, Bitmap portraitImage, char hero){
-        super(startX, startY, PORTRAIT_WIDTH, PORTRAIT_HEIGHT, portraitImage, gameScreen);
-        // Create new game objects for the portrait when constructor called, used to be drawn to screen
-        // call the draw methods of those opbjects within the draw call of the player class.
+    // Create new game objects for the portrait when constructor called, used to be drawn to screen
+    // call the draw methods of those objects within the draw call of the player class.
+    // Add an additional screen to allow players to select a hero
+
+    // Portrait drawn at midpoint on default layer viewport X axis to ~Hopefully~ keep it centred on different screens
+    public Player(GameScreen gameScreen, String hero){
+        super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2),
+                PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
+
+        for(int number = 0; number <= 9; number++) {
+            heroStatNumbers[number] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(number));
+        }
+
+        setUpHero(hero);
+
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -214,11 +231,78 @@ public class Player extends GameObject {
         // Else if zero display message or some sort of feedback to the player
     }
 
-    @Override
-    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
-                     ScreenViewport screenViewport){
-        // Draw elements associated with the player class, such as health, character portrait,
-        // ability icon etc.
+    // TODO Overridden draw method required to include ability icons etc
+
+//    @Override
+//    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
+//                     ScreenViewport screenViewport){
+//        // Draw elements associated with the player class, such as health, character portrait,
+//        // ability icon etc.
+//
+//
+//
+//    }
+
+    /**
+     * Method displays a different portrait based on the hero string that has been passed, and
+     * defines the hero abilities.
+     *
+     * Heroes and associated abilities (Default 2 mana cost)
+     * --------------------------------------------------------------------------------------------
+     * Emperor Commodus : Dagger Belt – Equip a 1 damage 2 durability weapon.
+     * Mars : Fortify - Grants the hero +2 Armor.
+     * Brutalus : Engage – Gain +1 attack this turn and +1 armour.
+     * Sagira : Eyes Up – Able to give any minion +1 health.
+     * Hircine : Hunt - Deals 2 damage to the opposing enemy hero.
+     * Meridia : Holy Healing: Restore 2 Health to Player Hero
+     * --------------------------------------------------------------------------------------------
+     */
+
+    public void setUpHero(String hero){
+
+        switch(hero){
+            case "Commodus":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            case "Mars":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            case "Brutalus":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            case "Sagira":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            case "Hircine":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            case "Meridia":
+
+                // I'll stick some ability related stuff in these sections
+
+                break;
+
+            default:
+                // Error handling / default hero hircine etc.
+                // I'll stick some ability related stuff in these sections
+
+        }
+
 
     }
 
