@@ -2,6 +2,8 @@ package uk.ac.qub.eeecs.game.prototypeClasses;
 
 import java.util.ArrayList;
 
+import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
+
 /**
  * Created by Matthew, 06/12/2018
  */
@@ -9,7 +11,7 @@ public class Deck {
 
     private ArrayList<Card> deck;
     private ArrayList<Card> hand;
-    private ArrayList<Minion> graveyard;
+    private ArrayList<MinionCard> graveyard;
 
     private int minionsLeft;
     private int specialsLeft;
@@ -43,7 +45,7 @@ public class Deck {
             }
 
             // otherwise delete card/add to graveyard as hand is full
-            // if (c instanceof Minion) addToGraveyard((Minion) c);
+            // if (c instanceof MinionCard) addToGraveyard((MinionCard) c);
         } else {
             // player/enemy takes damage
         }
@@ -53,11 +55,11 @@ public class Deck {
         for (int i = 0; i < x; i++) drawCard();
     }
 
-    public void addToGraveyard(Minion m) {
+    public void addToGraveyard(MinionCard m) {
         graveyard.add(m);
     }
 
-    public void resurrect(Minion m) {
+    public void resurrect(MinionCard m) {
         for (int i = 0; i < graveyard.size(); i++) {
             if (m.equals(graveyard.get(i))) {
                 hand.add(graveyard.remove(i));
@@ -71,7 +73,7 @@ public class Deck {
     }
 
     private void updateCardsLeft(Card c) {
-        if (c instanceof Minion) minionsLeft--;
+        if (c instanceof MinionCard) minionsLeft--;
         else specialsLeft--;
     }
 

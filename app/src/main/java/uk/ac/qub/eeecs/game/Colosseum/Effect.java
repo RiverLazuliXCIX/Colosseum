@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.prototypeClasses;
+package uk.ac.qub.eeecs.game.Colosseum;
 
 /**
  * Created by Matthew, 05/12/2018

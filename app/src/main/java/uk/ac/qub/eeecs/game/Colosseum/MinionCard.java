@@ -1,16 +1,18 @@
-package uk.ac.qub.eeecs.game.prototypeClasses;
+package uk.ac.qub.eeecs.game.Colosseum;
+
+import uk.ac.qub.eeecs.game.prototypeClasses.Card;
 
 /**
  * Created by Matthew, 05/12/2018
  */
-public class Minion extends Card {
+public class MinionCard extends Card {
 
     private int attack;
     private int maxHealth;
     private int health;
     private Effect mEffect;
 
-    public Minion() {
+    public MinionCard() {
         super();
         setAttack(0);
         setMaxHealth(1);
@@ -18,7 +20,7 @@ public class Minion extends Card {
         mEffect = Effect.NONE;
     }
 
-    public Minion(int coinCost, int attack, int health, Effect mEffect) {
+    public MinionCard(int coinCost, int attack, int health, Effect mEffect) {
         super(coinCost);
         setAttack(attack);
         setMaxHealth(health);
@@ -26,7 +28,7 @@ public class Minion extends Card {
         setEffect(mEffect);
     }
 
-    public Minion(int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
+    public MinionCard(int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
         super(coinCost);
         setAttack(attack);
         setMaxHealth(maxHealth);
@@ -34,21 +36,21 @@ public class Minion extends Card {
         setEffect(mEffect);
     }
 
-    public void attackEnemy(Minion eMinion) {
+    public void attackEnemy(MinionCard eMinionCard) {
         // add a check for any enemy minions on the board with taunts
 
-        eMinion.takeDamage(this.attack);
-        takeDamage(eMinion.getAttack());
+        eMinionCard.takeDamage(this.attack);
+        takeDamage(eMinionCard.getAttack());
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
-        eMinion.checkHealth();
+        eMinionCard.checkHealth();
         checkHealth();
     }
 
     // Another attack method will be required for attacking the enemy hero
     // Check for taunts on the board
     // Enemy hero will take the minions attack as damage
-    // Minion will take damage for any weapon the enemy has equipped
+    // MinionCard will take damage for any weapon the enemy has equipped
     // Check both healths
     // public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {}
 
