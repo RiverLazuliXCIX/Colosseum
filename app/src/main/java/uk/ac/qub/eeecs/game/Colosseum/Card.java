@@ -40,10 +40,13 @@ public class Card extends GameObject {
     private static final float CARD_WIDTH = 50.0f;
     private static final float CARD_HEIGHT = 70.0f;
 
-    // Define the card digit images
+    //Define the card digit images
     private Bitmap[] mCardDigits = new Bitmap[10];
 
-    // Define the attack and defence values
+    //Check card is flipped
+    private Boolean mCardFlippedBack = false;  //initially the card is not flipped
+
+    //Define the attack and defence values
     private int attack, defence, mana;
 
     //Set offset and scale values for positioning
@@ -107,8 +110,14 @@ public class Card extends GameObject {
                 Bitmap b = mCard.getBitmap();
                 Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
                 Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
-                if (b == front) mCard.setBitmap(back);
-                else if (b == back) mCard.setBitmap(front);
+                if (b == front) {
+                    mCard.setBitmap(back);
+                    mCardFlippedBack = true;
+                }
+                else if (b == back) {
+                    mCard.setBitmap(front);
+                    mCardFlippedBack = false;
+                }
             }
 
             //Bound the card - Story C3
@@ -132,14 +141,16 @@ public class Card extends GameObject {
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        //Draw the attack on the card
-        drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+        if (mCardFlippedBack) {
+            //Draw the attack on the card
+            drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
 
-        //Draw the defence on the card
-        drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+            //Draw the defence on the card
+            drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
 
-        //Draw the mana on the card
-        drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+            //Draw the mana on the card
+            drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+        }
     }
 
 
