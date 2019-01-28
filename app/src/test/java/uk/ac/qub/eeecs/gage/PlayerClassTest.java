@@ -9,6 +9,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import static org.junit.Assert.assertEquals;
@@ -32,6 +34,8 @@ public class PlayerClassTest {
     @Mock
     private Input input;
 
+    @Mock
+    private LayerViewport layerViewport;
 
     @Before
     public void setUp() {
@@ -40,6 +44,7 @@ public class PlayerClassTest {
         when(game.getInput()).thenReturn(input);
         when(gameScreen.getGame()).thenReturn(game);
         when(gameScreen.getName()).thenReturn("colosseumDemoScreen");
+        when(gameScreen.getDefaultLayerViewport()).thenReturn(layerViewport);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -55,12 +60,10 @@ public class PlayerClassTest {
         // Define expected properties
         int expectedHealth = 24;
         int expectedArmor = 0;
-        float startX = 10.0f;
-        float startY = 10.0f;
-        char hero = 'c';
+        String hero = "c";
 
         // Create a new player instance
-        Player player = new Player(startX,startY,gameScreen,bitmap,hero);
+        Player player = new Player(gameScreen,hero);
 
         // Damage the player character, from default health of 30
         player.receiveDamage(6);
@@ -79,12 +82,10 @@ public class PlayerClassTest {
         // Define expected properties
         int expectedHealth = 27;
         int expectedArmor = 0;
-        float startX = 10.0f;
-        float startY = 10.0f;
-        char hero = 'c';
+        String hero = "c";
 
         // Create a new player instance
-        Player player = new Player(startX,startY,gameScreen,bitmap,hero);
+        Player player = new Player(gameScreen,hero);
 
         // Increases player armor by 3 from it's default value of 0
         player.increaseArmor(3);
@@ -106,12 +107,10 @@ public class PlayerClassTest {
         // Define expected properties
         int expectedHealth = 30;
         int expectedArmor = 0;
-        float startX = 10.0f;
-        float startY = 10.0f;
-        char hero = 'c';
+        String hero = "c";
 
         // Create a new player instance
-        Player player = new Player(startX,startY,gameScreen,bitmap,hero);
+        Player player = new Player(gameScreen,hero);
 
         // Increases player armor by 3 from it's default value of 0
         player.increaseArmor(3);
@@ -132,12 +131,10 @@ public class PlayerClassTest {
         // Define expected properties
         int expectedHealth = 30;
         int expectedArmor = 2;
-        float startX = 10.0f;
-        float startY = 10.0f;
-        char hero = 'c';
+        String hero = "c";
 
         // Create a new player instance
-        Player player = new Player(startX,startY,gameScreen,bitmap,hero);
+        Player player = new Player(gameScreen,hero);
 
         // Increases player armor by 3 from it's default value of 0
         player.increaseArmor(3);
@@ -159,7 +156,7 @@ public class PlayerClassTest {
         int expectedArmor = 1;
         float startX = 10.0f;
         float startY = 10.0f;
-        char hero = 'c';
+        String hero = "c";
 
 
         AIOpponent opponent = new AIOpponent(startX,startY,gameScreen,bitmap,hero);
