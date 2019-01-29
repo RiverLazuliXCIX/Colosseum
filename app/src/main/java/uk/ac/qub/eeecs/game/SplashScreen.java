@@ -18,7 +18,7 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 public class SplashScreen extends GameScreen {
 
     // Properties
-    final private long SPLASH_TIMEOUT = 8000;
+    final private long SPLASH_TIMEOUT = 1400;
     private long timeOnCreate, currentTime;
     private GameObject mSplashBackground;
     private LayerViewport mSplashLayerViewport;
