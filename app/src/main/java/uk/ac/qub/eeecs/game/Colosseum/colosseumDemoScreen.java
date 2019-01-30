@@ -19,11 +19,13 @@ import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.ToggleButton;
+import uk.ac.qub.eeecs.gage.util.BoundingBox;
 import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 
 /**
  * Starter class for Card game stories
@@ -42,12 +44,15 @@ public class colosseumDemoScreen extends GameScreen{
     /**
      * Define cards
      **/
-    private Card mCard, mCard2;
+    private Card[] mCards = new Card[6];
 
     /**
      * Define the background board
      */
     private GameObject mGameBackground;
+
+    //Check if card is being held
+    private Card mCardHeld = null;
 
     //Array List to hold the Toggle Button ('End Turn')
     private List<ToggleButton> mButtons = new ArrayList<>();
@@ -132,14 +137,14 @@ public class colosseumDemoScreen extends GameScreen{
         //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
-        mCard = new Card(240, 120, this);
-        mCard.setAttack(1);
-        mCard.setDefence(4);
-        mCard.setMana(5);
-        mCard2 = new Card(280, 180, this);
-        mCard2.setAttack(3);
-        mCard2.setDefence(2);
-        mCard2.setMana(4);
+        mCards[0] = new Card(100, 100, this);
+        mCards[0].setAttack(1);
+        mCards[0].setDefence(4);
+        mCards[0].setMana(5);
+        mCards[1] = new Card(200, 100, this);
+        mCards[1].setAttack(3);
+        mCards[1].setDefence(2);
+        mCards[1].setMana(4);
 
         //User Story 7, Sprint 4 - Scott
         dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
@@ -235,12 +240,46 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
+            /*
             mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport, mGame);
             mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             for(Card deckOfCards: dCards){ //updates each card held within the "dCards" variable, Sprint 4 Story 7
                 deckOfCards.cardDrag(deckOfCards, mDefaultScreenViewport, mGameViewport, mGame);
             }
+            */
+
+            for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
+                Vector2 touchLocation = new Vector2(0, 0);
+
+                int touchType = mInput.getTouchEvents().get(i).type;
+                ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
+                        mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
+
+                //Move the card - Story C1
+                if (touchType == TouchEvent.TOUCH_DRAGGED
+                        && mCardHeld == null) {
+                    for (int j = 0; j < 2; j++){
+                        if (mCards[j].getBound().contains(touchLocation.x, touchLocation.y)) {
+                            mCardHeld = mCards[j];
+                            break;
+                        }
+                    }
+
+                    mCardHeld.position = touchLocation;
+
+                }
+
+                if (touchType == TouchEvent.TOUCH_DRAGGED
+                        && mCardHeld != null)
+                    mCardHeld.position = touchLocation;
+
+                if (touchType == TouchEvent.TOUCH_UP
+                        && mCardHeld != null)
+                    mCardHeld = null;
+
+            }
+
 
             mEndTurnButton.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
 
@@ -272,8 +311,8 @@ public class colosseumDemoScreen extends GameScreen{
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the cards onscreen
-        mCard.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        mCard2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        mCards[0].draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        mCards[1].draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
             int screenHeight = graphics2D.getSurfaceHeight();

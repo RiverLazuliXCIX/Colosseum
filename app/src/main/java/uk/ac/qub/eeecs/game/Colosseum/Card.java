@@ -43,6 +43,9 @@ public class Card extends GameObject {
     //Define the card digit images
     private Bitmap[] mCardDigits = new Bitmap[10];
 
+    //Check if card is being held
+    private Card mCardHeld = null;
+
     //Check card is flipped
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
 
@@ -101,8 +104,20 @@ public class Card extends GameObject {
 
             //Move the card - Story C1
             if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCard.getBound().contains(touchLocation.x, touchLocation.y))
-                mCard.position = touchLocation;
+                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)
+                    && mCardHeld == null) {
+                mCardHeld = mCard;
+                mCardHeld.position = touchLocation;
+
+            }
+
+            if (touchType == TouchEvent.TOUCH_DRAGGED
+                    && mCardHeld == mCard)
+                mCardHeld.position = touchLocation;
+
+            if (touchType == TouchEvent.TOUCH_UP
+                    && mCardHeld != null)
+                mCardHeld = null;
 
             //Flip the card - Story C5
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
@@ -205,4 +220,6 @@ public class Card extends GameObject {
     public int getMana() {
         return mana;
     }
+
+    public Card getCard(int i) {return this; }
 }
