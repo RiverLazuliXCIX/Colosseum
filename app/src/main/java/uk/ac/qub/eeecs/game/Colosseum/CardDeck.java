@@ -1,7 +1,6 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 
@@ -29,26 +28,17 @@ public class CardDeck {
         this.mDeckName = name;
         this.mGameScreen = gamescreen;
 
-        mDeck = new ArrayList<>(30);
-        mHand = new ArrayList<>(10);
-        mGraveyard = new ArrayList<>(0);
-        mMinionsLeft = 0;
-        mSpecialsLeft = 0;
-        mCardsInHand = 0;
-
+        mDeck = new ArrayList<>(0);
         buildDeck();
-        drawCards(3);
+        //drawCards(3);
     }
 
     //Public methods required for CardDeck Class:
     public void buildDeck() {
 
-        for (int i = 0; i < 30; i++) {
-            //Random r = new Random();
-            //Add 30 cards to deck, for initial build
-            //Random assortment of minions, weapons and special cards
-            //mDeck.add()
-        }
+        // We'll need to have local methods such as "drawMinionCard()" and
+        // "drawWeaponCard()" in their own classes to achieve this
+
     }
 
     public void drawCard() {
@@ -67,29 +57,16 @@ public class CardDeck {
 
     //Method that returns true if deck is empty
     //To be used when applying fatigue consequence
-    public void IsEmpty() {
+    public boolean isEmpty() {
         if (mDeck.size() == 0) {
             setIsEmptyFlag(true);
         }
+        return isEmptyFlag;
     }
 
     //Accessor and Mutator methods:
     public int getDeckID() { return mDeckID; }
-
     public String getDeckName() { return mDeckName; }
-
-    public int getMinionsLeft() {
-        return mMinionsLeft;
-    }
-
-    public int getSpecialsLeft() {
-        return mSpecialsLeft;
-    }
-
-    public int getCardsInHand() {
-        return mCardsInHand;
-    }
-
     public boolean getIsEmptyFlag() { return isEmptyFlag; }
 
     public ArrayList<Card> getDeck() {

@@ -46,6 +46,12 @@ public class CardDeckTest {
         CardDeck newDeck3 = new CardDeck(003, "BestestCardDeck", mDemoScreen);
 
         assertEquals(newDeck3.getDeckName(), "BestestCardDeck");
+    }
 
+    @Test
+    public void cardDeckIsEmpty() {
+        CardDeck newDeck = new CardDeck(004, "ThisIsADeck", mDemoScreen);
+
+        assertEquals(newDeck.isEmpty(), true);
     }
 }
