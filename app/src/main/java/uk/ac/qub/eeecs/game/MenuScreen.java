@@ -67,7 +67,6 @@ public class MenuScreen extends GameScreen {
         setupViewports();
         //Set up Menu Screen Objects:
         setUpMenuScreenObjects();
-
     }
 
 
@@ -158,6 +157,7 @@ public class MenuScreen extends GameScreen {
     public void newScreenButtonPress(GameScreen screen) {
         mAssetManager.getSound("ButtonPress").play();
         mScreenManager.addScreen(screen);
+        stopBackgroundMusic();
     }
 
     //Method to update MenuScreen:
@@ -213,9 +213,9 @@ public class MenuScreen extends GameScreen {
         mMuteUnmute.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         // Spacing that will be used to position the Paint object:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+        float SCREEN_WIDTH = mGame.getScreenWidth();
+        float SCREEN_HEIGHT = mGame.getScreenWidth();
 
-        graphics2D.drawText("MUSIC:", spacingX * 17.0f, spacingY * 1.5f, mMusicText);
+        graphics2D.drawText("MUSIC:", SCREEN_WIDTH * 0.67f, SCREEN_HEIGHT * 0.05f, mMusicText);
     }
 }
