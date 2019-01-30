@@ -44,7 +44,7 @@ public class Card extends GameObject {
     private Bitmap[] mCardDigits = new Bitmap[10];
 
     //Check card is flipped
-    private Boolean mCardFlippedBack = true;  //initially the card is not flipped
+    private Boolean mCardFlippedBack = false;  //initially the card is not flipped
 
     //Define the attack and defence values
     private int attack, defence, mana;
@@ -112,11 +112,11 @@ public class Card extends GameObject {
                 Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
                 if (b == front) {
                     mCard.setBitmap(back);
-                    mCardFlippedBack = false;
+                    mCardFlippedBack = true;
                 }
                 else if (b == back) {
                     mCard.setBitmap(front);
-                    mCardFlippedBack = true;
+                    mCardFlippedBack = false;
                 }
             }
 
@@ -141,7 +141,7 @@ public class Card extends GameObject {
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        if (mCardFlippedBack) {
+        if (!mCardFlippedBack) {
             //Draw the attack on the card
             drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
 
