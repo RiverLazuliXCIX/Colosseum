@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.icu.text.CollationKey;
+import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
@@ -44,7 +45,7 @@ public class Card extends GameObject {
     private Bitmap[] mCardDigits = new Bitmap[10];
 
     //Check card is flipped
-    private Boolean mCardFlippedBack = true;  //initially the card is not flipped
+    private Boolean mCardFlippedBack = false;  //initially the card is not flipped
 
     //Define the attack and defence values
     private int attack, defence, mana;
@@ -88,7 +89,7 @@ public class Card extends GameObject {
      * @param mGameViewport          game screen viewport
      * @param mGame                  the game in question
      */
-    public void cardDrag(Card mCard, ScreenViewport mDefaultScreenViewport,
+    public void cardDrag(List<TouchEvent> touchEvents, Card mCard, ScreenViewport mDefaultScreenViewport,
                          LayerViewport mGameViewport, Game mGame) {
         Input mInput = mGame.getInput();
 
@@ -100,9 +101,12 @@ public class Card extends GameObject {
                     mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
 
             //Move the card - Story C1
+            boolean mCardHeld = false;
+
             if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCard.getBound().contains(touchLocation.x, touchLocation.y))
+                    && mCard.getBound().contains(touchLocation.x, touchLocation.y)) {
                 mCard.position = touchLocation;
+            }
 
             //Flip the card - Story C5
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
@@ -112,11 +116,11 @@ public class Card extends GameObject {
                 Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
                 if (b == front) {
                     mCard.setBitmap(back);
-                    mCardFlippedBack = false;
+                    mCardFlippedBack = true;
                 }
                 else if (b == back) {
                     mCard.setBitmap(front);
-                    mCardFlippedBack = true;
+                    mCardFlippedBack = false;
                 }
             }
 
@@ -141,7 +145,7 @@ public class Card extends GameObject {
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        if (mCardFlippedBack) {
+        if (!mCardFlippedBack) {
             //Draw the attack on the card
             drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
 
