@@ -259,21 +259,20 @@ public class colosseumDemoScreen extends GameScreen{
                 //Move the card - Story C1
                 if (touchType == TouchEvent.TOUCH_DRAGGED
                         && mCardHeld == null) {
-                    for (int j = 0; j < 2; j++){
+                    //Check which card was touched, if any
+                    for (int j = 0; j < 2; j++) {
                         if (mCards[j].getBound().contains(touchLocation.x, touchLocation.y)) {
                             mCardHeld = mCards[j];
-                            break;
                         }
                     }
-
-                    mCardHeld.position = touchLocation;
-
                 }
 
+                //if a card was touched, and the event was a drag, move it
                 if (touchType == TouchEvent.TOUCH_DRAGGED
                         && mCardHeld != null)
                     mCardHeld.position = touchLocation;
 
+                //release the card, meaning no card is now held
                 if (touchType == TouchEvent.TOUCH_UP
                         && mCardHeld != null)
                     mCardHeld = null;
