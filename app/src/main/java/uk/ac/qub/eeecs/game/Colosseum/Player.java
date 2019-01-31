@@ -8,6 +8,7 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
+import uk.ac.qub.eeecs.game.prototypeClasses.Deck;
 
 public class Player extends GameObject {
 
@@ -21,19 +22,22 @@ public class Player extends GameObject {
     private static final float PORTRAIT_HEIGHT = 50.0f;
 
     // Sets a cap on the maximum health and mana a player can have at once
-    private static final int maxHealth = 30;
-    private static final int maxMana = 10;
+    private static final int MAX_HEALTH = 30;
+    private static final int MAX_MANA = 10;
+    private static final int HERO_ABILITY_COST = 2; // All hero abilities have a mana cost of 2 by default
 
     // Stores numbers used by hero stats (health, mana, durability, armor etc.)
-    private Bitmap[] heroStatNumbers = new Bitmap[10];
+    //private Bitmap[] heroStatNumbers = new Bitmap[10];
 
-    private int currentHealth = maxHealth; // Current health at initialisation should be set to max.
+    private int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
     private int currentManaCap = 1;        // Initial mana cap should be set to one, and will increase by one each turn, until it reaches maxMana upon which it stops increasing (outside of potential card effects).
     private int currentMana = 1;           // Initial mana should be set to current mana cap on start
     private int armor = 0;                 // Current armor of player character (Provides additional 'Health' that is deducted prior to the player's health pool when taking damage)
     private int attack = 0;                // Current attack of player character (Through weapons, abilities etc.)
     private int weaponDurability = 0;      // Durability of player's equipped weapon, once it reaches zero weapon is destroyed, player can no longer use it to attack
 
+    private boolean weaponEquipped = false;// Stores whether the player has equipped a weapon or not (can be equipped through abilities or cards, default is false, equipping a new weapon destroys the currently equipped one)
+    private boolean abilityUsedThisTurn = false; // Stores whether an ability has been used this turn, if true, ability cannot be played for the rest of the player's turn
     private boolean yourTurn; // Will be false or true depending on whether or not it is the player's turn
 
     // Add variables for storing player's active cards, deck, hand etc.
@@ -60,9 +64,9 @@ public class Player extends GameObject {
         super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
 
-        for(int number = 0; number <= 9; number++) {
-            heroStatNumbers[number] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(number));
-        }
+//        for(int number = 0; number <= 9; number++) {
+//            heroStatNumbers[number] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(number));
+//        }
 
         setUpHero(hero);
 
@@ -126,8 +130,8 @@ public class Player extends GameObject {
      */
     public void heal(int amountToHeal){
 
-        if(currentHealth + amountToHeal > maxHealth){
-            currentHealth = maxHealth;
+        if(currentHealth + amountToHeal > MAX_HEALTH){
+            currentHealth = MAX_HEALTH;
         } else{ currentHealth += amountToHeal;}
 
     }
@@ -171,7 +175,7 @@ public class Player extends GameObject {
      */
     public void increaseCurrentManaCap(){
 
-        if(currentManaCap < maxMana) {
+        if(currentManaCap < MAX_MANA) {
             currentManaCap += 1;
         }
 
@@ -223,12 +227,23 @@ public class Player extends GameObject {
      * (current implementation only decreases durability)
      *
      */
+    // 2 methods needed, deal damage to player/hero, deal damage to minion
     public void dealWeaponDamage(){
-        // implement ability to target/interact with minions and heroes
-        if(weaponDurability >0) {
-            weaponDurability -= 1;
+
+        if(weaponEquipped) {
+            // implement ability to target/interact with minions and heroes
+            if (weaponDurability > 0) {
+                // Deal damage to target
+                weaponDurability -= 1;
+            }
+            // Else if zero display message or some sort of feedback to the player
+            // Destroys the currently equipped weapon if, after attacking, weapon durability reaches 0
+            if (weaponDurability == 0) {
+                setCurrentAttack(0);
+                weaponEquipped = false;
+            }
         }
-        // Else if zero display message or some sort of feedback to the player
+
     }
 
     // TODO Overridden draw method required to include ability icons etc
@@ -248,14 +263,14 @@ public class Player extends GameObject {
      * defines the hero abilities.
      *
      * Heroes and associated abilities (Default 2 mana cost)
-     * --------------------------------------------------------------------------------------------
+     * +-------------------------------------------------------------------------------------------
      * Emperor Commodus : Dagger Belt – Equip a 1 damage 2 durability weapon.
      * Mars : Fortify - Grants the hero +2 Armor.
      * Brutalus : Engage – Gain +1 attack this turn and +1 armour.
      * Sagira : Eyes Up – Able to give any minion +1 health.
      * Hircine : Hunt - Deals 2 damage to the opposing enemy hero.
      * Meridia : Holy Healing: Restore 2 Health to Player Hero
-     * --------------------------------------------------------------------------------------------
+     * +-------------------------------------------------------------------------------------------
      */
 
     public void setUpHero(String hero){
@@ -304,6 +319,93 @@ public class Player extends GameObject {
         }
 
 
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Hero Ability methods
+    // /////////////////////////////////////////////////////////////////////////
+    // All abilites have a mana cost of 2 and can be activated once per turn,
+    // provided the mana cost can be covered.
+    // Note: Current implementation regarding abilities targeting enemy heroes, accounts for use against
+    // an AIOpponent.
+
+    // Note: Equipping a new weapon replaces the player's currently equipped weapon
+    public void commodusAbilityUsed(){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+            setCurrentAttack(1);
+            setCurrentWeaponDurability(2);
+            weaponEquipped = true;
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
+    }
+
+    public void marsAbilityUsed(){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+            increaseArmor(3);
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
+    }
+
+    public void brutalusAbilityUsed(){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+
+            // TODO end turn handler for temporary stat boosts (Could apply to both cards and heroes)
+            increaseAttack(1);
+            increaseArmor(1);
+
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
+    }
+
+    public void sagiraAbilityUsed(MinionCard targetMinion){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+
+            // If healing the minion by 1 results in a health value greater than or equal to max health, set current health to max health
+            if(targetMinion.getHealth()+1>=targetMinion.getMaxHealth()){
+                targetMinion.setHealth(targetMinion.getMaxHealth());
+            }else{
+                // else increase minion health by 1
+                targetMinion.setHealth(targetMinion.getHealth()+1);
+            }
+
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
+    }
+
+    public void hircineAbilityUsed(AIOpponent targetOpponent){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+
+            targetOpponent.receiveDamage(2);
+
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
+    }
+
+    public void meridiaAbilityUsed(){
+
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+            reduceCurrentMana(HERO_ABILITY_COST);
+
+            heal(2);
+
+            abilityUsedThisTurn = true;
+        }
+        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
     }
 
 }
