@@ -223,6 +223,7 @@ public class Player extends GameObject {
      * (current implementation only decreases durability)
      *
      */
+    // 2 methods needed, deal damage to player/hero, deal damage to minion
     public void dealWeaponDamage(){
         // implement ability to target/interact with minions and heroes
         if(weaponDurability >0) {
