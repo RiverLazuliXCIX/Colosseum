@@ -156,6 +156,7 @@ public class MenuScreen extends GameScreen {
     //'New Screen' button functions:
     public void newScreenButtonPress(GameScreen screen) {
         mAssetManager.getSound("ButtonPress").play();
+        mScreenManager.removeScreen(this);
         mScreenManager.addScreen(screen);
         stopBackgroundMusic();
     }

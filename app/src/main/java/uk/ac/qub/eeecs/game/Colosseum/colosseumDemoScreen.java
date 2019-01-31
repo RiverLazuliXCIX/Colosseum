@@ -175,7 +175,7 @@ public class colosseumDemoScreen extends GameScreen{
     // /////////////////////////////////////////////////////////////////////////
 
     protected void endPlayerTurn() {
-        //p2.setYourTurn(false);
+        p2.setYourTurn(false);
 
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
         //This will prevent player from attempting to draw from their deck, or playing a card

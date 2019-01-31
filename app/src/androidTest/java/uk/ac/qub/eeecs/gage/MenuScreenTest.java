@@ -32,13 +32,11 @@ public class MenuScreenTest {
     private Context context;
     private DemoGame game;
     AssetManager assetManager;
-    MenuScreen mMenuScreen;
 
     @Before
     public void setUp() {
         context = InstrumentationRegistry.getTargetContext();
         game = new DemoGame();
-        game.mFileIO = new FileIO(context);
         assetManager = new AssetManager(game);
     }
 

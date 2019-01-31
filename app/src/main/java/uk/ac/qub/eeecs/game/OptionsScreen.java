@@ -76,6 +76,7 @@ public class OptionsScreen extends GameScreen {
 
             if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen (menu screen)
                 mGame.getScreenManager().removeScreen(this);
+                mGame.getScreenManager().addScreen(new MenuScreen(mGame));
             }
         }
     }
