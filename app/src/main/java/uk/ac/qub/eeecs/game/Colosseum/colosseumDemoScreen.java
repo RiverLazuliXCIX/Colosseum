@@ -44,7 +44,7 @@ public class colosseumDemoScreen extends GameScreen{
     /**
      * Define cards
      **/
-    private Card[] mCards = new Card[6];
+    private List<Card> mCards = new ArrayList<Card>();
 
     /**
      * Define the background board
@@ -137,14 +137,14 @@ public class colosseumDemoScreen extends GameScreen{
         //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
-        mCards[0] = new Card(100, 100, this);
-        mCards[0].setAttack(1);
-        mCards[0].setDefence(4);
-        mCards[0].setMana(5);
-        mCards[1] = new Card(200, 100, this);
-        mCards[1].setAttack(3);
-        mCards[1].setDefence(2);
-        mCards[1].setMana(4);
+        mCards.add(new Card(100, 100, this));//) = new Card(100, 100, this);
+        mCards.get(0).setAttack(1);//[0].setAttack(1);
+        mCards.get(0).setDefence(4);
+        mCards.get(0).setMana(5);
+        mCards.add(new Card(200, 100, this));
+        mCards.get(1).setAttack(3);
+        mCards.get(1).setDefence(2);
+        mCards.get(1).setMana(4);
 
         //User Story 7, Sprint 4 - Scott
         dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
@@ -240,15 +240,16 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            /*
-            mCard.cardDrag(mCard, mDefaultScreenViewport, mGameViewport, mGame);
-            mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
+            for (int i = 0; i < 2; i++)
+                mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+            //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
+            /*
             for(Card deckOfCards: dCards){ //updates each card held within the "dCards" variable, Sprint 4 Story 7
                 deckOfCards.cardDrag(deckOfCards, mDefaultScreenViewport, mGameViewport, mGame);
             }
             */
-
+            /*
             for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
                 Vector2 touchLocation = new Vector2(0, 0);
 
@@ -278,7 +279,7 @@ public class colosseumDemoScreen extends GameScreen{
                     mCardHeld = null;
 
             }
-
+            */
 
             mEndTurnButton.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
 
@@ -310,8 +311,8 @@ public class colosseumDemoScreen extends GameScreen{
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the cards onscreen
-        mCards[0].draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        mCards[1].draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        mCards.get(0).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        mCards.get(1).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
             int screenHeight = graphics2D.getSurfaceHeight();
