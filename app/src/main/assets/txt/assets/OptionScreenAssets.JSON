@@ -24,6 +24,11 @@
       "type": "Bitmap",
       "name": "CoinFlipSelected",
       "file": "img/coinflipselected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HTPButton",
+      "file": "img/HTPButton.png"
     }
     ]
 }

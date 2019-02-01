@@ -47,12 +47,16 @@ public class MinionCard extends Card {
         checkHealth();
     }
 
-    // Another attack method will be required for attacking the enemy hero
-    // Check for taunts on the board
-    // Enemy hero will take the minions attack as damage
-    // MinionCard will take damage for any weapon the enemy has equipped
-    // Check both healths
-    // public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {}
+    /* Another attack method will be required for attacking the enemy hero
+     Check for taunts on the board
+     Enemy hero will take the minions attack as damage
+     MinionCard will take damage for any weapon the enemy has equipped
+     Check both healths
+     public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {}
+     */
+    public void attackEnemy(Player hero) { // uses Player as the parameter to allow for Player and AIOpponent to be passed in
+        hero.receiveDamage(this.attack);
+    }
 
     public void takeDamage(int damage) { this.health -= damage; }
 
