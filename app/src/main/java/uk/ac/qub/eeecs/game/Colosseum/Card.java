@@ -115,11 +115,6 @@ public class Card extends GameObject {
                     && mCardHeld != null)
                 mCardHeld.position = touchLocation;
 
-            //release the card, meaning no card is now held
-            if (touchType == TouchEvent.TOUCH_UP
-                    && mCardHeld != null)
-                mCardHeld = null;
-
 
             //Flip the card - Story C5
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
@@ -130,8 +125,8 @@ public class Card extends GameObject {
                     && mCardHeld != null
                     && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
                 Bitmap b = mCardHeld.getBitmap();
-                Bitmap front = mGame.getAssetManager().getBitmap("no1");
-                Bitmap back = mGame.getAssetManager().getBitmap("no9");
+                Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
+                Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
                 if (b == front) {
                     mCardHeld.setBitmap(back);
                     mCardHeld.mCardFlippedBack = true;
@@ -155,6 +150,11 @@ public class Card extends GameObject {
                 if (mCards.get(j).getBound().getTop() > mGameViewport.getTop())
                     mCards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
             }
+
+            //release the card, meaning no card is now held
+            if (touchType == TouchEvent.TOUCH_UP
+                    && mCardHeld != null)
+                mCardHeld = null;
         }
     }
 

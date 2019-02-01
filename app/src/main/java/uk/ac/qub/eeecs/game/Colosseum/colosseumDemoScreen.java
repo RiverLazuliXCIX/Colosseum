@@ -142,12 +142,12 @@ public class colosseumDemoScreen extends GameScreen{
         mCards.get(0).setAttack(1);
         mCards.get(0).setDefence(4);
         mCards.get(0).setMana(5);
-        mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
+        //mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
         mCards.add(new Card(200, 100, this));//, "CardFront"));
         mCards.get(1).setAttack(3);
         mCards.get(1).setDefence(2);
         mCards.get(1).setMana(4);
-        mCards.get(1).setBitmap(getGame().getAssetManager().getBitmap("no2"));
+        //mCards.get(1).setBitmap(getGame().getAssetManager().getBitmap("no2"));
 
         //User Story 7, Sprint 4 - Scott
         dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
@@ -251,7 +251,7 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < mCards.size(); i++)
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
