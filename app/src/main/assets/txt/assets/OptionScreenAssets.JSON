@@ -14,6 +14,16 @@
       "type": "Bitmap",
       "name": "OptionsBackground",
       "file": "img/OptionsBackground.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CoinFlip",
+      "file": "img/coinflip.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CoinFlipSelected",
+      "file": "img/coinflipselected.png"
     }
     ]
 }

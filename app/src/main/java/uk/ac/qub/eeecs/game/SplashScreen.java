@@ -8,6 +8,7 @@ import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -18,9 +19,9 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 public class SplashScreen extends GameScreen {
 
     // Properties
-    final private long SPLASH_TIMEOUT = 1400;
+    final private long SPLASH_TIMEOUT = 5000;
     private long timeOnCreate, currentTime;
-    private GameObject mSplashBackground;
+    private PushButton mSplashBackground;
     private LayerViewport mSplashLayerViewport;
     private TitleImage mMenuTitle;
     private TitleImage mTouchToContinue;
@@ -47,10 +48,9 @@ public class SplashScreen extends GameScreen {
         mGame.getAssetManager().loadAssets("txt/assets/SplashScreen.JSON");
 
         // Create the background
-        mSplashBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
+        mSplashBackground = new PushButton(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(), getGame()
-                .getAssetManager().getBitmap("SplashScreenBackground"), this);
+                mDefaultLayerViewport.getHeight(),"SplashScreenBackground", this);
 
         // Create the title image for the splash screens
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "SplashScreenTitle",this);
@@ -89,7 +89,10 @@ public class SplashScreen extends GameScreen {
         Input touchInput = mGame.getInput();
         List<TouchEvent> touchEvents = touchInput.getTouchEvents();
         if (touchEvents.size() > 0) {
-            goToMenuScreen();
+            mSplashBackground.update(elapsedTime);
+
+            if(mSplashBackground.isPushTriggered())
+                goToMenuScreen();
         }
     }
 
