@@ -144,4 +144,73 @@ public class OptionsScreenTest {
         assetManager.loadAndAddBitmap(assetName, assetPath);
         assertNotNull(assetManager.getBitmap(assetName));
     }
+
+    //Sprint 4, Story 18 toggle button asset tests
+
+    @Test
+    public void loadAndAddEdgeCaseButton_ValidData() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Check for successful load
+        String assetName = "CoinFlip", assetPath = "img/coinflip.png";
+        assertTrue(assetManager.loadAndAddBitmap(assetName, assetPath));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void loadAndAddEdgeCaseButton_Invalid_TestErrorReport() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Check for an unsuccessful load
+        String assetName = "flipacoin", assetPath = "img/flipacoin.png";
+        assetManager.loadAndAddBitmap(assetName, assetPath);
+    }
+
+    @Test
+    public void loadAndAddEdgeCaseButton_AlreadyLoadedAsset_TestErrorReport() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Load a bitmap and test it cannot be added a second time
+        String assetName = "CoinFlip", assetPath = "img/coinflip.png";
+        assetManager.loadAndAddBitmap(assetName, assetPath);
+        assertFalse(assetManager.loadAndAddBitmap(assetName, assetPath));
+    }
+
+    @Test
+    public void getEdgeCaseButton_ValidGet_TestIsSuccess() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Load a bitmap and test it can be extracted
+        String assetName = "CoinFlip", assetPath = "img/coinflip.png";
+        assetManager.loadAndAddBitmap(assetName, assetPath);
+        assertNotNull(assetManager.getBitmap(assetName));
+    }
+
+    @Test
+    public void loadAndAddEdgeCaseSelectedButton_ValidData() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Check for successful load
+        String assetName = "CoinFlipSelected", assetPath = "img/coinflipselected.png";
+        assertTrue(assetManager.loadAndAddBitmap(assetName, assetPath));
+    }
+
+    @Test
+    public void loadAndAddEdgeCaseSelectedButton_AlreadyLoadedAsset_TestErrorReport() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Load a bitmap and test it cannot be added a second time
+        String assetName = "CoinFlipSelected", assetPath = "img/coinflipselected.png";
+        assetManager.loadAndAddBitmap(assetName, assetPath);
+        assertFalse(assetManager.loadAndAddBitmap(assetName, assetPath));
+    }
+
+    @Test
+    public void getEdgeCaseSelectedButton_ValidGet_TestIsSuccess() {
+        // Build asset store
+        AssetManager assetManager = new AssetManager(game);
+        // Load a bitmap and test it can be extracted
+        String assetName = "CoinFlipSelected", assetPath = "img/coinflipselected.png";
+        assetManager.loadAndAddBitmap(assetName, assetPath);
+        assertNotNull(assetManager.getBitmap(assetName));
+    }
 }
