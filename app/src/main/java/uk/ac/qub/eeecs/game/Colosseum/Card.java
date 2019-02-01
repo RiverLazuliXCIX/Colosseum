@@ -74,7 +74,7 @@ public class Card extends GameObject {
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
      */
-    public Card(float startX, float startY, GameScreen gameScreen) {
+    public Card(float startX, float startY, GameScreen gameScreen) {//, String cardName) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
         // Store each of the damage/health digits
@@ -110,7 +110,6 @@ public class Card extends GameObject {
                     && mCardHeld == null)
                 checkCardTouched(mCards, touchLocation);
 
-
             //if a card was touched, and the event was a drag, move it
             if (touchType == TouchEvent.TOUCH_DRAGGED
                     && mCardHeld != null)
@@ -121,6 +120,7 @@ public class Card extends GameObject {
                     && mCardHeld != null)
                 mCardHeld = null;
 
+
             //Flip the card - Story C5
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                     && mCardHeld == null)
@@ -130,15 +130,15 @@ public class Card extends GameObject {
                     && mCardHeld != null
                     && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
                 Bitmap b = mCardHeld.getBitmap();
-                Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
-                Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
+                Bitmap front = mGame.getAssetManager().getBitmap("no1");
+                Bitmap back = mGame.getAssetManager().getBitmap("no9");
                 if (b == front) {
                     mCardHeld.setBitmap(back);
-                    mCardFlippedBack = true;
+                    mCardHeld.mCardFlippedBack = true;
                 }
                 else if (b == back) {
                     mCardHeld.setBitmap(front);
-                    mCardFlippedBack = false;
+                    mCardHeld.mCardFlippedBack = false;
                 }
             }
 
@@ -160,9 +160,10 @@ public class Card extends GameObject {
 
     private void checkCardTouched(List<Card> mCards, Vector2 touchLocation) {
         //Check which card was touched, if any
-        for (int j = 0; j < 2; j++) {
-            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y))
+        for (int j = 0; j < mCards.size(); j++) {
+            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)) {
                 mCardHeld = mCards.get(j);
+            }
         }
     }
 

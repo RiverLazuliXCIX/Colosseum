@@ -93,6 +93,7 @@ public class colosseumDemoScreen extends GameScreen{
         // Load in the assets used by the steering demo
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
+        //mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
 
 
         // Create the background
@@ -137,14 +138,16 @@ public class colosseumDemoScreen extends GameScreen{
         //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
-        mCards.add(new Card(100, 100, this));//) = new Card(100, 100, this);
-        mCards.get(0).setAttack(1);//[0].setAttack(1);
+        mCards.add(new Card(100, 100,  this));//, "CardFront"));
+        mCards.get(0).setAttack(1);
         mCards.get(0).setDefence(4);
         mCards.get(0).setMana(5);
-        mCards.add(new Card(200, 100, this));
+        mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
+        mCards.add(new Card(200, 100, this));//, "CardFront"));
         mCards.get(1).setAttack(3);
         mCards.get(1).setDefence(2);
         mCards.get(1).setMana(4);
+        mCards.get(1).setBitmap(getGame().getAssetManager().getBitmap("no2"));
 
         //User Story 7, Sprint 4 - Scott
         dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
@@ -187,7 +190,7 @@ public class colosseumDemoScreen extends GameScreen{
         dCard = new Card(RANDOM.nextInt(
                 (int)mDefaultLayerViewport.getWidth()-75)+35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
                 RANDOM.nextInt((int)mDefaultLayerViewport.getHeight()-75)+35, //-75, +35 to prevent cards spawning outside the top/bottom regions of the screen.
-                this);
+                this);//, "CardFront");
         dCard.setAttack(RANDOM.nextInt(10)); //limit of values 0-9
         dCard.setDefence(RANDOM.nextInt(10)); //limit of values 0-9
         dCard.setMana(RANDOM.nextInt(10)); //limit of values 0-9
