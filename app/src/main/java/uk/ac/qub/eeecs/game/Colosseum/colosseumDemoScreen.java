@@ -71,7 +71,7 @@ public class colosseumDemoScreen extends GameScreen{
     private Bitmap p2bit;
 
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
-    protected boolean edgeCase = false;
+    protected static boolean edgeCase = false;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -225,6 +225,14 @@ public class colosseumDemoScreen extends GameScreen{
                     break;
             }
         }
+    }
+
+    public boolean getEdgeCase() {
+        return edgeCase;
+    }
+
+    public static void setEdgeCase(boolean edgeCaseInput) {
+        edgeCaseInput = edgeCase;
     }
 
     /**
