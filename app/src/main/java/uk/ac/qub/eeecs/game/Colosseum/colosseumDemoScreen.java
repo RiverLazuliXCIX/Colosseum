@@ -183,7 +183,6 @@ public class colosseumDemoScreen extends GameScreen{
     // /////////////////////////////////////////////////////////////////////////
 
     protected void endPlayerTurn() {
-
         p2.setYourTurn(false);
 
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
@@ -258,18 +257,16 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            for (int i = 0; i < mCards.size(); i++) {
+            for (int i = 0; i < mCards.size(); i++)
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
-            }
 
             for (PushButton button : mButtons)
             button.update(elapsedTime);
 
             if (mEndTurnButton.isPushTriggered()) {
-                p2.setYourTurn(false);
+                endPlayerTurn();
             }
-
-
+            
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             /*
