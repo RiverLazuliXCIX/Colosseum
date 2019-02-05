@@ -54,14 +54,14 @@ public class colosseumDemoScreen extends GameScreen{
     //Check if card is being held
     private Card mCardHeld = null;
 
-    //Array List to hold the Toggle Button ('End Turn')
+    //Array List to hold the Toggle Buttons
     private List<ToggleButton> mButtons = new ArrayList<>();
-
-    //Array list to hold a deck of cards - Story 7 Sprint 4
-    private List<Card> dCards = new ArrayList<>();
 
     //Push button for ending player's turn
     private ToggleButton mEndTurnButton;
+
+    //Array list to hold a deck of cards - Story 7 Sprint 4
+    private List<Card> dCards = new ArrayList<>();
 
     //Paint item that will be used to tint the 'End Turn' button
     private Paint mButtonTint;
@@ -124,16 +124,21 @@ public class colosseumDemoScreen extends GameScreen{
                 break;
         }
     }
-        
         //Create the Push Buttons:
-        // Spacing that will be used to position the buttons
-        float SCREEN_WIDTH = mGame.getScreenWidth();
-        float SCREEN_HEIGHT = mGame.getScreenWidth();
+
+        // Spacing that will be used to position the objects:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         mEndTurnButton = new ToggleButton(
-                SCREEN_WIDTH * 0.95f, SCREEN_HEIGHT * 0.30f, SCREEN_WIDTH*0.125f, SCREEN_WIDTH*0.09f,
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn", "EndTurn2", this);
         mButtons.add(mEndTurnButton);
+
+        //        mEndTurnButton = new ToggleButton(
+        //                SCREEN_WIDTH * 0.90f, SCREEN_HEIGHT * 0.30f, SCREEN_WIDTH*0.125f, SCREEN_WIDTH*0.09f,
+        //                "EndTurn", "EndTurn2", this);
+        //        mButtons.add(mEndTurnButton);
 
         //Paint mButtonTint = new Paint();
 
@@ -251,8 +256,12 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            for (int i = 0; i < mCards.size(); i++)
+            for (int i = 0; i < mCards.size(); i++) {
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+            }
+
+            mEndTurnButton.update(elapsedTime);
+
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             /*
@@ -291,12 +300,6 @@ public class colosseumDemoScreen extends GameScreen{
 
             }
             */
-
-            mEndTurnButton.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
-
-            if (mEndTurnButton.isToggledOn()) {
-                endPlayerTurn();
-            }
         }
     }
 
@@ -337,9 +340,9 @@ public class colosseumDemoScreen extends GameScreen{
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        //Draw PushButtons onscreen:
+        //Draw ToggleButtons onscreen:
         for (ToggleButton button : mButtons) {
-            button.draw(elapsedTime, graphics2D);
+            button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         }
     }
 }
