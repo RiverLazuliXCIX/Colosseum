@@ -126,12 +126,12 @@ public class colosseumDemoScreen extends GameScreen{
     }
         
         //Create the Push Buttons:
-        // Spacing that will be used to position the buttons:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+        // Spacing that will be used to position the buttons
+        float SCREEN_WIDTH = mGame.getScreenWidth();
+        float SCREEN_HEIGHT = mGame.getScreenWidth();
 
         mEndTurnButton = new ToggleButton(
-                spacingX * 21.0f, spacingY * 7.0f , spacingX*2.5f, spacingY*2.0f,
+                SCREEN_WIDTH * 0.95f, SCREEN_HEIGHT * 0.30f, SCREEN_WIDTH*0.125f, SCREEN_WIDTH*0.09f,
                 "EndTurn", "EndTurn2", this);
         mButtons.add(mEndTurnButton);
 
