@@ -54,17 +54,15 @@ public class colosseumDemoScreen extends GameScreen{
     //Check if card is being held
     private Card mCardHeld = null;
 
-    //Array List to hold the Toggle Buttons
-    private List<ToggleButton> mButtons = new ArrayList<>();
+    //Array List to hold the Push Buttons
+    private List<PushButton> mButtons = new ArrayList<>();
 
     //Push button for ending player's turn
-    private ToggleButton mEndTurnButton;
+    private PushButton mEndTurnButton;
+    private PushButton mEndTurnButtonOff;
 
     //Array list to hold a deck of cards - Story 7 Sprint 4
     private List<Card> dCards = new ArrayList<>();
-
-    //Paint item that will be used to tint the 'End Turn' button
-    private Paint mButtonTint;
 
     //Define a TEST player
     private Player p2;
@@ -124,21 +122,23 @@ public class colosseumDemoScreen extends GameScreen{
                 break;
         }
     }
+
         //Create the Push Buttons:
 
         // Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
-        mEndTurnButton = new ToggleButton(
+        mEndTurnButton = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
-                "EndTurn", "EndTurn2", this);
+                "EndTurn", this);
         mButtons.add(mEndTurnButton);
 
-        //        mEndTurnButton = new ToggleButton(
-        //                SCREEN_WIDTH * 0.90f, SCREEN_HEIGHT * 0.30f, SCREEN_WIDTH*0.125f, SCREEN_WIDTH*0.09f,
-        //                "EndTurn", "EndTurn2", this);
-        //        mButtons.add(mEndTurnButton);
+        mEndTurnButtonOff = new PushButton (
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
+                "EndTurn2",  this);
+        mButtons.add(mEndTurnButtonOff);
+
 
         //Paint mButtonTint = new Paint();
 
@@ -183,6 +183,7 @@ public class colosseumDemoScreen extends GameScreen{
     // /////////////////////////////////////////////////////////////////////////
 
     protected void endPlayerTurn() {
+
         p2.setYourTurn(false);
 
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
@@ -243,6 +244,7 @@ public class colosseumDemoScreen extends GameScreen{
         edgeCaseInput = edgeCase;
     }
 
+
     /**
      * Update the card demo screen
      *
@@ -260,7 +262,13 @@ public class colosseumDemoScreen extends GameScreen{
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
             }
 
-            mEndTurnButton.update(elapsedTime);
+            for (PushButton button : mButtons)
+            button.update(elapsedTime);
+
+            if (mEndTurnButton.isPushTriggered()) {
+                p2.setYourTurn(false);
+            }
+
 
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
@@ -340,9 +348,11 @@ public class colosseumDemoScreen extends GameScreen{
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        //Draw ToggleButtons onscreen:
-        for (ToggleButton button : mButtons) {
-            button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        //Draw initial 'End Turn' button onscreen:
+        if (p2.getYourTurn()) {
+            mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        } else {
+            mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
     }
 }
