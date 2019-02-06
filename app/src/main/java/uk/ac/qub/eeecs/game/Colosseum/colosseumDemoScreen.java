@@ -266,7 +266,10 @@ public class colosseumDemoScreen extends GameScreen{
             if (mEndTurnButton.isPushTriggered()) {
                 endPlayerTurn();
             }
-            
+
+            for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
+                deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
+
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             /*
@@ -330,8 +333,8 @@ public class colosseumDemoScreen extends GameScreen{
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the cards onscreen
-        mCards.get(0).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        mCards.get(1).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
+            mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
             int screenHeight = graphics2D.getSurfaceHeight();
@@ -341,9 +344,9 @@ public class colosseumDemoScreen extends GameScreen{
             graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
         }
 
-        for(Card deckOfCards: dCards){ //draws each card held within the "dCards" variable, Sprint 4 Story 7
+        for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        }
+
 
         //Draw initial 'End Turn' button onscreen:
         if (p2.getYourTurn()) {
