@@ -6,6 +6,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.icu.util.Output;
 
@@ -75,6 +76,10 @@ public class colosseumDemoScreen extends GameScreen{
     //Paint item that will be used to draw text
     private Paint mText;
 
+    //Denarius
+    private List<GameObject> pDenarius = new ArrayList<>();
+    private List<GameObject> eDenarius = new ArrayList<>();
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -97,6 +102,9 @@ public class colosseumDemoScreen extends GameScreen{
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
         //mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
 
+        // Spacing that will be used to position the objects:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         // Create the background
         Bitmap mBackgroundBitmap = getGame()
@@ -110,30 +118,33 @@ public class colosseumDemoScreen extends GameScreen{
         if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
             edgeCaseTest();
         } else {
-        switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
-            case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
-                // tails - player starts
-                break;
-            case 1: //dCards.add(generateRandomDeck()); //heads - ai starts
-                //dCards.add(generateRandomDeck());
-                break;
-            case 2:
-                //dCards.add(generateRandomDeck());
-                //dCards.add(generateRandomDeck());
-                //dCards.add(generateRandomDeck());//edge of coin - set opponent health to 0, auto win game.
-                break;
-            default: //output an error
-                break;
+            switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
+                case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
+                    // tails - player starts
+                    break;
+                case 1: //dCards.add(generateRandomDeck()); //heads - ai starts
+                    //dCards.add(generateRandomDeck());
+                    break;
+                case 2:
+                    //dCards.add(generateRandomDeck());
+                    //dCards.add(generateRandomDeck());
+                    //dCards.add(generateRandomDeck());//edge of coin - set opponent health to 0, auto win game.
+                    break;
+                default: //output an error
+                    break;
+            }
         }
-    }
 
-
+        //PAINT OBJECT:
+        //Initialise Paint object I will use to draw text
+        mText = new Paint();
+        int screenHeight = mDefaultScreenViewport.height;
+        float textHeight = screenHeight / 24.0f;
+        mText.setTextSize(textHeight);
+        mText.setColor(Color.rgb(255,255,255));
+        mText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
 
         //Create the Push Buttons:
-
-        // Spacing that will be used to position the objects:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         mEndTurnButton = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
@@ -170,6 +181,26 @@ public class colosseumDemoScreen extends GameScreen{
         //Bitmap p2bit = mGame.getAssetManager().getBitmap("Test");
         //Player p2 = new Player(spacingX * 5.0f, spacingY * 5.0f, this, p2bit, "Hircine");
         p2=new Player(this,"Hircine");
+
+        //Create denarius objects
+        Bitmap denarius = getGame()
+                .getAssetManager().getBitmap("Denarius");
+        float scaleHor = 2.95f;
+
+        //player
+        p2.setCurrentMana(10);
+        for(int i = 0; i < p2.getCurrentMana(); i++) {
+            pDenarius.add(new GameObject(spacingX * scaleHor, spacingY * 0.38f, 30, 30, denarius, this));
+            scaleHor += 0.04f;
+        }
+
+        scaleHor = 2.95f;
+
+        //mock opponent
+        for(int i = 0; i < 20; i++) {
+            eDenarius.add(new GameObject(spacingX * scaleHor, spacingY * 2.78f, 30, 30, denarius, this));
+            scaleHor += 0.04f;
+        }
     }
 
     private void setupViewports() {
@@ -328,15 +359,19 @@ public class colosseumDemoScreen extends GameScreen{
 
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
+
         // Clear the screen
         graphics2D.clear(Color.WHITE);
         graphics2D.clipRect(mDefaultScreenViewport.toRect());
 
+
         // Draw the background first of all
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+
         // Draw the player portrait (Just for testing, still working on it)
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
 
         //Draw the cards onscreen
         for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
@@ -355,33 +390,42 @@ public class colosseumDemoScreen extends GameScreen{
 
 
         //Draw initial 'End Turn' button onscreen:
-        if (p2.getYourTurn()) {
+        if (p2.getYourTurn())
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        } else {
+        else
             mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        }
 
 
-        // Spacing that will be used to position the buttons:
+        //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
+
+        //PLAYER STATS
+        //TODO: Implement deck, hand, and graveyard functions so accurate values can be used below
         //Draw player mana
-        int pMana = 10;
-        graphics2D.drawText("Mana:" + pMana, spacingX * 8.0f, spacingY * 12.5f, mText);
+        for(int i = 0; i < p2.getCurrentMana(); i++)
+            pDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        graphics2D.drawText("Mana:" + p2.getCurrentMana(), spacingX * 12.8f, spacingY * 13.2f, mText);
 
         //Draw player card stats
-        int pCardsLeft = 24, pCardsDead = 2;
-        graphics2D.drawText("Cards in Deck: " + pCardsLeft, spacingX * 12.6f, spacingY * 12.2f, mText);
-        graphics2D.drawText("Cards in Graveyard: " + pCardsDead, spacingX * 12.6f, spacingY * 12.8f, mText);
+        int pCardsLeft = 24, pCardsHand= 5, pCardsDead = 22;
+        graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 7.0f, spacingY * 11.6f, mText);
+        graphics2D.drawText("Hand: " + pCardsHand, spacingX * 7.0f, spacingY * 12.2f, mText);
+        graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 7.0f, spacingY * 12.8f, mText);
 
         //Draw opponent mana
-        int eMana = 7;
-        graphics2D.drawText("Mana: " + eMana, spacingX * 8.0f, spacingY * 1.5f, mText);
+        int eMana = 20;
+        for(int i = 0; i < eMana; i++)
+            eDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        graphics2D.drawText("Mana: " + eMana, spacingX * 12.8f, spacingY * 2.35f, mText);
 
         //Draw opponent card stats
-        int eCardsLeft = 19, eCardsDead = 4;
-        graphics2D.drawText("Cards in Deck: " + eCardsLeft, spacingX * 12.6f, spacingY * 1.2f, mText);
-        graphics2D.drawText("Cards in Graveyard: " + eCardsDead, spacingX * 12.6f, spacingY * 1.8f, mText);
+        int eCardsLeft = 19, eCardsHand = 2, eCardsDead = 3;
+        graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 7.0f, spacingY * 0.6f, mText);
+        graphics2D.drawText("Hand: " + eCardsHand, spacingX * 7.0f, spacingY * 1.2f, mText);
+        graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 7.0f, spacingY * 1.8f, mText);
     }
 }
