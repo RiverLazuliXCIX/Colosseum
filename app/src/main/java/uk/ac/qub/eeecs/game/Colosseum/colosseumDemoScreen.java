@@ -6,7 +6,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Typeface;
 import android.icu.util.Output;
 
 import java.util.ArrayList;
@@ -55,17 +54,15 @@ public class colosseumDemoScreen extends GameScreen{
     //Check if card is being held
     private Card mCardHeld = null;
 
-    //Array List to hold the Toggle Button ('End Turn')
-    private List<ToggleButton> mButtons = new ArrayList<>();
+    //Array List to hold the Push Buttons
+    private List<PushButton> mButtons = new ArrayList<>();
+
+    //Push button for ending player's turn
+    private PushButton mEndTurnButton;
+    private PushButton mEndTurnButtonOff;
 
     //Array list to hold a deck of cards - Story 7 Sprint 4
     private List<Card> dCards = new ArrayList<>();
-
-    //Push button for ending player's turn
-    private ToggleButton mEndTurnButton;
-
-    //Paint item that will be used to tint the 'End Turn' button
-    private Paint mButtonTint;
 
     //Define a TEST player
     private Player p2;
@@ -73,9 +70,6 @@ public class colosseumDemoScreen extends GameScreen{
 
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
-
-    //Paint item that will be used to draw text
-    private Paint mText;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -129,25 +123,22 @@ public class colosseumDemoScreen extends GameScreen{
         }
     }
 
-        //Text for screen
-        //PAINT OBJECT:
-        //Initialise Paint object I will use to draw text
-        mText = new Paint();
-        int screenHeight = mDefaultScreenViewport.height;
-        float textHeight = screenHeight / 24.0f;
-        mText.setTextSize(textHeight);
-        mText.setColor(Color.rgb(255,255,255));
-        mText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
-        
         //Create the Push Buttons:
-        // Spacing that will be used to position the buttons:
+
+        // Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
-        mEndTurnButton = new ToggleButton(
-                spacingX * 21.0f, spacingY * 7.0f , spacingX*2.5f, spacingY*2.0f,
-                "EndTurn", "EndTurn2", this);
+        mEndTurnButton = new PushButton (
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
+                "EndTurn", this);
         mButtons.add(mEndTurnButton);
+
+        mEndTurnButtonOff = new PushButton (
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
+                "EndTurn2",  this);
+        mButtons.add(mEndTurnButtonOff);
+
 
         //Paint mButtonTint = new Paint();
 
@@ -252,6 +243,7 @@ public class colosseumDemoScreen extends GameScreen{
         edgeCaseInput = edgeCase;
     }
 
+
     /**
      * Update the card demo screen
      *
@@ -267,6 +259,17 @@ public class colosseumDemoScreen extends GameScreen{
 
             for (int i = 0; i < mCards.size(); i++)
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+
+            for (PushButton button : mButtons)
+            button.update(elapsedTime);
+
+            if (mEndTurnButton.isPushTriggered()) {
+                endPlayerTurn();
+            }
+
+            for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
+                deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
+
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             /*
@@ -305,12 +308,6 @@ public class colosseumDemoScreen extends GameScreen{
 
             }
             */
-
-            mEndTurnButton.update(elapsedTime, mDefaultLayerViewport, mDefaultScreenViewport);
-
-            if (mEndTurnButton.isToggledOn()) {
-                endPlayerTurn();
-            }
         }
     }
 
@@ -336,8 +333,8 @@ public class colosseumDemoScreen extends GameScreen{
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the cards onscreen
-        mCards.get(0).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        mCards.get(1).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
+            mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
             int screenHeight = graphics2D.getSurfaceHeight();
@@ -347,36 +344,15 @@ public class colosseumDemoScreen extends GameScreen{
             graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
         }
 
-        for(Card deckOfCards: dCards){ //draws each card held within the "dCards" variable, Sprint 4 Story 7
+        for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+
+        //Draw initial 'End Turn' button onscreen:
+        if (p2.getYourTurn()) {
+            mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        } else {
+            mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
-
-        //Draw PushButtons onscreen:
-        for (ToggleButton button : mButtons) {
-            button.draw(elapsedTime, graphics2D);
-        }
-
-
-        // Spacing that will be used to position the buttons:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
-
-        //Draw player mana
-        int pMana = 10;
-        graphics2D.drawText("Mana:" + pMana, spacingX * 8.0f, spacingY * 12.5f, mText);
-
-        //Draw player card stats
-        int pCardsLeft = 24, pCardsDead = 2;
-        graphics2D.drawText("Cards in Deck: " + pCardsLeft, spacingX * 12.6f, spacingY * 12.2f, mText);
-        graphics2D.drawText("Cards in Graveyard: " + pCardsDead, spacingX * 12.6f, spacingY * 12.8f, mText);
-
-        //Draw opponent mana
-        int eMana = 7;
-        graphics2D.drawText("Mana: " + eMana, spacingX * 8.0f, spacingY * 1.5f, mText);
-
-        //Draw opponent card stats
-        int eCardsLeft = 19, eCardsDead = 4;
-        graphics2D.drawText("Cards in Deck: " + eCardsLeft, spacingX * 12.6f, spacingY * 1.2f, mText);
-        graphics2D.drawText("Cards in Graveyard: " + eCardsDead, spacingX * 12.6f, spacingY * 1.8f, mText);
     }
 }

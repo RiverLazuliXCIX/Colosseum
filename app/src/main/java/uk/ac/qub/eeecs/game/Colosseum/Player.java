@@ -38,7 +38,7 @@ public class Player extends GameObject {
 
     private boolean weaponEquipped = false;// Stores whether the player has equipped a weapon or not (can be equipped through abilities or cards, default is false, equipping a new weapon destroys the currently equipped one)
     private boolean abilityUsedThisTurn = false; // Stores whether an ability has been used this turn, if true, ability cannot be played for the rest of the player's turn
-    private boolean yourTurn; // Will be false or true depending on whether or not it is the player's turn
+    private boolean yourTurn = true; // Will be false or true depending on whether or not it is the player's turn
 
     // Add variables for storing player's active cards, deck, hand etc.
 

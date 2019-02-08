@@ -22,7 +22,7 @@ import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class OptionsScreen extends GameScreen {
     private FPSCounter fpsCounter;
-    private PushButton mBackButton;
+    private PushButton mBackButton, htpButton;
     private List<PushButton> mButtons = new ArrayList<>();
     private ToggleButton tEdgeCaseButton;
     private List<ToggleButton> tButtons = new ArrayList<>();
@@ -62,11 +62,19 @@ public class OptionsScreen extends GameScreen {
                 "CoinFlip", "CoinFlipSelected", this);
         tButtons.add(tEdgeCaseButton);
 
+        // Add a how to play button
+        htpButton = new PushButton(
+                mDefaultLayerViewport.getWidth() * 0.15f, mDefaultLayerViewport.getHeight() * 0.50f,
+                mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
+                "HTPButton", this);
+        mButtons.add(htpButton);
+
         //Load in the background for the options menu Story O2
         mOptionBackground = new GameObject(mDefaultLayerViewport.getWidth()/ 2.0f,
                 mDefaultLayerViewport.getHeight()/ 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+
     }
 
     private void setupViewports() {
@@ -107,6 +115,11 @@ public class OptionsScreen extends GameScreen {
             if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen (menu screen)
                 mGame.getScreenManager().removeScreen(this);
                 mGame.getScreenManager().addScreen(new MenuScreen(mGame));
+
+                // If the how to play button is pushed, close this screen and open the how to play screen
+            } else if (htpButton.isPushTriggered()) {
+                mGame.getScreenManager().removeScreen(this);
+                mGame.getScreenManager().addScreen(new HTPScreen(mGame, mDefaultLayerViewport.getWidth() * 0.75f, mDefaultLayerViewport.getHeight() * 0.20f));
             }
             //Testing a toggle button input to enable the edgecase coinflip
             for(ToggleButton button : tButtons)
