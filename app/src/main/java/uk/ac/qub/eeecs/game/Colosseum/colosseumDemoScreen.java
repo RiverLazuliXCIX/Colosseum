@@ -6,6 +6,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
 import android.icu.util.Output;
 
 import java.util.ArrayList;
@@ -71,6 +72,9 @@ public class colosseumDemoScreen extends GameScreen{
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
 
+    //Paint item that will be used to draw text
+    private Paint mText;
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -122,6 +126,8 @@ public class colosseumDemoScreen extends GameScreen{
                 break;
         }
     }
+
+
 
         //Create the Push Buttons:
 
@@ -354,5 +360,28 @@ public class colosseumDemoScreen extends GameScreen{
         } else {
             mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
+
+
+        // Spacing that will be used to position the buttons:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+
+        //Draw player mana
+        int pMana = 10;
+        graphics2D.drawText("Mana:" + pMana, spacingX * 8.0f, spacingY * 12.5f, mText);
+
+        //Draw player card stats
+        int pCardsLeft = 24, pCardsDead = 2;
+        graphics2D.drawText("Cards in Deck: " + pCardsLeft, spacingX * 12.6f, spacingY * 12.2f, mText);
+        graphics2D.drawText("Cards in Graveyard: " + pCardsDead, spacingX * 12.6f, spacingY * 12.8f, mText);
+
+        //Draw opponent mana
+        int eMana = 7;
+        graphics2D.drawText("Mana: " + eMana, spacingX * 8.0f, spacingY * 1.5f, mText);
+
+        //Draw opponent card stats
+        int eCardsLeft = 19, eCardsDead = 4;
+        graphics2D.drawText("Cards in Deck: " + eCardsLeft, spacingX * 12.6f, spacingY * 1.2f, mText);
+        graphics2D.drawText("Cards in Graveyard: " + eCardsDead, spacingX * 12.6f, spacingY * 1.8f, mText);
     }
 }
