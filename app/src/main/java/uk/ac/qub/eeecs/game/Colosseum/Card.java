@@ -151,10 +151,27 @@ public class Card extends GameObject {
                     mCards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
             }
 
+
+            //Enlarge the card
+            if (touchType == TouchEvent.TOUCH_LONG_PRESS
+                    && mCardHeld == null)
+                checkCardTouched(mCards, touchLocation);
+
+            if (touchType == TouchEvent.TOUCH_LONG_PRESS
+                    && mCardHeld != null
+                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
+                //Enlarge the card
+                mCardHeld.setHeight(CARD_HEIGHT * 2.0f);
+                mCardHeld.setWidth(CARD_WIDTH * 2.0f);
+            }
+
             //release the card, meaning no card is now held
             if (touchType == TouchEvent.TOUCH_UP
-                    && mCardHeld != null)
+                    && mCardHeld != null) {
+                mCardHeld.setHeight(CARD_HEIGHT);
+                mCardHeld.setWidth(CARD_WIDTH);
                 mCardHeld = null;
+            }
         }
     }
 
