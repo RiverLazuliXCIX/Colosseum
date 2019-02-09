@@ -125,6 +125,19 @@ public class Vector2 {
     }
 
     /**
+     * CREATED BY Sean
+     * Add the component value to the vector, then return the vector
+     *
+     * @param x The x-component to add
+     * @param y The y-component to add
+     */
+    public Vector2 addReturn(float x, float y) {
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+
+    /**
      * Add the component value to the vector
      *
      * @param other Vector from which to add the values

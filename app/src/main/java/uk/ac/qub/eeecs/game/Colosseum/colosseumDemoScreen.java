@@ -165,9 +165,9 @@ public class colosseumDemoScreen extends GameScreen{
 
         //Setting up demo cards:
         mCards.add(new Card(100, 100,  this));//, "CardFront"));
-        mCards.get(0).setAttack(1);
-        mCards.get(0).setDefence(4);
-        mCards.get(0).setMana(5);
+        mCards.get(0).setAttack(11);
+        mCards.get(0).setDefence(42);
+        mCards.get(0).setMana(50);
         //mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
         mCards.add(new Card(200, 100, this));//, "CardFront"));
         mCards.get(1).setAttack(3);

@@ -202,14 +202,34 @@ public class Card extends GameObject {
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
         if (!mCardFlippedBack) {
+            //ASSUMING all stats are 2 digits or less
+
             //Draw the attack on the card
-            drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+            if (getAttack() < 10)   //if the value is a single digit, just draw it
+                drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+            else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
+                drawBitmap(mCardDigits[getAttack() / 10], mAttackOffset.addReturn(-0.1f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
+                drawBitmap(mCardDigits[getAttack() % 10], mAttackOffset.addReturn(0.2f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
+                mAttackOffset.add(-0.1f, 0);
+            }
 
             //Draw the defence on the card
-            drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+            if (getDefence() < 10)
+                drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+            else {
+                drawBitmap(mCardDigits[getDefence() / 10], mDefenceOffset.addReturn(-0.1f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
+                drawBitmap(mCardDigits[getDefence() % 10], mDefenceOffset.addReturn(0.2f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
+                mDefenceOffset.add(-0.1f, 0);
+            }
 
             //Draw the mana on the card
-            drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+            if (getMana() < 10)
+                drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+            else {
+                drawBitmap(mCardDigits[getMana() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
+                drawBitmap(mCardDigits[getMana() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
+                mManaOffset.add(-0.1f, 0);
+            }
         }
     }
 
@@ -266,5 +286,5 @@ public class Card extends GameObject {
         return mana;
     }
 
-    public Card getCard(int i) {return this; }
+    public Card getCard(int i) { return this; }
 }
