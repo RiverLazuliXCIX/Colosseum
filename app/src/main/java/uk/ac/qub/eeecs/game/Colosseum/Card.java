@@ -56,12 +56,22 @@ public class Card extends GameObject {
     private int attack, defence, mana;
 
     //Set offset and scale values for positioning
+
     private Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
     private Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
     private Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
     private Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
     private Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
     private Vector2 mManaScale = new Vector2(0.1f, 0.1f);
+
+    /*ALT CARD
+    private Vector2 mAttackOffset = new Vector2(-0.66f, -0.71f);
+    private Vector2 mAttackScale = new Vector2(0.12f, 0.12f);
+    private Vector2 mDefenceOffset = new Vector2(0.65f, -0.71f);
+    private Vector2 mDefenceScale = new Vector2(0.12f, 0.12f);
+    private Vector2 mManaOffset = new Vector2(0.69f, 0.78f);
+    private Vector2 mManaScale = new Vector2(0.12f, 0.12f);
+    */
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors

@@ -77,8 +77,12 @@ public class colosseumDemoScreen extends GameScreen{
     private Paint mText;
 
     //Denarius
+    //SINGLE COIN
+    private GameObject pDenarius, eDenarius;
+    /*MULTIPLE COINS
     private List<GameObject> pDenarius = new ArrayList<>();
     private List<GameObject> eDenarius = new ArrayList<>();
+    */
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -112,7 +116,7 @@ public class colosseumDemoScreen extends GameScreen{
 
         mGameBackground = new GameObject(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mBackgroundBitmap.getHeight(), mBackgroundBitmap, this);
+                mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
         //Deciding who starts first, Story 16 Sprint 4 - Scott
         if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
@@ -185,22 +189,18 @@ public class colosseumDemoScreen extends GameScreen{
         //Create denarius objects
         Bitmap denarius = getGame()
                 .getAssetManager().getBitmap("Denarius");
-        float scaleHor = 2.95f;
-
         //player
-        p2.setCurrentMana(10);
-        for(int i = 0; i < p2.getCurrentMana(); i++) {
-            pDenarius.add(new GameObject(spacingX * scaleHor, spacingY * 0.38f, 30, 30, denarius, this));
-            scaleHor += 0.04f;
-        }
+        p2.setCurrentMana(2);
+        p2.setCurrentManaCap(4);
 
-        scaleHor = 2.95f;
+        //SINGLE COIN
+        pDenarius = new GameObject(spacingX * 2.95f, spacingY * 0.38f, 30, 30, denarius, this);
+        eDenarius = new GameObject(spacingX * 2.95f, spacingY * 2.78f, 30, 30, denarius, this);
 
-        //mock opponent
-        for(int i = 0; i < 20; i++) {
-            eDenarius.add(new GameObject(spacingX * scaleHor, spacingY * 2.78f, 30, 30, denarius, this));
-            scaleHor += 0.04f;
-        }
+        /* FOR MULTIPLE COINS
+        createMultipleCoins(pDenarius, spacingX, spacingY, 0.38f, denarius);
+        createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
+        */
     }
 
     private void setupViewports() {
@@ -278,6 +278,15 @@ public class colosseumDemoScreen extends GameScreen{
 
     public static void setEdgeCase(boolean edgeCaseInput) {
         edgeCaseInput = edgeCase;
+    }
+
+    public void createMultipleCoins(List<GameObject> denarius, float spacingX, float spacingY, float scaleVert, Bitmap b) {
+        float scaleHor = 2.95f;
+
+        for(int i = 0; i < p2.getCurrentMana(); i++) {
+            denarius.add(new GameObject(spacingX * scaleHor, spacingY * scaleVert, 30, 30, b, this));
+            scaleHor += 0.04f;
+        }
     }
 
 
@@ -404,10 +413,15 @@ public class colosseumDemoScreen extends GameScreen{
         //PLAYER STATS
         //TODO: Implement deck, hand, and graveyard functions so accurate values can be used below
         //Draw player mana
+        //SINGLE COIN
+        pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        /*MULTIPLE COINS
         for(int i = 0; i < p2.getCurrentMana(); i++)
             pDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        */
 
-        graphics2D.drawText("Mana:" + p2.getCurrentMana(), spacingX * 12.8f, spacingY * 13.2f, mText);
+        graphics2D.drawText(p2.getCurrentMana()+ "/" + p2.getCurrentManaCap(), spacingX * 12.9f, spacingY * 12f, mText);
 
         //Draw player card stats
         int pCardsLeft = 24, pCardsHand= 5, pCardsDead = 22;
@@ -416,11 +430,16 @@ public class colosseumDemoScreen extends GameScreen{
         graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 7.0f, spacingY * 12.8f, mText);
 
         //Draw opponent mana
+        //SINGLE COIN
+        eDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        /*MULTIPLE COINS
         int eMana = 20;
         for(int i = 0; i < eMana; i++)
             eDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        */
 
-        graphics2D.drawText("Mana: " + eMana, spacingX * 12.8f, spacingY * 2.35f, mText);
+        graphics2D.drawText("3/3", spacingX * 12.9f, spacingY * 1.2f, mText);
 
         //Draw opponent card stats
         int eCardsLeft = 19, eCardsHand = 2, eCardsDead = 3;

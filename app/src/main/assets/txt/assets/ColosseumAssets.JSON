@@ -7,13 +7,28 @@
     },
     {
       "type": "Bitmap",
+      "name": "CardFrontAlt",
+      "file": "img/altassets/CardFrontAlt.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "Denarius",
       "file": "img/denarius.png"
     },
     {
       "type": "Bitmap",
+      "name": "DenariusAlt",
+      "file": "img/altassets/denariusAlt.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "CardBack",
       "file": "img/CardBack.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CardBackAlt",
+      "file": "img/altassets/CardBackAlt.png"
     },
     {
       "type": "Bitmap",
@@ -24,6 +39,11 @@
       "type": "Bitmap",
       "name": "ArenaFloor",
       "file": "img/ArenaFloor.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "ArenaFloorAlt",
+      "file": "img/altassets/ArenaFloorAlt.png"
     },
     {
       "type": "Bitmap",
