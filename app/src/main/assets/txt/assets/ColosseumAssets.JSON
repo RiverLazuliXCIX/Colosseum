@@ -110,6 +110,16 @@
       "type": "Bitmap",
       "name": "EndTurn2",
       "file": "img/END-TURN-ON.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Cog",
+      "file": "img/cog.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CogSelected",
+      "file": "img/cogSelected.png"
     }
     ]
 }

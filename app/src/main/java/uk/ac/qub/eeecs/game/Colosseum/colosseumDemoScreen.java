@@ -63,6 +63,9 @@ public class colosseumDemoScreen extends GameScreen{
     private PushButton mEndTurnButton;
     private PushButton mEndTurnButtonOff;
 
+    //Push Button for pausing the game - User Story 17 - Sprint 5
+    private PushButton mPauseButton;
+
     //Array list to hold a deck of cards - Story 7 Sprint 4
     private List<Card> dCards = new ArrayList<>();
 
@@ -160,6 +163,9 @@ public class colosseumDemoScreen extends GameScreen{
                 "EndTurn2",  this);
         mButtons.add(mEndTurnButtonOff);
 
+        mPauseButton = new PushButton(
+                spacingX*4.7f, spacingY*2.7f, spacingX*0.4f, spacingY*0.4f, "Cog", "CogSelected", this);
+        mButtons.add(mPauseButton);
 
         //Paint mButtonTint = new Paint();
 
@@ -403,6 +409,9 @@ public class colosseumDemoScreen extends GameScreen{
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         else
             mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        //Draw Pause button
+        mPauseButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
 
         //Spacing that will be used to position everything:

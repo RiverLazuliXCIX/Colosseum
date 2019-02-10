@@ -30,12 +30,7 @@
       "name": "Options-Select",
       "file": "img/options-select.png"
     },
-    {
-      "type": "Bitmap",
-      "name": "cog2selected",
-      "file": "img/cog2selected.png"
-    },
-    {
+        {
       "type": "Bitmap",
       "name": "QuitBtn",
       "file": "img/quit.png"
