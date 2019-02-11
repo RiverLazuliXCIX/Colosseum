@@ -1,0 +1,19 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "Pause",
+      "file": "img/PauseMenu.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Resume",
+      "file": "img/Resume.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "ResumeSelected",
+      "file": "img/ResumeSelected.png"
+    }
+  ]
+}

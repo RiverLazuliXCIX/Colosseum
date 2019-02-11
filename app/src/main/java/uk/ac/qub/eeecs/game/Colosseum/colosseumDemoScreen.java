@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.icu.util.Output;
+import android.os.storage.StorageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.game.PauseMenuScreen;
 
 /**
  * Starter class for Card game stories
@@ -314,6 +316,10 @@ public class colosseumDemoScreen extends GameScreen{
 
             for (PushButton button : mButtons)
             button.update(elapsedTime);
+
+            if(mPauseButton.isPushTriggered()){
+                mGame.getScreenManager().addScreen(new PauseMenuScreen(mGame));
+            }
 
             if (mEndTurnButton.isPushTriggered()) {
                 endPlayerTurn();
