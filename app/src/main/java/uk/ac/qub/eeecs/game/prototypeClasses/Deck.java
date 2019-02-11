@@ -40,7 +40,7 @@ public class Deck {
 
             if (cardsInHand < 10) {
                 hand.add(c);
-                updateCardsLeft(c);
+                //updateCardsLeft(c);
                 return;
             }
 
@@ -59,6 +59,7 @@ public class Deck {
         graveyard.add(m);
     }
 
+    /* commented out to stop compilation errors
     public void resurrect(MinionCard m) {
         for (int i = 0; i < graveyard.size(); i++) {
             if (m.equals(graveyard.get(i))) {
@@ -76,6 +77,7 @@ public class Deck {
         if (c instanceof MinionCard) minionsLeft--;
         else specialsLeft--;
     }
+    */
 
     public ArrayList<Card> getDeck() { return this.deck; }
     public void setDeck(ArrayList<Card> deck) { this.deck = deck; }

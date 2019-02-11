@@ -176,15 +176,15 @@ public class colosseumDemoScreen extends GameScreen{
         //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
-        mCards.add(new Card(100, 200,  this));//, "CardFront"));
-        mCards.get(0).setAttack(11);
-        mCards.get(0).setDefence(42);
-        mCards.get(0).setMana(50);
+        mCards.add(new MinionCard(100, 100,  this, 50, 11, 42));//, "CardFront"));
+        //mCards.get(0).setAttack(11);
+        //mCards.get(0).setDefence(42);
+        //mCards.get(0).setMana(50);
         //mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
-        mCards.add(new Card(200, 200, this));//, "CardFront"));
-        mCards.get(1).setAttack(3);
-        mCards.get(1).setDefence(2);
-        mCards.get(1).setMana(4);
+        mCards.add(new MinionCard(200, 100, this, 4, 3, 2));//, "CardFront"));
+        //mCards.get(1).setAttack(3);
+        //mCards.get(1).setDefence(2);
+        //mCards.get(1).setMana(4);
         //mCards.get(1).setBitmap(getGame().getAssetManager().getBitmap("no2"));
 
         //User Story 7, Sprint 4 - Scott
@@ -251,13 +251,12 @@ public class colosseumDemoScreen extends GameScreen{
 
     private Card generateRandomDeck() { //Scott Barham, Story 7 Sprint 4
         Card dCard;
-        dCard = new Card(RANDOM.nextInt(
-                (int)mDefaultLayerViewport.getWidth()-75)+35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
+        dCard = new MinionCard(RANDOM.nextInt((int)mDefaultLayerViewport.getWidth()-75)+35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
                 RANDOM.nextInt((int)mDefaultLayerViewport.getHeight()-75)+35, //-75, +35 to prevent cards spawning outside the top/bottom regions of the screen.
-                this);//, "CardFront");
-        dCard.setAttack(RANDOM.nextInt(10)); //limit of values 0-9
-        dCard.setDefence(RANDOM.nextInt(10)); //limit of values 0-9
-        dCard.setMana(RANDOM.nextInt(10)); //limit of values 0-9
+                this, RANDOM.nextInt(10), RANDOM.nextInt(10), RANDOM.nextInt(10));//, "CardFront");
+        //dCard.setAttack(RANDOM.nextInt(10)); //limit of values 0-9
+        //dCard.setDefence(RANDOM.nextInt(10)); //limit of values 0-9
+        //dCard.setMana(RANDOM.nextInt(10)); //limit of values 0-9
 
         return dCard;
     }
@@ -327,12 +326,12 @@ public class colosseumDemoScreen extends GameScreen{
 
             for (int i = 0; i < mCards.size(); i++){
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
-            playerRegion.update(mCards.get(i));
-           // opponentRegion.update(mCards.get(i));
+                playerRegion.update(mCards.get(i));
+                // opponentRegion.update(mCards.get(i));
             }
 
             for (PushButton button : mButtons)
-            button.update(elapsedTime);
+                button.update(elapsedTime);
 
             if(mPauseButton.isPushTriggered()){
                 mGame.getScreenManager().addScreen(new PauseMenuScreen(mGame));
