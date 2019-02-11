@@ -49,9 +49,11 @@ public class Card extends GameObject {
     //Check if card is being held
     private Card mCardHeld = null;
 
+
     //Check card is flipped
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
-
+    private Boolean draggable = true; // Card should not be draggable if it is locked in its region
+    private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
     //Define the attack and defence values
     private int attack, defence, mana;
 
@@ -119,6 +121,7 @@ public class Card extends GameObject {
             if (touchType == TouchEvent.TOUCH_DRAGGED
                     && mCardHeld == null)
                 checkCardTouched(mCards, touchLocation);
+            cardDropped = false;
 
             //if a card was touched, and the event was a drag, move it
             if (touchType == TouchEvent.TOUCH_DRAGGED
@@ -178,6 +181,7 @@ public class Card extends GameObject {
             //release the card, meaning no card is now held
             if (touchType == TouchEvent.TOUCH_UP
                     && mCardHeld != null) {
+                cardDropped = true;
                 mCardHeld.setHeight(CARD_HEIGHT);
                 mCardHeld.setWidth(CARD_WIDTH);
                 mCardHeld = null;
@@ -188,7 +192,7 @@ public class Card extends GameObject {
     private void checkCardTouched(List<Card> mCards, Vector2 touchLocation) {
         //Check which card was touched, if any
         for (int j = 0; j < mCards.size(); j++) {
-            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)) {
+            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)&&mCards.get(j).isDraggable()) {
                 mCardHeld = mCards.get(j);
             }
         }
@@ -274,6 +278,12 @@ public class Card extends GameObject {
         this.mana = mana;
     }
 
+    public void setDraggable(boolean draggable){
+        this.draggable = draggable;
+    }
+
+    public void setCardDropped(boolean cardDropped) { this.cardDropped = cardDropped;}
+
     public int getAttack() {
         return attack;
     }
@@ -285,6 +295,12 @@ public class Card extends GameObject {
     public int getMana() {
         return mana;
     }
+
+    public boolean isDraggable(){
+        return draggable;
+    }
+
+    public boolean isCardDropped(){return cardDropped;}
 
     public Card getCard(int i) { return this; }
 }

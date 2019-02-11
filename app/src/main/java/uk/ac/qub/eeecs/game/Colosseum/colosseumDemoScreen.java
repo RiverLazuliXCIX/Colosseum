@@ -89,6 +89,10 @@ public class colosseumDemoScreen extends GameScreen{
     private List<GameObject> eDenarius = new ArrayList<>();
     */
 
+    //Test region
+    BoardRegion playerRegion;
+    BoardRegion opponentRegion;
+
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -172,12 +176,12 @@ public class colosseumDemoScreen extends GameScreen{
         //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
-        mCards.add(new Card(100, 100,  this));//, "CardFront"));
+        mCards.add(new Card(100, 200,  this));//, "CardFront"));
         mCards.get(0).setAttack(11);
         mCards.get(0).setDefence(42);
         mCards.get(0).setMana(50);
         //mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
-        mCards.add(new Card(200, 100, this));//, "CardFront"));
+        mCards.add(new Card(200, 200, this));//, "CardFront"));
         mCards.get(1).setAttack(3);
         mCards.get(1).setDefence(2);
         mCards.get(1).setMana(4);
@@ -190,8 +194,6 @@ public class colosseumDemoScreen extends GameScreen{
         //}
 
         //Setting up demo player:
-        //Bitmap p2bit = mGame.getAssetManager().getBitmap("Test");
-        //Player p2 = new Player(spacingX * 5.0f, spacingY * 5.0f, this, p2bit, "Hircine");
         p2=new Player(this,"Hircine");
 
         //Create denarius objects
@@ -209,6 +211,18 @@ public class colosseumDemoScreen extends GameScreen{
         createMultipleCoins(pDenarius, spacingX, spacingY, 0.38f, denarius);
         createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
         */
+
+        // Defining player board region
+
+
+        float regionWidth= ViewportHelper.convertXDistanceFromLayerToScreen(mDefaultLayerViewport.getWidth(),mDefaultLayerViewport,mDefaultScreenViewport);
+        float regionHeight = ViewportHelper.convertYDistanceFromLayerToScreen(mDefaultLayerViewport.halfHeight-(p2.getPortraitHeight()),mDefaultLayerViewport,mDefaultScreenViewport);
+
+
+
+
+        playerRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.height/2, regionWidth,regionHeight,this);
+        opponentRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.height ,regionWidth ,regionHeight ,this);
     }
 
     private void setupViewports() {
@@ -311,8 +325,11 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            for (int i = 0; i < mCards.size(); i++)
+            for (int i = 0; i < mCards.size(); i++){
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+            playerRegion.update(mCards.get(i));
+           // opponentRegion.update(mCards.get(i));
+            }
 
             for (PushButton button : mButtons)
             button.update(elapsedTime);
@@ -393,6 +410,9 @@ public class colosseumDemoScreen extends GameScreen{
         // Draw the player portrait (Just for testing, still working on it)
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+        // Draw player board region (Just for testing again)
+//        graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
+//        graphics2D.drawRect(opponentRegion.getBoardRegionRect(),opponentRegion.getBoardRegionPaint());
 
         //Draw the cards onscreen
         for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.

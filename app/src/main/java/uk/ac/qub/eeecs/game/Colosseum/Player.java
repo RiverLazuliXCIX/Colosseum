@@ -101,6 +101,11 @@ public class Player extends GameObject {
     public boolean getYourTurn() {return yourTurn;}
     public void setYourTurn(boolean newTurnValue) {this.yourTurn = newTurnValue;}
 
+    // As these elements are "final", setters are not currently required, however, other elements of
+    // the game may use their dimensions for alignment and positioning, (ie. board regions etc.)
+    public float getPortraitHeight() {return PORTRAIT_HEIGHT;}
+    public float getPortraitWidth() {return PORTRAIT_WIDTH;}
+
     /**
      * Method for subtracting both health and armor when the player character/portrait
      * takes damage. Damage is dealt to armor first, before being dealt to player health

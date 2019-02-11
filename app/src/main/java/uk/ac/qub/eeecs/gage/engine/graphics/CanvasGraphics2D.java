@@ -107,6 +107,11 @@ public class CanvasGraphics2D implements IGraphics2D {
         mCanvas.drawRect(left, top, right, bottom, paint);
     }
 
+    @Override
+    public void drawRect(Rect rect, Paint paint) {
+        mCanvas.drawRect(rect, paint);
+    }
+
     /*
      * (non-Javadoc)
      *
