@@ -28,7 +28,6 @@ public class OptionsScreen extends GameScreen {
     private List<ToggleButton> tButtons = new ArrayList<>();
     private GameObject mOptionBackground;
     private LayerViewport mGameViewport;
-    Vector2 unitCountV = new Vector2();
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -46,33 +45,32 @@ public class OptionsScreen extends GameScreen {
         //Load in a newly created "OptionScreenAssets.JSON" file which stores assets and their properties - Story O1 and O2 Scott Barham
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
 
-        ViewportHelper.convertLayerPosIntoScreen(mDefaultLayerViewport,mDefaultLayerViewport.getHeight()*0.10f,mDefaultLayerViewport.getWidth()*0.30f,mDefaultScreenViewport,unitCountV);
-
-        fpsCounter = new FPSCounter( mDefaultLayerViewport.getWidth() * 0.75f, mDefaultLayerViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
+        setupViewports();
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
         // Load in the bitmap used for the back button, from a newly created "optionscreenassets.json" file - Story O3
         mBackButton = new PushButton(
-                mDefaultLayerViewport.getWidth() * 0.88f, mDefaultLayerViewport.getHeight() * 0.10f,
-                mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.88f, mGameViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
                 "BackArrow", "BackArrowSelected", this);
         mButtons.add(mBackButton);
 
         tEdgeCaseButton = new ToggleButton(
-                mDefaultLayerViewport.getWidth() * 0.15f, mDefaultLayerViewport.getHeight()*0.70f,
-                mDefaultLayerViewport.getWidth() * 0.095f, mDefaultLayerViewport.getHeight() * 0.15f,
+                mGameViewport.getWidth() * 0.15f, mGameViewport.getHeight()*0.70f,
+                mGameViewport.getWidth() * 0.095f, mGameViewport.getHeight() * 0.15f,
                 "CoinFlip", "CoinFlipSelected", this);
         tButtons.add(tEdgeCaseButton);
 
         // Add a how to play button
         htpButton = new PushButton(
-                mDefaultLayerViewport.getWidth() * 0.15f, mDefaultLayerViewport.getHeight() * 0.50f,
-                mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.15f, mGameViewport.getHeight() * 0.50f,
+                mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
                 "HTPButton", this);
         mButtons.add(htpButton);
 
         //Load in the background for the options menu Story O2
-        mOptionBackground = new GameObject(mDefaultLayerViewport.getWidth()/ 2.0f,
-                mDefaultLayerViewport.getHeight()/ 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(), getGame()
+        mOptionBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
+                mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
+                mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
 
     }
