@@ -51,9 +51,10 @@ public class BoardRegion extends GameObject {
          */
         boardRegionRect = new Rect((int)x,(int)y, (int)(x+width),(int)(y+height));
 
-        // Sets region colour
-//        boardRegionPaint.setColor(Color.parseColor("#00000000"));
+        // Sets region colour Currently used for testing, displaying region hitboxes
+        // boardRegionPaint.setColor(Color.parseColor("#00000000"));
         boardRegionPaint.setColor(Color.MAGENTA);
+
 
     }
 
@@ -73,15 +74,17 @@ public class BoardRegion extends GameObject {
 
     /**
      * Checks if a specified card is present within the region.
+     * /4 converts rectangle positions to their relevant positions on screen. Will need to refactor
+     * this to rid us of this magic number.
      *
      * @param card Card being checked if within region.
      */
-//boardRegionRect.bottom - boardRegionRect.top
+
     public boolean isInRegion(Card card){
 
-        if(card.position.x <= boardRegionRect.right && card.position.x >= boardRegionRect.left
-                && card.position.y >= position.y/4-getHeight()
-                && card.position.y <= position.y/4){
+        if(card.position.x <= boardRegionRect.right/4 && card.position.x >= boardRegionRect.left/4
+                && card.position.y >= boardRegionRect.top/4
+                && card.position.y <= boardRegionRect.bottom/4){
 
             return true;
         }
@@ -90,7 +93,7 @@ public class BoardRegion extends GameObject {
 
     /**
      * Updates the position of the cards in the container, moving the card to the rightmost available
-     * position. note: y position of 50 accounts for player portrait
+     * position. Using /4 to convert the positions to their relevant viewport positions
      *
      * @param card Card which is having its position updated
      */
@@ -98,14 +101,17 @@ public class BoardRegion extends GameObject {
     public void updateCardPosition(Card card){
 
             if (numActiveCards == 0) {
-                card.setPosition((position.x + (card.getWidth() / 2)) + (numActiveCards * card.getWidth()), position.y / 4 - (card.getHeight() / 2));
+                card.setPosition(position.x/4 + (card.getWidth()/2),position.y/4 + (card.getHeight()/2));
             } else {
-                card.setPosition((position.x + (card.getWidth() / 2)) + (numActiveCards * card.getWidth() + 5), position.y / 4 - (card.getHeight() / 2));
+                card.setPosition((position.x/4 + (card.getWidth() / 2)) + (numActiveCards * card.getWidth() + 5), position.y / 4 + (card.getHeight() / 2));
             }
     }
 
     /**
-     * If the board region is not full, update the card position
+     * If the board region is not full, update the card position, add card to that region's active
+     * cards array set cards to not be draggable, should not be movable once they are in play.
+     *
+     * TODO Add checks for card type, minions should appear in slots, but weapons/spells cards should be consumed once dropped and appear in the graveyard etc.
      *
      * @param card Card which is having its position updated
      */
@@ -120,6 +126,12 @@ public class BoardRegion extends GameObject {
 
     }
 
+
+    /**
+     * Removes card from active cards and decrements the number of cards on the board.
+     *
+     * @param card Card being removed
+     */
     public void removeCard (Card card){
 
             // Need additional minion/card functionality for when card is removed / destroyed
@@ -128,6 +140,14 @@ public class BoardRegion extends GameObject {
 
     }
 
+
+    /**
+     * Update function for regions. If a card is present within a region when a held card is dropped
+     * or, a card is dropped into a region, adds the card to the selected region. Currently uses
+     * addCard method to do this
+     *
+     * @param card Card being updated
+     */
     public void update(Card card){
         if (card.isCardDropped()&&isInRegion(card) && !isBoardRegionFull()&& card.isDraggable()){
             //updateCardPosition(card);

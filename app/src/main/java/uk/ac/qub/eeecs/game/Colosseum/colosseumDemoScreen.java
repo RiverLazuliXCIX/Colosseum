@@ -212,17 +212,14 @@ public class colosseumDemoScreen extends GameScreen{
         createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
         */
 
-        // Defining player board region
-
-
+        // Defining board region width and height
         float regionWidth= ViewportHelper.convertXDistanceFromLayerToScreen(mDefaultLayerViewport.getWidth(),mDefaultLayerViewport,mDefaultScreenViewport);
         float regionHeight = ViewportHelper.convertYDistanceFromLayerToScreen(mDefaultLayerViewport.halfHeight-(p2.getPortraitHeight()),mDefaultLayerViewport,mDefaultScreenViewport);
 
+        // Creating board playable regions (+200 )
+        playerRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+mDefaultScreenViewport.height/2, regionWidth,regionHeight,this);
+        opponentRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+p2.getPortraitHeight()+200 ,regionWidth ,regionHeight ,this);
 
-
-
-        playerRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.height/2, regionWidth,regionHeight,this);
-        opponentRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.height ,regionWidth ,regionHeight ,this);
     }
 
     private void setupViewports() {
@@ -326,8 +323,10 @@ public class colosseumDemoScreen extends GameScreen{
 
             for (int i = 0; i < mCards.size(); i++){
                 mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+
+                // Updates both regions for all cards
                 playerRegion.update(mCards.get(i));
-                // opponentRegion.update(mCards.get(i));
+                opponentRegion.update(mCards.get(i));
             }
 
             for (PushButton button : mButtons)
@@ -410,8 +409,8 @@ public class colosseumDemoScreen extends GameScreen{
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         // Draw player board region (Just for testing again)
-//        graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
-//        graphics2D.drawRect(opponentRegion.getBoardRegionRect(),opponentRegion.getBoardRegionPaint());
+        //graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
+       // graphics2D.drawRect(opponentRegion.getBoardRegionRect(),opponentRegion.getBoardRegionPaint());
 
         //Draw the cards onscreen
         for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
