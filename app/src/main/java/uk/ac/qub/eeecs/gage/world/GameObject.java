@@ -111,6 +111,29 @@ public class GameObject {
         mBound.halfHeight = height / 2.0f;
     }
 
+    /**
+     * Create a new game object without a bitmap
+     *
+     * @param x          x location of the object
+     * @param y          y location of the object
+     * @param width      width of the object
+     * @param height     height of the object
+     * @param gameScreen Gamescreen to which this object belongs
+     */
+    public GameObject(float x, float y, float width, float height,
+                      GameScreen gameScreen) {
+        mGameScreen = gameScreen;
+
+        position.x = x;
+        position.y = y;
+
+        // Create the bound
+        mBound.x = x;
+        mBound.y = y;
+        mBound.halfWidth = width / 2.0f;
+        mBound.halfHeight = height / 2.0f;
+    }
+
     // /////////////////////////////////////////////////////////////////////////
     // Methods
     // /////////////////////////////////////////////////////////////////////////

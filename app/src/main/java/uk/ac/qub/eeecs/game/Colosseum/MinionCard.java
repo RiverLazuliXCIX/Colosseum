@@ -1,6 +1,6 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-import uk.ac.qub.eeecs.game.prototypeClasses.Card;
+import uk.ac.qub.eeecs.gage.world.GameScreen;
 
 /**
  * Created by Matthew, 05/12/2018
@@ -12,6 +12,7 @@ public class MinionCard extends Card {
     private int health;
     private Effect mEffect;
 
+    /*
     public MinionCard() {
         super();
         setAttack(0);
@@ -19,17 +20,26 @@ public class MinionCard extends Card {
         setHealth(1);
         mEffect = Effect.NONE;
     }
+    */
 
-    public MinionCard(int coinCost, int attack, int health, Effect mEffect) {
-        super(coinCost);
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health) {
+        super(x, y, gs, coinCost);
+        setAttack(attack);
+        setMaxHealth(health);
+        setHealth(health);
+        setEffect(Effect.NONE);
+    }
+
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health, Effect mEffect) {
+        super(x, y, gs, coinCost);
         setAttack(attack);
         setMaxHealth(health);
         setHealth(health);
         setEffect(mEffect);
     }
 
-    public MinionCard(int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
-        super(coinCost);
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
+        super(x, y, gs, coinCost);
         setAttack(attack);
         setMaxHealth(maxHealth);
         setHealth(health);

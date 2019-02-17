@@ -49,11 +49,14 @@ public class Card extends GameObject {
     //Check if card is being held
     private Card mCardHeld = null;
 
+
     //Check card is flipped
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
-
+    private Boolean draggable = true; // Card should not be draggable if it is locked in its region
+    private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
     //Define the attack and defence values
-    private int attack, defence, mana;
+    //private int attack, defence, mana;
+    private int coinCost;
 
     //Set offset and scale values for positioning
 
@@ -84,9 +87,11 @@ public class Card extends GameObject {
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
      */
-    public Card(float startX, float startY, GameScreen gameScreen) {//, String cardName) {
+    public Card(float startX, float startY, GameScreen gameScreen, int coinCost) {//, String cardName) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
+
+        setCoinCost(coinCost);
         // Store each of the damage/health digits
         for(int digit = 0; digit <= 9; digit++)
             mCardDigits[digit] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(digit));
@@ -119,6 +124,7 @@ public class Card extends GameObject {
             if (touchType == TouchEvent.TOUCH_DRAGGED
                     && mCardHeld == null)
                 checkCardTouched(mCards, touchLocation);
+            cardDropped = false;
 
             //if a card was touched, and the event was a drag, move it
             if (touchType == TouchEvent.TOUCH_DRAGGED
@@ -178,6 +184,7 @@ public class Card extends GameObject {
             //release the card, meaning no card is now held
             if (touchType == TouchEvent.TOUCH_UP
                     && mCardHeld != null) {
+                cardDropped = true;
                 mCardHeld.setHeight(CARD_HEIGHT);
                 mCardHeld.setWidth(CARD_WIDTH);
                 mCardHeld = null;
@@ -188,7 +195,7 @@ public class Card extends GameObject {
     private void checkCardTouched(List<Card> mCards, Vector2 touchLocation) {
         //Check which card was touched, if any
         for (int j = 0; j < mCards.size(); j++) {
-            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)) {
+            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)&&mCards.get(j).isDraggable()) {
                 mCardHeld = mCards.get(j);
             }
         }
@@ -201,34 +208,38 @@ public class Card extends GameObject {
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        if (!mCardFlippedBack) {
-            //ASSUMING all stats are 2 digits or less
+        if (this instanceof MinionCard) {
+            if (!mCardFlippedBack) {
+                MinionCard mc = (MinionCard) this;
 
-            //Draw the attack on the card
-            if (getAttack() < 10)   //if the value is a single digit, just draw it
-                drawBitmap(mCardDigits[getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
-            else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
-                drawBitmap(mCardDigits[getAttack() / 10], mAttackOffset.addReturn(-0.1f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[getAttack() % 10], mAttackOffset.addReturn(0.2f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                mAttackOffset.add(-0.1f, 0);
-            }
+                //ASSUMING all stats are 2 digits or less
 
-            //Draw the defence on the card
-            if (getDefence() < 10)
-                drawBitmap(mCardDigits[getDefence()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
-            else {
-                drawBitmap(mCardDigits[getDefence() / 10], mDefenceOffset.addReturn(-0.1f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[getDefence() % 10], mDefenceOffset.addReturn(0.2f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                mDefenceOffset.add(-0.1f, 0);
-            }
+                //Draw the attack on the card
+                if (mc.getAttack() < 10)   //if the value is a single digit, just draw it
+                    drawBitmap(mCardDigits[mc.getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+                else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
+                    drawBitmap(mCardDigits[mc.getAttack() / 10], mAttackOffset.addReturn(-0.1f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
+                    drawBitmap(mCardDigits[mc.getAttack() % 10], mAttackOffset.addReturn(0.2f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
+                    mAttackOffset.add(-0.1f, 0);
+                }
 
-            //Draw the mana on the card
-            if (getMana() < 10)
-                drawBitmap(mCardDigits[getMana()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
-            else {
-                drawBitmap(mCardDigits[getMana() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[getMana() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                mManaOffset.add(-0.1f, 0);
+                //Draw the defence on the card
+                if (mc.getHealth() < 10)
+                    drawBitmap(mCardDigits[mc.getHealth()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+                else {
+                    drawBitmap(mCardDigits[mc.getHealth() / 10], mDefenceOffset.addReturn(-0.1f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
+                    drawBitmap(mCardDigits[mc.getHealth() % 10], mDefenceOffset.addReturn(0.2f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
+                    mDefenceOffset.add(-0.1f, 0);
+                }
+
+                //Draw the mana on the card
+                if (mc.getCoinCost() < 10)
+                    drawBitmap(mCardDigits[mc.getCoinCost()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+                else {
+                    drawBitmap(mCardDigits[mc.getCoinCost() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
+                    drawBitmap(mCardDigits[mc.getCoinCost() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
+                    mManaOffset.add(-0.1f, 0);
+                }
             }
         }
     }
@@ -239,9 +250,9 @@ public class Card extends GameObject {
                             LayerViewport layerViewport, ScreenViewport screenViewport) {
 
         bound = new BoundingBox(position.x + mBound.halfWidth * offset.x,
-                                position.y + mBound.halfHeight * offset.y,
-                                mBound.halfWidth * scale.x,
-                                mBound.halfHeight * scale.y);
+                position.y + mBound.halfHeight * offset.y,
+                mBound.halfWidth * scale.x,
+                mBound.halfHeight * scale.y);
 
         if (GraphicsHelper.getSourceAndScreenRect(
                 bound, bitmap, layerViewport, screenViewport, drawSourceRect, drawScreenRect)) {
@@ -262,6 +273,7 @@ public class Card extends GameObject {
         }
     }
 
+    /*
     public void setAttack(int attack){
         this.attack = attack;
     }
@@ -273,7 +285,15 @@ public class Card extends GameObject {
     public void setMana(int mana){
         this.mana = mana;
     }
+    */
 
+    public void setDraggable(boolean draggable){
+        this.draggable = draggable;
+    }
+
+    public void setCardDropped(boolean cardDropped) { this.cardDropped = cardDropped;}
+
+    /*
     public int getAttack() {
         return attack;
     }
@@ -285,6 +305,16 @@ public class Card extends GameObject {
     public int getMana() {
         return mana;
     }
+    */
+
+    public boolean isDraggable(){
+        return draggable;
+    }
+
+    public boolean isCardDropped(){return cardDropped;}
+
+    public int getCoinCost() { return this.coinCost; }
+    public void setCoinCost(int coinCost) { this.coinCost = coinCost; }
 
     public Card getCard(int i) { return this; }
 }

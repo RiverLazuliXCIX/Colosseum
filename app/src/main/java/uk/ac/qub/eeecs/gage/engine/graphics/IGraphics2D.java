@@ -82,4 +82,13 @@ public interface IGraphics2D {
      * @param paint  Paint used to specified line colour/width
      */
     void drawRect(float left, float top, float right, float bottom, Paint paint);
+
+    /**
+     * Draw a predefined rectangle
+     *
+     * @param rect  Rectangle to be drawn
+     * @param paint  Paint used to specified line colour/width
+     */
+    void drawRect(Rect rect, Paint paint);
+
 }
