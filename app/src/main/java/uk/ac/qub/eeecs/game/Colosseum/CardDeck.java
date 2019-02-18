@@ -12,14 +12,13 @@ public class CardDeck {
     private int mDeckID;
     private String mDeckName;
     private int numOfCards = 0;
+    private int sizeOfHand = 0;
     private GameScreen mGameScreen;
 
     //ArrayList to hold the deck of cards, and the card graveyard
     private ArrayList<Card> mDeck;
     private ArrayList<Card> mDiscardPile;
-
-    //Card Hand, held in an Array. 10 Cards maximum.
-    private Card[] mCardHand;
+    private ArrayList<Card> mCardHand;
 
     //Boolean values required to discern the functionality of the deck:
     private boolean isEmptyFlag;
@@ -44,7 +43,7 @@ public class CardDeck {
     public CardDeck(int id, String name, GameScreen gameScreen, boolean isAIDeck) {
         mDeck = new ArrayList<>(0);
         mDiscardPile = new ArrayList<>(0);
-        mCardHand = new Card[10];
+        mCardHand = new ArrayList<>(0);
 
         this.mDeckID = id;
         this.mDeckName = name;
@@ -89,13 +88,6 @@ public class CardDeck {
         numOfCards += numOfSpells;
     }
 
-    public void insertCard(int cardAmt) {
-        for (int i = 0; i < cardAmt; i++) {
-            Card testCard = new Card(0,0, mGameScreen, 2);
-            mDeck.add(i, testCard);
-        }
-    }
-
     public void insertMinionCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             Card testCard = new Card(0, 0, mGameScreen, 3);
@@ -103,26 +95,24 @@ public class CardDeck {
         }
     }
 
-    public Card[] drawBeginningCards() {
-     for (int i = 0; i < 10; i++) {
-         mCardHand[i] = drawTopCard();
-         trackRemovalOfCards(mCardHand[i]);
-     }
-     return mCardHand;
-    }
-
     public Card drawTopCard() {
         if (!mDeck.isEmpty()) {
             Card topCard = mDeck.get(mDeck.size() - 1);
-            trackRemovalOfCards(topCard);
+            trackRemovalOfCards();
+            trackAdditionOfCardsToHand();
             mDeck.remove(mDeck.size() - 1);
+            mCardHand.add(topCard);
                 return topCard;
             } else {
                 return null;
             }
     }
 
-    public void trackRemovalOfCards(Card card) {
+    private void trackAdditionOfCardsToHand () {
+        sizeOfHand++;
+    }
+
+    private void trackRemovalOfCards() {
         numOfCards--;
     }
 
@@ -141,7 +131,7 @@ public class CardDeck {
     //Accessor and Mutator methods:
     public ArrayList<Card> getDeck() { return this.mDeck; }
     public ArrayList<Card> getmDiscardPile() { return this.mDiscardPile; }
-    public Card[] getmCardHand() { return this.mCardHand; }
+    public ArrayList<Card> getmCardHand() { return this.mCardHand; }
     public int getDeckID() { return this.mDeckID; }
     public String getDeckName() { return this.mDeckName; }
     public GameScreen getmGameScreen() { return this.mGameScreen; }
@@ -155,7 +145,7 @@ public class CardDeck {
 
     public ArrayList<Card> setDeck(ArrayList<Card> newDeck) { return this.mDeck = newDeck; }
     public ArrayList<Card> setmDiscardPile(ArrayList<Card> newDiscard) {return this.mDiscardPile = newDiscard; }
-    public Card[] setmCardHand(Card[] newHand) { return this.mCardHand = newHand; }
+    public ArrayList<Card> setmCardHand(ArrayList<Card> newHand) { return this.mCardHand = newHand; }
     public int setDeckID(int newDeckID) { return this.mDeckID = newDeckID; }
     public String setDeckName(String newDeckName) { return this.mDeckName = newDeckName; }
     public GameScreen setGameScreen(GameScreen newGameScreen) {return this.mGameScreen = newGameScreen; }
@@ -165,5 +155,4 @@ public class CardDeck {
     public int setNumOfMinions(int newNumOfMinions) { return this.numOfMinions = newNumOfMinions; }
     public int setNumOfSpells(int newNumOfSpells) { return this.numOfSpells = newNumOfSpells; }
     public int setNumOfWeapons(int newNumOfWeapons) { return this.numOfWeapons = newNumOfWeapons; }
-
 }
