@@ -35,7 +35,9 @@ public class CardDeck {
     int numOfSpells;
     int numOfWeapons;
 
-    //CardDeck Constructors:
+     /**
+     /CardDeck Constructors:
+     **/
     public CardDeck() {
         //Empty Deck
     }
@@ -52,11 +54,16 @@ public class CardDeck {
         this.buildDeck();
     }
 
-    //Public methods required for CardDeck class:
+     /**
+     /Public methods required for CardDeck class:
+     **/
+
     public void buildDeck() {
         chooseDeckType();
         addToCardNum();
         insertMinionCard(numOfMinions);
+        //insertSpellCard(numOfSpells);
+        //insertWeaponCard(numOfWeapons);
     }
 
     public void chooseDeckType() {
@@ -81,6 +88,7 @@ public class CardDeck {
         }
     }
 
+
     // Methods to add different types of cards to the deck:
     public void addToCardNum() {
         numOfCards += numOfMinions;
@@ -95,6 +103,8 @@ public class CardDeck {
         }
     }
 
+
+    //Methods required to draw from Deck:
     public Card drawTopCard() {
         if (!mDeck.isEmpty()) {
             Card topCard = mDeck.get(mDeck.size() - 1);
@@ -116,6 +126,7 @@ public class CardDeck {
         numOfCards--;
     }
 
+
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean isEmpty() {
         if (mDeck.size() == 0) {
@@ -123,6 +134,7 @@ public class CardDeck {
         }
         return isEmptyFlag;
     }
+
 
     //Accessor and Mutator methods:
     public ArrayList<Card> getDeck() { return this.mDeck; }

@@ -154,6 +154,7 @@ public class colosseumDemoScreen extends GameScreen{
                 spacingX*4.7f, spacingY*2.7f, spacingX*0.4f, spacingY*0.4f, "Cog", "CogSelected", this);
         mButtons.add(mPauseButton);
 
+        //Button used to draw cards from deck:
         mDrawButton = new PushButton(
                 spacingX*0.5f, spacingY*0.5f, spacingX*0.8f, spacingY*0.8f, "CardDeckImg", this);
         mButtons.add(mDrawButton);
@@ -366,6 +367,16 @@ public class colosseumDemoScreen extends GameScreen{
             for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
                 deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
 
+
+            //Eventually the cards from the deck should be displayed onscreen: 
+            for (Card cards : playerDeck.getmCardHand()) {
+                cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+            }
+
+            for (Card cards : enemyDeck.getmCardHand()) {
+                cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+            }
+
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
             /*
@@ -458,6 +469,16 @@ public class colosseumDemoScreen extends GameScreen{
 
         for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+
+        //Draw the two player's hands, user and enemy:
+        for (Card cards : playerDeck.getmCardHand()) {
+            cards.draw(elapsedTime, graphics2D);
+        }
+
+        for (Card cards : enemyDeck.getmCardHand()) {
+            cards.draw(elapsedTime, graphics2D);
+        }
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;

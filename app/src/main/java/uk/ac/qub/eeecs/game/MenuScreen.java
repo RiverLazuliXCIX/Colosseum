@@ -107,7 +107,6 @@ public class MenuScreen extends GameScreen {
                 "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
 
-
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
         mMusicText = new Paint();
