@@ -1,11 +1,16 @@
 package uk.ac.qub.eeecs.game;
 
+import android.app.AlertDialog;
+import android.app.Notification;
 import android.graphics.Color;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.MainActivity;
+import uk.ac.qub.eeecs.gage.R;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -22,9 +27,7 @@ public class PauseMenuScreen extends GameScreen {
 
     private List<PushButton> mButtons = new ArrayList<>();
 
-    private PushButton mMenuScreen;
-    private PushButton mResume;
-    private  PushButton mOptions;
+    private PushButton mMenuScreen, mResume, mOptions, mMainMenu;
     private LayerViewport mMenuViewport;
 
     public PauseMenuScreen(Game game)
@@ -75,6 +78,11 @@ public class PauseMenuScreen extends GameScreen {
                 spacingX * 1.0f,spacingY * 0.5f,"Options",
                 "OptionsSelected",this );
         mButtons.add(mOptions);
+        //Creating the 'main menu' button
+        mMainMenu = new PushButton(spacingX * 2.4f, spacingY * 0.7f,
+                spacingX * 1.0f,spacingY * 0.5f,"MainMenu",
+                "MainMenuSelected",this );
+        mButtons.add(mMainMenu);
     }
 
     @Override
@@ -93,9 +101,14 @@ public class PauseMenuScreen extends GameScreen {
                 mGame.getScreenManager().removeScreen(this);
             else if(mOptions.isPushTriggered())
                 mGame.getScreenManager().addScreen((new OptionsScreen(mGame)));
+            else if (mMainMenu.isPushTriggered())
+            {
+                mGame.getScreenManager().removeScreen(this);
+                mGame.getScreenManager().removeScreen("colosseumDemoScreen");
+                mGame.getScreenManager().addScreen(new MenuScreen(mGame));
+            }
         }
     }
-
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         graphics2D.clear(Color.WHITE);
@@ -108,5 +121,7 @@ public class PauseMenuScreen extends GameScreen {
         mResume.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
 
         mOptions.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
+
+        mMainMenu.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
     }
 }
