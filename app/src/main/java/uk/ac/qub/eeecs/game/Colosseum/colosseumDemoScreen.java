@@ -71,9 +71,12 @@ public class colosseumDemoScreen extends GameScreen{
     //Array list to hold a deck of cards - Story 7 Sprint 4
     private List<Card> dCards = new ArrayList<>();
 
-    //Define a TEST player
+    //Define a test player
     private Player p2;
     private Bitmap p2bit;
+
+    //Define a Test Deck
+    private CardDeck playerDeck, enemyDeck;
 
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
@@ -107,6 +110,7 @@ public class colosseumDemoScreen extends GameScreen{
 
         setupViewports();
         setUpGameObjects();
+        setUpDecks();
     }
 
     private void setUpGameObjects() {
@@ -238,12 +242,17 @@ public class colosseumDemoScreen extends GameScreen{
     // Methods
     // /////////////////////////////////////////////////////////////////////////
 
-    protected void endPlayerTurn() {
+    public void endPlayerTurn() {
         p2.setYourTurn(false);
 
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
         //This will prevent player from attempting to draw from their deck, or playing a card
         //It will also trigger the AI to make a move
+    }
+
+    public void setUpDecks() {
+        playerDeck = new CardDeck(1, "Basic Player Deck", this, false);
+        enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true);
     }
 
     private Card generateRandomDeck() { //Scott Barham, Story 7 Sprint 4
@@ -444,7 +453,7 @@ public class colosseumDemoScreen extends GameScreen{
 
 
         //PLAYER STATS
-        //TODO: Implement deck, hand, and graveyard functions so accurate values can be used below
+        //TODO: Implement hand so accurate values can be used below
         //Draw player mana
         //SINGLE COIN
         pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
@@ -457,7 +466,9 @@ public class colosseumDemoScreen extends GameScreen{
         graphics2D.drawText(p2.getCurrentMana()+ "/" + p2.getCurrentManaCap(), spacingX * 12.9f, spacingY * 12f, mText);
 
         //Draw player card stats
-        int pCardsLeft = 24, pCardsHand= 5, pCardsDead = 22;
+        int pCardsLeft = playerDeck.getDeck().size();
+        int pCardsHand= playerDeck.getmCardHand().length;
+        int pCardsDead = playerDeck.getmDiscardPile().size();
         graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 7.0f, spacingY * 11.6f, mText);
         graphics2D.drawText("Hand: " + pCardsHand, spacingX * 7.0f, spacingY * 12.2f, mText);
         graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 7.0f, spacingY * 12.8f, mText);
@@ -475,7 +486,9 @@ public class colosseumDemoScreen extends GameScreen{
         graphics2D.drawText("3/3", spacingX * 12.9f, spacingY * 1.2f, mText);
 
         //Draw opponent card stats
-        int eCardsLeft = 19, eCardsHand = 2, eCardsDead = 3;
+        int eCardsLeft = enemyDeck.getDeck().size();
+        int eCardsHand = enemyDeck.getmCardHand().length;
+        int eCardsDead = enemyDeck.getmDiscardPile().size();
         graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 7.0f, spacingY * 0.6f, mText);
         graphics2D.drawText("Hand: " + eCardsHand, spacingX * 7.0f, spacingY * 1.2f, mText);
         graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 7.0f, spacingY * 1.8f, mText);

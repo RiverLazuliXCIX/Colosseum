@@ -14,8 +14,12 @@ public class CardDeck {
     private int numOfCards = 0;
     private GameScreen mGameScreen;
 
-    //ArrayList to hold the deck of cards
-    private ArrayList<Card> mDeck = new ArrayList<>(numOfCards);
+    //ArrayList to hold the deck of cards, and the card graveyard
+    private ArrayList<Card> mDeck;
+    private ArrayList<Card> mDiscardPile;
+
+    //Card Hand, held in an Array. 10 Cards maximum.
+    private Card[] mCardHand;
 
     //Boolean values required to discern the functionality of the deck:
     private boolean isEmptyFlag;
@@ -38,6 +42,10 @@ public class CardDeck {
     }
 
     public CardDeck(int id, String name, GameScreen gameScreen, boolean isAIDeck) {
+        mDeck = new ArrayList<>(0);
+        mDiscardPile = new ArrayList<>(0);
+        mCardHand = new Card[10];
+
         this.mDeckID = id;
         this.mDeckName = name;
         this.mGameScreen = gameScreen;
@@ -49,19 +57,7 @@ public class CardDeck {
     public void buildDeck() {
         chooseDeckType();
         addToCardNum();
-
-        /**
-        for (int i = 0; i < numOfMinions; i++) {
-            insertMinionCard(numOfMinions);
-        }
-
-        for (int i = 0; i < numOfSpells; i++) {
-            insertSpellCard(numOfSpells);
-        }
-
-        for (int i = 0;i < numOfWeapons; i++) {
-            insertWeaponCard(numOfWeapons);
-        }**/
+        insertMinionCard(numOfMinions);
     }
 
     public void chooseDeckType() {
@@ -93,7 +89,46 @@ public class CardDeck {
         numOfCards += numOfSpells;
     }
 
+    public void insertCard(int cardAmt) {
+        for (int i = 0; i < cardAmt; i++) {
+            Card testCard = new Card(0,0, mGameScreen, 2);
+            mDeck.add(i, testCard);
+        }
+    }
 
+    public void insertMinionCard(int cardAmt) {
+        for (int i = 0; i < cardAmt; i++) {
+            Card testCard = new Card(0, 0, mGameScreen, 3);
+            mDeck.add(i, testCard);
+        }
+    }
+
+    public Card[] drawBeginningCards() {
+     for (int i = 0; i < 10; i++) {
+         mCardHand[i] = drawTopCard();
+         trackRemovalOfCards(mCardHand[i]);
+     }
+     return mCardHand;
+    }
+
+    public Card drawTopCard() {
+        if (!mDeck.isEmpty()) {
+            Card topCard = mDeck.get(mDeck.size() - 1);
+            trackRemovalOfCards(topCard);
+            mDeck.remove(mDeck.size() - 1);
+                return topCard;
+            } else {
+                return null;
+            }
+    }
+
+    public void trackRemovalOfCards(Card card) {
+        numOfCards--;
+    }
+
+    private void removeCard(Card card) {
+        mDeck.remove(card);
+    }
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean isEmpty() {
@@ -104,11 +139,13 @@ public class CardDeck {
     }
 
     //Accessor and Mutator methods:
+    public ArrayList<Card> getDeck() { return this.mDeck; }
+    public ArrayList<Card> getmDiscardPile() { return this.mDiscardPile; }
+    public Card[] getmCardHand() { return this.mCardHand; }
     public int getDeckID() { return this.mDeckID; }
     public String getDeckName() { return this.mDeckName; }
     public GameScreen getmGameScreen() { return this.mGameScreen; }
     public boolean getIsEmptyFlag() { return this.isEmptyFlag; }
-    public ArrayList<Card> getDeck() { return this.mDeck; }
     public int getNumOfCards() { return this.numOfCards; }
     public int getMaxCards() { return MAX_CARDS; }
     public boolean getIsAIDeck() { return this.isAIDeck; }
@@ -116,10 +153,17 @@ public class CardDeck {
     public int getNumOfSpells() { return this.numOfSpells; }
     public int getNumOfWeapons() { return this.numOfWeapons; }
 
-    public int setDeckID(int newID) { return this.mDeckID = newID; }
-    public String setDeckName(String newName) { return this.mDeckName = newName; }
-    public GameScreen setmGameScreen(GameScreen newGameScreen) { return this.mGameScreen; }
+    public ArrayList<Card> setDeck(ArrayList<Card> newDeck) { return this.mDeck = newDeck; }
+    public ArrayList<Card> setmDiscardPile(ArrayList<Card> newDiscard) {return this.mDiscardPile = newDiscard; }
+    public Card[] setmCardHand(Card[] newHand) { return this.mCardHand = newHand; }
+    public int setDeckID(int newDeckID) { return this.mDeckID = newDeckID; }
+    public String setDeckName(String newDeckName) { return this.mDeckName = newDeckName; }
+    public GameScreen setGameScreen(GameScreen newGameScreen) {return this.mGameScreen = newGameScreen; }
     public boolean setIsEmptyFlag(boolean isDeckEmpty) { return this.isEmptyFlag = isDeckEmpty; }
-    public void setDeck(ArrayList<Card> deck) { this.mDeck = deck; }
-    public void setNumOfCards(int newNumOfCards) {this.numOfCards = newNumOfCards; }
+    public int setNumOfCards(int newNumOfCards) { return this.numOfCards = newNumOfCards; }
+    public boolean setIsAIDeck(boolean newIsAIDeck) { return this.isAIDeck = newIsAIDeck; }
+    public int setNumOfMinions(int newNumOfMinions) { return this.numOfMinions = newNumOfMinions; }
+    public int setNumOfSpells(int newNumOfSpells) { return this.numOfSpells = newNumOfSpells; }
+    public int setNumOfWeapons(int newNumOfWeapons) { return this.numOfWeapons = newNumOfWeapons; }
+
 }
