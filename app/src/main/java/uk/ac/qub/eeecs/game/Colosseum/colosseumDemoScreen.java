@@ -46,14 +46,10 @@ public class colosseumDemoScreen extends GameScreen{
     private Input mInput;
     private static final Random RANDOM = new Random();
 
-    /**
-     * Define cards
-     **/
+     //Define cards
     private List<Card> mCards = new ArrayList<Card>();
 
-    /**
-     * Define the background board
-     */
+     //Define the background board
     private GameObject mGameBackground;
 
     //Check if card is being held
@@ -66,7 +62,7 @@ public class colosseumDemoScreen extends GameScreen{
     private PushButton mEndTurnButton;
     private PushButton mEndTurnButtonOff;
 
-    //Push Button for pausing the game - User Story 17 - Sprint 5
+    //Push Button for pausing the game
     private PushButton mPauseButton;
 
     //Push Button for drawing a card
@@ -116,6 +112,7 @@ public class colosseumDemoScreen extends GameScreen{
         setUpGameObjects();
         setUpDecks();
         coinFlipStart();
+        coinFlipResult();
     }
 
     private void setUpGameObjects() {
@@ -249,14 +246,14 @@ public class colosseumDemoScreen extends GameScreen{
     // /////////////////////////////////////////////////////////////////////////
 
     public void endPlayerTurn() {
-        p2.setYourTurn(false);
-
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
         //This will prevent player from attempting to draw from their deck, or playing a card
         //It will also trigger the AI to make a move
+        p2.setYourTurn(false);
     }
 
     public void setUpDecks() {
+        //This method sets up the player and enemy decks, called when screen is loaded
         playerDeck = new CardDeck(1, "Basic Player Deck", this, false);
         enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true);
     }
@@ -279,11 +276,9 @@ public class colosseumDemoScreen extends GameScreen{
             return 2;
         }else
         if(flip>=3000 && flip<6000){ //heads (ai starts) - COIN TOSS LOST
-            p2.setYourTurn(false);
             return 1;
         }else
         if(flip>=0 && flip<3000){ //tails (user starts) - COIN TOSS WON
-            p2.setYourTurn(true);
             return 0;
         }
         return -1; //for error testing only
@@ -291,12 +286,22 @@ public class colosseumDemoScreen extends GameScreen{
 
     // Method for building hand (4 if the player loses coin toss, 3 if player wins)
 
-    /**private void coinFlipResult() {
+    private void coinFlipResult() {
         int result = coinFlipStart();
         switch (result) {
             case 0:
+                p2.setYourTurn(true);
+                for (int i = 0; i < 3; i++) {
+                    playerDeck.drawTopCard();
+                }
+                break;
+            case 1:
+                p2.setYourTurn(false);
+                for (int i = 0; i < 4; i++) {
+                    playerDeck.drawTopCard();
+                }
         }
-    }**/
+    }
 
     private void edgeCaseTest() { //Testing for the edge case scenario of the coin flip, User Story 18.1, Sprint 4 - Scott
         boolean i = true;
@@ -450,7 +455,7 @@ public class colosseumDemoScreen extends GameScreen{
             buttons.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        //Draw the cards onscreen
+        //Draw the cards onscreen:
         for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
             mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
