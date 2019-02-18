@@ -115,6 +115,7 @@ public class colosseumDemoScreen extends GameScreen{
         setupViewports();
         setUpGameObjects();
         setUpDecks();
+        coinFlipStart();
     }
 
     private void setUpGameObjects() {
@@ -136,7 +137,7 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
         //Deciding who starts first, Story 16 Sprint 4 - Scott
-        if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+        /**if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
             edgeCaseTest();
         } else {
             switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
@@ -154,7 +155,7 @@ public class colosseumDemoScreen extends GameScreen{
                 default: //output an error
                     break;
             }
-        }
+        }**/
 
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
@@ -278,9 +279,11 @@ public class colosseumDemoScreen extends GameScreen{
             return 2;
         }else
         if(flip>=3000 && flip<6000){ //heads (ai starts) - COIN TOSS LOST
+            p2.setYourTurn(false);
             return 1;
         }else
         if(flip>=0 && flip<3000){ //tails (user starts) - COIN TOSS WON
+            p2.setYourTurn(true);
             return 0;
         }
         return -1; //for error testing only
