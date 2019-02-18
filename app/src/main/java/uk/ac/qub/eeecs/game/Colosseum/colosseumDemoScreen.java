@@ -73,7 +73,6 @@ public class colosseumDemoScreen extends GameScreen{
 
     //Define a test player
     private Player p2;
-    private Bitmap p2bit;
 
     //Define a Test Deck
     private CardDeck playerDeck, enemyDeck;
@@ -87,10 +86,6 @@ public class colosseumDemoScreen extends GameScreen{
     //Denarius
     //SINGLE COIN
     private GameObject pDenarius, eDenarius;
-    /*MULTIPLE COINS
-    private List<GameObject> pDenarius = new ArrayList<>();
-    private List<GameObject> eDenarius = new ArrayList<>();
-    */
 
     //Test region
     BoardRegion playerRegion;
@@ -133,26 +128,6 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
-        //Deciding who starts first, Story 16 Sprint 4 - Scott
-        /**if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
-            edgeCaseTest();
-        } else {
-            switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
-                case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
-                    // tails - player starts
-                    break;
-                case 1: //dCards.add(generateRandomDeck()); //heads - ai starts
-                    //dCards.add(generateRandomDeck());
-                    break;
-                case 2:
-                    //dCards.add(generateRandomDeck());
-                    //dCards.add(generateRandomDeck());
-                    //dCards.add(generateRandomDeck());//edge of coin - set opponent health to 0, auto win game.
-                    break;
-                default: //output an error
-                    break;
-            }
-        }**/
 
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
@@ -163,11 +138,14 @@ public class colosseumDemoScreen extends GameScreen{
         mText.setColor(Color.rgb(255,255,255));
         mText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
 
+
         //Create the Push Buttons:
+        //This button is created twice, where one has no effect when clicked, ie it is greyed out.
         mEndTurnButton = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn", this);
 
+        //'Greyed out' version of the endTurnButton:
         mEndTurnButtonOff = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn2",  this);
@@ -180,7 +158,6 @@ public class colosseumDemoScreen extends GameScreen{
                 spacingX*0.5f, spacingY*0.5f, spacingX*0.8f, spacingY*0.8f, "CardDeckImg", this);
         mButtons.add(mDrawButton);
 
-        //Paint mButtonTint = new Paint();
 
         //Setting up demo cards:
         mCards.add(new MinionCard(100, 100,  this, 50, 11, 42));//, "CardFront"));
@@ -284,22 +261,31 @@ public class colosseumDemoScreen extends GameScreen{
         return -1; //for error testing only
     }
 
-    // Method for building hand (4 if the player loses coin toss, 3 if player wins)
+    // Method for building hand (4 if the player loses coin toss, 3 if player wins) - Dearbhaile
 
     private void coinFlipResult() {
         int result = coinFlipStart();
         switch (result) {
-            case 0:
+            case 0: // ie, player starts
                 p2.setYourTurn(true);
                 for (int i = 0; i < 3; i++) {
                     playerDeck.drawTopCard();
                 }
+
+                for (int i = 0; i < 4; i++) {
+                    enemyDeck.drawTopCard();
+                }
                 break;
-            case 1:
+            case 1: // ie, ai starts
                 p2.setYourTurn(false);
                 for (int i = 0; i < 4; i++) {
                     playerDeck.drawTopCard();
                 }
+
+                for (int i = 0; i < 3; i++) {
+                    enemyDeck.drawTopCard();
+                }
+                break;
         }
     }
 
@@ -365,6 +351,9 @@ public class colosseumDemoScreen extends GameScreen{
             if(mPauseButton.isPushTriggered()){
                 mGame.getScreenManager().addScreen(new PauseMenuScreen(mGame));
             }
+
+            mEndTurnButton.update(elapsedTime);
+            mEndTurnButtonOff.update(elapsedTime);
 
             if (mEndTurnButton.isPushTriggered()) {
                 endPlayerTurn();

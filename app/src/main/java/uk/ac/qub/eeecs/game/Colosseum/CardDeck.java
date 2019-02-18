@@ -116,10 +116,6 @@ public class CardDeck {
         numOfCards--;
     }
 
-    private void removeCard(Card card) {
-        mDeck.remove(card);
-    }
-
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean isEmpty() {
         if (mDeck.size() == 0) {
