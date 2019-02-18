@@ -369,13 +369,13 @@ public class colosseumDemoScreen extends GameScreen{
 
 
             //Eventually the cards from the deck should be displayed onscreen: 
-            for (Card cards : playerDeck.getmCardHand()) {
+            /*for (Card cards : playerDeck.getmCardHand()) {
                 cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
 
             for (Card cards : enemyDeck.getmCardHand()) {
                 cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-            }
+            }*/
 
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
@@ -470,7 +470,7 @@ public class colosseumDemoScreen extends GameScreen{
         for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-
+        /*
         //Draw the two player's hands, user and enemy:
         for (Card cards : playerDeck.getmCardHand()) {
             cards.draw(elapsedTime, graphics2D);
@@ -478,7 +478,7 @@ public class colosseumDemoScreen extends GameScreen{
 
         for (Card cards : enemyDeck.getmCardHand()) {
             cards.draw(elapsedTime, graphics2D);
-        }
+        }*/
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
