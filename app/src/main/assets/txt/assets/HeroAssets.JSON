@@ -29,6 +29,41 @@
       "type": "Bitmap",
       "name": "HeroSagira",
       "file": "img/hero/SagiraGuardian.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "AbilityFrame",
+      "file": "img/hero/AbilityFrame.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "Hunt",
+      "file": "img/hero/Abilities/Hunt.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HuntPushed",
+      "file": "img/hero/Abilities/HuntPushed.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HolyHealing",
+      "file": "img/hero/Abilities/HolyHealing.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HolyHealingPushed",
+      "file": "img/hero/Abilities/HolyHealingPushed.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "KnifeBelt",
+      "file": "img/hero/Abilities/KnifeBelt.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "KnifeBeltPushed",
+      "file": "img/hero/Abilities/KnifeBeltPushed.png"
     }
   ]
 }

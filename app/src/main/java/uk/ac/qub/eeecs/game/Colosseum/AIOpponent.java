@@ -9,10 +9,19 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 
 public class AIOpponent extends Player {
 
-    public AIOpponent(float startX, float startY, GameScreen gameScreen, Bitmap portraitImage, String hero){
+    private float opponentPortraitXPos = getPortraitXPos(); // Centers the player portrait x coordinate to the center of the screen, same as the player portrait
+    private float opponentPortraitYPos = getGameScreen().getDefaultLayerViewport().getTop()-(getPortraitHeight()/2); // Displays the portrait at the top of the screen
+    private float abilityFrameXPos = getAbilityFrameXPos();
+    private float abilityFrameYPos = opponentPortraitYPos - (getPortraitHeight()/2) + (getAbilityFrameHeight()/2);
+
+    public AIOpponent(GameScreen gameScreen, String hero){
         super(gameScreen, hero);
-        // Create new game objects for the portrait when constructor called, used to be drawn to screen
-        // call the draw methods of those objects within the draw call of the opponent class.
+
+        setPortraitYPos(opponentPortraitYPos);
+        setAbilityFrameYPos(abilityFrameYPos);
+
+        drawHeroAbility(hero);
+
     }
 
     // AIOpponent will use Identical methods to the player class, with the exception of some new

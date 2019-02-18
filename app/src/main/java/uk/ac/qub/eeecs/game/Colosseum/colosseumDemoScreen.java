@@ -77,6 +77,9 @@ public class colosseumDemoScreen extends GameScreen{
     //Define a Test Deck
     private CardDeck playerDeck, enemyDeck;
 
+    // Define a test Opponent
+    private AIOpponent opponent;
+
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
 
@@ -179,14 +182,18 @@ public class colosseumDemoScreen extends GameScreen{
         //}
 
         //Setting up demo player:
-        p2=new Player(this,"Hircine");
+        p2=new Player(this,"Meridia");
+        opponent = new AIOpponent(this,"EmperorCommodus");
 
         //Create denarius objects
         Bitmap denarius = getGame()
                 .getAssetManager().getBitmap("Denarius");
         //player
-        p2.setCurrentMana(2);
+        p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
+
+        opponent.setCurrentMana(4);
+        opponent.setCurrentManaCap(4);
 
         //SINGLE COIN
         pDenarius = new GameObject(spacingX * 2.95f, spacingY * 0.38f, 30, 30, denarius, this);
@@ -335,6 +342,9 @@ public class colosseumDemoScreen extends GameScreen{
         // Process any touch events occurring since the update
         mInput = mGame.getInput();
 
+        p2.update(elapsedTime);
+        opponent.update(elapsedTime);
+
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
@@ -439,6 +449,7 @@ public class colosseumDemoScreen extends GameScreen{
 
         // Draw the player portrait (Just for testing, still working on it)
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        opponent.draw(elapsedTime,graphics2D,mGameViewport,mDefaultScreenViewport);
 
         // Draw player board region (Just for testing again)
         //graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
@@ -514,7 +525,7 @@ public class colosseumDemoScreen extends GameScreen{
             eDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         */
 
-        graphics2D.drawText("3/3", spacingX * 12.9f, spacingY * 1.2f, mText);
+        graphics2D.drawText(opponent.getCurrentMana()+"/"+opponent.getCurrentManaCap(), spacingX * 12.9f, spacingY * 1.2f, mText);
 
         //Draw opponent card stats
         int eCardsLeft = enemyDeck.getDeck().size();

@@ -2,8 +2,14 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
 
+import java.util.List;
+
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
+import uk.ac.qub.eeecs.gage.engine.input.Input;
+import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.PushButton;
+import uk.ac.qub.eeecs.gage.util.GraphicsHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -15,18 +21,27 @@ public class Player extends GameObject {
     // Properties
     // /////////////////////////////////////////////////////////////////////////
 
-    // Stores the character portrait height and width
-    // TODO Portrait width stores temporary values, needs to make it scale
+    // Stores the character portrait height and width as well as the frame for the ability icons
     private static final float PORTRAIT_WIDTH = 50.0f;
     private static final float PORTRAIT_HEIGHT = 50.0f;
+    private static final float ABILITY_FRAME_WIDTH = PORTRAIT_WIDTH - 15;
+    private static final float ABILITY_FRAME_HEIGHT = PORTRAIT_HEIGHT - 15;
 
+    private float portraitXPos = getGameScreen().getDefaultLayerViewport().halfWidth; // Centers the player portrait x coordinate to the center of the screen
+    private float portraitYPos = getGameScreen().getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2); // Displays the portrait at the bottom of the screen
+
+    private float abilityFrameXPos = portraitXPos + (PORTRAIT_WIDTH/2)+ (ABILITY_FRAME_WIDTH/2);
+    private float abilityFrameYPos = portraitYPos - (PORTRAIT_HEIGHT/2) + (ABILITY_FRAME_HEIGHT/2);
+
+    private PushButton heroAbility; // Push button handling the hero abilities
+
+    private Input playerInput; // Input for the player class
+
+    private String hero; // Currently selected hero
     // Sets a cap on the maximum health and mana a player can have at once
     private static final int MAX_HEALTH = 30;
     private static final int MAX_MANA = 10;
     private static final int HERO_ABILITY_COST = 2; // All hero abilities have a mana cost of 2 by default
-
-    // Stores numbers used by hero stats (health, mana, durability, armor etc.)
-    //private Bitmap[] heroStatNumbers = new Bitmap[10];
 
     private int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
     private int currentManaCap = 1;        // Initial mana cap should be set to one, and will increase by one each turn, until it reaches maxMana upon which it stops increasing (outside of potential card effects).
@@ -46,12 +61,8 @@ public class Player extends GameObject {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     *
-     //* @param startX           Starting x coordinate of the player character portrait
-     //* @param startY           Starting y coordinate of the player character portrait
      * @param gameScreen       Gamescreen upon which the portrait will be displayed
      * @param hero             The player's hero, different heroes have different abilities etc.
-     //* @param portraitImage    Bitmap of the player's chosen character to be displayed.
      */
 
     // Create new game objects for the portrait when constructor called, used to be drawn to screen
@@ -63,11 +74,8 @@ public class Player extends GameObject {
         super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
 
-//        for(int number = 0; number <= 9; number++) {
-//            heroStatNumbers[number] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(number));
-//        }
-
-        setUpHero(hero);
+        drawHeroAbility(hero);
+        this.hero = hero;
 
     }
 
@@ -100,10 +108,32 @@ public class Player extends GameObject {
     public boolean getYourTurn() {return yourTurn;}
     public void setYourTurn(boolean newTurnValue) {this.yourTurn = newTurnValue;}
 
+    public float getPortraitXPos() {return portraitXPos;}
+    public void setPortraitXPos(float portraitXPos) {this.portraitXPos = portraitXPos;}
+
+    public float getPortraitYPos() {return portraitYPos;}
+    public void setPortraitYPos(float portraitYPos) {
+        this.portraitYPos = portraitYPos;
+        position.y = portraitYPos;
+    }
+
+    public float getAbilityFrameXPos() {return abilityFrameXPos;}
+    public void setAbilityFrameXPos(float abilityFrameXPos) {
+        this.abilityFrameXPos = abilityFrameXPos;
+        position.x = abilityFrameXPos;
+    }
+
+    public float getAbilityFrameYPos() {return abilityFrameYPos;}
+    public void setAbilityFrameYPos(float abilityFrameYPos) {this.abilityFrameYPos = abilityFrameYPos;}
+
     // As these elements are "final", setters are not currently required, however, other elements of
     // the game may use their dimensions for alignment and positioning, (ie. board regions etc.)
     public float getPortraitHeight() {return PORTRAIT_HEIGHT;}
     public float getPortraitWidth() {return PORTRAIT_WIDTH;}
+    public float getAbilityFrameHeight(){return  ABILITY_FRAME_HEIGHT;}
+    public float getAbilityFrameWidth(){return  ABILITY_FRAME_WIDTH;}
+
+    //public Player getPlayer(){ return this;}
 
     /**
      * Method for subtracting both health and armor when the player character/portrait
@@ -251,16 +281,78 @@ public class Player extends GameObject {
     }
 
     // TODO Overridden draw method required to include ability icons etc
+    // Draw elements associated with the player class, such as health, character portrait,
+    // ability icon etc.
+    @Override
+    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
+                     ScreenViewport screenViewport){
+        if (GraphicsHelper.getClippedSourceAndScreenRect(this, layerViewport,
+                screenViewport, drawSourceRect, drawScreenRect)) {
 
-//    @Override
-//    public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
-//                     ScreenViewport screenViewport){
-//        // Draw elements associated with the player class, such as health, character portrait,
-//        // ability icon etc.
-//
-//
-//
-//    }
+            graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect, null);
+
+        }
+
+        // Drawing ability frame
+        GameObject abilityFrame = new GameObject(abilityFrameXPos,abilityFrameYPos,
+                PORTRAIT_WIDTH-15, PORTRAIT_HEIGHT-15,
+                getGameScreen().getGame().getAssetManager().getBitmap("AbilityFrame"),
+                getGameScreen());
+
+        abilityFrame.draw(elapsedTime,graphics2D, layerViewport,screenViewport);
+        heroAbility.draw(elapsedTime,graphics2D, layerViewport,screenViewport);
+    }
+
+
+    @Override
+    public void update(ElapsedTime elapsedTime){
+
+        // Process any touch events occurring since the update
+        playerInput = getGameScreen().getGame().getInput();
+        List<TouchEvent> touchEvents = playerInput.getTouchEvents();
+
+        if(touchEvents.size()>0){
+
+            // If ability has not been played this turn, allow hero ability to be tapped
+            if(!abilityUsedThisTurn) {
+                heroAbility.update(elapsedTime);
+
+                if (heroAbility.isPushTriggered()) {
+                    updateHeroAbilities();
+                }
+            }
+
+        }
+
+    }
+
+    // Determines what action is executed when user taps on their hero ability
+    public void updateHeroAbilities(){
+
+        if(hero.equals("EmperorCommodus")){
+            commodusAbilityUsed();
+        }
+
+        if(hero.equals("Mars")){
+            marsAbilityUsed();
+        }
+
+        if(hero.equals("Brutalus")){
+            // TODO add temporary attack boost field
+        }
+
+        if(hero.equals("Sagira")){
+            // Updated when playing cards are developed further
+        }
+
+        if(hero.equals("Hircine")){
+            // TODO obtain player's opponent to use as target
+        }
+
+        if(hero.equals("Meridia")){
+            meridiaAbilityUsed();
+        }
+    }
 
     /**
      * Method displays a different portrait based on the hero string that has been passed, and
@@ -277,12 +369,12 @@ public class Player extends GameObject {
      * +-------------------------------------------------------------------------------------------
      */
 
-    public void setUpHero(String hero){
+    // Changes the hero ability image based on what hero is being played
+    public void drawHeroAbility(String hero){
 
         switch(hero){
-            case "Commodus":
-
-                // I'll stick some ability related stuff in these sections
+            case "EmperorCommodus":
+                heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"KnifeBelt","KnifeBeltPushed",getGameScreen());
 
                 break;
 
@@ -305,14 +397,12 @@ public class Player extends GameObject {
                 break;
 
             case "Hircine":
-
-                // I'll stick some ability related stuff in these sections
+                heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"Hunt","HuntPushed",getGameScreen());
 
                 break;
 
             case "Meridia":
-
-                // I'll stick some ability related stuff in these sections
+                heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"HolyHealing","HolyHealingPushed",getGameScreen());
 
                 break;
 
@@ -336,7 +426,7 @@ public class Player extends GameObject {
     // Note: Equipping a new weapon replaces the player's currently equipped weapon
     public void commodusAbilityUsed(){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
             setCurrentAttack(1);
             setCurrentWeaponDurability(2);
@@ -348,7 +438,7 @@ public class Player extends GameObject {
 
     public void marsAbilityUsed(){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
             increaseArmor(3);
             abilityUsedThisTurn = true;
@@ -358,10 +448,10 @@ public class Player extends GameObject {
 
     public void brutalusAbilityUsed(){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
 
-            // TODO end turn handler for temporary stat boosts (Could apply to both cards and heroes)
+            // When turn end button pressed, return attack to what it was previously
             increaseAttack(1);
             increaseArmor(1);
 
@@ -372,7 +462,7 @@ public class Player extends GameObject {
 
     public void sagiraAbilityUsed(MinionCard targetMinion){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
 
             // If healing the minion by 1 results in a health value greater than or equal to max health, set current health to max health
@@ -390,7 +480,7 @@ public class Player extends GameObject {
 
     public void hircineAbilityUsed(AIOpponent targetOpponent){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
 
             targetOpponent.receiveDamage(2);
@@ -402,7 +492,7 @@ public class Player extends GameObject {
 
     public void meridiaAbilityUsed(){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
 
             heal(2);
