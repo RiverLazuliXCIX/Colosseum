@@ -24,6 +24,7 @@ public class PauseMenuScreen extends GameScreen {
 
     private PushButton mMenuScreen;
     private PushButton mResume;
+    private  PushButton mOptions;
     private LayerViewport mMenuViewport;
 
     public PauseMenuScreen(Game game)
@@ -69,6 +70,11 @@ public class PauseMenuScreen extends GameScreen {
                 spacingX * 1.0f,spacingY * 0.5f,"Resume",
                 "ResumeSelected",this );
         mButtons.add(mResume);
+        //Creating the options button
+        mOptions = new PushButton(spacingX * 2.4f, spacingY * 1.3f,
+                spacingX * 1.0f,spacingY * 0.5f,"Options",
+                "OptionsSelected",this );
+        mButtons.add(mOptions);
     }
 
     @Override
@@ -85,7 +91,8 @@ public class PauseMenuScreen extends GameScreen {
 
             if(mResume.isPushTriggered())
                 mGame.getScreenManager().removeScreen(this);
-
+            else if(mOptions.isPushTriggered())
+                mGame.getScreenManager().addScreen((new OptionsScreen(mGame)));
         }
     }
 
@@ -99,5 +106,7 @@ public class PauseMenuScreen extends GameScreen {
                 mDefaultScreenViewport);
 
         mResume.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
+
+        mOptions.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
     }
 }
