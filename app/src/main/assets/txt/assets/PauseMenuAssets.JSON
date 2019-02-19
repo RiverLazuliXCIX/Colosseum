@@ -35,6 +35,16 @@
       "type": "Bitmap",
       "name": "MainMenuSelected",
       "file": "img/MainMenuSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Concede",
+      "file": "imgConcede.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "ConcedeSelected",
+      "file": "img/ConcedeSelected.png"
     }
   ]
 }
