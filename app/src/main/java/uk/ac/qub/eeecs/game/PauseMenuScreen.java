@@ -1,16 +1,11 @@
 package uk.ac.qub.eeecs.game;
 
-import android.app.AlertDialog;
-import android.app.Notification;
 import android.graphics.Color;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
-import uk.ac.qub.eeecs.gage.MainActivity;
-import uk.ac.qub.eeecs.gage.R;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -28,7 +23,7 @@ public class PauseMenuScreen extends GameScreen {
 
     private List<PushButton> mButtons = new ArrayList<>();
 
-    private PushButton mMenuScreen, mResume, mOptions, mMainMenu;
+    private PushButton mMenuScreen, mResume, mOptions, mMainMenu, mConcede;
     private LayerViewport mMenuViewport;
 
     public PauseMenuScreen(Game game)
@@ -70,20 +65,25 @@ public class PauseMenuScreen extends GameScreen {
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(),"Pause", this);
         //Creating resume button
-        mResume = new PushButton(spacingX * 2.4f, spacingY * 1.9f,
-                spacingX * 1.0f,spacingY * 0.5f,"Resume",
+        mResume = new PushButton(spacingX * 2.5f, spacingY * 1.95f,
+                spacingX * 0.8f,spacingY * 0.39f,"Resume",
                 "ResumeSelected",this );
         mButtons.add(mResume);
         //Creating the options button
-        mOptions = new PushButton(spacingX * 2.4f, spacingY * 1.3f,
-                spacingX * 1.0f,spacingY * 0.5f,"Options",
+        mOptions = new PushButton(spacingX * 2.5f, spacingY * 1.45f,
+                spacingX * 0.8f,spacingY * 0.39f,"Options",
                 "OptionsSelected",this );
         mButtons.add(mOptions);
         //Creating the 'main menu' button
-        mMainMenu = new PushButton(spacingX * 2.4f, spacingY * 0.7f,
-                spacingX * 1.0f,spacingY * 0.5f,"MainMenu",
+        mMainMenu = new PushButton(spacingX * 2.5f, spacingY * 0.95f,
+                spacingX * 0.8f,spacingY * 0.39f,"MainMenu",
                 "MainMenuSelected",this );
         mButtons.add(mMainMenu);
+        //Creating the 'concede' button
+        mConcede = new PushButton(spacingX * 2.5f, spacingY * 0.45f,
+                spacingX * 0.8f,spacingY * 0.39f,"Concede",
+                "ConcedeSelected",this );
+        mButtons.add(mConcede);
     }
 
     @Override
@@ -103,9 +103,8 @@ public class PauseMenuScreen extends GameScreen {
             else if(mOptions.isPushTriggered())
                 mGame.getScreenManager().changeScreenButton((new OptionsScreen(mGame)));
             else if (mMainMenu.isPushTriggered())
-            {
                 mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
-            }
+
         }
     }
     @Override
