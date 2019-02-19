@@ -97,8 +97,7 @@ public class SplashScreen extends GameScreen {
     }
 
     public void goToMenuScreen() {
-        mGame.getScreenManager().removeScreen(this.getName());
-        mGame.getScreenManager().addScreen(new MenuScreen(mGame));
+        mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
     }
 
     /**

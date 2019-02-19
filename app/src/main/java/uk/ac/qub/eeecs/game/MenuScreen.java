@@ -103,7 +103,7 @@ public class MenuScreen extends GameScreen {
         mButtons.add(mOptionsButton);
         //Create the Quit button
         mQuitButton = new PushButton(
-                spacingX * 4.0f, spacingY * 1.5f, spacingX*1.5f, spacingY*1.5f,
+                spacingX * 4.0f, spacingY * 1.55f, spacingX*1.5f, spacingY*1.5f, //Aligning buttons slightly
                 "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
 
@@ -155,8 +155,7 @@ public class MenuScreen extends GameScreen {
     //'New Screen' button functions:
     public void newScreenButtonPress(GameScreen screen) {
         mAssetManager.getSound("ButtonPress").play();
-        mScreenManager.removeScreen(this);
-        mScreenManager.addScreen(screen);
+        mScreenManager.changeScreenButton(screen);
         stopBackgroundMusic();
     }
 

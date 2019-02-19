@@ -13,21 +13,22 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
 public class HTPScreen extends GameScreen {
 
     private PushButton backButton; // Back button to return from this screen
     private List<PushButton> pushButtons = new ArrayList<>(); // List for all push buttons to update all in a loop
     private GameObject mOptionBackground; // Add in the options background so that the screen isn't bland
+    private LayerViewport mGameViewport;
 
     /**
      * Constructor for the How To Play screen
      *
      * @param g The game object
-     * @param x x co-ord to draw at
-     * @param y y co-ord to draw at
+
      */
-    public HTPScreen(Game g, float x, float y) {
+    public HTPScreen(Game g) {
         // Set up the screen and load the assets
         super("HTPScreen", g);
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
@@ -36,18 +37,32 @@ public class HTPScreen extends GameScreen {
         this.x = x;
         this.y = y;
 
+        setupViewports();
+
         // Create the back button
         backButton = new PushButton(
-                mDefaultLayerViewport.getWidth() * 0.88f, mDefaultLayerViewport.getHeight() * 0.10f,
-                mDefaultLayerViewport.getWidth() * 0.075f, mDefaultLayerViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.88f, mGameViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
                 "BackArrow", "BackArrowSelected", this);
         pushButtons.add(backButton);
 
         // Load the background for the screen
-        mOptionBackground = new GameObject(mDefaultLayerViewport.getWidth()/ 2.0f,
-                mDefaultLayerViewport.getHeight()/ 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(), getGame()
+        mOptionBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
+                mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
+                mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+    }
+
+    private void setupViewports() {
+        // Setup the screen viewport to use the full screen.
+        mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
+
+        // Calculate the layer height that will preserved the screen aspect ratio
+        // given an assume 480 layer width.
+        float layerHeight = mGame.getScreenHeight() * (480.0f / mGame.getScreenWidth());
+
+        mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+        mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
     /**
@@ -70,7 +85,6 @@ public class HTPScreen extends GameScreen {
             // If the back button is pressed, return to the options menu
             if (backButton.isPushTriggered()) {
                 mGame.getScreenManager().removeScreen(this);
-                mGame.getScreenManager().addScreen(new OptionsScreen(mGame));
             }
         }
     }
@@ -101,6 +115,6 @@ public class HTPScreen extends GameScreen {
         float textHeight = screenHeight / 30.0f;
         textPaint.setTextSize(textHeight);
         // Placeholder text
-        graphics2D.drawText("Colosseum: How to Play", x, y+80, textPaint);
+        graphics2D.drawText("Colosseum: How to Play", mGameViewport.getWidth()*0.55f, mGameViewport.getHeight()*0.6f, textPaint);
     }
 }

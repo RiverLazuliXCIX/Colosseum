@@ -111,13 +111,10 @@ public class OptionsScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen (menu screen)
-                mGame.getScreenManager().removeScreen(this);
-                mGame.getScreenManager().addScreen(new MenuScreen(mGame));
-
-                // If the how to play button is pushed, close this screen and open the how to play screen
+                mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame)); //Refactored return button
             } else if (htpButton.isPushTriggered()) {
-                mGame.getScreenManager().removeScreen(this);
-                mGame.getScreenManager().addScreen(new HTPScreen(mGame, mDefaultLayerViewport.getWidth() * 0.75f, mDefaultLayerViewport.getHeight() * 0.20f));
+                // If the how to play button is pushed, close this screen and open the how to play screen
+                mGame.getScreenManager().changeScreenButton(new HTPScreen(mGame));
             }
             //Testing a toggle button input to enable the edgecase coinflip
             for(ToggleButton button : tButtons)
