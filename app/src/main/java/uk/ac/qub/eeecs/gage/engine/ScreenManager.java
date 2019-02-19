@@ -26,6 +26,7 @@ public class ScreenManager {
      * Collection of available game screens
      */
     private Stack<GameScreen> mGameScreens;
+    private GameScreen searchedScreen; //Used to temporarily store the "searched for" screen, to be moved to the top of the stack.
 
     /**
      * Game instance
@@ -62,9 +63,10 @@ public class ScreenManager {
      */
     public boolean addScreen(GameScreen screen) {
         // Add the game screen if the specified name isn't already added
-        if (mGameScreens.contains(screen))
-            return false;
-
+        if (mGameScreens.contains(screen)) {
+            //System.out.println("screen already exists"); // Used for debugging new additions to the screenmanager code
+            return false;}
+        //System.out.println("screen didnt exist"); // Used for debugging new additions to the screenmanager code
         mGameScreens.push(screen);
         return true;
     }
@@ -88,10 +90,63 @@ public class ScreenManager {
      */
     public GameScreen getScreen(String name) {
         for(GameScreen gameScreen : mGameScreens) {
-            if(gameScreen.getName().compareTo(name) == 0)
-                return gameScreen;
-        }
+            if(gameScreen.getName().compareTo(name) == 0) {
+                //System.out.println("found"); // Used for debugging new additions to the screenmanager code
+                return gameScreen; }
+            //System.out.println("not found at current: " + gameScreen.getName()); // Used for debugging new additions to the screenmanager code
+        } //System.out.println("not found at all"); // Used for debugging new additions to the screenmanager code
         return null;
+    }
+
+    public void changeScreenButton(GameScreen screen) {//Used for changing game screens
+        if(mGame.getScreenManager().existingScreen(screen.getName())) {//if the target screen exists already, swap the screen to top of stack (instead of a new instance)
+            //System.out.println("screen was already found");
+            mGame.getScreenManager().gotoScreen(screen.getName()); //Call method "gotoScreen" to get to target screen
+        } else { //Else the screen doesnt exist
+            //System.out.println("screen was not already found");
+            mGame.getScreenManager().addScreen(screen); //Create a new instance of the screen
+        }
+    }
+
+    public String getScreenName(GameScreen gameScreen) { //Get the string name from the gamescreen
+        return gameScreen.getName();
+    }
+
+    public void printAllScreenNames() { //Scott Sprint 5
+        System.out.println("NEW LIST");
+        for(GameScreen theScreen: mGameScreens) { //Iterate through each gamescreen currently existing
+            System.out.println(theScreen.getName()); //Output the list of screens
+        }
+    }
+
+    public void gotoScreen(String name) { //Changes added by Scott, Sprint 5 - Feb
+        int i = 0; //Set iterator to 0
+        if (existingScreen(name)) { //If the screen exists, enter loop
+            for (GameScreen gameScreen1 : mGameScreens) { //Iterate through each screen currently active
+                //System.out.println(i); //Check for the size of the list
+                if (gameScreen1.getName().compareTo(name) == 0) { //If the current screens name is equal to the "searched for" screen
+                   // System.out.println("Screen popped from original stack"); //For debugging purposes
+                    searchedScreen = mGameScreens.elementAt(i); //Store the found screen in temporary variable "searchedScreen"
+                    mGameScreens.remove(i); //Remove the gamescreen in the stack at the current point
+                    mGameScreens.push(searchedScreen); //Push the found screen onto the top of the stack, thereby making it the "current screen"
+                   // System.out.println("Screen pushed onto top of stack"); //For debugging purposes
+                    break; //Exit the loop as the screen was found
+                }
+                i++;//Iterate up the stack looking for the "searched for" screen
+              //  System.out.println("Screen pushed onto temp stack"); //For debugging purposes
+            }
+        }
+      //  System.out.println("Screen not already existing, cannot go to screen"); //For debugging purposes
+    }
+
+    public boolean existingScreen(String name) { //Scott Sprint 5
+        for(GameScreen gameScreen : mGameScreens) { //iterate through each screen looking if the screen input, exists
+            if(gameScreen.getName().compareTo(name) == 0) { //if found, return true
+            //    System.out.println("found"); //Used for debugging if the screen was already existing
+                return true; }
+           // System.out.println("not found at current: " + gameScreen.getName()); //outputting each screen it was not found at
+        } //System.out.println("not found at all"); //screen not found
+        return false;
     }
 
     /**
@@ -105,7 +160,7 @@ public class ScreenManager {
      * specified screen could not be found).
      */
     public boolean removeScreen(GameScreen gameScreen) {
-         return mGameScreens.remove(gameScreen);
+        return mGameScreens.remove(gameScreen);
     }
 
     /**
