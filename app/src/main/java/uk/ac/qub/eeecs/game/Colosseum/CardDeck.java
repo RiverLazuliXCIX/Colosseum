@@ -62,6 +62,7 @@ public class CardDeck {
         chooseDeckType();
         addToCardNum();
         insertMinionCard(numOfMinions);
+
         //insertSpellCard(numOfSpells);
         //insertWeaponCard(numOfWeapons);
     }
@@ -97,7 +98,7 @@ public class CardDeck {
 
     public void insertMinionCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            Card testCard = new Card(0, 0, mGameScreen, 3);
+            Card testCard = new Card(200, 200, mGameScreen, 3);
             mDeck.add(i, testCard);
         }
     }

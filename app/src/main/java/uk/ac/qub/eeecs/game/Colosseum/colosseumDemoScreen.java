@@ -397,14 +397,14 @@ public class colosseumDemoScreen extends GameScreen{
                 deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
 
 
-            //Eventually the cards from the deck should be displayed onscreen: 
-            /*for (Card cards : playerDeck.getmCardHand()) {
+            //Eventually the cards from the hand should be displayed onscreen:
+            for (Card cards : playerDeck.getmCardHand()) {
                 cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
 
             for (Card cards : enemyDeck.getmCardHand()) {
                 cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-            }*/
+            }
 
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
@@ -486,8 +486,8 @@ public class colosseumDemoScreen extends GameScreen{
         }
 
         //Draw the cards onscreen:
-        for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
-            mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        /*for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
+            mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);*/
 
         if(edgeCase){ //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
             int screenHeight = graphics2D.getSurfaceHeight();
@@ -497,18 +497,19 @@ public class colosseumDemoScreen extends GameScreen{
             graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
         }
 
-        for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
+        /*for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        */
 
-        /*
         //Draw the two player's hands, user and enemy:
-        for (Card cards : playerDeck.getmCardHand()) {
-            cards.draw(elapsedTime, graphics2D);
+        for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
+            playerDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        for (Card cards : enemyDeck.getmCardHand()) {
-            cards.draw(elapsedTime, graphics2D);
-        }*/
+        for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
+            enemyDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        }
+
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
