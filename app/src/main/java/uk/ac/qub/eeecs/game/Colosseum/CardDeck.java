@@ -77,17 +77,16 @@ public class CardDeck {
                 break;
             case 1:
                 numOfMinions = 15;
-                numOfSpells = 5;
-                numOfWeapons = 10;
+                numOfSpells = 10;
+                numOfWeapons = 5;
                 break;
             case 2:
                 numOfMinions = 10;
-                numOfSpells = 10;
+                numOfSpells = 15;
                 numOfWeapons = 5;
                 break;
         }
     }
-
 
     // Methods to add different types of cards to the deck:
     public void addToCardNum() {
@@ -103,19 +102,14 @@ public class CardDeck {
         }
     }
 
-
     //Methods required to draw from Deck:
     public Card drawTopCard() {
-        if (!mDeck.isEmpty()) {
             Card topCard = mDeck.get(mDeck.size() - 1);
             trackRemovalOfCards();
             trackAdditionOfCardsToHand();
             mDeck.remove(mDeck.size() - 1);
             mCardHand.add(topCard);
                 return topCard;
-            } else {
-                return null;
-            }
     }
 
     private void trackAdditionOfCardsToHand () {

@@ -264,16 +264,16 @@ public class colosseumDemoScreen extends GameScreen{
         if(flip==6000) { //side of coin (1/6000 chance to auto-win)
             return 2;
         }else
-        if(flip>=3000 && flip<6000){ //heads (ai starts) - COIN TOSS LOST
+        if(flip>=3000 && flip<6000){ //heads (ai starts)
             return 1;
         }else
-        if(flip>=0 && flip<3000){ //tails (user starts) - COIN TOSS WON
+        if(flip>=0 && flip<3000){ //tails (user starts)
             return 0;
         }
         return -1; //for error testing only
     }
 
-    // Method for building hand (4 if the player loses coin toss, 3 if player wins) - Dearbhaile
+    // Method for building hand (4 if heads, 3 if tails) - Dearbhaile
 
     private void coinFlipResult() {
         int result = coinFlipStart();
@@ -379,8 +379,18 @@ public class colosseumDemoScreen extends GameScreen{
                 endPlayerTurn();
             }
 
+
+            //Still working on this - Dearbhaile
+            //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
+            //On this screen, it will be displayed how much health they will lose (cumulative value)
+            //Screen then disappears after 3 seconds.
+
             if (mDrawButton.isPushTriggered()) {
-                playerDeck.drawTopCard();
+                if (!playerDeck.getDeck().isEmpty()) {
+                    playerDeck.drawTopCard();
+                } else {
+                    mGame.getScreenManager().changeScreenButton(new FatigueScreen(mGame));
+                }
             }
 
             for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
