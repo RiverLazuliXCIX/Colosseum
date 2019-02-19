@@ -370,7 +370,7 @@ public class colosseumDemoScreen extends GameScreen{
                 button.update(elapsedTime);
 
             if(mPauseButton.isPushTriggered()){
-                mGame.getScreenManager().addScreen(new PauseMenuScreen(mGame));
+                mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
             }
 
             mEndTurnButton.update(elapsedTime);
