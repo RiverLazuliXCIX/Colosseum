@@ -120,6 +120,11 @@
       "type": "Bitmap",
       "name": "CogSelected",
       "file": "img/cogSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CardDeckImg",
+      "file": "img/deck_img.png"
     }
     ]
 }

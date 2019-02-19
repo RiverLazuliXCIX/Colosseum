@@ -45,14 +45,11 @@ public class colosseumDemoScreen extends GameScreen{
     private LayerViewport mGameViewport;
     private Input mInput;
     private static final Random RANDOM = new Random();
-    /**
-     * Define cards
-     **/
+
+     //Define cards
     private List<Card> mCards = new ArrayList<Card>();
 
-    /**
-     * Define the background board
-     */
+     //Define the background board
     private GameObject mGameBackground;
 
     //Check if card is being held
@@ -65,15 +62,23 @@ public class colosseumDemoScreen extends GameScreen{
     private PushButton mEndTurnButton;
     private PushButton mEndTurnButtonOff;
 
-    //Push Button for pausing the game - User Story 17 - Sprint 5
+    //Push Button for pausing the game
     private PushButton mPauseButton;
+
+    //Push Button for drawing a card
+    private PushButton mDrawButton;
 
     //Array list to hold a deck of cards - Story 7 Sprint 4
     private List<Card> dCards = new ArrayList<>();
 
-    //Define a TEST player
+    //Define a test player
     private Player p2;
-    private Bitmap p2bit;
+
+    //Define a Test Deck
+    private CardDeck playerDeck, enemyDeck;
+
+    // Define a test Opponent
+    private AIOpponent opponent;
 
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
@@ -84,10 +89,6 @@ public class colosseumDemoScreen extends GameScreen{
     //Denarius
     //SINGLE COIN
     private GameObject pDenarius, eDenarius;
-    /*MULTIPLE COINS
-    private List<GameObject> pDenarius = new ArrayList<>();
-    private List<GameObject> eDenarius = new ArrayList<>();
-    */
 
     //Test region
     BoardRegion playerRegion;
@@ -107,6 +108,9 @@ public class colosseumDemoScreen extends GameScreen{
 
         setupViewports();
         setUpGameObjects();
+        setUpDecks();
+        coinFlipStart();
+        coinFlipResult();
     }
 
     private void setUpGameObjects() {
@@ -127,26 +131,6 @@ public class colosseumDemoScreen extends GameScreen{
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
-        //Deciding who starts first, Story 16 Sprint 4 - Scott
-        if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
-            edgeCaseTest();
-        } else {
-            switch (coinFlipStart()) { //Start of Story 16, Sprint 4.
-                case 0: //dCards.add(generateRandomDeck());  //used the random card generator to test if each case could be entered
-                    // tails - player starts
-                    break;
-                case 1: //dCards.add(generateRandomDeck()); //heads - ai starts
-                    //dCards.add(generateRandomDeck());
-                    break;
-                case 2:
-                    //dCards.add(generateRandomDeck());
-                    //dCards.add(generateRandomDeck());
-                    //dCards.add(generateRandomDeck());//edge of coin - set opponent health to 0, auto win game.
-                    break;
-                default: //output an error
-                    break;
-            }
-        }
 
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
@@ -157,23 +141,27 @@ public class colosseumDemoScreen extends GameScreen{
         mText.setColor(Color.rgb(255,255,255));
         mText.setTypeface(Typeface.create("Arial",Typeface.BOLD));
 
-        //Create the Push Buttons:
 
+        //Create the Push Buttons:
+        //This button is created twice, where one has no effect when clicked, ie it is greyed out.
         mEndTurnButton = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn", this);
-        mButtons.add(mEndTurnButton);
 
+        //'Greyed out' version of the endTurnButton:
         mEndTurnButtonOff = new PushButton (
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn2",  this);
-        mButtons.add(mEndTurnButtonOff);
 
         mPauseButton = new PushButton(
                 spacingX*4.7f, spacingY*2.7f, spacingX*0.4f, spacingY*0.4f, "Cog", "CogSelected", this);
         mButtons.add(mPauseButton);
 
-        //Paint mButtonTint = new Paint();
+        //Button used to draw cards from deck:
+        mDrawButton = new PushButton(
+                spacingX*0.5f, spacingY*0.5f, spacingX*0.8f, spacingY*0.8f, "CardDeckImg", this);
+        mButtons.add(mDrawButton);
+
 
         //Setting up demo cards:
         mCards.add(new MinionCard(100, 100,  this, 50, 11, 42));//, "CardFront"));
@@ -194,14 +182,18 @@ public class colosseumDemoScreen extends GameScreen{
         //}
 
         //Setting up demo player:
-        p2=new Player(this,"Hircine");
+        p2=new Player(this,"Meridia");
+        opponent = new AIOpponent(this,"EmperorCommodus");
 
         //Create denarius objects
         Bitmap denarius = getGame()
                 .getAssetManager().getBitmap("Denarius");
         //player
-        p2.setCurrentMana(2);
+        p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
+
+        opponent.setCurrentMana(4);
+        opponent.setCurrentManaCap(4);
 
         //SINGLE COIN
         pDenarius = new GameObject(spacingX * 2.95f, spacingY * 0.38f, 30, 30, denarius, this);
@@ -216,7 +208,7 @@ public class colosseumDemoScreen extends GameScreen{
         float regionWidth= ViewportHelper.convertXDistanceFromLayerToScreen(mDefaultLayerViewport.getWidth(),mDefaultLayerViewport,mDefaultScreenViewport);
         float regionHeight = ViewportHelper.convertYDistanceFromLayerToScreen(mDefaultLayerViewport.halfHeight-(p2.getPortraitHeight()),mDefaultLayerViewport,mDefaultScreenViewport);
 
-        // Creating board playable regions (+200 )
+        // Creating board playable regions (+200)
         playerRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+mDefaultScreenViewport.height/2, regionWidth,regionHeight,this);
         opponentRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+p2.getPortraitHeight()+200 ,regionWidth ,regionHeight ,this);
 
@@ -238,12 +230,17 @@ public class colosseumDemoScreen extends GameScreen{
     // Methods
     // /////////////////////////////////////////////////////////////////////////
 
-    protected void endPlayerTurn() {
-        p2.setYourTurn(false);
-
+    public void endPlayerTurn() {
         //When player ends turn, a 'YourTurn' variable on the player should turn to false
         //This will prevent player from attempting to draw from their deck, or playing a card
         //It will also trigger the AI to make a move
+        p2.setYourTurn(false);
+    }
+
+    public void setUpDecks() {
+        //This method sets up the player and enemy decks, called when screen is loaded
+        playerDeck = new CardDeck(1, "Basic Player Deck", this, false);
+        enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true);
     }
 
     private Card generateRandomDeck() { //Scott Barham, Story 7 Sprint 4
@@ -263,13 +260,41 @@ public class colosseumDemoScreen extends GameScreen{
         if(flip==6000) { //side of coin (1/6000 chance to auto-win)
             return 2;
         }else
-        if(flip>=3000 && flip<6000){ //heads (ai starts)
+        if(flip>=3000 && flip<6000){ //heads (ai starts) - COIN TOSS LOST
             return 1;
         }else
-        if(flip>=0 && flip<3000){ //tails (user starts)
+        if(flip>=0 && flip<3000){ //tails (user starts) - COIN TOSS WON
             return 0;
         }
         return -1; //for error testing only
+    }
+
+    // Method for building hand (4 if the player loses coin toss, 3 if player wins) - Dearbhaile
+
+    private void coinFlipResult() {
+        int result = coinFlipStart();
+        switch (result) {
+            case 0: // ie, player starts
+                p2.setYourTurn(true);
+                for (int i = 0; i < 3; i++) {
+                    playerDeck.drawTopCard();
+                }
+
+                for (int i = 0; i < 4; i++) {
+                    enemyDeck.drawTopCard();
+                }
+                break;
+            case 1: // ie, ai starts
+                p2.setYourTurn(false);
+                for (int i = 0; i < 4; i++) {
+                    playerDeck.drawTopCard();
+                }
+
+                for (int i = 0; i < 3; i++) {
+                    enemyDeck.drawTopCard();
+                }
+                break;
+        }
     }
 
     private void edgeCaseTest() { //Testing for the edge case scenario of the coin flip, User Story 18.1, Sprint 4 - Scott
@@ -307,7 +332,6 @@ public class colosseumDemoScreen extends GameScreen{
         }
     }
 
-
     /**
      * Update the card demo screen
      *
@@ -317,6 +341,9 @@ public class colosseumDemoScreen extends GameScreen{
     public void update(ElapsedTime elapsedTime) {
         // Process any touch events occurring since the update
         mInput = mGame.getInput();
+
+        p2.update(elapsedTime);
+        opponent.update(elapsedTime);
 
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
@@ -336,12 +363,29 @@ public class colosseumDemoScreen extends GameScreen{
                 mGame.getScreenManager().addScreen(new PauseMenuScreen(mGame));
             }
 
+            mEndTurnButton.update(elapsedTime);
+            mEndTurnButtonOff.update(elapsedTime);
+
             if (mEndTurnButton.isPushTriggered()) {
                 endPlayerTurn();
             }
 
+            if (mDrawButton.isPushTriggered()) {
+                playerDeck.drawTopCard();
+            }
+
             for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
                 deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
+
+
+            //Eventually the cards from the deck should be displayed onscreen: 
+            /*for (Card cards : playerDeck.getmCardHand()) {
+                cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+            }
+
+            for (Card cards : enemyDeck.getmCardHand()) {
+                cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+            }*/
 
             //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
 
@@ -400,19 +444,29 @@ public class colosseumDemoScreen extends GameScreen{
         graphics2D.clear(Color.WHITE);
         graphics2D.clipRect(mDefaultScreenViewport.toRect());
 
-
         // Draw the background first of all
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-
         // Draw the player portrait (Just for testing, still working on it)
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        opponent.draw(elapsedTime,graphics2D,mGameViewport,mDefaultScreenViewport);
 
         // Draw player board region (Just for testing again)
         //graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
        // graphics2D.drawRect(opponentRegion.getBoardRegionRect(),opponentRegion.getBoardRegionPaint());
 
-        //Draw the cards onscreen
+        //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image:
+        if (p2.getYourTurn())
+            mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        else
+            mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        //Draw the remainder of the buttons:
+        for (PushButton buttons : mButtons) {
+            buttons.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        }
+
+        //Draw the cards onscreen:
         for (int i = 0; i < mCards.size(); i++) //Fix to make sure everyone card introduced is drawn onscreen - Story 30 Sprint 5 Scott.
             mCards.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
@@ -427,24 +481,21 @@ public class colosseumDemoScreen extends GameScreen{
         for(Card deckOfCards: dCards) //draws each card held within the "dCards" variable, Sprint 4 Story 7
             deckOfCards.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+        /*
+        //Draw the two player's hands, user and enemy:
+        for (Card cards : playerDeck.getmCardHand()) {
+            cards.draw(elapsedTime, graphics2D);
+        }
 
-        //Draw initial 'End Turn' button onscreen:
-        if (p2.getYourTurn())
-            mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        else
-            mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-
-        //Draw Pause button
-        mPauseButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-
+        for (Card cards : enemyDeck.getmCardHand()) {
+            cards.draw(elapsedTime, graphics2D);
+        }*/
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
-
-        //PLAYER STATS
-        //TODO: Implement deck, hand, and graveyard functions so accurate values can be used below
+        //PLAYER STATS BEING DRAWN:
         //Draw player mana
         //SINGLE COIN
         pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
@@ -457,7 +508,9 @@ public class colosseumDemoScreen extends GameScreen{
         graphics2D.drawText(p2.getCurrentMana()+ "/" + p2.getCurrentManaCap(), spacingX * 12.9f, spacingY * 12f, mText);
 
         //Draw player card stats
-        int pCardsLeft = 24, pCardsHand= 5, pCardsDead = 22;
+        int pCardsLeft = playerDeck.getDeck().size();
+        int pCardsHand= playerDeck.getmCardHand().size();
+        int pCardsDead = playerDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
         graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 7.0f, spacingY * 11.6f, mText);
         graphics2D.drawText("Hand: " + pCardsHand, spacingX * 7.0f, spacingY * 12.2f, mText);
         graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 7.0f, spacingY * 12.8f, mText);
@@ -472,10 +525,12 @@ public class colosseumDemoScreen extends GameScreen{
             eDenarius.get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         */
 
-        graphics2D.drawText("3/3", spacingX * 12.9f, spacingY * 1.2f, mText);
+        graphics2D.drawText(opponent.getCurrentMana()+"/"+opponent.getCurrentManaCap(), spacingX * 12.9f, spacingY * 1.2f, mText);
 
         //Draw opponent card stats
-        int eCardsLeft = 19, eCardsHand = 2, eCardsDead = 3;
+        int eCardsLeft = enemyDeck.getDeck().size();
+        int eCardsHand = enemyDeck.getmCardHand().size();
+        int eCardsDead = enemyDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
         graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 7.0f, spacingY * 0.6f, mText);
         graphics2D.drawText("Hand: " + eCardsHand, spacingX * 7.0f, spacingY * 1.2f, mText);
         graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 7.0f, spacingY * 1.8f, mText);

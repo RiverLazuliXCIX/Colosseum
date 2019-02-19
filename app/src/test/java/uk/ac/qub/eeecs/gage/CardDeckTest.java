@@ -7,12 +7,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
-import uk.ac.qub.eeecs.gage.engine.ScreenManager;
-import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
-import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -25,21 +21,20 @@ public class CardDeckTest {
 
     //Mocking up various objects, screens etc, required for tests
     @Mock
-    private Game game;
+    private Game mGame;
     @Mock
-    private GameScreen gameScreen;
+    private GameScreen mGameScreen;
     @Mock
-    private AssetManager assetManager;
+    private AssetManager mAssetManager;
     @Mock
-    private Bitmap bitmap;
-    @Mock
-    private Input input;
+    private Bitmap mBitmap;
 
     @Before
     public void setUp() {
-        //when(gameScreen.getGame()).thenReturn(game);
-        //when(game.getAssetManager()).thenReturn(assetManager);
-        //when(assetManager.getBitmap(any(String.class))).thenReturn(bitmap);
+        //when(mGame.getAssetManager()).thenReturn(mAssetManager);
+        //when(mAssetManager.getBitmap(any(String.class))).thenReturn(mBitmap);
+        //when(mGameScreen.getGame()).thenReturn(mGame);
+        //when(mGameScreen.getName()).thenReturn("colosseumDemoScreen");
     }
 
     @Test
@@ -53,15 +48,23 @@ public class CardDeckTest {
     @Test
     public void cardDeckCreate_WithData() {
         //This test is to ensure that the extended CardDeck constructor is called, a deck is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
 
         assertNotNull(newDeck);
     }
 
     @Test
+    public void cardDeckCreate_AddsCards() {
+        //This test is to ensure that when a new deck is created, the numOfCards variable changes:
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
+
+        assertNotEquals(newDeck.getNumOfCards(), 0);
+    }
+
+    @Test
     public void cardDeckGetID() {
         //This test is to ensure that the CardDeck ID is set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
 
         assertEquals(newDeck.getDeckID(), 1);
     }
@@ -69,15 +72,22 @@ public class CardDeckTest {
     @Test
     public void cardDeckGetName() {
         //This test is to ensure that the CardDeck Name is set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
 
         assertEquals(newDeck.getDeckName(), "aCardDeck");
     }
 
     @Test
+    public void cardDeckGetScreen() {
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
+
+        assertEquals(newDeck.getmGameScreen(), mGameScreen);
+    }
+
+    @Test
     public void cardDeckGetIsAI() {
         //This test is to ensure that the CardDeck AI ownership settings are set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
 
         assertFalse(newDeck.getIsAIDeck());
     }
@@ -85,7 +95,7 @@ public class CardDeckTest {
     @Test
     public void cardDeckIsEmpty() {
         //This test is to ensure that the isEmpty() method works as expected:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
 
         assertEquals(newDeck.getDeck().isEmpty(), true);
     }
@@ -96,7 +106,7 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Minions() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getNumOfMinions(),0);
@@ -104,7 +114,7 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Spells() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getNumOfSpells(),0);
@@ -112,25 +122,19 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Weapons() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getNumOfWeapons(),0);
     }
 
-    //
-    // The following tests are to check my 'InsertXCard' methods work as expected:
-    //
-
     @Test
-    public void cardDeckCreate_AddsCards() {
-        //This test is to ensure that when a new deck is created, the numOfCards variable changes:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", gameScreen, false);
+    public void insertGenericCard_Test() {
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mGameScreen, false);
+        newDeck.insertGenericCard_Test(1);
 
-        assertNotEquals(newDeck.getNumOfCards(), 0);
+        assertEquals(newDeck.getDeck().size(), 1);
     }
-
-
 
 
     /**@Test

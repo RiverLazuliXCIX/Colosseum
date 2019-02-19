@@ -14,6 +14,27 @@
       "type": "Bitmap",
       "name": "ResumeSelected",
       "file": "img/ResumeSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Options",
+      "file": "img/PaOptions.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "OptionsSelected",
+      "file": "img/PaOptionsSelected.png"
+
+    },
+    {
+      "type": "Bitmap",
+      "name": "MainMenu",
+      "file": "img/MainMenu.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "MainMenuSelected",
+      "file": "img/MainMenuSelected.png"
     }
   ]
 }
