@@ -39,7 +39,7 @@ public class MenuScreen extends GameScreen {
     private List<PushButton> mButtons = new ArrayList<>();
 
     //Push buttons for accessing different screens
-    private PushButton mPlayGameButton, mOptionsButton, mQuitButton;
+    private PushButton mPlayGameButton, mOptionsButton, mQuitButton, mStatsButton, mHTPButton;
 
     //Toggle button for mute-unmute
     private ToggleButton mMuteUnmute;
@@ -106,6 +106,15 @@ public class MenuScreen extends GameScreen {
                 spacingX * 4.0f, spacingY * 1.55f, spacingX*1.5f, spacingY*1.5f, //Aligning buttons slightly
                 "QuitBtn", "Quit-Select",this);
         mButtons.add(mQuitButton);
+        mStatsButton = new PushButton(
+                spacingX * 1.6f, spacingY * 0.4f, spacingX*0.7f, spacingY*0.6f,
+                "statsButton", "statsButtonSelected",this);
+        mButtons.add(mStatsButton);
+        //Create the Quit button
+        mHTPButton = new PushButton(
+                spacingX * 3.2f, spacingY * 0.4f, spacingX*0.8f, spacingY*0.5f,
+                "HTPButton", "HTPButtonSelected",this);
+        mButtons.add(mHTPButton);
 
         //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
@@ -178,6 +187,10 @@ public class MenuScreen extends GameScreen {
                 newScreenButtonPress(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {
                 System.exit(0);
+            } else if (mStatsButton.isPushTriggered()) {
+                newScreenButtonPress(new StatisticsScreen(mGame));
+            } else if (mHTPButton.isPushTriggered()) {
+                newScreenButtonPress(new HTPScreen(mGame));
             }
 
             //Update Mute-Unmute Toggle Button

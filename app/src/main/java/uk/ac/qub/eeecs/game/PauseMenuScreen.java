@@ -23,7 +23,7 @@ public class PauseMenuScreen extends GameScreen {
 
     private List<PushButton> mButtons = new ArrayList<>();
 
-    private PushButton mMenuScreen, mResume, mOptions, mMainMenu, mConcede;
+    private PushButton mMenuScreen, mResume, mOptions, mMainMenu, mConcede, mStatsButton, mHTPButton;
     private LayerViewport mMenuViewport;
 
     public PauseMenuScreen(Game game)
@@ -84,6 +84,15 @@ public class PauseMenuScreen extends GameScreen {
                 spacingX * 0.8f,spacingY * 0.39f,"Concede",
                 "ConcedeSelected",this );
         mButtons.add(mConcede);
+        mStatsButton = new PushButton(
+                spacingX*0.5f, spacingY * 0.4f, spacingX*0.7f, spacingY*0.6f,
+                "statsButton", "statsButtonSelected",this);
+        mButtons.add(mStatsButton);
+        //Create the Quit button
+        mHTPButton = new PushButton(
+                spacingX * 4.5f, spacingY * 0.4f, spacingX*0.8f, spacingY*0.5f,
+                "HTPButton", "HTPButtonSelected",this);
+        mButtons.add(mHTPButton);
     }
 
     @Override
@@ -102,9 +111,18 @@ public class PauseMenuScreen extends GameScreen {
                 mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
             else if(mOptions.isPushTriggered())
                 mGame.getScreenManager().changeScreenButton((new OptionsScreen(mGame)));
-            else if (mMainMenu.isPushTriggered())
+            else if (mMainMenu.isPushTriggered()){
                 mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
-
+            } else if (mStatsButton.isPushTriggered()) {
+                mGame.getScreenManager().changeScreenButton((new StatisticsScreen(mGame)));
+            } else if (mHTPButton.isPushTriggered()) {
+                mGame.getScreenManager().changeScreenButton((new HTPScreen(mGame)));
+            } else if (mConcede.isPushTriggered()) {
+                StatisticsScreen.setMostRecentResult("Loss");
+                int i = StatisticsScreen.getTotalLosses();
+                StatisticsScreen.setTotalLosses(i+1);
+                mGame.getScreenManager().changeScreenButton((new MenuScreen(mGame)));
+            }
         }
     }
     @Override

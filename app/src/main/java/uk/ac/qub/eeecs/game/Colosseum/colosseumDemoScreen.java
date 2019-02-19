@@ -328,9 +328,8 @@ public class colosseumDemoScreen extends GameScreen{
     public boolean getEdgeCase() {
         return edgeCase;
     }
-
     public static void setEdgeCase(boolean edgeCaseInput) {
-        edgeCaseInput = edgeCase;
+        edgeCase = edgeCaseInput;
     }
 
     public void createMultipleCoins(List<GameObject> denarius, float spacingX, float spacingY, float scaleVert, Bitmap b) {

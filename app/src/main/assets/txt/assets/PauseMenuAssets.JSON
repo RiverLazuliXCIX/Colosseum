@@ -45,6 +45,26 @@
       "type": "Bitmap",
       "name": "ConcedeSelected",
       "file": "img/ConcedeSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HTPButton",
+      "file": "img/HTPButton.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "HTPButtonSelected",
+      "file": "img/HTPButtonSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "statsButton",
+      "file": "img/statsButton.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "statsButtonSelected",
+      "file": "img/statsButtonSelected.png"
     }
   ]
 }

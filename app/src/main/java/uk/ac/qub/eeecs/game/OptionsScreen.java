@@ -42,10 +42,26 @@ public class OptionsScreen extends GameScreen {
     public OptionsScreen(Game game) {
         super("OptionScreen", game);
 
+        setupViewports();
+        setUpGameObjects();
+    }
+
+    private void setupViewports() {
+        // Setup the screen viewport to use the full screen.
+        mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
+
+        // Calculate the layer height that will preserved the screen aspect ratio
+        // given an assume 480 layer width.
+        float layerHeight = mGame.getScreenHeight() * (480.0f / mGame.getScreenWidth());
+
+        mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+        mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+    }
+
+    private void setUpGameObjects() {
         //Load in a newly created "OptionScreenAssets.JSON" file which stores assets and their properties - Story O1 and O2 Scott Barham
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
 
-        setupViewports();
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
         // Load in the bitmap used for the back button, from a newly created "optionscreenassets.json" file - Story O3
         mBackButton = new PushButton(
@@ -60,31 +76,13 @@ public class OptionsScreen extends GameScreen {
                 "CoinFlip", "CoinFlipSelected", this);
         tButtons.add(tEdgeCaseButton);
 
-        // Add a how to play button
-        htpButton = new PushButton(
-                mGameViewport.getWidth() * 0.15f, mGameViewport.getHeight() * 0.50f,
-                mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
-                "HTPButton", this);
-        mButtons.add(htpButton);
-
         //Load in the background for the options menu Story O2
         mOptionBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
 
-    }
 
-    private void setupViewports() {
-        // Setup the screen viewport to use the full screen.
-        mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
-
-        // Calculate the layer height that will preserved the screen aspect ratio
-        // given an assume 480 layer width.
-        float layerHeight = mGame.getScreenHeight() * (480.0f / mGame.getScreenWidth());
-
-        mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
-        mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -116,9 +114,6 @@ public class OptionsScreen extends GameScreen {
                 } else {
                     mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame)); //Refactored return button
                 }
-            } else if (htpButton.isPushTriggered()) {
-                // If the how to play button is pushed, close this screen and open the how to play screen
-                mGame.getScreenManager().changeScreenButton(new HTPScreen(mGame));
             }
             //Testing a toggle button input to enable the edgecase coinflip
             for(ToggleButton button : tButtons)

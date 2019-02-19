@@ -142,9 +142,19 @@ public class ScreenManager {
     public boolean existingScreen(String name) { //Scott Sprint 5
         for(GameScreen gameScreen : mGameScreens) { //iterate through each screen looking if the screen input, exists
             if(gameScreen.getName().compareTo(name) == 0) { //if found, return true
-            //    System.out.println("found"); //Used for debugging if the screen was already existing
+                //    System.out.println("found"); //Used for debugging if the screen was already existing
                 return true; }
-           // System.out.println("not found at current: " + gameScreen.getName()); //outputting each screen it was not found at
+            // System.out.println("not found at current: " + gameScreen.getName()); //outputting each screen it was not found at
+        } //System.out.println("not found at all"); //screen not found
+        return false;
+    }
+
+    public boolean existingScreen(GameScreen screen) { //Scott Sprint 5 - Alternate check for existing screen using the gamescreen instead of the screen name.
+        for(GameScreen gameScreen : mGameScreens) { //iterate through each screen looking if the screens' name input, exists
+            if(gameScreen.getName().compareTo(screen.getName()) == 0) { //if found, return true
+                //    System.out.println("found"); //Used for debugging if the screen was already existing
+                return true; }
+            // System.out.println("not found at current: " + gameScreen.getName()); //outputting each screen it was not found at
         } //System.out.println("not found at all"); //screen not found
         return false;
     }
