@@ -121,6 +121,7 @@ public class PauseMenuScreen extends GameScreen {
                 StatisticsScreen.setMostRecentResult("Loss");
                 int i = StatisticsScreen.getTotalLosses();
                 StatisticsScreen.setTotalLosses(i+1);
+                mGame.getScreenManager().removeScreen("CardScreen");
                 mGame.getScreenManager().changeScreenButton((new MenuScreen(mGame)));
             }
         }
