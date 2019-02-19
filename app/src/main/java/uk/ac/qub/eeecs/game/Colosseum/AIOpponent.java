@@ -20,7 +20,7 @@ public class AIOpponent extends Player {
         setPortraitYPos(opponentPortraitYPos);
         setAbilityFrameYPos(abilityFrameYPos);
 
-        drawHeroAbility(hero);
+        createHeroAbilityButton(hero);
 
     }
 

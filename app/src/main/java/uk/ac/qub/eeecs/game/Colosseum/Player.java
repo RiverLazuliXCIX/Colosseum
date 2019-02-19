@@ -74,7 +74,9 @@ public class Player extends GameObject {
         super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
 
-        drawHeroAbility(hero);
+        // Creates the relevant push buttons for the hero abilities
+        createHeroAbilityButton(hero);
+
         this.hero = hero;
 
     }
@@ -82,58 +84,6 @@ public class Player extends GameObject {
     // /////////////////////////////////////////////////////////////////////////
     // Methods
     // /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Getter and setter methods for each of the appropriate private variables
-     */
-
-    public int getCurrentHealth(){return currentHealth;}
-    public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
-
-    public int getCurrentManaCap(){return currentManaCap;}
-    public void setCurrentManaCap(int currentManaCap){this.currentManaCap = currentManaCap;}
-
-    public int getCurrentMana(){return currentMana;}
-    public void setCurrentMana(int currentMana){this.currentMana = currentMana;}
-
-    public int getCurrentArmor(){return armor;}
-    public void setCurrentArmor(int armor){this.armor = armor;}
-
-    public int getCurrentAttack() {return attack;}
-    public void setCurrentAttack(int attack){this.attack = attack;}
-
-    public int getCurrentWeaponDurability() {return weaponDurability;}
-    public void setCurrentWeaponDurability(int weaponDurability) {this.weaponDurability = weaponDurability;}
-
-    public boolean getYourTurn() {return yourTurn;}
-    public void setYourTurn(boolean newTurnValue) {this.yourTurn = newTurnValue;}
-
-    public float getPortraitXPos() {return portraitXPos;}
-    public void setPortraitXPos(float portraitXPos) {this.portraitXPos = portraitXPos;}
-
-    public float getPortraitYPos() {return portraitYPos;}
-    public void setPortraitYPos(float portraitYPos) {
-        this.portraitYPos = portraitYPos;
-        position.y = portraitYPos;
-    }
-
-    public float getAbilityFrameXPos() {return abilityFrameXPos;}
-    public void setAbilityFrameXPos(float abilityFrameXPos) {
-        this.abilityFrameXPos = abilityFrameXPos;
-        position.x = abilityFrameXPos;
-    }
-
-    public float getAbilityFrameYPos() {return abilityFrameYPos;}
-    public void setAbilityFrameYPos(float abilityFrameYPos) {this.abilityFrameYPos = abilityFrameYPos;}
-
-    // As these elements are "final", setters are not currently required, however, other elements of
-    // the game may use their dimensions for alignment and positioning, (ie. board regions etc.)
-    public float getPortraitHeight() {return PORTRAIT_HEIGHT;}
-    public float getPortraitWidth() {return PORTRAIT_WIDTH;}
-    public float getAbilityFrameHeight(){return  ABILITY_FRAME_HEIGHT;}
-    public float getAbilityFrameWidth(){return  ABILITY_FRAME_WIDTH;}
-
-    //public Player getPlayer(){ return this;}
 
     /**
      * Method for subtracting both health and armor when the player character/portrait
@@ -280,9 +230,20 @@ public class Player extends GameObject {
 
     }
 
-    // TODO Overridden draw method required to include ability icons etc
-    // Draw elements associated with the player class, such as health, character portrait,
-    // ability icon etc.
+    // /////////////////////////////////////////////////////////////////////////
+    // Draw methods
+    // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Draw elements associated with the player class, such as health, character portrait,
+     * ability icon etc.
+     *
+     * @param elapsedTime    Elapsed time information
+     * @param graphics2D     Graphics instance
+     * @param layerViewport  Game layer viewport
+     * @param screenViewport Screen viewport
+     *
+     */
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
                      ScreenViewport screenViewport){
@@ -294,6 +255,19 @@ public class Player extends GameObject {
         }
 
         // Drawing ability frame
+        drawAbilityFrame(elapsedTime, graphics2D, layerViewport,screenViewport);
+
+    }
+    /**
+     * Method that handles drawing the hero's associated ability frame
+     *
+     * @param elapsedTime    Elapsed time information
+     * @param graphics2D     Graphics instance
+     * @param layerViewport  Game layer viewport
+     * @param screenViewport Screen viewport
+     */
+    public void drawAbilityFrame(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
+                                 ScreenViewport screenViewport){
         GameObject abilityFrame = new GameObject(abilityFrameXPos,abilityFrameYPos,
                 PORTRAIT_WIDTH-15, PORTRAIT_HEIGHT-15,
                 getGameScreen().getGame().getAssetManager().getBitmap("AbilityFrame"),
@@ -303,74 +277,11 @@ public class Player extends GameObject {
         heroAbility.draw(elapsedTime,graphics2D, layerViewport,screenViewport);
     }
 
-
-    @Override
-    public void update(ElapsedTime elapsedTime){
-
-        // Process any touch events occurring since the update
-        playerInput = getGameScreen().getGame().getInput();
-        List<TouchEvent> touchEvents = playerInput.getTouchEvents();
-
-        if(touchEvents.size()>0){
-
-            // If ability has not been played this turn, allow hero ability to be tapped
-            if(!abilityUsedThisTurn) {
-                heroAbility.update(elapsedTime);
-
-                if (heroAbility.isPushTriggered()) {
-                    updateHeroAbilities();
-                }
-            }
-
-        }
-
-    }
-
-    // Determines what action is executed when user taps on their hero ability
-    public void updateHeroAbilities(){
-
-        if(hero.equals("EmperorCommodus")){
-            commodusAbilityUsed();
-        }
-
-        if(hero.equals("Mars")){
-            marsAbilityUsed();
-        }
-
-        if(hero.equals("Brutalus")){
-            // TODO add temporary attack boost field
-        }
-
-        if(hero.equals("Sagira")){
-            // Updated when playing cards are developed further
-        }
-
-        if(hero.equals("Hircine")){
-            // TODO obtain player's opponent to use as target
-        }
-
-        if(hero.equals("Meridia")){
-            meridiaAbilityUsed();
-        }
-    }
-
-    /**
-     * Method displays a different portrait based on the hero string that has been passed, and
-     * defines the hero abilities.
+    /** Changes the hero ability image based on what hero is being played
      *
-     * Heroes and associated abilities (Default 2 mana cost)
-     * +-------------------------------------------------------------------------------------------
-     * Emperor Commodus : Dagger Belt – Equip a 1 damage 2 durability weapon.
-     * Mars : Fortify - Grants the hero +2 Armor.
-     * Brutalus : Engage – Gain +1 attack this turn and +1 armour.
-     * Sagira : Eyes Up – Able to give any minion +1 health.
-     * Hircine : Hunt - Deals 2 damage to the opposing enemy hero.
-     * Meridia : Holy Healing: Restore 2 Health to Player Hero
-     * +-------------------------------------------------------------------------------------------
+     * @param hero The hero that the player has selected to play as
      */
-
-    // Changes the hero ability image based on what hero is being played
-    public void drawHeroAbility(String hero){
+    public void createHeroAbilityButton(String hero){
 
         switch(hero){
             case "EmperorCommodus":
@@ -416,12 +327,83 @@ public class Player extends GameObject {
     }
 
     // /////////////////////////////////////////////////////////////////////////
+    // Update methods
+    // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Updates elements associated with the player class
+     *
+     * @param elapsedTime    Elapsed time information
+     */
+    @Override
+    public void update(ElapsedTime elapsedTime){
+
+        // Process any touch events occurring since the update
+        playerInput = getGameScreen().getGame().getInput();
+        List<TouchEvent> touchEvents = playerInput.getTouchEvents();
+
+        if(touchEvents.size()>0){
+
+            // If ability has not been played this turn, allow hero ability to be tapped
+            if(!abilityUsedThisTurn) {
+                heroAbility.update(elapsedTime);
+
+                if (heroAbility.isPushTriggered()) {
+                    updateHeroAbilities();
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     *Determines what action is executed when user taps on their hero ability
+     */
+    public void updateHeroAbilities(){
+
+        if(hero.equals("EmperorCommodus")){
+            commodusAbilityUsed();
+        }
+
+        if(hero.equals("Mars")){
+            marsAbilityUsed();
+        }
+
+        if(hero.equals("Brutalus")){
+            // TODO add temporary attack boost field
+        }
+
+        if(hero.equals("Sagira")){
+            // Updated when playing cards are developed further
+        }
+
+        if(hero.equals("Hircine")){
+            // TODO obtain player's opponent to use as target
+        }
+
+        if(hero.equals("Meridia")){
+            meridiaAbilityUsed();
+        }
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
     // Hero Ability methods
     // /////////////////////////////////////////////////////////////////////////
-    // All abilites have a mana cost of 2 and can be activated once per turn,
-    // provided the mana cost can be covered.
-    // Note: Current implementation regarding abilities targeting enemy heroes, accounts for use against
-    // an AIOpponent.
+
+    /**
+     * Methods that define the different hero abilities
+     *
+     * Heroes and associated abilities (Default 2 mana cost)
+     * +-------------------------------------------------------------------------------------------
+     * Emperor Commodus : Dagger Belt – Equip a 1 damage 2 durability weapon.
+     * Mars : Fortify - Grants the hero +2 Armor.
+     * Brutalus : Engage – Gain +1 attack this turn and +1 armour.
+     * Sagira : Eyes Up – Able to give any minion +1 health.
+     * Hircine : Hunt - Deals 2 damage to the opposing enemy hero.
+     * Meridia : Holy Healing: Restore 2 Health to Player Hero
+     * +-------------------------------------------------------------------------------------------
+     */
 
     // Note: Equipping a new weapon replaces the player's currently equipped weapon
     public void commodusAbilityUsed(){
@@ -501,5 +483,60 @@ public class Player extends GameObject {
         }
         // Action can't be performed, provide feedback to player (Message box, some form of prompt)
     }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Getter and setter methods
+    // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Getter and setter methods for each of the appropriate private variables
+     */
+
+    public int getCurrentHealth(){return currentHealth;}
+    public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
+
+    public int getCurrentManaCap(){return currentManaCap;}
+    public void setCurrentManaCap(int currentManaCap){this.currentManaCap = currentManaCap;}
+
+    public int getCurrentMana(){return currentMana;}
+    public void setCurrentMana(int currentMana){this.currentMana = currentMana;}
+
+    public int getCurrentArmor(){return armor;}
+    public void setCurrentArmor(int armor){this.armor = armor;}
+
+    public int getCurrentAttack() {return attack;}
+    public void setCurrentAttack(int attack){this.attack = attack;}
+
+    public int getCurrentWeaponDurability() {return weaponDurability;}
+    public void setCurrentWeaponDurability(int weaponDurability) {this.weaponDurability = weaponDurability;}
+
+    public boolean getYourTurn() {return yourTurn;}
+    public void setYourTurn(boolean newTurnValue) {this.yourTurn = newTurnValue;}
+
+    public float getPortraitXPos() {return portraitXPos;}
+    public void setPortraitXPos(float portraitXPos) {this.portraitXPos = portraitXPos;}
+
+    public float getPortraitYPos() {return portraitYPos;}
+    public void setPortraitYPos(float portraitYPos) {
+        this.portraitYPos = portraitYPos;
+        position.y = portraitYPos;
+    }
+
+    public float getAbilityFrameXPos() {return abilityFrameXPos;}
+    public void setAbilityFrameXPos(float abilityFrameXPos) {
+        this.abilityFrameXPos = abilityFrameXPos;
+        position.x = abilityFrameXPos;
+    }
+
+    public float getAbilityFrameYPos() {return abilityFrameYPos;}
+    public void setAbilityFrameYPos(float abilityFrameYPos) {this.abilityFrameYPos = abilityFrameYPos;}
+
+    // As these elements are "final", setters are not currently required, however, other elements of
+    // the game may use their dimensions for alignment and positioning, (ie. board regions etc.)
+    public float getPortraitHeight() {return PORTRAIT_HEIGHT;}
+    public float getPortraitWidth() {return PORTRAIT_WIDTH;}
+    public float getAbilityFrameHeight(){return  ABILITY_FRAME_HEIGHT;}
+    public float getAbilityFrameWidth(){return  ABILITY_FRAME_WIDTH;}
+
 
 }
