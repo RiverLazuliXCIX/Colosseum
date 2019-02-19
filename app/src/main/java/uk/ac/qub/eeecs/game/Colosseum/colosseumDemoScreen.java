@@ -357,12 +357,20 @@ public class colosseumDemoScreen extends GameScreen{
         List<TouchEvent> touchEvents = mInput.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            for (int i = 0; i < mCards.size(); i++){
-                mCards.get(i).cardDrag(mCards, mDefaultScreenViewport, mGameViewport, mGame);
+            for (int i = 0; i < playerDeck.getmCardHand().size(); i++){
+                playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                 // Updates both regions for all cards
-                playerRegion.update(mCards.get(i));
-                opponentRegion.update(mCards.get(i));
+                playerRegion.update(playerDeck.getmCardHand().get(i));
+                opponentRegion.update(playerDeck.getmCardHand().get(i));
+            }
+
+            for (int i = 0; i < enemyDeck.getmCardHand().size(); i++){
+                enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+
+                // Updates both regions for all cards
+                playerRegion.update(enemyDeck.getmCardHand().get(i));
+                opponentRegion.update(enemyDeck.getmCardHand().get(i));
             }
 
             for (PushButton button : mButtons)
@@ -397,7 +405,7 @@ public class colosseumDemoScreen extends GameScreen{
                 deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
 
 
-            //Eventually the cards from the hand should be displayed onscreen:
+            //Two sets of Hands (player and enemy) are able to be dragged:
             for (Card cards : playerDeck.getmCardHand()) {
                 cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
@@ -502,6 +510,7 @@ public class colosseumDemoScreen extends GameScreen{
         */
 
         //Draw the two player's hands, user and enemy:
+        //At present, all cards appear at the same position. Needs more work. - Dearbhaile
         for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
             playerDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
@@ -509,7 +518,6 @@ public class colosseumDemoScreen extends GameScreen{
         for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
             enemyDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
-
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
