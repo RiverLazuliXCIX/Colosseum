@@ -119,6 +119,10 @@ public class colosseumDemoScreen extends GameScreen{
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
         //mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
 
+        if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+            edgeCaseTest();
+        }
+
         // Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
@@ -293,6 +297,12 @@ public class colosseumDemoScreen extends GameScreen{
                 for (int i = 0; i < 3; i++) {
                     enemyDeck.drawTopCard();
                 }
+                break;
+            case 2: //edge of coin - set opponent health to 0, auto win game.
+
+                break;
+            default: //output an error as this should not be reached
+
                 break;
         }
     }

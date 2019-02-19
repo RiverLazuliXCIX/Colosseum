@@ -149,6 +149,19 @@ public class ScreenManager {
         return false;
     }
 
+    public boolean previousScreen(String name) { //Scott Sprint 5
+        int i = 0;
+        for(GameScreen gameScreen : mGameScreens) { //Checks for a screen previous (for mini menu to options menu and then back)
+            i++;
+            if(gameScreen.getName().compareTo(name) == 0) { //if found, return true
+                if(i==mGameScreens.size()-1){
+                return true; }
+                break;
+            }
+        }
+        return false;
+    }
+
     /**
      * Remove the specified game screen from the manager.
      * <p>

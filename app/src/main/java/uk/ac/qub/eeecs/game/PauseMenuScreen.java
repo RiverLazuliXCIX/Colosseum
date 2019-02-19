@@ -18,6 +18,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class PauseMenuScreen extends GameScreen {
 
@@ -98,14 +99,12 @@ public class PauseMenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if(mResume.isPushTriggered())
-                mGame.getScreenManager().removeScreen(this);
+                mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
             else if(mOptions.isPushTriggered())
-                mGame.getScreenManager().addScreen((new OptionsScreen(mGame)));
+                mGame.getScreenManager().changeScreenButton((new OptionsScreen(mGame)));
             else if (mMainMenu.isPushTriggered())
             {
-                mGame.getScreenManager().removeScreen(this);
-                mGame.getScreenManager().removeScreen("colosseumDemoScreen");
-                mGame.getScreenManager().addScreen(new MenuScreen(mGame));
+                mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
             }
         }
     }
@@ -118,10 +117,8 @@ public class PauseMenuScreen extends GameScreen {
         mMenuScreen.draw(elapsedTime, graphics2D, mMenuViewport,
                 mDefaultScreenViewport);
 
-        mResume.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
+        for (PushButton button : mButtons) //Draw all the buttons stored in "mButtons"
+            button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        mOptions.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
-
-        mMainMenu.draw(elapsedTime, graphics2D, mMenuViewport, mDefaultScreenViewport);
     }
 }

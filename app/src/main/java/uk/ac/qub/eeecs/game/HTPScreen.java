@@ -84,7 +84,7 @@ public class HTPScreen extends GameScreen {
 
             // If the back button is pressed, return to the options menu
             if (backButton.isPushTriggered()) {
-                mGame.getScreenManager().removeScreen(this);
+                mGame.getScreenManager().changeScreenButton(new OptionsScreen(mGame));
             }
         }
     }
