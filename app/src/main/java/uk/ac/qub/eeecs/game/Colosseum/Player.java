@@ -1,6 +1,8 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.GraphicsHelper;
+import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -253,9 +256,10 @@ public class Player extends GameObject {
             graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect, null);
 
         }
-
+        drawStats(elapsedTime, graphics2D, layerViewport,screenViewport);
         // Drawing ability frame
         drawAbilityFrame(elapsedTime, graphics2D, layerViewport,screenViewport);
+
 
     }
     /**
@@ -324,6 +328,52 @@ public class Player extends GameObject {
         }
 
 
+    }
+
+    /**
+     * Method that handles drawing the hero's associated health and armour to the screen
+     *
+     * @param elapsedTime    Elapsed time information
+     * @param graphics2D     Graphics instance
+     * @param layerViewport  Game layer viewport
+     * @param screenViewport Screen viewport
+     */
+    public void drawStats(ElapsedTime elapsedTime, IGraphics2D graphics2D, LayerViewport layerViewport,
+                          ScreenViewport screenViewport){
+
+        // Initialising properties for player health/armor stats text paint
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(25);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+
+        // Specifying icon location and dimensions
+        float statIconWidth = PORTRAIT_WIDTH/3;
+        float statIconHeight = PORTRAIT_HEIGHT/3;
+
+        float healthIconXPos = portraitXPos-statIconWidth;
+        float healthIconYPos = portraitYPos-statIconHeight;
+
+        float armorIconXPos= portraitXPos+statIconWidth;
+        float armorIconYPos= portraitYPos-statIconHeight;
+
+        // Defining icon game objects
+        GameObject healthIcon = new GameObject(healthIconXPos,healthIconYPos,
+                statIconWidth, statIconHeight,
+                getGameScreen().getGame().getAssetManager().getBitmap("HeroHealth"),
+                getGameScreen());
+
+        GameObject armorIcon = new GameObject(armorIconXPos,armorIconYPos,
+                statIconWidth, statIconHeight,
+                getGameScreen().getGame().getAssetManager().getBitmap("HeroArmor"),
+                getGameScreen());
+
+        // Drawing icons with associated health/armor text values
+        healthIcon.draw(elapsedTime,graphics2D,layerViewport,screenViewport);
+        graphics2D.drawText(currentHealth+"/"+MAX_HEALTH,healthIconXPos*4 , getGameScreen().getDefaultScreenViewport().bottom - healthIconYPos*4, textPaint);
+
+        armorIcon.draw(elapsedTime,graphics2D,layerViewport,screenViewport);
+        graphics2D.drawText(String.valueOf(armor),armorIconXPos*4 , getGameScreen().getDefaultScreenViewport().bottom - armorIconYPos*4, textPaint);
     }
 
     // /////////////////////////////////////////////////////////////////////////

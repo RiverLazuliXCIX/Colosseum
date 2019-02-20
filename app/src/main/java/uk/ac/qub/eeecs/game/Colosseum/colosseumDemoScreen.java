@@ -195,6 +195,7 @@ public class colosseumDemoScreen extends GameScreen{
         //player
         p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
+        //p2.setCurrentHealth(28); // For testing ability only, remove later
 
         opponent.setCurrentMana(4);
         opponent.setCurrentManaCap(4);

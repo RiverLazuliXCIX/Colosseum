@@ -37,6 +37,16 @@
     },
 	{
       "type": "Bitmap",
+      "name": "HeroHealth",
+      "file": "img/hero/HeroHealth.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HeroArmor",
+      "file": "img/hero/HeroArmor.png"
+    },
+	{
+      "type": "Bitmap",
       "name": "Hunt",
       "file": "img/hero/Abilities/Hunt.png"
     },
