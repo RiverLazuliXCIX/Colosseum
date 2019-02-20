@@ -25,13 +25,13 @@ public class Player extends GameObject {
     // /////////////////////////////////////////////////////////////////////////
 
     // Stores the character portrait height and width as well as the frame for the ability icons
-    private static final float PORTRAIT_WIDTH = 50.0f;
-    private static final float PORTRAIT_HEIGHT = 50.0f;
+    private static final float PORTRAIT_WIDTH = 35.0f;
+    private static final float PORTRAIT_HEIGHT = 35.0f;
     private static final float ABILITY_FRAME_WIDTH = PORTRAIT_WIDTH - 15;
     private static final float ABILITY_FRAME_HEIGHT = PORTRAIT_HEIGHT - 15;
 
-    private float portraitXPos = getGameScreen().getDefaultLayerViewport().halfWidth; // Centers the player portrait x coordinate to the center of the screen
-    private float portraitYPos = getGameScreen().getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2); // Displays the portrait at the bottom of the screen
+    private float portraitXPos = position.x;
+    private float portraitYPos = position.y;
 
     private float abilityFrameXPos = portraitXPos + (PORTRAIT_WIDTH/2)+ (ABILITY_FRAME_WIDTH/2);
     private float abilityFrameYPos = portraitYPos - (PORTRAIT_HEIGHT/2) + (ABILITY_FRAME_HEIGHT/2);
@@ -74,7 +74,7 @@ public class Player extends GameObject {
 
     // Portrait drawn at midpoint on default layer viewport X axis to ~Hopefully~ keep it centred on different screens
     public Player(GameScreen gameScreen, String hero){
-        super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2),
+        super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2)+(70.0f/1.5f),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
 
         // Creates the relevant push buttons for the hero abilities
@@ -347,7 +347,7 @@ public class Player extends GameObject {
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
-        // Specifying icon location and dimensions
+        // Specifying icon location and dimensions (In relation to player hero portrait)
         float statIconWidth = PORTRAIT_WIDTH/3;
         float statIconHeight = PORTRAIT_HEIGHT/3;
 

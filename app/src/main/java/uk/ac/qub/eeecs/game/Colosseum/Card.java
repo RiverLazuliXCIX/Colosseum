@@ -40,8 +40,9 @@ public class Card extends GameObject {
      * size and an appropriate width/height ratio.
      */
 
-    private static final float CARD_WIDTH = 50.0f;
-    private static final float CARD_HEIGHT = 70.0f;
+    // Was 50, 70
+    private static final float CARD_WIDTH = 50.0f/1.5f;
+    private static final float CARD_HEIGHT = 70.0f/1.5f;
 
     //Define the card digit images
     private Bitmap[] mCardDigits = new Bitmap[10];

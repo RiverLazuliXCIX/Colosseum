@@ -10,7 +10,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 public class AIOpponent extends Player {
 
     private float opponentPortraitXPos = getPortraitXPos(); // Centers the player portrait x coordinate to the center of the screen, same as the player portrait
-    private float opponentPortraitYPos = getGameScreen().getDefaultLayerViewport().getTop()-(getPortraitHeight()/2); // Displays the portrait at the top of the screen
+    private float opponentPortraitYPos = getGameScreen().getDefaultLayerViewport().getTop()-(getPortraitHeight()/2)-(70.0f/1.5f); // Displays the portrait at the top of the screen
     private float abilityFrameXPos = getAbilityFrameXPos();
     private float abilityFrameYPos = opponentPortraitYPos - (getPortraitHeight()/2) + (getAbilityFrameHeight()/2);
 

@@ -29,6 +29,7 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 
 /**
@@ -91,8 +92,8 @@ public class colosseumDemoScreen extends GameScreen{
     private GameObject pDenarius, eDenarius;
 
     //Test region
-    BoardRegion playerRegion;
-    BoardRegion opponentRegion;
+    ActiveRegion playerRegion;
+    ActiveRegion opponentRegion;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -209,13 +210,9 @@ public class colosseumDemoScreen extends GameScreen{
         createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
         */
 
-        // Defining board region width and height
-        float regionWidth= ViewportHelper.convertXDistanceFromLayerToScreen(mDefaultLayerViewport.getWidth(),mDefaultLayerViewport,mDefaultScreenViewport);
-        float regionHeight = ViewportHelper.convertYDistanceFromLayerToScreen(mDefaultLayerViewport.halfHeight-(p2.getPortraitHeight()),mDefaultLayerViewport,mDefaultScreenViewport);
-
-        // Creating board playable regions (+200)
-        playerRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+mDefaultScreenViewport.height/2, regionWidth,regionHeight,this);
-        opponentRegion = new BoardRegion(mDefaultScreenViewport.left,mDefaultScreenViewport.top+p2.getPortraitHeight()+200 ,regionWidth ,regionHeight ,this);
+        // Defining playable region width and height
+        playerRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop()/2.0f,mDefaultLayerViewport.getBottom()+p2.position.y+(p2.getPortraitHeight()/2));
+        opponentRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(),mDefaultLayerViewport.getTop()- (p2.position.y+(p2.getPortraitHeight()/2)),mDefaultLayerViewport.getTop()/2.0f);
 
     }
 
@@ -478,10 +475,6 @@ public class colosseumDemoScreen extends GameScreen{
         // Draw the player portrait (Just for testing, still working on it)
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         opponent.draw(elapsedTime,graphics2D,mGameViewport,mDefaultScreenViewport);
-
-        // Draw player board region (Just for testing again)
-        //graphics2D.drawRect(playerRegion.getBoardRegionRect(),playerRegion.getBoardRegionPaint());
-       // graphics2D.drawRect(opponentRegion.getBoardRegionRect(),opponentRegion.getBoardRegionPaint());
 
         //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image:
         if (p2.getYourTurn())
