@@ -3,25 +3,26 @@ package uk.ac.qub.eeecs.game.Colosseum.Regions;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 
 /**
- * Class used to define the region of the game board, within which, cards can be played
+ * Class used to define the hand region of the game board, within which, cards are drawn to
+ * TODO Method to return card to hand if chosen position is invalid
  */
 
-public class ActiveRegion extends GameRegion {
+public class HandRegion extends GameRegion {
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
     // /////////////////////////////////////////////////////////////////////////
 
-    private float spacingXCards = 20.0f;
+
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
 
-    public ActiveRegion (float xLeftEdge,float xRightEdge, float yTopEdge, float yBottomEdge){
-        super (xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+    public HandRegion (float xLeftEdge,float xRightEdge, float yTopEdge, float yBottomEdge){
+        super(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
 
-        setMaxNumCardsInRegion(11);
+        setMaxNumCardsInRegion(8);
 
     }
 
@@ -54,48 +55,46 @@ public class ActiveRegion extends GameRegion {
      *
      * @param card Card which is having its position updated
      */
-    public void addCard (Card card){
 
-        if(!isRegionFull()){
+    public void addCard (Card card) {
+
+        if (!isRegionFull()) {
             updateCardPosition(card);
             getCardsInRegion().add(card);
-            card.setDraggable(false);
-            setNumCardsInRegion(getNumCardsInRegion()+1);
+            setNumCardsInRegion(getNumCardsInRegion() + 1);
         }
 
     }
 
-    /**
-     * Removes card from active cards and decrements the number of cards on the board.
-     *
-     * @param card Card being removed
-     */
-    public void removeCard (Card card){
-
-        getCardsInRegion().remove(card);
-        setNumCardsInRegion(getNumCardsInRegion()-1);
-
-    }
+//    public void removeCard (Card card) {
+//
+//            getCardsInRegion().remove(card);
+//            setNumCardsInRegion(getNumCardsInRegion() - 1);
+//
+//
+//
+//    }
 
     /**
-     * Update function for the active. If a card is present within a region when a held card is dropped
+     * Update function for the hand. If a card is present within a region when a held card is dropped
      * or, a card is dropped into a region, adds the card to the selected region. Currently uses
      * addCard method to do this
      *
      * @param card Card being updated
      */
+
     public void update(Card card){
-        if (card.isCardDropped()&& isInRegion(card) && !isRegionFull()&& card.isDraggable()){
-            //updateCardPosition(card);
+
+        // If card is dropped and is in the region, and not currently stored in the region, add it to the region
+        if (card.isCardDropped()&& isInRegion(card) && !getCardsInRegion().contains(card)){
             addCard(card);
         }
+
+//        // If card was moved out of the region, remove it from the region
+//        if(card.isCardDropped()&& !isInRegion(card) && getCardsInRegion().contains(card)){
+//            removeCard(card);
+//        }
+
     }
-
-    // /////////////////////////////////////////////////////////////////////////
-    // Getter and Setter Methods
-    // /////////////////////////////////////////////////////////////////////////
-
-    public float getSpacingXCards() { return spacingXCards; }
-    public void setSpacingXCards(float spacingXCards) { this.spacingXCards = spacingXCards; }
 
 }

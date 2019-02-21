@@ -30,6 +30,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 
 /**
@@ -92,8 +93,10 @@ public class colosseumDemoScreen extends GameScreen{
     private GameObject pDenarius, eDenarius;
 
     //Test region
-    ActiveRegion playerRegion;
-    ActiveRegion opponentRegion;
+    ActiveRegion playerActiveRegion;
+    ActiveRegion opponentActiveRegion;
+    HandRegion playerHandRegion;
+    HandRegion opponentHandRegion;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -210,9 +213,12 @@ public class colosseumDemoScreen extends GameScreen{
         createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
         */
 
-        // Defining playable region width and height
-        playerRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop()/2.0f,mDefaultLayerViewport.getBottom()+p2.position.y+(p2.getPortraitHeight()/2));
-        opponentRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(),mDefaultLayerViewport.getTop()- (p2.position.y+(p2.getPortraitHeight()/2)),mDefaultLayerViewport.getTop()/2.0f);
+        // Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
+        playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop()/2.0f,mDefaultLayerViewport.getBottom()+p2.position.y+(p2.getPortraitHeight()/2));
+        opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(),mDefaultLayerViewport.getTop()- (p2.position.y+(p2.getPortraitHeight()/2)),mDefaultLayerViewport.getTop()/2.0f);
+
+        playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight()/2 -  (4*(50.0f/1.5f)), mDefaultLayerViewport.getRight()/2 +  (4*(50.0f/1.5f)), p2.position.y-(p2.getPortraitHeight()/2), mDefaultLayerViewport.getBottom());
+        opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight()/2 -  (4*(50.0f/1.5f)), mDefaultLayerViewport.getRight()/2 +  (4*(50.0f/1.5f)), mDefaultLayerViewport.getTop(),opponent.position.y+(opponent.getPortraitHeight()/2));
 
     }
 
@@ -359,16 +365,24 @@ public class colosseumDemoScreen extends GameScreen{
                 playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                 // Updates both regions for all cards
-                playerRegion.update(playerDeck.getmCardHand().get(i));
-                opponentRegion.update(playerDeck.getmCardHand().get(i));
+                playerActiveRegion.update(playerDeck.getmCardHand().get(i));
+                opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
+
+                playerHandRegion.update(playerDeck.getmCardHand().get(i));
+                opponentHandRegion.update(playerDeck.getmCardHand().get(i));
+
             }
 
             for (int i = 0; i < enemyDeck.getmCardHand().size(); i++){
                 enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                 // Updates both regions for all cards
-                playerRegion.update(enemyDeck.getmCardHand().get(i));
-                opponentRegion.update(enemyDeck.getmCardHand().get(i));
+                playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
+                opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
+
+                playerHandRegion.update(enemyDeck.getmCardHand().get(i));
+                opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
+
             }
 
             for (PushButton button : mButtons)
