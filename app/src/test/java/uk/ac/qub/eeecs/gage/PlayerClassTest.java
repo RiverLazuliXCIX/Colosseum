@@ -10,8 +10,6 @@ import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.gage.world.ScreenViewport;
-import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -519,6 +517,8 @@ public class PlayerClassTest {
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
+        player.setWeaponEquipped(true);
+
         player.setCurrentWeaponDurability(1);
 
         // Deal weapon damage reduce durability by 1
@@ -540,6 +540,7 @@ public class PlayerClassTest {
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
         player.setCurrentWeaponDurability(2);
+        player.setWeaponEquipped(true);
 
         // Deal weapon damage reduce durability by 1
         player.dealWeaponDamage();
@@ -559,6 +560,7 @@ public class PlayerClassTest {
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
+        player.setWeaponEquipped(true);
         player.setCurrentWeaponDurability(0);
 
         // Deal weapon damage reduce durability by 1

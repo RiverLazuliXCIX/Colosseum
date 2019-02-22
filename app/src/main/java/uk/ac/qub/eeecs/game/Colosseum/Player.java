@@ -221,7 +221,7 @@ public class Player extends GameObject {
             // implement ability to target/interact with minions and heroes
             if (weaponDurability > 0) {
                 // Deal damage to target
-                weaponDurability -= 1;
+                weaponDurability--;
             }
             // Else if zero display message or some sort of feedback to the player
             // Destroys the currently equipped weapon if, after attacking, weapon durability reaches 0
@@ -588,5 +588,6 @@ public class Player extends GameObject {
     public float getAbilityFrameHeight(){return  ABILITY_FRAME_HEIGHT;}
     public float getAbilityFrameWidth(){return  ABILITY_FRAME_WIDTH;}
 
-
+    public boolean isWeaponEquipped() { return weaponEquipped; }
+    public void setWeaponEquipped(boolean weaponEquipped) { this.weaponEquipped = weaponEquipped; }
 }
