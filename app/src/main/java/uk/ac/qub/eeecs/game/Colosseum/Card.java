@@ -193,6 +193,21 @@ public class Card extends GameObject {
         }
     }
 
+    public void flipCard(Game mGame) {
+        if(!mCardFlippedBack) {
+            Bitmap b = this.getBitmap();
+            Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
+            Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
+            if (b == front) {
+                this.setBitmap(back);
+                this.mCardFlippedBack = true;
+            } //else if (b == back) {
+                //this.setBitmap(front);
+                //this.mCardFlippedBack = false;
+            //}
+        }
+    }
+
     private void checkCardTouched(List<Card> mCards, Vector2 touchLocation) {
         //Check which card was touched, if any
         for (int j = 0; j < mCards.size(); j++) {

@@ -233,6 +233,10 @@ public class colosseumDemoScreen extends GameScreen{
         //This method sets up the player and enemy decks, called when screen is loaded
         playerDeck = new CardDeck(1, "Basic Player Deck", this, false);
         enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true);
+
+        for(int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
+            enemyDeck.getmCardHand().get(i).flipCard(this.mGame);
+        }
     }
 
     private Card generateRandomDeck() { //Scott Barham, Story 7 Sprint 4
