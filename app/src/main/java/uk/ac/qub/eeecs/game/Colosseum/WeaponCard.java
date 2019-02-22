@@ -17,6 +17,13 @@ public class WeaponCard extends Card {
         setCharges(charges);
     }
 
+    // Copy Constructor
+    public WeaponCard(float x, float y, WeaponCard wc) {
+        super(x, y, wc.getGameScreen(), wc.getCoinCost());
+        setDamage(wc.getDamage());
+        setCharges(wc.getCharges());
+    }
+
     // Will work for Player and AI
     public void play(Player p) {
         p.setWeaponEquipped(true);

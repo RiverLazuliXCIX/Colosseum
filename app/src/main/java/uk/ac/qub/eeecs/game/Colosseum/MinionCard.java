@@ -12,15 +12,14 @@ public class MinionCard extends Card {
     private int health;
     private Effect mEffect;
 
-    /*
-    public MinionCard() {
-        super();
-        setAttack(0);
+    // 'Default' Constructor
+    public MinionCard(GameScreen gs) {
+        super(0, 0, gs, 1);
+        setAttack(1);
         setMaxHealth(1);
         setHealth(1);
         mEffect = Effect.NONE;
     }
-    */
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health) {
         super(x, y, gs, coinCost);
@@ -44,6 +43,15 @@ public class MinionCard extends Card {
         setMaxHealth(maxHealth);
         setHealth(health);
         setEffect(mEffect);
+    }
+
+    // Copy Constructor
+    public MinionCard(float x, float y, MinionCard mc) {
+        super(x, y, mc.getGameScreen(), mc.getCoinCost());
+        setAttack(mc.getAttack());
+        setMaxHealth(mc.getMaxHealth());
+        setHealth(mc.getHealth());
+        setEffect(mc.getEffect());
     }
 
     public void attackEnemy(MinionCard eMinionCard) {
