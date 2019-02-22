@@ -32,6 +32,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
+import uk.ac.qub.eeecs.game.FatigueScreen;
 
 /**
  * Starter class for Card game stories
@@ -171,23 +172,6 @@ public class colosseumDemoScreen extends GameScreen{
         mButtons.add(mDrawButton);
 
 
-        //Setting up demo cards:
-        mCards.add(new MinionCard(100, 100,  this, 50, 11, 42));//, "CardFront"));
-        //mCards.get(0).setAttack(11);
-        //mCards.get(0).setDefence(42);
-        //mCards.get(0).setMana(50);
-        //mCards.get(0).setBitmap(getGame().getAssetManager().getBitmap("no1"));
-        mCards.add(new MinionCard(200, 100, this, 4, 3, 2));//, "CardFront"));
-        //mCards.get(1).setAttack(3);
-        //mCards.get(1).setDefence(2);
-        //mCards.get(1).setMana(4);
-        //mCards.get(1).setBitmap(getGame().getAssetManager().getBitmap("no2"));
-
-        //User Story 7, Sprint 4 - Scott
-        dCards.add(generateRandomDeck()); //single random card, shows that it has random values and appears randomly.
-        //for(int i = 0; i<30; i++) {   //creates a mass of cards for testing purposes, un-comment at your own demise.
-        //    dCards.add(generateRandomDeck());
-        //}
 
         //Setting up demo player:
         p2=new Player(this,"Meridia");
@@ -408,6 +392,7 @@ public class colosseumDemoScreen extends GameScreen{
             if (mDrawButton.isPushTriggered()) {
                 if (!playerDeck.getDeck().isEmpty()) {
                     playerDeck.drawTopCard();
+                    playerDeck.destroyCardOverLimit();
                 } else {
                     mGame.getScreenManager().changeScreenButton(new FatigueScreen(mGame));
                 }
@@ -426,44 +411,6 @@ public class colosseumDemoScreen extends GameScreen{
                 cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
 
-            //mCard2.cardDrag(mCard2, mDefaultScreenViewport, mGameViewport, mGame);
-
-            /*
-            for(Card deckOfCards: dCards){ //updates each card held within the "dCards" variable, Sprint 4 Story 7
-                deckOfCards.cardDrag(deckOfCards, mDefaultScreenViewport, mGameViewport, mGame);
-            }
-            */
-            /*
-            for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
-                Vector2 touchLocation = new Vector2(0, 0);
-
-                int touchType = mInput.getTouchEvents().get(i).type;
-                ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
-                        mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
-
-                //Move the card - Story C1
-                if (touchType == TouchEvent.TOUCH_DRAGGED
-                        && mCardHeld == null) {
-                    //Check which card was touched, if any
-                    for (int j = 0; j < 2; j++) {
-                        if (mCards[j].getBound().contains(touchLocation.x, touchLocation.y)) {
-                            mCardHeld = mCards[j];
-                        }
-                    }
-                }
-
-                //if a card was touched, and the event was a drag, move it
-                if (touchType == TouchEvent.TOUCH_DRAGGED
-                        && mCardHeld != null)
-                    mCardHeld.position = touchLocation;
-
-                //release the card, meaning no card is now held
-                if (touchType == TouchEvent.TOUCH_UP
-                        && mCardHeld != null)
-                    mCardHeld = null;
-
-            }
-            */
         }
     }
 
@@ -518,7 +465,6 @@ public class colosseumDemoScreen extends GameScreen{
         */
 
         //Draw the two player's hands, user and enemy:
-        //At present, all cards appear at the same position. Needs more work. - Dearbhaile
         for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
             playerDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
