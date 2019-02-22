@@ -215,22 +215,39 @@ public class Player extends GameObject {
      *
      */
     // 2 methods needed, deal damage to player/hero, deal damage to minion
-    public void dealWeaponDamage(){
+    // Will work regardless or a Player or AIOpponent attacking
+    public void dealWeaponDamage(Player p){
 
         if(weaponEquipped) {
             // implement ability to target/interact with minions and heroes
             if (weaponDurability > 0) {
+                p.receiveDamage(getCurrentAttack());
                 // Deal damage to target
                 weaponDurability--;
             }
             // Else if zero display message or some sort of feedback to the player
             // Destroys the currently equipped weapon if, after attacking, weapon durability reaches 0
-            if (weaponDurability == 0) {
+            else if (weaponDurability <= 0) { // in case durability is somehow less than 0
                 setCurrentAttack(0);
                 weaponEquipped = false;
             }
         }
 
+    }
+
+    public void dealWeaponDamage(MinionCard mc) {
+        if(weaponEquipped) {
+            if (weaponDurability > 0) {
+                mc.takeDamage(getCurrentAttack());
+                this.receiveDamage(mc.getAttack());
+
+                mc.checkHealth();
+                weaponDurability--;
+            } else if (weaponDurability <= 0) { // in case durability is somehow less than 0
+                setCurrentAttack(0);
+                weaponEquipped = false;
+            }
+        }
     }
 
     // /////////////////////////////////////////////////////////////////////////
