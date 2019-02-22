@@ -31,6 +31,7 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
+import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 import uk.ac.qub.eeecs.game.FatigueScreen;
 
@@ -291,7 +292,7 @@ public class colosseumDemoScreen extends GameScreen{
                 }
                 break;
             case 2: //edge of coin - set opponent health to 0, auto win game.
-
+                EndGameScreen.setCoinFlipResult(true);
                 break;
             default: //output an error as this should not be reached
 
@@ -346,75 +347,98 @@ public class colosseumDemoScreen extends GameScreen{
         p2.update(elapsedTime);
         opponent.update(elapsedTime);
 
-        List<TouchEvent> touchEvents = mInput.getTouchEvents();
-        if (touchEvents.size() > 0) {
-
-            for (int i = 0; i < playerDeck.getmCardHand().size(); i++){
-                playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-
-                // Updates both regions for all cards
-                playerActiveRegion.update(playerDeck.getmCardHand().get(i));
-                opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
-
-                playerHandRegion.update(playerDeck.getmCardHand().get(i));
-                opponentHandRegion.update(playerDeck.getmCardHand().get(i));
-
+        if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
+            try {
+                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
+            } catch (InterruptedException e) {
+            }
+            EndGameScreen.setMostRecentResult("win");
+            mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+        } else if (p2.getCurrentHealth() <= 0 || opponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
+            try {
+                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
+            } catch (InterruptedException e) {
             }
 
-            for (int i = 0; i < enemyDeck.getmCardHand().size(); i++){
-                enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-
-                // Updates both regions for all cards
-                playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
-                opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
-
-                playerHandRegion.update(enemyDeck.getmCardHand().get(i));
-                opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
-
+            if (p2.getCurrentHealth() <= 0 && opponent.getCurrentHealth() <= 0) { //if both sides health is 0 or less, the game ends in a draw
+                EndGameScreen.setMostRecentResult("draw");
+            } else if (p2.getCurrentHealth() <= 0) { //if the player reaches 0 or less health, they lose
+                EndGameScreen.setMostRecentResult("loss");
+            } else if (opponent.getCurrentHealth() <= 0) { //if the opponent reaches 0 or less health, the player wins
+                EndGameScreen.setMostRecentResult("win");
             }
+            mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //swap to the end game screen regardless of whatever outcome occurs
+        } else {
 
-            for (PushButton button : mButtons)
-                button.update(elapsedTime);
+            List<TouchEvent> touchEvents = mInput.getTouchEvents();
+            if (touchEvents.size() > 0) {
 
-            if(mPauseButton.isPushTriggered()){
-                mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
-            }
+                for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
+                    playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
-            mEndTurnButton.update(elapsedTime);
-            mEndTurnButtonOff.update(elapsedTime);
+                    // Updates both regions for all cards
+                    playerActiveRegion.update(playerDeck.getmCardHand().get(i));
+                    opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
 
-            if (mEndTurnButton.isPushTriggered()) {
-                endPlayerTurn();
-            }
+                    playerHandRegion.update(playerDeck.getmCardHand().get(i));
+                    opponentHandRegion.update(playerDeck.getmCardHand().get(i));
+
+                }
+
+                for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
+                    enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+
+                    // Updates both regions for all cards
+                    playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
+                    opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
+
+                    playerHandRegion.update(enemyDeck.getmCardHand().get(i));
+                    opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
+
+                }
+
+                for (PushButton button : mButtons)
+                    button.update(elapsedTime);
+
+                if (mPauseButton.isPushTriggered()) {
+                    mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
+                }
+
+                mEndTurnButton.update(elapsedTime);
+                mEndTurnButtonOff.update(elapsedTime);
+
+                if (mEndTurnButton.isPushTriggered()) {
+                    endPlayerTurn();
+                }
 
 
-            //Still working on this - Dearbhaile
-            //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
-            //On this screen, it will be displayed how much health they will lose (cumulative value)
-            //Screen then disappears after 3 seconds.
+                //Still working on this - Dearbhaile
+                //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
+                //On this screen, it will be displayed how much health they will lose (cumulative value)
+                //Screen then disappears after 3 seconds.
 
-            if (mDrawButton.isPushTriggered()) {
-                if (!playerDeck.getDeck().isEmpty()) {
-                    playerDeck.drawTopCard();
-                    playerDeck.destroyCardOverLimit();
-                } else {
-                    mGame.getScreenManager().changeScreenButton(new FatigueScreen(mGame));
+                if (mDrawButton.isPushTriggered()) {
+                    if (!playerDeck.getDeck().isEmpty()) {
+                        playerDeck.drawTopCard();
+                        playerDeck.destroyCardOverLimit();
+                    } else {
+                        mGame.getScreenManager().changeScreenButton(new FatigueScreen(mGame));
+                    }
+                }
+
+                for (Card deckOfCards : dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
+                    deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
+
+
+                //Two sets of Hands (player and enemy) are able to be dragged:
+                for (Card cards : playerDeck.getmCardHand()) {
+                    cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+                }
+
+                for (Card cards : enemyDeck.getmCardHand()) {
+                    cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
                 }
             }
-
-            for(Card deckOfCards: dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
-                deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
-
-
-            //Two sets of Hands (player and enemy) are able to be dragged:
-            for (Card cards : playerDeck.getmCardHand()) {
-                cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-            }
-
-            for (Card cards : enemyDeck.getmCardHand()) {
-                cards.cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-            }
-
         }
     }
 

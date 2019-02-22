@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "OptionsBackground",
+      "file": "img/OptionsBackground.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "MainMenu",
+      "file": "img/MainMenu.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "MainMenuSelected",
+      "file": "img/MainMenuSelected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "playAnother",
+      "file": "img/playAnother.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "playAnotherSelected",
+      "file": "img/playAnotherSelected.png"
+    }
+    ]
+}

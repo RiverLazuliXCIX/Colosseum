@@ -118,11 +118,9 @@ public class PauseMenuScreen extends GameScreen {
             } else if (mHTPButton.isPushTriggered()) {
                 mGame.getScreenManager().changeScreenButton((new HTPScreen(mGame)));
             } else if (mConcede.isPushTriggered()) {
-                StatisticsScreen.setMostRecentResult("Loss");
-                int i = StatisticsScreen.getTotalLosses();
-                StatisticsScreen.setTotalLosses(i+1);
-                mGame.getScreenManager().removeScreen("CardScreen");
-                mGame.getScreenManager().changeScreenButton((new MenuScreen(mGame)));
+                EndGameScreen.setMostRecentResult("loss");
+                EndGameScreen.setConcedeResult(true);
+                mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
             }
         }
     }

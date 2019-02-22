@@ -22,12 +22,12 @@ public class StatisticsScreen extends GameScreen {
     private GameObject sBackground; // Add in the background for the statistics screen
     private LayerViewport mGameViewport;
 
-    private static int totalWins = 0; //create a count for total number of wins
-    private static int totalLosses = 0; //create a count for total number of losses
+    private static double totalWins = 0; //create a count for total number of wins
+    private static double totalLosses = 0; //create a count for total number of losses
     private static String mostRecentResult = "No games played yet"; //holder for the most recent result
     private double winLossRatio = 0.0; //holder for the ratio of wins/losses
     private double winPercent = 0.0; //holder for win percentage
-    private int totalGamesPlayed = 0; //create a count for total number of games played.
+    private double totalGamesPlayed = 0; //create a count for total number of games played.
 
 
     /**
@@ -75,18 +75,18 @@ public class StatisticsScreen extends GameScreen {
     }
 
     //Getters and setters for total wins
-    public static int getTotalWins() {
+    public static double getTotalWins() {
         return totalWins;
     }
-    public static void setTotalWins(int winInput) {
+    public static void setTotalWins(double winInput) {
         totalWins = winInput;
     }
 
     //Getters and setters for total losses
-    public static int getTotalLosses() {
+    public static double getTotalLosses() {
         return totalLosses;
     }
-    public static void setTotalLosses(int lossInput) {
+    public static void setTotalLosses(double lossInput) {
         totalLosses = lossInput;
     }
 
@@ -103,11 +103,11 @@ public class StatisticsScreen extends GameScreen {
      */
     @Override
     public void update(ElapsedTime elapsedTime) {
-        totalGamesPlayed = totalWins + totalLosses;
+        totalGamesPlayed = totalWins + totalLosses; //calculate the total games played
 
         if(totalGamesPlayed!=0) {
-            winLossRatio = (double)totalWins/(double)totalGamesPlayed;
-            winPercent = winLossRatio*100.0;
+            winLossRatio = (double)totalWins/(double)totalGamesPlayed; //create a win/loss ratio for output later
+            winPercent = winLossRatio*100.0; //create a win percentage for output later
         }
 
 
@@ -169,7 +169,7 @@ public class StatisticsScreen extends GameScreen {
         graphics2D.drawText("Win Percentage: ", mGameViewport.getWidth()*0.9f, mGameViewport.getHeight()*3f, textPaint);
         graphics2D.drawText(String.valueOf(winPercent)+" %", mGameViewport.getWidth()*2.3f, mGameViewport.getHeight()*3f, textPaint); //draw the text of the win percentage
         graphics2D.drawText("Total games played: ", mGameViewport.getWidth()*0.9f, mGameViewport.getHeight()*3.5f, textPaint);
-        graphics2D.drawText(String.valueOf(totalGamesPlayed), mGameViewport.getWidth()*2.3f, mGameViewport.getHeight()*3.5f, textPaint); //draw the text of the total games played
+        graphics2D.drawText(String.valueOf((int)totalGamesPlayed), mGameViewport.getWidth()*2.3f, mGameViewport.getHeight()*3.5f, textPaint); //draw the text of the total games played
 
     }
 }
