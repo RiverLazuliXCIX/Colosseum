@@ -22,9 +22,10 @@ public class GameRegion {
     private float regionWidth;
     private float regionHeight;
 
-    private int numCardsInRegion = 0;
+    private int numCardsInRegion;
+    private int maxNumCardsInRegion;
 
-    private ArrayList <Card> cardsInRegion = new ArrayList<Card>();
+    private ArrayList <Card> cardsInRegion;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -39,6 +40,11 @@ public class GameRegion {
         this.regionYPosBottom = yBottomEdge;
         this.regionWidth = xRightEdge-xLeftEdge;
         this.regionHeight = yTopEdge - yBottomEdge;
+
+        // Sets default values related to cards within the region
+        this.numCardsInRegion = 0;
+        this.maxNumCardsInRegion = 10;
+        this.cardsInRegion = new ArrayList<>();
 
     }
 
@@ -60,6 +66,17 @@ public class GameRegion {
             return true;
         }
 
+        return false;
+    }
+
+    /**
+     * Checks if the active region is full
+     */
+
+    public boolean isRegionFull(){
+        if(numCardsInRegion == maxNumCardsInRegion) {
+            return true;
+        }
         return false;
     }
 
@@ -95,4 +112,6 @@ public class GameRegion {
     public ArrayList<Card> getCardsInRegion() { return cardsInRegion; }
     public void setCardsInRegion(ArrayList<Card> cardsInRegion) { this.cardsInRegion = cardsInRegion; }
 
+    public int getMaxNumCardsInRegion() { return maxNumCardsInRegion; }
+    public void setMaxNumCardsInRegion(int maxNumCardsInRegion) { this.maxNumCardsInRegion = maxNumCardsInRegion; }
 }

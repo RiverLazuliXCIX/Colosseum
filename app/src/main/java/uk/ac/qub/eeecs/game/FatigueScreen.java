@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.Colosseum;
+package uk.ac.qub.eeecs.game;
 
 import android.graphics.Color;
 
@@ -9,8 +9,10 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class FatigueScreen extends GameScreen {
 
@@ -18,13 +20,20 @@ public class FatigueScreen extends GameScreen {
     final private long FATIGUE_TIMEOUT = 3000;
     private long timeOnCreate, currentTime;
     private LayerViewport mFatigueScreenViewport;
+    private TitleImage ohNoText;
 
 
     public FatigueScreen(Game game) {
         super("FatigueScreen", game);
         timeOnCreate = System.currentTimeMillis();
         setupViewports();
+        setUpFatigueScreenObjects();
+    }
 
+    private void setUpFatigueScreenObjects() {
+        //mGame.getAssetManager().loadAndAddBitmap("OhNo", "img/OhNo.png");
+
+        //TitleImage ohNoText = new TitleImage(100, 100, 100, 50, "OhNo", this);
     }
 
     private void setupViewports() {
