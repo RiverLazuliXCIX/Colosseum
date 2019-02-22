@@ -472,7 +472,7 @@ public class Player extends GameObject {
 
         if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
             reduceCurrentMana(HERO_ABILITY_COST);
-            increaseArmor(3);
+            increaseArmor(2);
             abilityUsedThisTurn = true;
         }
         // Action can't be performed, provide feedback to player (Message box, some form of prompt)
@@ -590,4 +590,8 @@ public class Player extends GameObject {
 
     public boolean isWeaponEquipped() { return weaponEquipped; }
     public void setWeaponEquipped(boolean weaponEquipped) { this.weaponEquipped = weaponEquipped; }
+
+    public boolean isAbilityUsedThisTurn() { return abilityUsedThisTurn; }
+    public void setAbilityUsedThisTurn(boolean abilityUsedThisTurn) { this.abilityUsedThisTurn = abilityUsedThisTurn; }
+
 }

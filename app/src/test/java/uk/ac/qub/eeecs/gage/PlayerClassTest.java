@@ -143,6 +143,10 @@ public class PlayerClassTest {
         assertEquals(expectedArmor,player.getCurrentArmor());
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing heal();
+    // /////////////////////////////////////////////////////////////////////////
+
     /*
      * Heal the player 2 points from 28 to the health cap, expecting the health to reach the cap of
      * 30
@@ -204,6 +208,10 @@ public class PlayerClassTest {
         assertEquals(expectedHealth,player.getCurrentHealth());
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing reduceCurrentMana();
+    // /////////////////////////////////////////////////////////////////////////
+
     /*
      * Try to reduce mana while at 0 (Should fail, mana should stay at 0)
      */
@@ -264,6 +272,10 @@ public class PlayerClassTest {
         assertEquals(expectedMana,player.getCurrentMana());
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing increaseCurrentMana();
+    // /////////////////////////////////////////////////////////////////////////
+
     /*
      * Increasing mana from 0 to 1
      */
@@ -304,6 +316,10 @@ public class PlayerClassTest {
         // Test that player mana is increased to the expected amount
         assertEquals(expectedMana,player.getCurrentMana());
     }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing increaseCurrentManaCap();
+    // /////////////////////////////////////////////////////////////////////////
 
     /*
      * Increasing mana cap from 9 to 10, acceptable amount
@@ -366,6 +382,10 @@ public class PlayerClassTest {
         assertEquals(expectedManaCap,player.getCurrentManaCap());
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing increaseArmor();
+    // /////////////////////////////////////////////////////////////////////////
+
     /*
      * Increasing armor from 0 to 3, acceptable amount
      */
@@ -405,6 +425,10 @@ public class PlayerClassTest {
         // Test that player armor is increased to the expected amount
         assertEquals(expectedArmor,player.getCurrentArmor());
     }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing reduceAttack();
+    // /////////////////////////////////////////////////////////////////////////
 
     /*
      * Reduce attack from 1 to 0, boundary case
@@ -466,6 +490,10 @@ public class PlayerClassTest {
         assertEquals(expectedAttack,player.getCurrentAttack());
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing increaseAttack();
+    // /////////////////////////////////////////////////////////////////////////
+
     /*
      * Increase attack while hero currently has no attack available
      */
@@ -505,6 +533,10 @@ public class PlayerClassTest {
         // Test that player attack is increased to the expected amount
         assertEquals(expectedAttack,player.getCurrentAttack());
     }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing dealWeaponDamage();
+    // /////////////////////////////////////////////////////////////////////////
 
     /*
      * Deal weapon damage to reduce durability to 0 boundary case
@@ -571,5 +603,239 @@ public class PlayerClassTest {
     }
 
     //TODO Update hero weapon attack tests for attacking minions and other enemy heroes
+
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing Hero Abilities
+    // /////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Using Emperor Commodus' ability, ability used this turn should be set to true, weapon equipped
+     * should be true, durability should be 2, attack should be 1 and current mana should be 2.
+     */
+    @Test
+    public void player_commodusAbilityNoWeaponEquipped() {
+        // Define expected properties
+        int expectedCurrentMana = 2;
+        int expectedAttack = 1;
+        int expectedDurability = 2;
+        boolean expectedWeaponEquipped = true;
+        boolean expectedAbilityUsed = true;
+
+        // Create a new player instance
+        String hero = "EmperorCommodus";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(4);
+        player.setCurrentManaCap(4);
+        player.setCurrentAttack(0);
+        player.setCurrentWeaponDurability(0);
+        player.setWeaponEquipped(false);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.commodusAbilityUsed();
+
+        // Test that mana has been reduced by 2, a weapon has been equipped, player attack and weapon
+        // durability are set to 1 and 2 respectively and ability used is set to true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedAttack,player.getCurrentAttack());
+        assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Emperor Commodus' ability, ability used this turn should be set to true, weapon equipped
+     * should be true, durability should be 2, attack should be 1 and current mana should be 2. Since
+     * a weapon is already equipped, durability and attack should be overwritten to that of commodus'
+     * weapon.
+     */
+    @Test
+    public void player_commodusAbilityWeaponEquipped() {
+        // Define expected properties
+        int expectedCurrentMana = 2;
+        int expectedAttack = 1;
+        int expectedDurability = 2;
+        boolean expectedWeaponEquipped = true;
+        boolean expectedAbilityUsed = true;
+
+        // Create a new player instance
+        String hero = "EmperorCommodus";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(4);
+        player.setCurrentManaCap(4);
+        player.setCurrentAttack(10);
+        player.setCurrentWeaponDurability(10);
+        player.setWeaponEquipped(true);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.commodusAbilityUsed();
+
+        // Test that mana has been reduced by 2, a weapon has been equipped, player attack and weapon
+        // durability are set to 1 and 2 respectively and ability used is set to true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedAttack,player.getCurrentAttack());
+        assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Emperor Commodus' ability with insufficient mana and no weapon equipped, ability used
+     * this turn should be kept at false, weapon equipped should be false, durability should be 0,
+     * attack should be 0 and current mana should stay at 1.
+     */
+    @Test
+    public void player_commodusAbilityInsufficientManaNoWeaponEquipped() {
+        // Define expected properties
+        int expectedCurrentMana = 1;
+        int expectedAttack = 0;
+        int expectedDurability = 0;
+        boolean expectedWeaponEquipped = false;
+        boolean expectedAbilityUsed = false;
+
+        // Create a new player instance
+        String hero = "EmperorCommodus";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(1);
+        player.setCurrentManaCap(1);
+        player.setCurrentAttack(0);
+        player.setCurrentWeaponDurability(0);
+        player.setWeaponEquipped(false);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.commodusAbilityUsed();
+
+        // Test that mana has not been deducted, ability has not been used, and weapon has not been equipped
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedAttack,player.getCurrentAttack());
+        assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Emperor Commodus' ability with insufficient mana and a weapon already equipped, ability
+     * used this turn should be kept at false, weapon equipped should stay true, durability should
+     * stay 10, attack should stay 10 and current mana should stay at 1.
+     */
+    @Test
+    public void player_commodusAbilityInsufficientManaWeaponEquipped() {
+        // Define expected properties
+        int expectedCurrentMana = 1;
+        int expectedAttack = 10;
+        int expectedDurability = 10;
+        boolean expectedWeaponEquipped = true;
+        boolean expectedAbilityUsed = false;
+
+        // Create a new player instance
+        String hero = "EmperorCommodus";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(1);
+        player.setCurrentManaCap(1);
+        player.setCurrentAttack(10);
+        player.setCurrentWeaponDurability(10);
+        player.setWeaponEquipped(true);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.commodusAbilityUsed();
+
+        // Test that mana has not been deducted, ability has not been used, and weapon has not been equipped
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedAttack,player.getCurrentAttack());
+        assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Mars' ability should increase player armor by 2 and deduct 2 mana from the player, setting
+     * ability used this turn to true. (Mars ability uses increaseArmor() to increase armor which
+     * was previously tested)
+     */
+    @Test
+    public void player_marsAbilitySufficientMana() {
+        // Define expected properties
+        int expectedCurrentMana = 2;
+        int expectedArmor = 2;
+        boolean expectedAbilityUsed = true;
+
+        // Create a new player instance
+        String hero = "Mars";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(4);
+        player.setCurrentManaCap(4);
+        player.setCurrentArmor(0);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.marsAbilityUsed();
+
+        // Test that mana has been reduced by 2, armor has been increased by 2 and ability used this
+        // turn is true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedArmor,player.getCurrentArmor());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Mars' ability with insufficient mana should not increase player armor, and the ability
+     * should not be expected.
+     */
+    @Test
+    public void player_marsAbilityInsufficientMana() {
+        // Define expected properties
+        int expectedCurrentMana = 1;
+        int expectedArmor = 0;
+        boolean expectedAbilityUsed = false;
+
+        // Create a new player instance
+        String hero = "Mars";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(1);
+        player.setCurrentManaCap(1);
+        player.setCurrentArmor(0);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.marsAbilityUsed();
+
+        // Test that mana has been reduced by 2, armor has been increased by 2 and ability used this
+        // turn is true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedArmor,player.getCurrentArmor());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /**
+     * ----REPLACE BRUTALUS ABILITY TESTS HERE WHEN FULLY IMPLEMENTED----
+     */
+
+    /**
+     * ----REPLACE SAGIRA ABILITY TESTS HERE WHEN FULLY IMPLEMENTED----
+     */
+
+    
 
 }
