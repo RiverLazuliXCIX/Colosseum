@@ -15,6 +15,8 @@ import uk.ac.qub.eeecs.game.DemoGame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+ /* Tests for the screen 'SplashScreen'
+  Performed by @Diarmuid Toal Sprint 5. */
 
 @RunWith(AndroidJUnit4.class) // Testing Splash Screen
 public class SplashScreenTest {
@@ -105,5 +107,7 @@ public class SplashScreenTest {
         assetManager.loadAndAddBitmap(assetName, assetPath);
         assertFalse(assetManager.loadAndAddBitmap(assetName, assetPath));
     }
-
+    @Test
+    public void goToMenuScreen() {
+    }
 }
