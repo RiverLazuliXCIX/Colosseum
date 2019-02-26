@@ -11,7 +11,6 @@ import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
-import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -29,7 +28,7 @@ public class CoinTossScreen extends GameScreen {
     //Variables required for the time delay on this screen:
     final private long mCOINTOSS_TIMEOUT = 10000;
     private long mTimeOnCreate, mCurrentTime;
-    private long timeRemaining;
+    private long mTimeRemaining;
 
     //Variables required for the message (lines 1 and 2) to display properly
     private int mCoinTossResult = 0;
@@ -112,9 +111,10 @@ public class CoinTossScreen extends GameScreen {
         Input input = mGame.getInput();
 
         mCurrentTime = System.currentTimeMillis();
-        timeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
+        mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
         if (mCurrentTime - mTimeOnCreate >= mCOINTOSS_TIMEOUT) {
+            mGame.getScreenManager().getCurrentScreen().dispose();
             mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
         }
     }
@@ -139,7 +139,7 @@ public class CoinTossScreen extends GameScreen {
             graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.32f, mText);
             graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.38f, mText);
 
-            graphics2D.drawText("Game will begin in " + timeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mSmallText);
+            graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mSmallText);
         }
     }
 }

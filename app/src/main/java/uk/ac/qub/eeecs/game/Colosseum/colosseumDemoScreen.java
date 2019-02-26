@@ -333,7 +333,7 @@ public class colosseumDemoScreen extends GameScreen {
         mInput = mGame.getInput();
 
         while (!coinFlipDone) {
-            mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame, getCoinTossResult()));
+            mGame.getScreenManager().addScreen(new CoinTossScreen(mGame, getCoinTossResult()));
             coinFlipDone = true;
         }
 
