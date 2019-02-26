@@ -1,0 +1,15 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "CTSBackground",
+      "file": "img/papyrus-bg.jpg"
+    },
+
+    {
+      "type": "Bitmap",
+      "name": "CTSTitle",
+      "file": "img/CoinTossTitle.png"
+    }
+  ]
+}
