@@ -2,14 +2,8 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.icu.util.Output;
-import android.os.storage.StorageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +25,7 @@ import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 import uk.ac.qub.eeecs.game.FatigueScreen;
 
-/**
- * Starter class for Card game stories
- *
- * @version 1.0
- */
+
 public class colosseumDemoScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
@@ -337,11 +327,6 @@ public class colosseumDemoScreen extends GameScreen {
         }
     }
 
-    /**
-     * Update the card demo screen
-     *
-     * @param elapsedTime Elapsed time information
-     */
     @Override
     public void update(ElapsedTime elapsedTime) {
         // Process any touch events occurring since the update
@@ -431,11 +416,10 @@ public class colosseumDemoScreen extends GameScreen {
                         playerDeck.drawTopCard();
                         playerDeck.destroyCardOverLimit();
                     } else {
-                        mGame.getScreenManager().changeScreenButton(new FatigueScreen(mGame));
+                        mGame.getScreenManager().addScreen(new FatigueScreen(mGame));
                     }
                 }
 
-                ///
 
                 for (Card deckOfCards : dCards) //Allows each card held within the "dCards" variable to be dragged, Story 29 Sprint 5 Scott
                     deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
@@ -537,7 +521,6 @@ public class colosseumDemoScreen extends GameScreen {
         graphics2D.drawText("Hand: " + eCardsHand, spacingX * 7.0f, spacingY * 1.2f, mText);
         graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 7.0f, spacingY * 1.8f, mText);
     }
-
 
     public int getCoinTossResult() {
         return this.coinTossResult;
