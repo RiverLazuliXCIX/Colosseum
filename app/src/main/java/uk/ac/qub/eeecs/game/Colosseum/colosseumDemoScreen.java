@@ -113,6 +113,8 @@ public class colosseumDemoScreen extends GameScreen {
     public colosseumDemoScreen(Game game) {
         super("CardScreen", game);
 
+        coinFlipDone = false;
+
         setupViewports();
         setUpGameObjects();
         setUpDecks();

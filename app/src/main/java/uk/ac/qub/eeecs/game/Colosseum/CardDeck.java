@@ -110,14 +110,14 @@ public class CardDeck {
 
     public void insertSpellCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            Card mTestSpell = new Card(200, 200, mGameScreen, 3);
+            SpellCard mTestSpell = new SpellCard(200, 200, mGameScreen, 3, Effect.NONE, 1);
             mDeck.add(i, mTestSpell);
         }
     }
 
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            Card mTestWeapon = new Card(200, 200, mGameScreen, 3);
+            WeaponCard mTestWeapon = new WeaponCard(200, 200, mGameScreen, 3, 2, 1);
             mDeck.add(i, mTestWeapon);
         }
     }
@@ -165,7 +165,6 @@ public class CardDeck {
     public ArrayList<Card> getDeck() { return this.mDeck; }
     public ArrayList<Card> getmDiscardPile() { return this.mDiscardPile; }
     public ArrayList<Card> getmCardHand() { return this.mCardHand; }
-
     public int getDeckID() { return this.mDeckID; }
     public String getDeckName() { return this.mDeckName; }
     public GameScreen getmGameScreen() { return this.mGameScreen; }
@@ -182,7 +181,6 @@ public class CardDeck {
     public ArrayList<Card> setDeck(ArrayList<Card> newDeck) { return this.mDeck = newDeck; }
     public ArrayList<Card> setmDiscardPile(ArrayList<Card> newDiscard) {return this.mDiscardPile = newDiscard; }
     public ArrayList<Card> setmCardHand(ArrayList<Card> newHand) { return this.mCardHand = newHand; }
-
     public int setDeckID(int newDeckID) { return this.mDeckID = newDeckID; }
     public String setDeckName(String newDeckName) { return this.mDeckName = newDeckName; }
     public GameScreen setGameScreen(GameScreen newGameScreen) {return this.mGameScreen = newGameScreen; }
