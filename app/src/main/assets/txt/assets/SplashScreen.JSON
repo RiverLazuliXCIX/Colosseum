@@ -19,6 +19,11 @@
       "type": "Bitmap",
       "name": "TeamLogo",
       "file": "img/red-panda-face.png"
+    },
+    {
+      "type": "Music",
+      "name": "Bg-Music",
+      "file": "sound/Benedictus.mp3"
     }
   ]
 }

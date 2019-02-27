@@ -4,9 +4,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import java.util.List;
-import java.util.Random;
-
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
@@ -36,8 +33,8 @@ public class CoinTossScreen extends GameScreen {
     private String mCoinTossMsg2 = "";
 
     //Paint items that will be used to draw text
-    private Paint mText;
-    private Paint mSmallText;
+    private Paint mMessageText;
+    private Paint mTimerText;
 
     // Constructor
     //Create the 'CoinTossScreen' screen
@@ -66,20 +63,20 @@ public class CoinTossScreen extends GameScreen {
         // Create the title image
         mCoinTossTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "CTSTitle",this);
 
-        //PAINT OBJECT:
+        //PAINT OBJECTS:
         //Initialise Paint Objects I will use to draw text
-        mText = new Paint();
+        mMessageText = new Paint();
         int screenHeight = mDefaultScreenViewport.height;
         float textHeight = screenHeight / 20.0f;
-        mText.setTextSize(textHeight);
-        mText.setColor(Color.BLACK);
-        mText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+        mMessageText.setTextSize(textHeight);
+        mMessageText.setColor(Color.BLACK);
+        mMessageText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
 
-        mSmallText = new Paint();
+        mTimerText = new Paint();
         float smallTextHeight = screenHeight / 24.0f;
-        mSmallText.setTextSize(smallTextHeight);
-        mSmallText.setColor(Color.BLACK);
-        mSmallText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+        mTimerText.setTextSize(smallTextHeight);
+        mTimerText.setColor(Color.BLACK);
+        mTimerText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
     }
 
     public void setupViewports() {
@@ -136,10 +133,10 @@ public class CoinTossScreen extends GameScreen {
         float SCREEN_HEIGHT = mGame.getScreenWidth();
 
         if (mCurrentTime - mTimeOnCreate >= 3000) {
-            graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.32f, mText);
-            graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.38f, mText);
+            graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.32f, mMessageText);
+            graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.38f, mMessageText);
 
-            graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mSmallText);
+            graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
         }
     }
 }

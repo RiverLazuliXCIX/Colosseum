@@ -1,10 +1,14 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
+import uk.ac.qub.eeecs.gage.engine.audio.Music;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
@@ -29,6 +33,11 @@ public class SplashScreen extends GameScreen {
     private int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
     private int spacingY = (int) mDefaultLayerViewport.getHeight() / 4;
 
+    //Shared preferences for music:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreferences.edit();
+
     /**
      * Creating the 'Splash Screen' screen
      * @param game Game to which this screen belongs
@@ -40,6 +49,10 @@ public class SplashScreen extends GameScreen {
         timeOnCreate = System.currentTimeMillis();
         setupViewports();
         setUpSplashScreeneObjects();
+
+        //Set up Music Preferences:
+        mPrefEditor.putBoolean("Music", true);
+        mPrefEditor.commit();
     }
 
     //Methods
@@ -56,6 +69,7 @@ public class SplashScreen extends GameScreen {
         mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "SplashScreenTitle",this);
         mTouchToContinue = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 0.5f, spacingX * 2.0f, spacingY / 2.2f, "TouchToContinue", this);
         mTeamLogo = new TitleImage(mDefaultLayerViewport.getWidth() / 11.0f, spacingY * 3.0f,spacingX * 0.43f, spacingY / 1.5f, "TeamLogo", this);
+
     }
 
     private void setupViewports() {

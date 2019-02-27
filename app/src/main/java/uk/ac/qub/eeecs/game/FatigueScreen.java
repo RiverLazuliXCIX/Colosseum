@@ -28,7 +28,7 @@ public class FatigueScreen extends GameScreen {
     private LayerViewport mFatigueScreenViewport;
     private TitleImage mOhNoText;
     private Paint mText;
-    private Paint mSmallText;
+    private Paint mTimerText;
 
     public FatigueScreen(Game game) {
         super("FatigueScreen", game);
@@ -56,11 +56,11 @@ public class FatigueScreen extends GameScreen {
         mText.setColor(Color.BLACK);
         mText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
 
-        mSmallText = new Paint();
+        mTimerText = new Paint();
         float smallTextHeight = screenHeight / 24.0f;
-        mSmallText.setTextSize(smallTextHeight);
-        mSmallText.setColor(Color.BLACK);
-        mSmallText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+        mTimerText.setTextSize(smallTextHeight);
+        mTimerText.setColor(Color.BLACK);
+        mTimerText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
     }
 
     private void setupViewports() {
@@ -91,6 +91,11 @@ public class FatigueScreen extends GameScreen {
         }
     }
 
+    public void determineFatigueValue() {
+
+
+    }
+
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         //Clear the screen
@@ -107,7 +112,7 @@ public class FatigueScreen extends GameScreen {
         graphics2D.drawText("You have run out of cards. You take " + mDamageTaken + " damage this turn.", SCREEN_WIDTH * 0.2f, SCREEN_HEIGHT * 0.28f, mText);
 
         //Draw the text showing the timer
-        graphics2D.drawText("Game will resume in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mSmallText);
+        graphics2D.drawText("Game will resume in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
 
     }
 }

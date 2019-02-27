@@ -24,6 +24,21 @@
       "type": "Bitmap",
       "name": "CoinFlipSelected",
       "file": "img/coinflipselected.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "OptionsTitle",
+      "file": "img/OptionsTitle.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "OptButtonOn",
+      "file": "img/button_on.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "OptButtonOff",
+      "file": "img/button_off.png"
     }
     ]
 }

@@ -405,11 +405,9 @@ public class colosseumDemoScreen extends GameScreen {
                 }
 
 
-                //Still working on this - Dearbhaile
-                //TODO: Finish Fatigue Screen
                 //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
                 //On this screen, it will be displayed how much health they will lose (cumulative value)
-                //Screen then disappears after 3 seconds.
+                //Screen then disappears after 5 seconds. - Dearbhaile
 
                 if (mDrawButton.isPushTriggered()) {
                     if (!playerDeck.getDeck().isEmpty()) {
@@ -425,7 +423,7 @@ public class colosseumDemoScreen extends GameScreen {
                     deckOfCards.cardDrag(dCards, mDefaultScreenViewport, mGameViewport, mGame);
 
 
-                //Two sets of Hands (player and enemy) are able to be dragged:
+                //Two sets of Hands (player and enemy) are able to be dragged - Dearbhaile
                 for (Card cards : playerDeck.getmCardHand()) {
                     cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
                 }
@@ -460,7 +458,7 @@ public class colosseumDemoScreen extends GameScreen {
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         opponent.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-        //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image:
+        //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
         if (p2.getYourTurn())
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         else
@@ -479,7 +477,7 @@ public class colosseumDemoScreen extends GameScreen {
             graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
         }
 
-        //Draw the two player's hands, user and enemy:
+        //Draw the two player's hands, user and enemy - Dearbhaile
         for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
             playerDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
