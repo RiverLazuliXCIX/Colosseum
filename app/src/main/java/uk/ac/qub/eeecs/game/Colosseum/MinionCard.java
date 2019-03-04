@@ -14,7 +14,7 @@ public class MinionCard extends Card {
 
     // 'Default' Constructor
     public MinionCard(GameScreen gs) {
-        super(0, 0, gs, 1);
+        super(0, 0, gs, 1, false);
         setAttack(1);
         setMaxHealth(1);
         setHealth(1);
@@ -22,7 +22,7 @@ public class MinionCard extends Card {
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health) {
-        super(x, y, gs, coinCost);
+        super(x, y, gs, coinCost, false);
         setAttack(attack);
         setMaxHealth(health);
         setHealth(health);
@@ -30,7 +30,7 @@ public class MinionCard extends Card {
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health, Effect mEffect) {
-        super(x, y, gs, coinCost);
+        super(x, y, gs, coinCost, false);
         setAttack(attack);
         setMaxHealth(health);
         setHealth(health);
@@ -38,7 +38,7 @@ public class MinionCard extends Card {
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
-        super(x, y, gs, coinCost);
+        super(x, y, gs, coinCost, false);
         setAttack(attack);
         setMaxHealth(maxHealth);
         setHealth(health);
@@ -47,7 +47,7 @@ public class MinionCard extends Card {
 
     // Copy Constructor
     public MinionCard(float x, float y, MinionCard mc) {
-        super(x, y, mc.getGameScreen(), mc.getCoinCost());
+        super(x, y, mc.getGameScreen(), mc.getCoinCost(), mc.getIsEnemy());
         setAttack(mc.getAttack());
         setMaxHealth(mc.getMaxHealth());
         setHealth(mc.getHealth());

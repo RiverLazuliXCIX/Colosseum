@@ -55,9 +55,12 @@ public class Card extends GameObject {
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
     private Boolean draggable = true; // Card should not be draggable if it is locked in its region
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
+    private Boolean isEnemy = false;
     //Define the attack and defence values
     //private int attack, defence, mana;
     private int coinCost;
+
+
 
     //Set offset and scale values for positioning
 
@@ -88,9 +91,12 @@ public class Card extends GameObject {
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
      */
-    public Card(float startX, float startY, GameScreen gameScreen, int coinCost) {//, String cardName) {
+    public Card(float startX, float startY, GameScreen gameScreen, int coinCost, Boolean isEnemy) {//, String cardName) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
+
+        if(this.isEnemy)
+            flipCard(this.mGameScreen.getGame());
 
         setCoinCost(coinCost);
         // Store each of the damage/health digits
@@ -372,6 +378,9 @@ public class Card extends GameObject {
 
     public int getCoinCost() { return this.coinCost; }
     public void setCoinCost(int coinCost) { this.coinCost = coinCost; }
+
+    public boolean getIsEnemy() { return this.isEnemy; }
+    public void setIsEnemy(Boolean isEnemy) { this.isEnemy = isEnemy; }
 
     public Card getCard(int i) { return this; }
 }

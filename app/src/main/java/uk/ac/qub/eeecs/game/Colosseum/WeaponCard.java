@@ -8,18 +8,18 @@ public class WeaponCard extends Card {
 
     // 'Default' constructor
     public WeaponCard(GameScreen gs) {
-        super(0, 0, gs, 1);
+        super(0, 0, gs, 1, false);
     }
 
     public WeaponCard(float x, float y, GameScreen gs, int coinCost, int damage, int charges) {
-        super(x, y, gs, coinCost);
+        super(x, y, gs, coinCost, false);
         setDamage(damage);
         setCharges(charges);
     }
 
     // Copy Constructor
     public WeaponCard(float x, float y, WeaponCard wc) {
-        super(x, y, wc.getGameScreen(), wc.getCoinCost());
+        super(x, y, wc.getGameScreen(), wc.getCoinCost(), wc.getIsEnemy());
         setDamage(wc.getDamage());
         setCharges(wc.getCharges());
     }
