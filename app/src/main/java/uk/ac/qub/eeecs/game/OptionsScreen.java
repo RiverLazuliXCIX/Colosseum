@@ -149,12 +149,8 @@ public class OptionsScreen extends GameScreen {
             mMusicOff.update(elapsedTime);
             mMusicOn.update(elapsedTime);
 
-            if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen (menu screen)
-                if(mGame.getScreenManager().previousScreen("PauseScreen")){
-                    mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
-                } else {
-                    mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame)); //Refactored return button
-                }
+            if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen
+                mGame.getScreenManager().previousScreen(); //Calls the "previousScreen" method to return to the screen listed below this in the stack (as this screen can be reached from different screens).
             }
 
             if (mMusicOn.isPushTriggered()) {

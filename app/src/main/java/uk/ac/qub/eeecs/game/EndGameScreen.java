@@ -27,8 +27,8 @@ public class EndGameScreen extends GameScreen {
     private static String mostRecentResult = ""; //holder for the most recent result
     private static boolean coinFlipResult = false; //holder for the coin flip result
     private static boolean concedeResult = false; //holder for if the player concedes
-
-
+    private static long timePlayed; //Used for recording the time of the game
+    private double timePlayedDisplay = 0.0; //used for displaying the time of the game
     /**
      * Constructor for the How To Play screen
      *
@@ -76,7 +76,6 @@ public class EndGameScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
-
     }
 
     //Getters and setters for most recent results
@@ -84,6 +83,10 @@ public class EndGameScreen extends GameScreen {
         return mostRecentResult;
     }
     public static void setMostRecentResult(String resultInput) { mostRecentResult = resultInput; }
+
+    //Getters and setters for time played result
+    public static long getTimePlayed() { return timePlayed; }
+    public static void setTimePlayed(long timePlayed) { EndGameScreen.timePlayed = timePlayed; }
 
     //Getters and setters for coin flip result
     public static boolean getCoinFlipResult() {
@@ -102,6 +105,9 @@ public class EndGameScreen extends GameScreen {
     private void addStatstics() {
         double i = StatisticsScreen.getTotalLosses();
         double j = StatisticsScreen.getTotalWins();
+
+        StatisticsScreen.setRecentGameTime(timePlayedDisplay); //Set the most recent time played
+        StatisticsScreen.setTotalGameTime(StatisticsScreen.getTotalGameTime()+timePlayedDisplay); //Calculate a total time played
 
         if(mostRecentResult=="win") {
             StatisticsScreen.setMostRecentResult("Win");
@@ -123,7 +129,7 @@ public class EndGameScreen extends GameScreen {
      */
     @Override
     public void update(ElapsedTime elapsedTime) {
-
+        timePlayedDisplay = timePlayed/1000.0;
 
         // Process any touch events occurring since the last update
         Input input = mGame.getInput();
@@ -135,19 +141,19 @@ public class EndGameScreen extends GameScreen {
             for (PushButton button : pushButtons)
                 button.update(elapsedTime);
 
-            // If the back button is pressed, return to the previous screen
-            if (menuButton.isPushTriggered()) {
-                //return to main menu
-                addStatstics();
-                mGame.getScreenManager().removeScreen("CardScreen");
-                mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
+            if (menuButton.isPushTriggered()) { //Return to main menu
+                changeScreen(new MenuScreen(mGame));
             }
-            if(newGameButton.isPushTriggered()) {
-                addStatstics();
-                mGame.getScreenManager().removeScreen("CardScreen");
-                mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
+            if(newGameButton.isPushTriggered()) { //Start a new game
+                changeScreen(new colosseumDemoScreen(mGame));
             }
         }
+    }
+
+    private void changeScreen(GameScreen gameScreen) { //Refactoring when a button is pressed for reusability
+        addStatstics(); //Add the recent statistics to the statistics screen
+        mGame.getScreenManager().removeScreen("CardScreen"); //remove the card game screen, so new games can be started
+        mGame.getScreenManager().changeScreenButton(gameScreen); //Change the screen to the input screen.
     }
 
     private Paint textPaint = new Paint();
@@ -176,12 +182,12 @@ public class EndGameScreen extends GameScreen {
         textPaint.setTextSize(textHeight); //create a appropriate sizing of text
 
         graphics2D.drawText("Your game has finished", mGameViewport.getWidth()*1.6f, mGameViewport.getHeight()*0.6f, textPaint);
-        graphics2D.drawText("You achieved a " + (String.valueOf(mostRecentResult)), mGameViewport.getWidth()*1.68f, mGameViewport.getHeight()*1.3f, textPaint);
+        graphics2D.drawText("Your game resulted in a " + (String.valueOf(mostRecentResult)), mGameViewport.getWidth()*1.5f, mGameViewport.getHeight()*1.3f, textPaint);
         if(mostRecentResult=="win") {
             graphics2D.drawText("Congratulations on your win!", mGameViewport.getWidth()*1.53f, mGameViewport.getHeight()*2.0f, textPaint);
         } else if(mostRecentResult=="loss") {
             if(concedeResult){
-                graphics2D.drawText("You conceded your last game, better luck next time!", mGameViewport.getWidth()*1.2f, mGameViewport.getHeight()*2.0f, textPaint);
+                graphics2D.drawText("You conceded your last game, better luck next time!", mGameViewport.getWidth()*1.15f, mGameViewport.getHeight()*2.0f, textPaint);
             } else {
                 graphics2D.drawText("Unfortunate result, good luck next time!", mGameViewport.getWidth() * 1.35f, mGameViewport.getHeight() * 2.0f, textPaint);
             }
@@ -192,6 +198,7 @@ public class EndGameScreen extends GameScreen {
             graphics2D.drawText("You have got extremely lucky and won with the coin flip landing on it's edge! Congratulations!", mGameViewport.getWidth()*0.5f, mGameViewport.getHeight()*2.5f, textPaint);
         }
         graphics2D.drawText("Your statistics screen has been updated.", mGameViewport.getWidth()*1.34f, mGameViewport.getHeight()*3.0f, textPaint);
+        graphics2D.drawText("Time played: " + (String.valueOf(timePlayedDisplay)) + " seconds.", mGameViewport.getWidth()*1.5f, mGameViewport.getHeight()*3.5f, textPaint);
 
     }
 }

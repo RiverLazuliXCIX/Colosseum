@@ -71,6 +71,8 @@ public class colosseumDemoScreen extends GameScreen {
     private int coinTossResult;
 
     boolean coinFlipDone = false;
+    private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
+    private static boolean wasPaused = false;
 
     // Define a test Opponent
     private AIOpponent opponent;
@@ -262,7 +264,6 @@ public class colosseumDemoScreen extends GameScreen {
         coinTossResult = coinFlipStart();
         switch (coinTossResult) {
             case 0: // ie, player starts
-
                 p2.setYourTurn(true);
                 for (int i = 0; i < 3; i++) {
                     playerDeck.drawTopCard();
@@ -284,10 +285,9 @@ public class colosseumDemoScreen extends GameScreen {
                 }
                 break;
             case 2: //edge of coin - set opponent health to 0, auto win game.
-
+                EndGameScreen.setCoinFlipResult(true);
                 break;
             default: //output an error as this should not be reached
-
                 break;
         }
     }
@@ -318,6 +318,8 @@ public class colosseumDemoScreen extends GameScreen {
         edgeCase = edgeCaseInput;
     }
 
+    public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
+
     public void createMultipleCoins(List<GameObject> denarius, float spacingX, float spacingY, float scaleVert, Bitmap b) {
         float scaleHor = 2.95f;
 
@@ -332,7 +334,13 @@ public class colosseumDemoScreen extends GameScreen {
         // Process any touch events occurring since the update
         mInput = mGame.getInput();
 
+        if(wasPaused) { //If the game was paused, gather the total time it was paused for
+            wasPaused=false;
+            pauseTimeTotal += System.currentTimeMillis()-pauseTime;//gather a total paused time, in the case of a user pausing multiple times
+        }
+
         while (!coinFlipDone) {
+            startTime = System.currentTimeMillis(); //get the initial start time once at start of game
             mGame.getScreenManager().addScreen(new CoinTossScreen(mGame, getCoinTossResult()));
             coinFlipDone = true;
         }
@@ -345,7 +353,8 @@ public class colosseumDemoScreen extends GameScreen {
                 Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
             } catch (InterruptedException e) {
             }
-            EndGameScreen.setMostRecentResult("win");
+            EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
+            EndGameScreen.setMostRecentResult("win"); //Record the result
             mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
         } else if (p2.getCurrentHealth() <= 0 || opponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
             try {
@@ -354,12 +363,13 @@ public class colosseumDemoScreen extends GameScreen {
             }
 
             if (p2.getCurrentHealth() <= 0 && opponent.getCurrentHealth() <= 0) { //if both sides health is 0 or less, the game ends in a draw
-                EndGameScreen.setMostRecentResult("draw");
+                EndGameScreen.setMostRecentResult("draw"); //Record the result
             } else if (p2.getCurrentHealth() <= 0) { //if the player reaches 0 or less health, they lose
-                EndGameScreen.setMostRecentResult("loss");
+                EndGameScreen.setMostRecentResult("loss"); //Record the result
             } else if (opponent.getCurrentHealth() <= 0) { //if the opponent reaches 0 or less health, the player wins
-                EndGameScreen.setMostRecentResult("win");
+                EndGameScreen.setMostRecentResult("win"); //Record the result
             }
+            EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
             mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //swap to the end game screen regardless of whatever outcome occurs
         } else {
 
@@ -394,6 +404,9 @@ public class colosseumDemoScreen extends GameScreen {
                     button.update(elapsedTime);
 
                 if (mPauseButton.isPushTriggered()) {
+                    pauseTime = System.currentTimeMillis(); //gather the current time when the game is being paused
+                    wasPaused = true; //allow for a check when the game is next active, to calculate pause time.
+                    EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic incase of a "concede"
                     mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
                 }
 
