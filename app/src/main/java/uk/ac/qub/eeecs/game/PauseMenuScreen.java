@@ -120,6 +120,7 @@ public class PauseMenuScreen extends GameScreen {
             } else if (mConcede.isPushTriggered()) {
                 EndGameScreen.setMostRecentResult("loss");
                 EndGameScreen.setConcedeResult(true);
+                colosseumDemoScreen.setWasPaused(false); //Set this back to false for a new game
                 mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
             }
         }

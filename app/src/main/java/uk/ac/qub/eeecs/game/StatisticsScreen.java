@@ -28,6 +28,10 @@ public class StatisticsScreen extends GameScreen {
     private double winLossRatio = 0.0; //holder for the ratio of wins/losses
     private double winPercent = 0.0; //holder for win percentage
     private double totalGamesPlayed = 0; //create a count for total number of games played.
+    private static double recentGameTime = 0.0; //most recent game time
+    private static double totalGameTime = 0.0; //total game time for this session
+    private boolean winStreak = false, lossStreak = false; //used to determine if the user is on a win or loss streak
+    private static int ownMinionsKilled, enemyMinionsKilled; //for how many minions on their side, or enemy side have died (total).
 
 
     /**
@@ -82,6 +86,18 @@ public class StatisticsScreen extends GameScreen {
         totalWins = winInput;
     }
 
+    //Setter for most recent time
+    public static void setRecentGameTime(double recentTime) {recentGameTime = recentTime; }
+    //Getter and setter for total game time
+    public static double getTotalGameTime() { return totalGameTime; }
+    public static void setTotalGameTime(double totalTime) { totalGameTime = totalTime; }
+
+    //Getters and setters for minions killed
+    public static int getOwnMinionsKilled() { return ownMinionsKilled; }
+    public static void setOwnMinionsKilled(int ownMinionsKilled) { StatisticsScreen.ownMinionsKilled = ownMinionsKilled; }
+    public static int getEnemyMinionsKilled() { return enemyMinionsKilled; }
+    public static void setEnemyMinionsKilled(int enemyMinionsKilled) { StatisticsScreen.enemyMinionsKilled = enemyMinionsKilled; }
+
     //Getters and setters for total losses
     public static double getTotalLosses() {
         return totalLosses;
@@ -123,11 +139,7 @@ public class StatisticsScreen extends GameScreen {
 
             // If the back button is pressed, return to the previous screen
             if (backButton.isPushTriggered()) {
-                if(mGame.getScreenManager().previousScreen("PauseScreen")){ //If its the mini pause screen, return to there
-                    mGame.getScreenManager().changeScreenButton(new PauseMenuScreen(mGame));
-                } else { //Else return to main menu
-                    mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
-                }
+                mGame.getScreenManager().previousScreen(); //Calls the "previousScreen" method to return to the screen listed below this in the stack (as this screen can be reached from different screens).
             }
         }
     }

@@ -27,7 +27,6 @@ public abstract class FPSCounter extends GameObject {
     private static long sinceLastUpdate = 0; //holds the system time since the last update of fps
     private static int updateAmount = 0; //used to count how many seconds has passed since the start to calculate an average
     final private static long ONE_SECOND = 1000000000L; //1,000x1,000,000, 1second = 1000MS, 1MS = 1,000,000NS. So 1,000MSx1,000,000NS = 1 Second
-    private static long firstTime = -1; //Used to capture the system time of the first iteration
 
     private float x,y;
     private GameScreen gameScreen;
@@ -64,9 +63,6 @@ public abstract class FPSCounter extends GameObject {
     public void update(ElapsedTime elapsedTime) {
 
         recentFrames++; //count the number of frames that passes each update
-        if(firstTime == -1){ //if this is the first update, then set the variable "firstTime" to the current system time
-            firstTime = System.nanoTime();
-        }
 
         if(ONE_SECOND < System.nanoTime() - sinceLastUpdate) { //If one second passes
             //Story P1
