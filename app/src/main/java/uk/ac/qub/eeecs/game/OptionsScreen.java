@@ -3,24 +3,18 @@ package uk.ac.qub.eeecs.game;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
-import uk.ac.qub.eeecs.gage.engine.audio.Music;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.ui.ToggleButton;
-import uk.ac.qub.eeecs.gage.util.Vector2;
-import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.ui.FPSCounter; //Story P1
@@ -30,7 +24,7 @@ import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 public class OptionsScreen extends GameScreen {
 
     private FPSCounter fpsCounter;
-    private PushButton mBackButton, htpButton;
+    private PushButton mBackButton;
     private List<PushButton> mButtons = new ArrayList<>();
     private ToggleButton tEdgeCaseButton;
     private List<ToggleButton> tButtons = new ArrayList<>();
@@ -49,17 +43,10 @@ public class OptionsScreen extends GameScreen {
     //PushButtons used to toggle on and off the FPS counter:
     private PushButton mFPSon, mFPSoff;
 
-    // Spacing that will be used to position the buttons:
-    float SCREEN_WIDTH = mGame.getScreenWidth();
-    float SCREEN_HEIGHT = mGame.getScreenWidth();
-
     //Information needed to set Music Preferences:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
     private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
-
-    //Paint item that will be used to draw text
-    private Paint mSettingsText;
 
     //Constructor
     public OptionsScreen(Game game) {
@@ -89,14 +76,32 @@ public class OptionsScreen extends GameScreen {
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
+        // Spacing for title and buttons - they should be right in the middle of the screen:
+        float mHalfWidth = mDefaultLayerViewport.getWidth() / 2.0f;
+
+        float mButtonWidth = mDefaultLayerViewport.getWidth() / 4;
+        float mButtonHeight = mDefaultLayerViewport.getHeight() / 5;
+
         //Set up the 'Options' Title Image:
-        mOptionsTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "OptionsTitle",this);
+        mOptionsTitle = new TitleImage(mHalfWidth, spacingY * 2.5f, mButtonWidth, spacingY/2.2f, "OptionsTitle",this);
 
         //Create the buttons necessary to set music preferences - Dearbhaile
         mMusicOn = new PushButton(
-                spacingX * 3.55f, spacingY * 1.95f, spacingX*0.4f, spacingY*0.3f, "OptButtonOff",this);
+                mHalfWidth, spacingY * 1.95f, mButtonWidth, mButtonHeight, "OptButtonOn",this);
         mMusicOff = new PushButton(
-                spacingX * 3.55f, spacingY * 1.95f, spacingX*0.4f, spacingY*0.3f, "OptButtonOn",this);
+                mHalfWidth, spacingY * 1.95f, mButtonWidth, mButtonHeight, "OptButtonOff",this);
+
+        //Create the buttons necessary to set up SFX preferences - Dearbhaile
+        mSFXon = new PushButton(
+                mHalfWidth, spacingY * 1.30f, mButtonWidth, mButtonHeight, "SfxButtonOn", this);
+        mSFXoff = new PushButton(
+                mHalfWidth, spacingY * 1.30f, mButtonWidth, mButtonHeight, "SfxButtonOff", this);
+
+        //Create the buttons necessary to set up FPS preferences - Dearbhaile
+        mFPSon = new PushButton(
+                mHalfWidth, spacingY * 0.65f, mButtonWidth, mButtonHeight, "FpsButtonOn", this);
+        mFPSoff = new PushButton(
+                mHalfWidth, spacingY * 0.65f, mButtonWidth, mButtonHeight, "FpsButtonOff", this);
 
         //Set up the fps counter - Scott Barham
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
@@ -119,15 +124,6 @@ public class OptionsScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
-
-        //PAINT OBJECT:
-        //Initialise Paint Objects I will use to draw text
-        mSettingsText = new Paint();
-        int screenHeight = mDefaultScreenViewport.height;
-        float textHeight = screenHeight / 16.0f;
-        mSettingsText.setTextSize(textHeight);
-        mSettingsText.setColor(Color.BLACK);
-        mSettingsText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
     }
 
     // Methods
@@ -146,13 +142,21 @@ public class OptionsScreen extends GameScreen {
             for (PushButton button : mButtons)
                 button.update(elapsedTime);
 
+            //These buttons are not in mButtons, as they are drawn differently to the rest
+            //Thus, they must be updated separately from those in the Array List.
             mMusicOff.update(elapsedTime);
             mMusicOn.update(elapsedTime);
+            mSFXoff.update(elapsedTime);
+            mSFXon.update(elapsedTime);
+            mFPSoff.update(elapsedTime);
+            mFPSon.update(elapsedTime);
 
             if (mBackButton.isPushTriggered()) { //Story O3, if the back button is pressed, go back to previous screen
                 mGame.getScreenManager().previousScreen(); //Calls the "previousScreen" method to return to the screen listed below this in the stack (as this screen can be reached from different screens).
             }
 
+            //Conditions for what happens when you click one of the 3 buttons.
+            //TODO: Refactor this code - too much repetition (Dearbhaile)
             if (mMusicOn.isPushTriggered()) {
                 if (mGetPreference.getBoolean("Music", false)) {
                     mPrefEditor.putBoolean("Music", true);
@@ -169,6 +173,46 @@ public class OptionsScreen extends GameScreen {
                     mPrefEditor.commit();
                 } else {
                     mPrefEditor.putBoolean("Music", true);
+                    mPrefEditor.commit();
+                }
+            }
+
+            if (mSFXon.isPushTriggered()) {
+                if (mGetPreference.getBoolean("SFX", false)) {
+                    mPrefEditor.putBoolean("SFX", true);
+                    mPrefEditor.commit();
+                } else {
+                    mPrefEditor.putBoolean("SFX", false);
+                    mPrefEditor.commit();
+                }
+            }
+
+            if (mSFXoff.isPushTriggered()) {
+                if (mGetPreference.getBoolean("SFX", true)) {
+                    mPrefEditor.putBoolean("SFX", false);
+                    mPrefEditor.commit();
+                } else {
+                    mPrefEditor.putBoolean("SFX", true);
+                    mPrefEditor.commit();
+                }
+            }
+
+            if (mFPSon.isPushTriggered()) {
+                if (mGetPreference.getBoolean("FPS", true)) {
+                    mPrefEditor.putBoolean("FPS", false);
+                    mPrefEditor.commit();
+                } else {
+                    mPrefEditor.putBoolean("FPS", true);
+                    mPrefEditor.commit();
+                }
+            }
+
+            if (mFPSoff.isPushTriggered()) {
+                if (mGetPreference.getBoolean("FPS", false)) {
+                    mPrefEditor.putBoolean("FPS", true);
+                    mPrefEditor.commit();
+                } else {
+                    mPrefEditor.putBoolean("FPS", false);
                     mPrefEditor.commit();
                 }
             }
@@ -193,9 +237,12 @@ public class OptionsScreen extends GameScreen {
         mOptionBackground.draw(elapsedTime, graphics2D, mDefaultLayerViewport,
                 mDefaultScreenViewport);
 
+        //Draw the Title 'Options' onscreen - Dearbhaile
         mOptionsTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        fpsCounter.draw(elapsedTime,graphics2D); //Story P1
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
 
         //Then draw the back button in (and any other buttons if added later) - Story O3
         for (PushButton button : mButtons)
@@ -204,12 +251,23 @@ public class OptionsScreen extends GameScreen {
         for (ToggleButton tbutton : tButtons)
             tbutton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
+        //TODO: Refactor this code - too much repetition (Dearbhaile)
         if(mGetPreference.getBoolean("Music", true)) {
             mMusicOff.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         } else {
             mMusicOn.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
         }
 
-        graphics2D.drawText("Background Music Playing:", SCREEN_WIDTH * 0.20f, SCREEN_HEIGHT * 0.18f, mSettingsText);
+        if(mGetPreference.getBoolean("SFX", true)) {
+            mSFXoff.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        } else {
+            mSFXon.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        }
+
+        if(mGetPreference.getBoolean("FPS", true)) {
+            mFPSoff.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        } else {
+            mFPSon.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        }
     }
 }

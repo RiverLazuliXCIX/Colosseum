@@ -33,12 +33,32 @@
     {
       "type": "Bitmap",
       "name": "OptButtonOn",
-      "file": "img/button_on.png"
+      "file": "img/button_music-on.png"
     },
     {
       "type": "Bitmap",
       "name": "OptButtonOff",
-      "file": "img/button_off.png"
+      "file": "img/button_music-off.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "SfxButtonOn",
+      "file": "img/button_sfx-on.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "SfxButtonOff",
+      "file": "img/button_sfx-off.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "FpsButtonOn",
+      "file": "img/button_fps-on.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "FpsButtonOff",
+      "file": "img/button_fps-off.png"
     }
     ]
 }

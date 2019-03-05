@@ -126,15 +126,6 @@ public class MenuScreen extends GameScreen {
         mMenuViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-    //Methods that control background music:
-    public void playBackgroundMusic() {
-        while (!mBgMusicMenu.isPlaying()) {
-            mBgMusicMenu.setLopping(true);
-            mBgMusicMenu.setVolume(1);
-            mBgMusicMenu.play();
-        }
-    }
-
     public void stopBackgroundMusic() {
         while (mBgMusicMenu.isPlaying()) {
             mBgMusicMenu.stop();
@@ -204,7 +195,5 @@ public class MenuScreen extends GameScreen {
         //Draw the buttons using enhanced for loops
         for (PushButton button : mButtons)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-
-
     }
 }

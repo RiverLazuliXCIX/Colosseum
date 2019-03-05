@@ -52,6 +52,8 @@ public class SplashScreen extends GameScreen {
 
         //Set up Music Preferences:
         mPrefEditor.putBoolean("Music", true);
+        mPrefEditor.putBoolean("SFX", true);
+        mPrefEditor.putBoolean("FPS", false);
         mPrefEditor.commit();
     }
 
