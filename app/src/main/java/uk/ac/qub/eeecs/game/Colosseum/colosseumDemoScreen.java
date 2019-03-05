@@ -36,9 +36,6 @@ public class colosseumDemoScreen extends GameScreen {
     private Input mInput;
     private static final Random RANDOM = new Random();
 
-    //Define cards
-    private List<Card> mCards = new ArrayList<Card>();
-
     //Define the background board
     private GameObject mGameBackground;
 
@@ -265,6 +262,8 @@ public class colosseumDemoScreen extends GameScreen {
         switch (coinTossResult) {
             case 0: // ie, player starts
                 p2.setYourTurn(true);
+                opponent.setCurrentMana(5);
+                opponent.setCurrentManaCap(5);
                 for (int i = 0; i < 3; i++) {
                     playerDeck.drawTopCard();
                 }
@@ -276,6 +275,8 @@ public class colosseumDemoScreen extends GameScreen {
 
             case 1: // ie, ai starts
                 p2.setYourTurn(false);
+                p2.setCurrentMana(5);
+                p2.setCurrentManaCap(5);
                 for (int i = 0; i < 4; i++) {
                     playerDeck.drawTopCard();
                 }
