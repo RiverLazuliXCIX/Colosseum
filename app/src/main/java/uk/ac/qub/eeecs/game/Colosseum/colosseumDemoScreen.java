@@ -45,9 +45,8 @@ public class colosseumDemoScreen extends GameScreen {
     //Array List to hold the Push Buttons
     private List<PushButton> mButtons = new ArrayList<>();
 
-    //Push button for ending player's turn
-    private PushButton mEndTurnButton;
-    private PushButton mEndTurnButtonOff;
+    //Push buttons for ending player's turn
+    private PushButton mEndTurnButton, mEndTurnButtonOff;
 
     //Push Button for pausing the game
     private PushButton mPauseButton;
@@ -67,7 +66,12 @@ public class colosseumDemoScreen extends GameScreen {
     //Set up an int value for holding the coin flip result
     private int coinTossResult;
 
+    //Set up a boolean value for whether or not coin flip is finished
     boolean coinFlipDone = false;
+
+    //Set up an int value to hold the fatigue due to be taken from the player
+    int mFatigueCounter = 0;
+
     private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
     private static boolean wasPaused = false;
 
@@ -256,7 +260,7 @@ public class colosseumDemoScreen extends GameScreen {
     }
 
     // Method for building hand (4 if heads, 3 if tails) - Dearbhaile
-
+    //TODO: Refactor this entire section. Too much repeated code. - Dearbhaile
     private void coinFlipResult() {
         coinTossResult = coinFlipStart();
         switch (coinTossResult) {
@@ -310,16 +314,6 @@ public class colosseumDemoScreen extends GameScreen {
             }
         }
     }
-
-    public boolean getEdgeCase() {
-        return edgeCase;
-    }
-
-    public static void setEdgeCase(boolean edgeCaseInput) {
-        edgeCase = edgeCaseInput;
-    }
-
-    public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
 
     public void createMultipleCoins(List<GameObject> denarius, float spacingX, float spacingY, float scaleVert, Bitmap b) {
         float scaleHor = 2.95f;
@@ -428,7 +422,9 @@ public class colosseumDemoScreen extends GameScreen {
                         playerDeck.drawTopCard();
                         playerDeck.destroyCardOverLimit();
                     } else {
-                        mGame.getScreenManager().addScreen(new FatigueScreen(mGame));
+                        mFatigueCounter++;
+                        mGame.getScreenManager().addScreen(new FatigueScreen(mGame, mFatigueCounter));
+                        p2.receiveDamage(mFatigueCounter);
                     }
                 }
 
@@ -537,4 +533,14 @@ public class colosseumDemoScreen extends GameScreen {
     public int getCoinTossResult() {
         return this.coinTossResult;
     }
+
+    public boolean getEdgeCase() {
+        return edgeCase;
+    }
+
+    public static void setEdgeCase(boolean edgeCaseInput) {
+        edgeCase = edgeCaseInput;
+    }
+
+    public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
 }

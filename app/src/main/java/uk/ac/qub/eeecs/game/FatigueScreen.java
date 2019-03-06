@@ -19,10 +19,10 @@ import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 public class FatigueScreen extends GameScreen {
 
     //Variables required for the Fatigue Screen:
-    final private long FATIGUE_TIMEOUT = 5000;
+    final private long FATIGUE_TIMEOUT = 3000;
     private long mTimeOnCreate, mCurrentTime;
     private long mTimeRemaining;
-    private int mDamageTaken = 0;
+    private int mDamageTaken;
 
     //Objects required for the appearance of the Fatigue Screen:
     private LayerViewport mFatigueScreenViewport;
@@ -30,9 +30,11 @@ public class FatigueScreen extends GameScreen {
     private Paint mText;
     private Paint mTimerText;
 
-    public FatigueScreen(Game game) {
+    public FatigueScreen(Game game, int damageToTake) {
         super("FatigueScreen", game);
         mTimeOnCreate = System.currentTimeMillis();
+        this.mDamageTaken = damageToTake;
+
         setupViewports();
         setUpFatigueScreenObjects();
     }
@@ -81,7 +83,7 @@ public class FatigueScreen extends GameScreen {
         Input input = mGame.getInput();
 
         mCurrentTime = System.currentTimeMillis();
-        mTimeRemaining = 5 - ((mCurrentTime - mTimeOnCreate)/1000);
+        mTimeRemaining = 3 - ((mCurrentTime - mTimeOnCreate)/1000);
 
         //Get current time and check for timeout
         mCurrentTime = System.currentTimeMillis();
@@ -89,11 +91,6 @@ public class FatigueScreen extends GameScreen {
             mGame.getScreenManager().getCurrentScreen().dispose();
             mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
         }
-    }
-
-    public void determineFatigueValue() {
-
-
     }
 
     @Override
