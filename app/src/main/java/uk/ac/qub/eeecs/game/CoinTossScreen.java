@@ -168,4 +168,10 @@ public class CoinTossScreen extends GameScreen {
             graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
         }
     }
+
+    //Getters and setters:
+    public int getmCoinTossResult() { return this.mCoinTossResult; }
+    public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
+    public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
+
 }

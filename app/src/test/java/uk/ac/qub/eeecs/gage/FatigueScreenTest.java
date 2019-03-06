@@ -7,8 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.ac.qub.eeecs.game.FatigueScreenForTesting;
+import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeNotNull;
 import static org.mockito.Mockito.when;
 
@@ -28,15 +29,15 @@ public class FatigueScreenTest {
 
     //The following tests are to test the FatigueScreen constructor:
     @Test
-    public void constructor_SetUpFully() {
+    public void screen_SetUpFully() {
         //This test is to ensure that the constructor successfully creates an instance of FatigueScreen
         FatigueScreenForTesting f1 = new FatigueScreenForTesting(mGame, 5);
 
-        assumeNotNull(f1);
+        assertNotNull(f1);
     }
 
     @Test
-    public void constructor_NameCorrect() {
+    public void screen_NameCorrect() {
         //This test is to ensure that the correct name is assigned to the new FatigueScreen
         FatigueScreenForTesting f1 = new FatigueScreenForTesting(mGame, 5);
 

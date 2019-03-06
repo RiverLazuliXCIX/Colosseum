@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game;
+package uk.ac.qub.eeecs.game.TestScreens;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -34,16 +34,10 @@ public class FatigueScreenForTesting extends GameScreen {
         super("FatigueScreen", game);
         mTimeOnCreate = System.currentTimeMillis();
         this.mDamageTaken = damageToTake;
-
         setupViewports();
-        setUpFatigueScreenObjects();
     }
 
     //Methods
-    private void setUpFatigueScreenObjects() {
-
-    }
-
     private void setupViewports() {
         // Setup the screen viewport to use the full screen.
         mDefaultScreenViewport.set(0, 0, mGame.getScreenWidth(), mGame.getScreenHeight());
