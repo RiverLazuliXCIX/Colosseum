@@ -4,10 +4,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import java.util.List;
+
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
+import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -23,9 +27,12 @@ public class CoinTossScreen extends GameScreen {
     private TitleImage mCoinTossTitle;
 
     //Variables required for the time delay on this screen:
-    final private long mCOINTOSS_TIMEOUT = 10000;
+    private long mCOINTOSS_TIMEOUT = 10000;
     private long mTimeOnCreate, mCurrentTime;
     private long mTimeRemaining;
+
+    //Create PushButton necessary to skip animation
+    PushButton mSkipButton;
 
     //Variables required for the message (lines 1 and 2) to display properly
     private int mCoinTossResult = 0;
@@ -43,6 +50,9 @@ public class CoinTossScreen extends GameScreen {
         mTimeOnCreate = System.currentTimeMillis();
         setupViewports();
         setUpCTSObjects();
+
+        //This next line assigns the coinToss result from the colosseumDemoScreen
+        //and assigns it for use in this screen to determine which message is displayed.
         this.mCoinTossResult = coinToss;
         chooseTextToDisplay();
     }
@@ -62,6 +72,10 @@ public class CoinTossScreen extends GameScreen {
 
         // Create the title image
         mCoinTossTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "CTSTitle",this);
+
+        //Create the Skip button
+        mSkipButton = new PushButton(spacingX * 3.9f, spacingY * 2.5f, spacingX*0.8f, spacingY*0.8f,
+                "SkipArrow", this);
 
         //PAINT OBJECTS:
         //Initialise Paint Objects I will use to draw text
@@ -99,6 +113,7 @@ public class CoinTossScreen extends GameScreen {
         else if (mCoinTossResult == 1) {
             mCoinTossMsg1 = "The coin landed on tails! The enemy plays first.";
             mCoinTossMsg2 = "You draw an extra card and additional mana for your troubles.";
+
         }
     }
 
@@ -114,6 +129,17 @@ public class CoinTossScreen extends GameScreen {
             mGame.getScreenManager().getCurrentScreen().dispose();
             mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
         }
+
+        List<TouchEvent> touchEvents = input.getTouchEvents();
+        if (touchEvents.size() > 0) {
+            mSkipButton.update(elapsedTime);
+
+            //If the 'skip animation' button is pressed, then go straight to game
+            if (mSkipButton.isPushTriggered()) {
+                mCOINTOSS_TIMEOUT = 0;
+
+            }
+        }
     }
 
     @Override
@@ -127,6 +153,9 @@ public class CoinTossScreen extends GameScreen {
 
         //Draw the title image
         mCoinTossTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
+        //Draw the skip button
+        mSkipButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         // Spacing that will be used to position the Paint object:
         float SCREEN_WIDTH = mGame.getScreenWidth();

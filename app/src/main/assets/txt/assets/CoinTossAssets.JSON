@@ -10,6 +10,11 @@
       "type": "Bitmap",
       "name": "CTSTitle",
       "file": "img/CoinTossTitle.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "SkipArrow",
+      "file": "img/SkipArrow.png"
     }
   ]
 }
