@@ -139,7 +139,7 @@ public class colosseumDemoScreen extends GameScreen {
         //Initialise Paint object I will use to draw text
         mText = new Paint();
         int screenHeight = mDefaultScreenViewport.height;
-        float textHeight = screenHeight / 24.0f;
+        float textHeight = screenHeight / 28.0f;
         mText.setTextSize(textHeight);
         mText.setColor(Color.rgb(255, 255, 255));
         mText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
@@ -181,8 +181,8 @@ public class colosseumDemoScreen extends GameScreen {
         opponent.setCurrentManaCap(4);
 
         //SINGLE COIN
-        pDenarius = new GameObject(spacingX * 2.95f, spacingY * 0.38f, 30, 30, denarius, this);
-        eDenarius = new GameObject(spacingX * 2.95f, spacingY * 2.78f, 30, 30, denarius, this);
+        pDenarius = new GameObject(spacingX * 3.7f, spacingY * 0.2f, 30, 30, denarius, this);
+        eDenarius = new GameObject(spacingX * 3.7f, spacingY * 2.79f, 30, 30, denarius, this);
 
         /* FOR MULTIPLE COINS
         createMultipleCoins(pDenarius, spacingX, spacingY, 0.38f, denarius);
@@ -382,10 +382,10 @@ public class colosseumDemoScreen extends GameScreen {
 
                     // Updates both regions for all cards
                     playerActiveRegion.update(playerDeck.getmCardHand().get(i));
-                    opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
+                    //opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
 
-                    playerHandRegion.update(playerDeck.getmCardHand().get(i));
-                    opponentHandRegion.update(playerDeck.getmCardHand().get(i));
+                    //playerHandRegion.update(playerDeck.getmCardHand().get(i));
+                    // opponentHandRegion.update(playerDeck.getmCardHand().get(i));
 
                 }
 
@@ -393,10 +393,10 @@ public class colosseumDemoScreen extends GameScreen {
                     enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards
-                    playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
-                    opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
+                    //playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
+                    //opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
 
-                    playerHandRegion.update(enemyDeck.getmCardHand().get(i));
+                    //playerHandRegion.update(enemyDeck.getmCardHand().get(i));
                     opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
 
                 }
@@ -509,29 +509,29 @@ public class colosseumDemoScreen extends GameScreen {
         //SINGLE COIN
         pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-        graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 12.9f, spacingY * 12f, mText);
+        graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 14.5f, spacingY * 11.4f, mText);
 
         //Draw player card stats
         int pCardsLeft = playerDeck.getDeck().size();
         int pCardsHand = playerDeck.getmCardHand().size();
         int pCardsDead = playerDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 7.0f, spacingY * 11.6f, mText);
-        graphics2D.drawText("Hand: " + pCardsHand, spacingX * 7.0f, spacingY * 12.2f, mText);
-        graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 7.0f, spacingY * 12.8f, mText);
+        graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 3.6f, spacingY * 11.0f, mText);
+        graphics2D.drawText("Hand: " + pCardsHand, spacingX * 3.6f, spacingY * 11.4f, mText);
+        graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 3.6f, spacingY * 11.8f, mText);
 
         //Draw opponent mana
         //SINGLE COIN
         eDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-        graphics2D.drawText(opponent.getCurrentMana() + "/" + opponent.getCurrentManaCap(), spacingX * 12.9f, spacingY * 1.2f, mText);
+        graphics2D.drawText(opponent.getCurrentMana() + "/" + opponent.getCurrentManaCap(), spacingX * 14.5f, spacingY * 1.0f, mText);
 
         //Draw opponent card stats
         int eCardsLeft = enemyDeck.getDeck().size();
         int eCardsHand = enemyDeck.getmCardHand().size();
         int eCardsDead = enemyDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 7.0f, spacingY * 0.6f, mText);
-        graphics2D.drawText("Hand: " + eCardsHand, spacingX * 7.0f, spacingY * 1.2f, mText);
-        graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 7.0f, spacingY * 1.8f, mText);
+        graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 3.6f, spacingY * 0.6f, mText);
+        graphics2D.drawText("Hand: " + eCardsHand, spacingX * 3.6f, spacingY * 1.0f, mText);
+        graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 3.6f, spacingY * 1.4f, mText);
     }
 
     public int getCoinTossResult() {

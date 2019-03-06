@@ -30,6 +30,10 @@ public class CardDeck {
     //Random, to be used to 'choose' type of deck:
     private static final Random RANDOM = new Random();
 
+    private static final float X_POSITION = 160f;
+    private static final float Y_POSITION = 25f;
+
+
     //Integer variables to be used to determine deck 'type':
     int mNumOfMinions;
     int mNumOfSpells;
@@ -101,32 +105,61 @@ public class CardDeck {
         mNumOfCards += mNumOfSpells;
     }
 
+
+    //TODO: change x and y pos to use screen widths
     public void insertMinionCard(int cardAmt) {
+
+
+
         for (int i = 0; i < cardAmt; i++) {
+            float x = X_POSITION;
+            float y = Y_POSITION;
             Boolean enemyDeck = false;
-            if(getDeckID() == 2)
+            if(getDeckID() == 2) {
                 enemyDeck = true;
-            MinionCard mTestMinion = new MinionCard(200, 200, mGameScreen, 3, enemyDeck, 2, 1);
+                y *= 9.8f;
+            }
+            //x += 33.4f * i;
+            MinionCard mTestMinion = new MinionCard(x, y, mGameScreen, 3, enemyDeck, 2, 1);
+
             mDeck.add(i, mTestMinion);
         }
     }
 
     public void insertSpellCard(int cardAmt) {
+
+
+
         for (int i = 0; i < cardAmt; i++) {
+            float x = X_POSITION;
+            float y = Y_POSITION;
             Boolean enemyDeck = false;
-            if(getDeckID() == 2)
+            if(getDeckID() == 2) {
                 enemyDeck = true;
-            SpellCard mTestSpell = new SpellCard(200, 200, mGameScreen, 3, enemyDeck, Effect.NONE, 1);
+                y *= 9.8f;
+            }
+            //x += 33.4 * i;
+            SpellCard mTestSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, Effect.NONE, 1);
+
             mDeck.add(i, mTestSpell);
         }
     }
 
     public void insertWeaponCard(int cardAmt) {
+
+
+
         for (int i = 0; i < cardAmt; i++) {
+            float x = X_POSITION;
+            float y = Y_POSITION;
             Boolean enemyDeck = false;
-            if(getDeckID() == 2)
+            if(getDeckID() == 2) {
                 enemyDeck = true;
-            WeaponCard mTestWeapon = new WeaponCard(200, 200, mGameScreen, 3, enemyDeck, 2, 1);
+                y *= 9.8f;
+            }
+            //x += 33.4f * i;
+            WeaponCard mTestWeapon = new WeaponCard(x, y, mGameScreen, 3, enemyDeck, 2, 1);
+
             mDeck.add(i, mTestWeapon);
         }
     }
