@@ -14,14 +14,14 @@ public class SpellCard extends Card {
         setMagnitude(0);
     }
 
-    public SpellCard(float x, float y, GameScreen gs, int coinCost, Effect effect) {
-        super(x, y, gs, coinCost, false);
+    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, Effect effect) {
+        super(x, y, gs, coinCost, isEnemy);
         setEffect(effect);
         setMagnitude(0);
     }
 
-    public SpellCard(float x, float y, GameScreen gs, int coinCost, Effect effect, int magnitude) {
-        super(x, y, gs, coinCost, false);
+    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, Effect effect, int magnitude) {
+        super(x, y, gs, coinCost, isEnemy);
         setEffect(effect);
         setMagnitude(magnitude);
     }

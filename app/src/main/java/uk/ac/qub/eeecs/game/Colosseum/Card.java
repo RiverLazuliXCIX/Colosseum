@@ -55,7 +55,7 @@ public class Card extends GameObject {
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
     private Boolean draggable = true; // Card should not be draggable if it is locked in its region
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
-    private Boolean isEnemy = false;
+    private Boolean isEnemy;
     //Define the attack and defence values
     //private int attack, defence, mana;
     private int coinCost;
@@ -95,7 +95,7 @@ public class Card extends GameObject {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
-        if(this.isEnemy)
+        if(isEnemy)
             flipCard(this.mGameScreen.getGame());
 
         setCoinCost(coinCost);

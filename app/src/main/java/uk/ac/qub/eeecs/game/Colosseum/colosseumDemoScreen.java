@@ -235,7 +235,7 @@ public class colosseumDemoScreen extends GameScreen {
         Card dCard;
         dCard = new MinionCard(RANDOM.nextInt((int) mDefaultLayerViewport.getWidth() - 75) + 35, //-75, +35 to prevent cards spawning outside the side regions of the screen.
                 RANDOM.nextInt((int) mDefaultLayerViewport.getHeight() - 75) + 35, //-75, +35 to prevent cards spawning outside the top/bottom regions of the screen.
-                this, RANDOM.nextInt(10),    RANDOM.nextInt(10), RANDOM.nextInt(10));//, "CardFront");
+                this, RANDOM.nextInt(10),  false,  RANDOM.nextInt(10), RANDOM.nextInt(10));//, "CardFront");
         //dCard.setAttack(RANDOM.nextInt(10)); //limit of values 0-9
         //dCard.setDefence(RANDOM.nextInt(10)); //limit of values 0-9
         //dCard.setMana(RANDOM.nextInt(10)); //limit of values 0-9

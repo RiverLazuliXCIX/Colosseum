@@ -21,24 +21,24 @@ public class MinionCard extends Card {
         mEffect = Effect.NONE;
     }
 
-    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health) {
-        super(x, y, gs, coinCost, false);
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, int attack, int health) {
+        super(x, y, gs, coinCost, isEnemy);
         setAttack(attack);
         setMaxHealth(health);
         setHealth(health);
         setEffect(Effect.NONE);
     }
 
-    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int health, Effect mEffect) {
-        super(x, y, gs, coinCost, false);
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, int attack, int health, Effect mEffect) {
+        super(x, y, gs, coinCost, isEnemy);
         setAttack(attack);
         setMaxHealth(health);
         setHealth(health);
         setEffect(mEffect);
     }
 
-    public MinionCard(float x, float y, GameScreen gs, int coinCost, int attack, int maxHealth, int health, Effect mEffect) {
-        super(x, y, gs, coinCost, false);
+    public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, int attack, int maxHealth, int health, Effect mEffect) {
+        super(x, y, gs, coinCost, isEnemy);
         setAttack(attack);
         setMaxHealth(maxHealth);
         setHealth(health);

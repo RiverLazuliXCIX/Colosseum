@@ -11,8 +11,8 @@ public class WeaponCard extends Card {
         super(0, 0, gs, 1, false);
     }
 
-    public WeaponCard(float x, float y, GameScreen gs, int coinCost, int damage, int charges) {
-        super(x, y, gs, coinCost, false);
+    public WeaponCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, int damage, int charges) {
+        super(x, y, gs, coinCost, isEnemy);
         setDamage(damage);
         setCharges(charges);
     }

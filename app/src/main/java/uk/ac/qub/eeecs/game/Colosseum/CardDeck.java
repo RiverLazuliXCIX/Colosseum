@@ -103,21 +103,30 @@ public class CardDeck {
 
     public void insertMinionCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            MinionCard mTestMinion = new MinionCard(200, 200, mGameScreen, 3, 2, 1);
+            Boolean enemyDeck = false;
+            if(getDeckID() == 2)
+                enemyDeck = true;
+            MinionCard mTestMinion = new MinionCard(200, 200, mGameScreen, 3, enemyDeck, 2, 1);
             mDeck.add(i, mTestMinion);
         }
     }
 
     public void insertSpellCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            SpellCard mTestSpell = new SpellCard(200, 200, mGameScreen, 3, Effect.NONE, 1);
+            Boolean enemyDeck = false;
+            if(getDeckID() == 2)
+                enemyDeck = true;
+            SpellCard mTestSpell = new SpellCard(200, 200, mGameScreen, 3, enemyDeck, Effect.NONE, 1);
             mDeck.add(i, mTestSpell);
         }
     }
 
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            WeaponCard mTestWeapon = new WeaponCard(200, 200, mGameScreen, 3, 2, 1);
+            Boolean enemyDeck = false;
+            if(getDeckID() == 2)
+                enemyDeck = true;
+            WeaponCard mTestWeapon = new WeaponCard(200, 200, mGameScreen, 3, enemyDeck, 2, 1);
             mDeck.add(i, mTestWeapon);
         }
     }
