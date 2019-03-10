@@ -10,6 +10,8 @@ import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
+import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -539,70 +541,114 @@ public class PlayerClassTest {
     // /////////////////////////////////////////////////////////////////////////
 
     /*
-     * Deal weapon damage to reduce durability to 0 boundary case
+     * Deal 1 weapon damage to opponent, opponent health should reduce by 1 to 29
+     * weapon durability should hit 0, weapon is no longer equipped, and player
+     * attack reduced to 0.
      */
     @Test
-    public void player_weaponAttackReduceDurabilityToZero() {
+    public void player_weaponAttackOpponentPlayerDurabilityReducedToZero() {
         // Define expected properties
         int expectedDurability = 0;
+        boolean expectedPlayerWeaponEquipped = false;
+        int expectedPlayerAttack = 0;
+        int expectedOpponentHealth = 29;
+
         String hero = "c";
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
         player.setWeaponEquipped(true);
-
+        player.setCurrentAttack(1);
         player.setCurrentWeaponDurability(1);
 
-        // Deal weapon damage reduce durability by 1
-        player.dealWeaponDamage();
+        // Create a new opponent instance
+        AIOpponent opponent = new AIOpponent(gameScreen, hero);
+        opponent.setCurrentHealth(30);
+
+        // Deal weapon damage to opponent reduce durability by 1
+        player.dealWeaponDamage(opponent);
 
         // Test that player weapon durability is reduced to the expected amount
         assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedPlayerWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedPlayerAttack, player.getCurrentAttack());
+        assertEquals(expectedOpponentHealth,opponent.getCurrentHealth());
+
     }
 
     /*
-     * Deal weapon damage to reduce durability to above 0, acceptable case
+     * Deal 1 weapon damage to minion card, reducing minion health from 10 to 9, player should receive
+     * 2 damage from minion after attack reducing health from 30 to 28, and the weapon with 2 durability
+     * should reduce to 1, and stay equipped.
      */
+
     @Test
-    public void player_weaponAttackReduceDurabilityAboveZero() {
+    public void player_weaponAttackOpponentMinionDurabilityReducedAboveZero() {
         // Define expected properties
         int expectedDurability = 1;
+        boolean expectedPlayerWeaponEquipped = true;
+        int expectedPlayerAttack = 1;
+        int expectedPlayerHealth = 28;
+        int expectedMinionHealth = 9;
+
         String hero = "c";
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
-        player.setCurrentWeaponDurability(2);
+        player.setCurrentHealth(30);
         player.setWeaponEquipped(true);
+        player.setCurrentAttack(1);
+        player.setCurrentWeaponDurability(2);
 
-        // Deal weapon damage reduce durability by 1
-        player.dealWeaponDamage();
+        // Create a new minion instance
+        MinionCard minion = new MinionCard(gameScreen);
+        minion.setHealth(10);
+        minion.setAttack(2);
 
-        // Test that player weapon durability is reduced to the expected amount
+        // Deal weapon damage to minion reduce durability by 1
+        player.dealWeaponDamage(minion);
+
         assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedPlayerWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedPlayerAttack, player.getCurrentAttack());
+        assertEquals(expectedPlayerHealth,player.getCurrentHealth());
+        assertEquals(expectedMinionHealth,minion.getHealth());
+
     }
 
     /*
-     * Deal weapon damage to reduce durability to below 0, should fail, and durability stays at 0
+     * Attempt to deal weapon damage to reduce durability to below 0, should fail, and durability
+     * set at 0, weapon equipped is set to false, attack is set to 0, and opponent health remains
+     * the same (Triggers in the event a spell reduced durability to 0 or less prior to attacking)
      */
     @Test
-    public void player_weaponAttackReduceDurabilityBelowZero() {
+    public void player_weaponAttackDurabilityAtZero() {
         // Define expected properties
         int expectedDurability = 0;
+        boolean expectedPlayerWeaponEquipped = false;
+        int expectedOpponentHealth = 30;
+
         String hero = "c";
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
         player.setWeaponEquipped(true);
+        player.setCurrentAttack(2);
         player.setCurrentWeaponDurability(0);
 
-        // Deal weapon damage reduce durability by 1
-        player.dealWeaponDamage();
+        // Create a new opponent instance
+        AIOpponent opponent = new AIOpponent(gameScreen, hero);
+        opponent.setCurrentHealth(30);
 
-        // Test that player weapon durability is reduced to the expected amount
+        // Attempt to deal weapon damage to opponent
+        player.dealWeaponDamage(opponent);
+
         assertEquals(expectedDurability,player.getCurrentWeaponDurability());
+        assertEquals(expectedPlayerWeaponEquipped,player.isWeaponEquipped());
+        assertEquals(expectedOpponentHealth,opponent.getCurrentHealth());
+
     }
 
-    //TODO Update hero weapon attack tests for attacking minions and other enemy heroes
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -836,6 +882,6 @@ public class PlayerClassTest {
      * ----REPLACE SAGIRA ABILITY TESTS HERE WHEN FULLY IMPLEMENTED----
      */
 
-    
+
 
 }
