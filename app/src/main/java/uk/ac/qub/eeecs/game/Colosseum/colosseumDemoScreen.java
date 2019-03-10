@@ -502,9 +502,7 @@ public class colosseumDemoScreen extends GameScreen {
 
         //PLAYER STATS BEING DRAWN:
         //Draw player mana
-        //SINGLE COIN
         pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-
         graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 14.5f, spacingY * 11.4f, mText);
 
         //Draw player card stats
@@ -516,9 +514,7 @@ public class colosseumDemoScreen extends GameScreen {
         graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 3.6f, spacingY * 11.8f, mText);
 
         //Draw opponent mana
-        //SINGLE COIN
         eDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-
         graphics2D.drawText(opponent.getCurrentMana() + "/" + opponent.getCurrentManaCap(), spacingX * 14.5f, spacingY * 1.0f, mText);
 
         //Draw opponent card stats

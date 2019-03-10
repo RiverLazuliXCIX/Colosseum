@@ -12,6 +12,7 @@ public class CardDeck {
     private String mDeckName;
     private int mNumOfCards = 0;
     private int mSizeOfHand = 0;
+    private int mSizeOfDiscard = 0;
     private GameScreen mGameScreen;
 
     //ArrayList to hold the deck of cards, and the card graveyard
@@ -32,7 +33,6 @@ public class CardDeck {
 
     private static final float X_POSITION = 160f;
     private static final float Y_POSITION = 25f;
-
 
     //Integer variables to be used to determine deck 'type':
     int mNumOfMinions;
@@ -108,9 +108,6 @@ public class CardDeck {
 
     //TODO: change x and y pos to use screen widths
     public void insertMinionCard(int cardAmt) {
-
-
-
         for (int i = 0; i < cardAmt; i++) {
             float x = X_POSITION;
             float y = Y_POSITION;
@@ -127,9 +124,6 @@ public class CardDeck {
     }
 
     public void insertSpellCard(int cardAmt) {
-
-
-
         for (int i = 0; i < cardAmt; i++) {
             float x = X_POSITION;
             float y = Y_POSITION;
@@ -146,9 +140,6 @@ public class CardDeck {
     }
 
     public void insertWeaponCard(int cardAmt) {
-
-
-
         for (int i = 0; i < cardAmt; i++) {
             float x = X_POSITION;
             float y = Y_POSITION;
@@ -211,6 +202,7 @@ public class CardDeck {
     public String getDeckName() { return this.mDeckName; }
     public GameScreen getmGameScreen() { return this.mGameScreen; }
     public int getmSizeOfHand() { return this.mSizeOfHand; }
+    public int getmSizeOfDiscard() { return this.mSizeOfDiscard; }
     public boolean getmIsEmptyFlag() { return this.mIsEmptyFlag; }
     public int getNumOfCards() { return this.mNumOfCards ; }
     public int getMaxDeckCards() { return MAX_DECK_CARDS; }
@@ -227,6 +219,7 @@ public class CardDeck {
     public String setDeckName(String newDeckName) { return this.mDeckName = newDeckName; }
     public GameScreen setGameScreen(GameScreen newGameScreen) {return this.mGameScreen = newGameScreen; }
     public int setmSizeOfHand(int newHandSize) { return this.mSizeOfHand = newHandSize; }
+    public int setmSizeOfDiscard(int newDiscardSize) { return this.mSizeOfDiscard = newDiscardSize; }
     public boolean setmIsEmptyFlag(boolean isDeckEmpty) { return this.mIsEmptyFlag = isDeckEmpty; }
     public int setNumOfCards(int newNumOfCards) { return this.mNumOfCards = newNumOfCards; }
     public boolean setmIsAIDeck(boolean newIsAIDeck) { return this.mIsAIDeck = newIsAIDeck; }

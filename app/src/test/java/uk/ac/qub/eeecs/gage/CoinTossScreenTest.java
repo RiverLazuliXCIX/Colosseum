@@ -10,7 +10,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import uk.ac.qub.eeecs.game.TestScreens.CoinTossScreenForTesting;
-import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoinTossScreenTest {
@@ -28,6 +27,8 @@ public class CoinTossScreenTest {
 
     @Test
     public void screen_SetUpFully() {
+        //This is a test on the constructor, to see when it is called,
+        //is an instance of CoinTossScreen created or not -
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame, 0);
 
         assertNotNull(c1);
@@ -56,8 +57,12 @@ public class CoinTossScreenTest {
 
     @Test
     public void checkMessage_CoinIsHeads() {
+        //This test is to check that when the 'Heads' value (0) is passed in, is the
+        //correct message passed in to be displayed on the CoinTossScreen:
+
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame, 0);
 
+        //'chooseTextToDisplay' method is called:
         c1.chooseTextToDisplay();
 
         String expectedLine1 = "The coin landed on heads! You get to play first.";
@@ -69,8 +74,11 @@ public class CoinTossScreenTest {
 
     @Test
     public void checkMessage_CoinIsTails() {
+        //This test is to check that when the 'Tails' value (1) is passed in, is the
+        //correct message passed in to be displayed on the CoinTossScreen:
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame, 1);
 
+        //'chooseTextToDisplay' method is called:
         c1.chooseTextToDisplay();
 
         String expectedLine1 = "The coin landed on tails! The enemy plays first.";

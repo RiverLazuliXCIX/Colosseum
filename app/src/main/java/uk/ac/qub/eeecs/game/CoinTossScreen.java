@@ -134,10 +134,9 @@ public class CoinTossScreen extends GameScreen {
         if (touchEvents.size() > 0) {
             mSkipButton.update(elapsedTime);
 
-            //If the 'skip animation' button is pressed, then go straight to game
+            //If the 'skip animation' button is pressed, then go straight to game:
             if (mSkipButton.isPushTriggered()) {
                 mCOINTOSS_TIMEOUT = 0;
-
             }
         }
     }
@@ -173,5 +172,4 @@ public class CoinTossScreen extends GameScreen {
     public int getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
-
 }
