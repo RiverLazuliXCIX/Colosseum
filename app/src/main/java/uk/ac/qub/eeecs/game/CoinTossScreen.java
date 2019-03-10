@@ -1,8 +1,11 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
@@ -11,6 +14,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
@@ -25,6 +29,7 @@ public class CoinTossScreen extends GameScreen {
     private GameObject mCTSBackground;
     private LayerViewport mGameViewport;
     private TitleImage mCoinTossTitle;
+    private FPSCounter fpsCounter;
 
     //Variables required for the time delay on this screen:
     private long mCOINTOSS_TIMEOUT = 10000;
@@ -42,6 +47,11 @@ public class CoinTossScreen extends GameScreen {
     //Paint items that will be used to draw text
     private Paint mMessageText;
     private Paint mTimerText;
+
+    //Information needed to set Music Preferences:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
 
     // Constructor
     //Create the 'CoinTossScreen' screen
@@ -65,6 +75,9 @@ public class CoinTossScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("CTSBackground"), this);
+
+        //Set up the fps counter - Scott Barham
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
 
         // Spacing that will be used to position the Coin Toss Screen Objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -165,6 +178,10 @@ public class CoinTossScreen extends GameScreen {
             graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.38f, mMessageText);
 
             graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
+        }
+
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
         }
     }
 

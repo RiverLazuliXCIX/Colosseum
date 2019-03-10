@@ -73,7 +73,6 @@ public class OptionsScreen extends GameScreen {
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
 
         // Spacing that will be used to position the buttons:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         // Spacing for title and buttons - they should be right in the middle of the screen:

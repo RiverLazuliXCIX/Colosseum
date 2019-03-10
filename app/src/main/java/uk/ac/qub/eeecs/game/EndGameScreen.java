@@ -1,7 +1,10 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -29,6 +33,14 @@ public class EndGameScreen extends GameScreen {
     private static boolean concedeResult = false; //holder for if the player concedes
     private static long timePlayed; //Used for recording the time of the game
     private double timePlayedDisplay = 0.0; //used for displaying the time of the game
+
+    //Information needed to set Music/SFX/FPS Preferences:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
+
+    FPSCounter fpsCounter;
+
     /**
      * Constructor for the How To Play screen
      *
@@ -76,6 +88,10 @@ public class EndGameScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+
+        //Set up the fps counter - Scott Barham
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { };
+
     }
 
     //Getters and setters for most recent results
@@ -180,6 +196,10 @@ public class EndGameScreen extends GameScreen {
         int screenHeight = graphics2D.getSurfaceHeight();
         float textHeight = screenHeight / 30.0f;
         textPaint.setTextSize(textHeight); //create a appropriate sizing of text
+
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
 
         graphics2D.drawText("Your game has finished", mGameViewport.getWidth()*1.6f, mGameViewport.getHeight()*0.6f, textPaint);
         graphics2D.drawText("Your game resulted in a " + (String.valueOf(mostRecentResult)), mGameViewport.getWidth()*1.5f, mGameViewport.getHeight()*1.3f, textPaint);

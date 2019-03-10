@@ -1,8 +1,11 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
@@ -11,6 +14,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -30,6 +34,13 @@ public class FatigueScreen extends GameScreen {
     private Paint mText;
     private Paint mTimerText;
 
+    FPSCounter fpsCounter;
+
+    //Information needed to set Music/SFX/FPS Preferences:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
+
     public FatigueScreen(Game game, int damageToTake) {
         super("FatigueScreen", game);
         mTimeOnCreate = System.currentTimeMillis();
@@ -48,6 +59,9 @@ public class FatigueScreen extends GameScreen {
 
         // Create the title image
         mOhNoText = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.0f, spacingX*1.5f, spacingY/2.2f, "OhNoImg",this);
+
+        //Set up the fps counter - Scott Barham
+        fpsCounter = new FPSCounter( mFatigueScreenViewport.getWidth() * 0.50f, mFatigueScreenViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
 
         //PAINT OBJECT:
         //Initialise Paint Objects I will use to draw text
@@ -111,6 +125,9 @@ public class FatigueScreen extends GameScreen {
         //Draw the text showing the timer
         graphics2D.drawText("Game will resume in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
 
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
     }
 
     //Getters and setters:

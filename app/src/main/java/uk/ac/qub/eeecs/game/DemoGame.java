@@ -56,6 +56,8 @@ public class DemoGame extends Game {
         else if (mScreenManager.getCurrentScreen().getName().equals("SplashScreen"))
             return false;
 
+
+
         // Stop any playing music
         if(mAudioManager.isMusicPlaying())
             mAudioManager.stopMusic();
