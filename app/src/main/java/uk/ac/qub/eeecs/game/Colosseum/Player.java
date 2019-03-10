@@ -210,28 +210,36 @@ public class Player extends GameObject {
      * Method for the player hero dealing weapon damage. Performs a check to ensure that the weapon
      * durability is above 0, if true, enemy hero should receive damage and the hero's weapon
      * durability should decrease by one.
-     * TODO Targeting enemy hero or minions when cards and enemy class has been implemented
-     * (current implementation only decreases durability)
      *
      */
-    // 2 methods needed, deal damage to player/hero, deal damage to minion
     // Will work regardless or a Player or AIOpponent attacking
     public void dealWeaponDamage(Player p){
 
         if(weaponEquipped) {
             // implement ability to target/interact with minions and heroes
             if (weaponDurability > 0) {
+                // Deal damage to target and reduce weapon durability
                 p.receiveDamage(getCurrentAttack());
-                // Deal damage to target
                 weaponDurability--;
+
+                // If after dealing weapon damage, durability is 0, unequip weapon and set current
+                // attack to 0.
+                if (weaponDurability <= 0){
+                    setCurrentAttack(0);
+                    weaponEquipped = false;
+                }
+
             }
-            // Else if zero display message or some sort of feedback to the player
-            // Destroys the currently equipped weapon if, after attacking, weapon durability reaches 0
+            // Else if durability is zero or less display message or some sort of feedback to the
+            // player. Destroys the currently equipped weapon if, after attacking, weapon durability
+            // reaches 0 (Used in the event a card reduces weapon durability outside of this method)
             else if (weaponDurability <= 0) { // in case durability is somehow less than 0
                 setCurrentAttack(0);
                 weaponEquipped = false;
+                // Display message that no weapon is equipped, cannot attack
             }
         }
+        // TODO If player attempts to deal weapon damage with no weapon equipped, display feedback
 
     }
 
@@ -243,6 +251,14 @@ public class Player extends GameObject {
 
                 mc.checkHealth();
                 weaponDurability--;
+
+                // If after dealing weapon damage, durability is 0, unequip weapon and set current
+                // attack to 0.
+                if (weaponDurability <= 0){
+                    setCurrentAttack(0);
+                    weaponEquipped = false;
+                }
+
             } else if (weaponDurability <= 0) { // in case durability is somehow less than 0
                 setCurrentAttack(0);
                 weaponEquipped = false;
