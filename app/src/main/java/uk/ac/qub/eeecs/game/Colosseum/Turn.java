@@ -13,12 +13,12 @@ public class Turn {
         this.mTurnNum++;
     };
 
-    private void endPlayerTurnFunc(Turn turn, Player player) {
+    private void newTurnFunc(Turn turn, Player player) {
         turn.incrementTurnNum();
         player.reduceCurrentMana(1);
     }
 
     //Getters and setters:
     public int getmTurnNum() {return this.mTurnNum;}
-    public int setmTurnNum(int newTurnNum) {return this.mTurnNum = newTurnNum;}
+
 }
