@@ -3,8 +3,6 @@ package uk.ac.qub.eeecs.game;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ import uk.ac.qub.eeecs.gage.engine.audio.Music;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.ToggleButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
@@ -56,18 +55,16 @@ public class MenuScreen extends GameScreen {
     //Declares the background music
     private Music mBgMusicMenu;
 
+    //Set up FPSCounter Object:
+    FPSCounter fpsCounter;
+
     // Constructors
     //Create the 'Menu Screen' screen
     public MenuScreen(Game game) {
         super("MenuScreen", game);
-
-        //Set up viewports:
         setupViewports();
-
-        //Set up Menu Screen Objects:
         setUpMenuScreenObjects();
     }
-
 
     public void setUpMenuScreenObjects() {
         // Load in the required assets from an external .JSON file
@@ -111,6 +108,10 @@ public class MenuScreen extends GameScreen {
                 spacingX * 3.2f, spacingY * 0.4f, spacingX*0.8f, spacingY*0.5f,
                 "HTPButton", "HTPButtonSelected",this);
         mButtons.add(mHTPButton);
+
+        //Set up the fps counter
+        fpsCounter = new FPSCounter( mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f, this) { };
+
     }
 
     // Methods
@@ -134,12 +135,13 @@ public class MenuScreen extends GameScreen {
 
     //'New Screen' button functions:
     public void newScreenButtonPress(GameScreen screen) {
+        //Play sound effects, if they are 'On' in the Options Screen:
         if(mGetPreferences.getBoolean("SFX", true)) {
             mAssetManager.getSound("ButtonPress").play();
         }
-
+        //Change screen:
         mScreenManager.changeScreenButton(screen);
-
+        //If music is playing, stop it:
         if (mGetPreferences.getBoolean("Music", true)) {
             stopBackgroundMusic();
         }
@@ -151,19 +153,20 @@ public class MenuScreen extends GameScreen {
         //Check if music preferences are set to 'True', music plays. Otherwise, don't.
         mGetPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
+        //Use music preferences to control whether or not music should play:
         if(mGetPreferences.getBoolean("Music", true)) {
             mBgMusicMenu.play();
         } else if (mGetPreferences.getBoolean("Music", false)) {
             stopBackgroundMusic();
         }
 
-        // Process any touch events occurring since the update
+        // Process any touch events occurring since the update:
         Input input = mGame.getInput();
 
         List<TouchEvent> touchEvents = input.getTouchEvents();
         if (touchEvents.size() > 0) {
 
-            //Update Push Buttons, and carry out appropriate action
+            //Update Push Buttons, and carry out appropriate action:
             for (PushButton button : mButtons)
                 button.update(elapsedTime);
 
@@ -198,5 +201,9 @@ public class MenuScreen extends GameScreen {
         //Draw the buttons using enhanced for loops
         for (PushButton button : mButtons)
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
+        if(mGetPreferences.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
     }
 }

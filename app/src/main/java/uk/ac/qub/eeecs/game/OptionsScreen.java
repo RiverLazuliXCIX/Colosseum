@@ -34,14 +34,8 @@ public class OptionsScreen extends GameScreen {
     //Initialise TitleImage for displaying 'Options' Title
     private TitleImage mOptionsTitle;
 
-    //PushButtons used to toggle the music on and off:
-    private PushButton mMusicOn, mMusicOff;
-
-    //PushButtons used to toggle sound effects on and off:
-    private PushButton mSFXon, mSFXoff;
-
-    //PushButtons used to toggle on and off the FPS counter:
-    private PushButton mFPSon, mFPSoff;
+    //PushButtons used to toggle the music/SFX/FPS
+    private PushButton mMusicOn, mMusicOff, mSFXon, mSFXoff, mFPSon, mFPSoff;
 
     //Information needed to set Music Preferences:
     private Context mContext = mGame.getActivity();
@@ -66,18 +60,6 @@ public class OptionsScreen extends GameScreen {
 
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
-    }
-
-    public void setUpPreferences(PushButton pushButton, String dataType, boolean start, boolean finish) {
-        if (pushButton.isPushTriggered()) {
-            if (mGetPreference.getBoolean(dataType, start)) {
-                mPrefEditor.putBoolean(dataType, finish);
-                mPrefEditor.commit();
-            } else {
-                mPrefEditor.putBoolean(dataType, start);
-                mPrefEditor.commit();
-            }
-        }
     }
 
     private void setUpOptionScrnObjects() {
@@ -135,6 +117,18 @@ public class OptionsScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+    }
+
+    public void setUpPreferences(PushButton pushButton, String dataType, boolean start, boolean finish) {
+        if (pushButton.isPushTriggered()) {
+            if (mGetPreference.getBoolean(dataType, start)) {
+                mPrefEditor.putBoolean(dataType, finish);
+                mPrefEditor.commit();
+            } else {
+                mPrefEditor.putBoolean(dataType, start);
+                mPrefEditor.commit();
+            }
+        }
     }
 
     // Methods

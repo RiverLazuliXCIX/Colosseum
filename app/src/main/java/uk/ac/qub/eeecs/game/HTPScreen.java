@@ -1,7 +1,10 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -21,6 +25,13 @@ public class HTPScreen extends GameScreen {
     private List<PushButton> pushButtons = new ArrayList<>(); // List for all push buttons to update all in a loop
     private GameObject mOptionBackground; // Add in the options background so that the screen isn't bland
     private LayerViewport mGameViewport;
+
+    //Set up FPSCounter Object:
+    FPSCounter fpsCounter;
+
+    //Information needed to set Music/SFX/FPS Preferences:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
 
     /**
      * Constructor for the How To Play screen
@@ -51,6 +62,9 @@ public class HTPScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+
+        //Set up the fps counter
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { };
     }
 
     private void setupViewports() {
@@ -115,6 +129,10 @@ public class HTPScreen extends GameScreen {
         float textHeight = screenHeight / 30.0f;
         textPaint.setTextSize(textHeight);
         // Placeholder text
-        graphics2D.drawText("Colosseum: How to Play", mGameViewport.getWidth()*0.55f, mGameViewport.getHeight()*0.6f, textPaint);
+        graphics2D.drawText("Colosseum: How to Play", mGameViewport.getWidth()*0.55f, mGameViewport.getHeight()*1.0f, textPaint);
+
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
     }
 }

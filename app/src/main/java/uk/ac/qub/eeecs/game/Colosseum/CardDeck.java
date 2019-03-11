@@ -26,13 +26,22 @@ public class CardDeck {
     //Random, to be used to 'choose' type of deck:
     private static final Random RANDOM = new Random();
 
-    private static final float X_POSITION = 160f, Y_POSITION = 25f;
-
     //Integer variables to be used to determine deck 'type':
     private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
 
     // Corresponds to the associated hand region where cards will be drawn to
     private HandRegion mHandRegion;
+
+    //Values for positioning re cards:
+    private static final float X_POSITION = 160f, Y_POSITION = 25f;
+    float x = X_POSITION;
+    float y = Y_POSITION;
+
+    //Variables initialized for card values:
+    private String name = "";
+    private int coinCost = 0, attack = 0, health = 0, magnitude = 0, damage = 0, charges = 0;;
+    private Effect effect;
+    private Boolean enemyDeck = false;
 
      /**
      /CardDeck Constructors:
@@ -93,195 +102,127 @@ public class CardDeck {
     }
 
     //TODO: change x and y pos to use screen widths - Sean
+    public void setMinionValues(String cardName, int costToPlay, int attackVal, int healthVal) {
+        name = cardName;
+        coinCost = costToPlay;
+        attack = attackVal;
+        health = healthVal;
+    }
+
     public void insertMinionCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            float x = X_POSITION;
-            float y = Y_POSITION;
-            Boolean enemyDeck = false;
+
             if (getDeckID() == 2) {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            //x += 33.4f * i;
-            Random rand = new Random();
-            String name = "";
-            int coinCost = 0;
-            int attack = 0;
-            int health = 0;
-
-            int no = rand.nextInt(7);
+            int no = RANDOM.nextInt(7);
             switch (no) {
                 case 0:
-                    name = "Card_Archer";
-                    coinCost = 2;
-                    attack = 3;
-                    health = 2;
+                    setMinionValues("Card_Archer", 2, 3, 2);
                     break;
                 case 1:
-                    name = "Card_Centurion";
-                    coinCost = 3;
-                    attack = 2;
-                    health = 2;
+                    setMinionValues("Card_Centurion", 3, 2, 2);
                     break;
                 case 2:
-                    name = "Card_Cerberus";
-                    coinCost = 1;
-                    attack = 2;
-                    health = 1;
+                    setMinionValues("Card_Cerberus", 1, 2, 1);
                     break;
                 case 3:
-                    name = "Card_Lion";
-                    coinCost = 6;
-                    attack = 5;
-                    health = 4;
+                    setMinionValues("Card_Lion", 6, 5, 4);
                     break;
                 case 4:
-                    name = "Card_Veles";
-                    coinCost = 4;
-                    attack = 3;
-                    health = 4;
+                    setMinionValues("Card_Veles", 4, 3, 4);
                     break;
                 case 5:
-                    name = "Card_Veteran";
-                    coinCost = 2;
-                    attack = 1;
-                    health = 3;
+                    setMinionValues("Card_Veteran", 2, 1, 3);
                     break;
                 case 6:
-                    name = "Card_Elephant";
-                    coinCost = 9;
-                    attack = 3;
-                    health = 8;
+                    setMinionValues("Card_Elephant", 9, 3, 8);
+                    break;
                 case 7:
-                    name = "Card_Hound";
-                    coinCost = 1;
-                    attack = 1;
-                    health = 4;
+                    setMinionValues("Card_Hound", 1, 1, 4);
+                    break;
             }
-
             MinionCard mMinion = new MinionCard(x, y, mGameScreen, coinCost, enemyDeck, name, attack, health);
             mDeck.add(i, mMinion);
         }
     }
 
+    public void setSpellValues(String cardName, int costToPlay, Effect cardEffect, int mag) {
+        name = cardName;
+        coinCost = costToPlay;
+        effect = cardEffect;
+        magnitude = mag;
+    }
+
     public void insertSpellCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            float x = X_POSITION;
-            float y = Y_POSITION;
-            Boolean enemyDeck = false;
             if(getDeckID() == 2) {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            //x += 33.4 * i;
-            Random rand = new Random();
-            String name = "";
-            int coinCost = 0;
-            Effect effect;
-            int magnitude = 0;
-            int no = rand.nextInt(8);
-
+            int no = RANDOM.nextInt(8);
             switch (no) {
                 case 0:
-                    name = "Card_Aegis";
-                    coinCost = 3;
-                    effect = Effect.NONE;
-                    magnitude = 3;
+                    setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
                     break;
                 case 1:
-                    name = "Card_Battleshout";
-                    coinCost = 5;
-                    effect = Effect.NONE;
-                    magnitude = 2;
+                    setSpellValues("Card_Battleshout", 5, Effect.NONE, 2);
                     break;
                 case 2:
-                    name = "Card_Cavalry";
-                    coinCost = 3;
-                    effect = Effect.NONE;
-                    magnitude = 2;
+                    setSpellValues("Card_Cavalry", 3, Effect.NONE, 2);
                     break;
                 case 3:
-                    name = "Card_Commander";
-                    coinCost = 6;
-                    effect = Effect.NONE;
-                    magnitude = 4;
+                    setSpellValues("Card_Commander", 6, Effect.NONE, 4);
                     break;
                 case 4:
-                    name = "Card_Touch";
-                    coinCost = 5;
-                    effect = Effect.NONE;
-                    magnitude = 4;
+                    setSpellValues("Card_Touch", 5, Effect.NONE, 4);
                     break;
                 case 5:
-                    name = "Card_Aurora";
-                    coinCost = 2;
-                    effect = Effect.NONE;
-                    magnitude = 1;
+                    setSpellValues("Card_Aurora", 2, Effect.NONE, 1);
                     break;
                 case 6:
-                    name = "Card_LionWarCry";
-                    coinCost = 4;
-                    effect = Effect.NONE;
-                    magnitude = 3;
+                    setSpellValues("Card_LionWarCry", 4, Effect.NONE, 3);
                     break;
                 case 7:
-                    name = "Card_Strike";
-                    coinCost = 4;
-                    effect = Effect.NONE;
-                    magnitude = 2;
+                    setSpellValues("Card_Strike", 4, Effect.NONE, 2);
                     break;
                 case 8:
-                    name = "Card_Rete";
-                    coinCost = 6;
-                    effect = Effect.NONE;
-                    magnitude = 5;
+                    setSpellValues("Card_Rete", 6, Effect.NONE, 5);
                     break;
             }
-
             SpellCard mSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, name, Effect.NONE, 1);
-
             mDeck.add(i, mSpell);
         }
     }
 
+    public void setWeaponValues(String cardName, int cardDamage, int costToPlay, int chargesLeft) {
+        name = cardName;
+        coinCost = costToPlay;
+        damage = cardDamage;
+        charges = chargesLeft;
+    }
+
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
-            float x = X_POSITION;
-            float y = Y_POSITION;
-            Boolean enemyDeck = false;
             if (getDeckID() == 2) {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            //x += 33.4f * i;
-            Random rand = new Random();
-            String name = "";
-            int coinCost = 0, damage = 0, charges = 0;
-            int no = rand.nextInt(3);
+
+            int no = RANDOM.nextInt(3);
             switch (no) {
                 case 0:
-                    name = "Card_Hasta";
-                    coinCost = 4;
-                    damage = 3;
-                    charges = 2;
+                    setWeaponValues("Card_Hasta", 4, 3, 2);
                     break;
                 case 1:
-                    name = "Card_Axe";
-                    coinCost = 5;
-                    damage = 4;
-                    charges = 3;
+                    setWeaponValues("Card_Axe", 5, 4, 3);
                     break;
                 case 2:
-                    name = "Card_Scourge";
-                    coinCost = 5;
-                    damage = 5;
-                    charges = 1;
+                    setWeaponValues("Card_Scourge", 5, 5, 1);
                     break;
                 case 3:
-                    name = "Card_Bow";
-                    coinCost = 3;
-                    damage = 2;
-                    charges = 3;
+                    setWeaponValues("Card_Bow", 3, 2, 3);
                     break;
             }
                 WeaponCard mWeapon = new WeaponCard(x, y, mGameScreen, coinCost, enemyDeck, name, damage, charges);
@@ -310,6 +251,14 @@ public class CardDeck {
                 mCardHand.remove(cardOver);
             }
         }
+    }
+
+    public void discardCard(Card cardToDiscard) {
+        trackRemovalOfCards();
+        mCardHand.remove(cardToDiscard);
+
+        mSizeOfDiscard++;
+        mDiscardPile.add(cardToDiscard);
     }
 
     //Method that returns true if deck is empty - to be used when applying fatigue
