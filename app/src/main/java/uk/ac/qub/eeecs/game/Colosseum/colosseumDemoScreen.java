@@ -366,14 +366,6 @@ public class colosseumDemoScreen extends GameScreen {
             List<TouchEvent> touchEvents = mInput.getTouchEvents();
             if (touchEvents.size() > 0) {
 
-                for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-                    playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-                }
-
-                for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
-                    enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-                }
-
                 //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
                 for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
                     playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
