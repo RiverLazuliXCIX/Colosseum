@@ -3,107 +3,107 @@
     {
       "type": "Bitmap",
       "name": "Card_Aegis",
-      "file": "img/AegisOfKabar.png"
+      "file": "img/minions/AegisOfKabar.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Archer",
-      "file": "img/Archer.png"
+      "file": "img/minions/Archer.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Battleshout",
-      "file": "img/Battleshout.png"
+      "file": "img/minions/Battleshout.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Cavalry",
-      "file": "img/CavalrysGuardian.png"
+      "file": "img/minions/CavalrysGuardian.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Centurion",
-      "file": "img/Centurion.png"
+      "file": "img/minions/Centurion.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Commander",
-      "file": "img/CommandersAssault.png"
+      "file": "img/minions/CommandersAssault.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Touch",
-      "file": "img/DecayingTouch.png"
+      "file": "img/minions/DecayingTouch.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Aurora",
-      "file": "img/DomainOfAurora.png"
+      "file": "img/minions/DomainOfAurora.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Hasta",
-      "file": "img/Hasta.png"
+      "file": "img/minions/Hasta.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Lion",
-      "file": "img/Lion.png"
+      "file": "img/minions/Lion.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_LionWarCry",
-      "file": "img/LionWarCry.png"
+      "file": "img/minions/LionWarCry.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Axe",
-      "file": "img/MightyAxe.png"
+      "file": "img/minions/MightyAxe.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Cerberus",
-      "file": "img/Cerberus.png"
+      "file": "img/minions/Cerberus.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Rete",
-      "file": "img/Rete.png"
+      "file": "img/minions/Rete.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Scourge",
-      "file": "img/Scourge.png"
+      "file": "img/minions/Scourge.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Strike",
-      "file": "img/SearingStrike.png"
+      "file": "img/minions/SearingStrike.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Bow",
-      "file": "img/TalonBow.png"
+      "file": "img/minions/TalonBow.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Veles",
-      "file": "img/Veles.png"
+      "file": "img/minions/Veles.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Veteran",
-      "file": "img/VeteranFighter.png"
+      "file": "img/minions/VeteranFighter.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Elephant",
-      "file": "img/WarElephant.png"
+      "file": "img/minions/WarElephant.png"
     },
     {
       "type": "Bitmap",
       "name": "Card_Hound",
-      "file": "img/WarHound.png"
+      "file": "img/minions/WarHound.png"
     }
   ]
 }

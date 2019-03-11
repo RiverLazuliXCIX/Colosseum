@@ -49,6 +49,8 @@ public class Card extends GameObject {
 
     //Check if card is being held
     private Card mCardHeld = null;
+    //Check if card is selected to attack with
+    private Boolean attackSelected = false;
 
 
     //Check card is flipped
@@ -60,16 +62,20 @@ public class Card extends GameObject {
     //private int attack, defence, mana;
     private int coinCost;
 
+    private Bitmap mCardPortrait;
+    private String mCardName;
 
 
     //Set offset and scale values for positioning
-
     private Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
     private Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
     private Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
     private Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
     private Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
     private Vector2 mManaScale = new Vector2(0.1f, 0.1f);
+
+    private Vector2 mPortraitOffset = new Vector2(0f, 0f);
+    private Vector2 mPortraitScale = new Vector2(1f, 1f);
 
     /*ALT CARD
     private Vector2 mAttackOffset = new Vector2(-0.66f, -0.71f);
@@ -91,9 +97,12 @@ public class Card extends GameObject {
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
      */
-    public Card(float startX, float startY, GameScreen gameScreen, int coinCost, Boolean isEnemy) {//, String cardName) {
+    public Card(float startX, float startY, GameScreen gameScreen, int coinCost, Boolean isEnemy, String mCardName) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
+
+        //temp
+        mCardPortrait = gameScreen.getGame().getAssetManager().getBitmap(mCardName);
 
         if(isEnemy)
             flipCard(this.mGameScreen.getGame());
@@ -140,6 +149,7 @@ public class Card extends GameObject {
 
 
             //Flip the card - Story C5
+            //Edited: select card for attacking with
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                     && mCardHeld == null)
                 checkCardTouched(mCards, touchLocation);
@@ -147,17 +157,7 @@ public class Card extends GameObject {
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                     && mCardHeld != null
                     && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
-                Bitmap b = mCardHeld.getBitmap();
-                Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
-                Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
-                if (b == front) {
-                    mCardHeld.setBitmap(back);
-                    mCardHeld.mCardFlippedBack = true;
-                }
-                else if (b == back) {
-                    mCardHeld.setBitmap(front);
-                    mCardHeld.mCardFlippedBack = false;
-                }
+                setAttackSelected(true);
             }
 
             //Bound the card - Story C3
@@ -227,6 +227,10 @@ public class Card extends GameObject {
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
                      LayerViewport layerViewport, ScreenViewport screenViewport) {
 
+        // Draw the portrait
+        drawBitmap(mCardPortrait, mPortraitOffset, mPortraitScale,
+                graphics2D, layerViewport, screenViewport);
+
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
@@ -236,6 +240,7 @@ public class Card extends GameObject {
 
                 //ASSUMING all stats are 2 digits or less
 
+                //TODO: REFACTOR
                 //Draw the attack on the card
                 if (mc.getAttack() < 10)   //if the value is a single digit, just draw it
                     drawBitmap(mCardDigits[mc.getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
@@ -383,4 +388,13 @@ public class Card extends GameObject {
     public void setIsEnemy(Boolean isEnemy) { this.isEnemy = isEnemy; }
 
     public Card getCard(int i) { return this; }
+
+    public Boolean getAttackSelected() { return attackSelected; }
+    public void setAttackSelected(Boolean attackSelected) { this.attackSelected = attackSelected; }
+
+    public String getmCardName() { return mCardName; }
+    public void setmCardName(String mCardName) { this.mCardName = mCardName; }
+
+    public Bitmap getmCardPortrait() { return mCardPortrait; }
+    public void setmCardPortrait(Bitmap cardPortrait) { this.mCardPortrait = cardPortrait; }
 }

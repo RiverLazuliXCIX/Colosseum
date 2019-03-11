@@ -9,26 +9,26 @@ public class SpellCard extends Card {
 
     // 'Default' Constructor
     public SpellCard(GameScreen gs) {
-        super(0, 0, gs, 1, false);
+        super(0, 0, gs, 1, false, "");
         setEffect(Effect.DAMAGE);
         setMagnitude(0);
     }
 
-    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, Effect effect) {
-        super(x, y, gs, coinCost, isEnemy);
+    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, Effect effect) {
+        super(x, y, gs, coinCost, isEnemy, cardName);
         setEffect(effect);
         setMagnitude(0);
     }
 
-    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, Effect effect, int magnitude) {
-        super(x, y, gs, coinCost, isEnemy);
+    public SpellCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, Effect effect, int magnitude) {
+        super(x, y, gs, coinCost, isEnemy, cardName);
         setEffect(effect);
         setMagnitude(magnitude);
     }
 
     // Copy Constructor
     public SpellCard(float x, float y, SpellCard sc) {
-        super(x, y, sc.getGameScreen(), sc.getCoinCost(), sc.getIsEnemy());
+        super(x, y, sc.getGameScreen(), sc.getCoinCost(), sc.getIsEnemy(), sc.getmCardName());
         setEffect(sc.getEffect());
         setMagnitude(sc.getMagnitude());
     }

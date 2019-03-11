@@ -117,7 +117,27 @@ public class CardDeck {
                 y *= 9.8f;
             }
             //x += 33.4f * i;
-            MinionCard mTestMinion = new MinionCard(x, y, mGameScreen, 3, enemyDeck, 2, 1);
+            Random rand = new Random();
+            String name = "";
+            int no = rand.nextInt(7);
+            if (no == 0)
+                name = "Card_Archer";
+            else if (no == 1)
+                name = "Card_Centurion";
+            else if (no == 2)
+                name = "Card_Cerberus";
+            else if (no == 3)
+                name = "Card_Lion";
+            else if (no == 4)
+                name = "Card_Veles";
+            else if (no == 5)
+                name = "Card_Veteran";
+            else if (no == 6)
+                name = "Card_Elephant";
+            else if (no == 7)
+                name = "Card_Hound";
+
+            MinionCard mTestMinion = new MinionCard(x, y, mGameScreen, 3, enemyDeck, name, 2, 1);
 
             mDeck.add(i, mTestMinion);
         }
@@ -133,7 +153,29 @@ public class CardDeck {
                 y *= 9.8f;
             }
             //x += 33.4 * i;
-            SpellCard mTestSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, Effect.NONE, 1);
+            Random rand = new Random();
+            String name = "";
+            int no = rand.nextInt(8);
+            if (no == 0)
+                name = "Card_Aegis";
+            else if (no == 1)
+                name = "Card_Battleshout";
+            else if (no == 2)
+                name = "Card_Cavalry";
+            else if (no == 3)
+                name = "Card_Commander";
+            else if (no == 4)
+                name = "Card_Touch";
+            else if (no == 5)
+                name = "Card_Aurora";
+            else if (no == 6)
+                name = "Card_LionWarCry";
+            else if (no == 7)
+                name = "Card_Strike";
+            else if (no == 8)
+                name = "Card_Rete";
+
+            SpellCard mTestSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, name, Effect.NONE, 1);
 
             mDeck.add(i, mTestSpell);
         }
@@ -149,7 +191,19 @@ public class CardDeck {
                 y *= 9.8f;
             }
             //x += 33.4f * i;
-            WeaponCard mTestWeapon = new WeaponCard(x, y, mGameScreen, 3, enemyDeck, 2, 1);
+            Random rand = new Random();
+            String name = "";
+            int no = rand.nextInt(3);
+            if (no == 0)
+                name = "Card_Hasta";
+            else if (no == 1)
+                name = "Card_Axe";
+            else if (no == 2)
+                name = "Card_Scourge";
+            else if (no == 3)
+                name = "Card_Bow";
+
+            WeaponCard mTestWeapon = new WeaponCard(x, y, mGameScreen, 3, enemyDeck, name, 2, 1);
 
             mDeck.add(i, mTestWeapon);
         }

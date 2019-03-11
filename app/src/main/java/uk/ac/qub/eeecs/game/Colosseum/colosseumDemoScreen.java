@@ -109,6 +109,8 @@ public class colosseumDemoScreen extends GameScreen {
         // Load in the assets used by the steering demo
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
+        mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
+        //mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
 
         if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
             edgeCaseTest();
