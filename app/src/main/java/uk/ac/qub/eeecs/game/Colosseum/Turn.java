@@ -2,20 +2,23 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 public class Turn {
 
+    //int required to hold turn number:
     private int mTurnNum;
 
+    //Constructor for Turn:
     public Turn() {
         //Initially, turn number is always 1.
         mTurnNum = 1;
     }
 
-    private void incrementTurnNum() {
+    public void incrementTurnNum() {
         this.mTurnNum++;
     };
 
-    private void newTurnFunc(Turn turn, Player player) {
-        turn.incrementTurnNum();
-        player.reduceCurrentMana(1);
+    public void newTurnFunc(Player player) {
+        incrementTurnNum();
+        player.increaseCurrentMana(1);
+        player.increaseCurrentManaCap();
     }
 
     //Getters and setters:

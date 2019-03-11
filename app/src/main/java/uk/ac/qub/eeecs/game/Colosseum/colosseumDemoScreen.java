@@ -51,8 +51,8 @@ public class colosseumDemoScreen extends GameScreen {
     //Push Button for drawing a card from your deck
     private PushButton mDrawButton;
 
-    //Array list to hold a deck of cards - Story 7 Sprint 4
-    private List<Card> dCards = new ArrayList<>();
+    //Turn object that stores all data about the current turn:
+    private Turn mCurrentTurn = new Turn();
 
     //Define a test player
     private Player p2;
@@ -66,10 +66,10 @@ public class colosseumDemoScreen extends GameScreen {
     private int coinTossResult;
 
     //Set up a boolean value for whether or not coin flip is finished
-    boolean coinFlipDone = false;
+    private boolean coinFlipDone = false;
 
     //Set up an int value to hold the fatigue due to be taken from the player
-    int mFatigueCounter = 0;
+    private int mFatigueCounter = 0;
 
     private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
     private static boolean wasPaused = false;
@@ -88,9 +88,9 @@ public class colosseumDemoScreen extends GameScreen {
     ActiveRegion playerActiveRegion, opponentActiveRegion;
     HandRegion playerHandRegion, opponentHandRegion;
 
-    //Timer elements
-    private long mTimeOnCreate, mCurrentTime;
-    private final long mEnemyTurnTime = 5000;
+    //Variables required for the enemy turn timer:
+    private long mEnemy_Turn_Time = 5000;
+    private long mEnemyTurnBegins, mCurrentTime;
 
     // Constructors
     public colosseumDemoScreen(Game game) {
@@ -105,6 +105,7 @@ public class colosseumDemoScreen extends GameScreen {
 
     }
 
+    // Methods
     private void setUpGameObjects() {
         // Load in the assets used by the steering demo
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
@@ -116,10 +117,6 @@ public class colosseumDemoScreen extends GameScreen {
             edgeCaseTest();
         }
 
-        // Spacing that will be used to position the objects:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
-
         // Create the background
         Bitmap mBackgroundBitmap = getGame()
                 .getAssetManager().getBitmap("ArenaFloor");
@@ -129,7 +126,6 @@ public class colosseumDemoScreen extends GameScreen {
                 mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
 
-        //PAINT OBJECT:
         //Initialise Paint object I will use to draw text
         mText = new Paint();
         int screenHeight = mDefaultScreenViewport.height;
@@ -140,12 +136,14 @@ public class colosseumDemoScreen extends GameScreen {
 
 
         //Create the Push Buttons:
-        //This button is created twice, where one has no effect when clicked, ie it is greyed out.
+        //Spacing that will be used to position the objects:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+
         mEndTurnButton = new PushButton(
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn", this);
 
-        //'Greyed out' version of the endTurnButton:
         mEndTurnButtonOff = new PushButton(
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn2", this);
@@ -154,7 +152,6 @@ public class colosseumDemoScreen extends GameScreen {
                 spacingX * 4.7f, spacingY * 2.7f, spacingX * 0.4f, spacingY * 0.4f, "Cog", "CogSelected", this);
         mButtons.add(mPauseButton);
 
-        //Button used to draw cards from deck:
         mDrawButton = new PushButton(
                 spacingX * 0.4f, spacingY * 0.4f, spacingX * 0.6f, spacingY * 0.6f, "CardDeckImg", this);
         mButtons.add(mDrawButton);
@@ -166,7 +163,7 @@ public class colosseumDemoScreen extends GameScreen {
         //Create denarius objects
         Bitmap denarius = getGame()
                 .getAssetManager().getBitmap("Denarius");
-        //player
+
         p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
 
@@ -177,18 +174,12 @@ public class colosseumDemoScreen extends GameScreen {
         pDenarius = new GameObject(spacingX * 3.7f, spacingY * 0.2f, 30, 30, denarius, this);
         eDenarius = new GameObject(spacingX * 3.7f, spacingY * 2.79f, 30, 30, denarius, this);
 
-        /* FOR MULTIPLE COINS
-        createMultipleCoins(pDenarius, spacingX, spacingY, 0.38f, denarius);
-        createMultipleCoins(eDenarius, spacingX, spacingY, 2.78f, denarius);
-        */
-
-        // Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
+        //Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
         playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() / 2.0f, mDefaultLayerViewport.getBottom() + p2.position.y + (p2.getPortraitHeight() / 2));
         opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() - (p2.position.y + (p2.getPortraitHeight() / 2)), mDefaultLayerViewport.getTop() / 2.0f);
 
         playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), p2.position.y - (p2.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), opponent.position.y + (opponent.getPortraitHeight() / 2));
-
     }
 
     private void setupViewports() {
@@ -203,22 +194,40 @@ public class colosseumDemoScreen extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-    // /////////////////////////////////////////////////////////////////////////
-    // Methods
-    // /////////////////////////////////////////////////////////////////////////
-
-    public void endPlayerTurn() {
-        //When player ends turn, a 'YourTurn' variable on the player should turn to false
-        //This will prevent player from attempting to draw from their deck, or playing a card
-        //It will also trigger the AI to make a move
-        p2.setYourTurn(false);
-        playEnemyTurn();
+    public void drawCardHand(CardDeck deckRequired, ElapsedTime elapsedTime, IGraphics2D graphics2D) {
+        for (int i = 0; i < deckRequired.getmCardHand().size(); i++) {
+            deckRequired.getmCardHand().get(i).draw(elapsedTime, graphics2D,  mGameViewport, mDefaultScreenViewport);
+        }
     }
 
-    public void playEnemyTurn() {
-        //Resets timer for enemy turn, giving enemy 5 seconds to 'play'
+    //Methods relating to stopping and starting turns - Dearbhaile
+    public void endPlayerTurn() {
+        p2.setYourTurn(false);
         opponent.setYourTurn(true);
-        mTimeOnCreate = System.currentTimeMillis();
+        mEnemyTurnBegins = System.currentTimeMillis();
+    }
+
+    public void checkIfEnemysTurn() {
+            if (mCurrentTime - mEnemyTurnBegins >= mEnemy_Turn_Time) {
+                p2.setYourTurn(true);
+                opponent.setYourTurn(false);
+                mCurrentTurn.newTurnFunc(p2);
+                drawCard();
+            }
+    }
+
+    //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
+    //On this screen, it will be displayed how much health they will lose (cumulative value)
+    //Screen then disappears after 5 seconds. - Dearbhaile
+    public void drawCard() {
+            if (!playerDeck.getDeck().isEmpty()) {
+                playerDeck.drawTopCard();
+                playerDeck.destroyCardOverLimit();
+            } else {
+                mFatigueCounter++;
+                mGame.getScreenManager().addScreen(new FatigueScreen(mGame, mFatigueCounter));
+                p2.receiveDamage(mFatigueCounter);
+            }
     }
 
     public void setUpDecks() {
@@ -244,14 +253,14 @@ public class colosseumDemoScreen extends GameScreen {
         return -1; //for error testing only
     }
 
-    //Method to draw set number of cards, for use after coin flip:
+    //REFACTORED CODE: These methods are used in CoinFlipResult to avoid as much redundant code
+    //Method to draw set number of cards, for use after coin flip. - Dearbhaile
     private void drawSetNumCards(CardDeck deckToUse, int numToDraw) {
         for (int i = 0; i < numToDraw; i++) {
             deckToUse.drawTopCard();
         }
     }
 
-    //REFACTORED CODE: These methods are used in CoinFlipResult to avoid as much redundant code
     private void setUpStats_PlayerStarts() {
         p2.setYourTurn(true);
         opponent.setCurrentMana(5);
@@ -267,16 +276,19 @@ public class colosseumDemoScreen extends GameScreen {
         drawSetNumCards(playerDeck, 4);
     }
 
-    // Method for building hand based on coin flip:
+    // Method for building hand based on coin flip. - Dearbhaile
     private void coinFlipResult() {
         coinTossResult = coinFlipStart();
         switch (coinTossResult) {
             case 0: // PLAYER STARTS
                 p2.setYourTurn(true);
+                opponent.setYourTurn(false);
                 setUpStats_PlayerStarts();
                 break;
             case 1: // AI STARTS
-                endPlayerTurn();
+                opponent.setYourTurn(true);
+                p2.setYourTurn(false);
+                mEnemyTurnBegins = System.currentTimeMillis();
                 setUpStats_EnemyStarts();
                 break;
             case 2: //EDGE - AUTO WIN
@@ -322,13 +334,13 @@ public class colosseumDemoScreen extends GameScreen {
         //Process any touch events occurring since the update
         mInput = mGame.getInput();
 
-        //If the game was paused, gather the total time it was paused for
+        //If the game was paused, gather the total time it was paused for. - Scott
         if(wasPaused) {
             wasPaused=false;
             pauseTimeTotal += System.currentTimeMillis()-pauseTime;//gather a total paused time, in the case of a user pausing multiple times
         }
 
-        //Get the initial start time once at start of game
+        //Get the initial start time once at start of game. - Scott
         while (!coinFlipDone) {
             startTime = System.currentTimeMillis();
             mGame.getScreenManager().addScreen(new CoinTossScreen(mGame, getCoinTossResult()));
@@ -338,6 +350,11 @@ public class colosseumDemoScreen extends GameScreen {
         //Update player and opponent's stats
         p2.update(elapsedTime);
         opponent.update(elapsedTime);
+
+        //If opponent's turn, check when it ends:
+        if (opponent.getYourTurn()) {
+            checkIfEnemysTurn();
+        }
 
         //'EndGameScreen' code - Scott
         if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
@@ -382,7 +399,7 @@ public class colosseumDemoScreen extends GameScreen {
                     opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
                     opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
                 }
-                
+
                 for (PushButton button : mButtons)
                     button.update(elapsedTime);
 
@@ -400,20 +417,6 @@ public class colosseumDemoScreen extends GameScreen {
                     endPlayerTurn();
                 }
 
-                //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
-                //On this screen, it will be displayed how much health they will lose (cumulative value)
-                //Screen then disappears after 5 seconds. - Dearbhaile
-                if (mDrawButton.isPushTriggered()) {
-                    if (!playerDeck.getDeck().isEmpty()) {
-                        playerDeck.drawTopCard();
-                        playerDeck.destroyCardOverLimit();
-                    } else {
-                        mFatigueCounter++;
-                        mGame.getScreenManager().addScreen(new FatigueScreen(mGame, mFatigueCounter));
-                        p2.receiveDamage(mFatigueCounter);
-                    }
-                }
-
                 //Two sets of Hands (player and enemy) are able to be dragged - Dearbhaile
                 for (Card cards : playerDeck.getmCardHand()) {
                     cards.cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
@@ -423,19 +426,9 @@ public class colosseumDemoScreen extends GameScreen {
                 }
             }
         }
-
-        //Monitors how long opponent's turn has been running
-        //If 5 seconds has elapsed, end opponent's turn - Dearbhaile
-        if (mCurrentTime - mTimeOnCreate >= mEnemyTurnTime) {
-            p2.setYourTurn(true);
-            opponent.setYourTurn(false);
-        }
     }
 
-    /**
-     * Draw the card demo screen
-     **/
-
+     //Draw the card demo screen
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         // Clear the screen
@@ -454,6 +447,8 @@ public class colosseumDemoScreen extends GameScreen {
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         //PLAYER STATS BEING DRAWN:
+        graphics2D.drawText("Turn # " + mCurrentTurn.getmTurnNum(), spacingX * 1.0f, spacingY * 0.6f, mText);
+
         //Draw player mana
         pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 14.5f, spacingY * 11.4f, mText);
@@ -481,7 +476,7 @@ public class colosseumDemoScreen extends GameScreen {
         //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
         if (p2.getYourTurn())
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        else
+        else if (!p2.getYourTurn())
             mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
         //Draw the remainder of the buttons:
@@ -498,16 +493,9 @@ public class colosseumDemoScreen extends GameScreen {
             graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
         }
 
-
-
         //Draw the two player's hands, user and enemy - Dearbhaile
-        for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-            playerDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        }
-
-        for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
-            enemyDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        }
+        drawCardHand(playerDeck, elapsedTime, graphics2D);
+        drawCardHand(enemyDeck, elapsedTime, graphics2D);
     }
 
     //Getters and setters:
