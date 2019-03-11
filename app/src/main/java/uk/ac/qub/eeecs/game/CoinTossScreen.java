@@ -22,6 +22,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
+//CoinTossScreen, coded by Dearbhaile Walsh
 public class CoinTossScreen extends GameScreen {
 
     // Properties
@@ -32,7 +33,7 @@ public class CoinTossScreen extends GameScreen {
     private FPSCounter fpsCounter;
 
     //Variables required for the time delay on this screen:
-    private long mCOINTOSS_TIMEOUT = 10000;
+    private long mCoinToss_Timeout = 10000;
     private long mTimeOnCreate, mCurrentTime;
     private long mTimeRemaining;
 
@@ -48,10 +49,9 @@ public class CoinTossScreen extends GameScreen {
     private Paint mMessageText;
     private Paint mTimerText;
 
-    //Information needed to set Music Preferences:
+    //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
-    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
 
     // Constructor
     //Create the 'CoinTossScreen' screen
@@ -126,7 +126,6 @@ public class CoinTossScreen extends GameScreen {
         else if (mCoinTossResult == 1) {
             mCoinTossMsg1 = "The coin landed on tails! The enemy plays first.";
             mCoinTossMsg2 = "You draw an extra card and additional mana for your troubles.";
-
         }
     }
 
@@ -138,7 +137,7 @@ public class CoinTossScreen extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
-        if (mCurrentTime - mTimeOnCreate >= mCOINTOSS_TIMEOUT) {
+        if (mCurrentTime - mTimeOnCreate >= mCoinToss_Timeout) {
             mGame.getScreenManager().getCurrentScreen().dispose();
             mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
         }
@@ -149,7 +148,7 @@ public class CoinTossScreen extends GameScreen {
 
             //If the 'skip animation' button is pressed, then go straight to game:
             if (mSkipButton.isPushTriggered()) {
-                mCOINTOSS_TIMEOUT = 0;
+                mCoinToss_Timeout = 0;
             }
         }
     }

@@ -1,7 +1,10 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -33,6 +37,13 @@ public class StatisticsScreen extends GameScreen {
     private boolean winStreak = false, lossStreak = false; //used to determine if the user is on a win or loss streak
     private static int ownMinionsKilled, enemyMinionsKilled; //for how many minions on their side, or enemy side have died (total).
 
+    //Shared preferences for music/SFX/FPS:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreferences.edit();
+
+    //Set up FPSCounter Object:
+    FPSCounter fpsCounter;
 
     /**
      * Constructor for the How To Play screen
@@ -75,6 +86,9 @@ public class StatisticsScreen extends GameScreen {
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("OptionsBackground"), this);
+
+        //Set up the fps counter
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { };
 
     }
 
@@ -183,5 +197,9 @@ public class StatisticsScreen extends GameScreen {
         graphics2D.drawText("Total games played: ", mGameViewport.getWidth()*0.9f, mGameViewport.getHeight()*3.5f, textPaint);
         graphics2D.drawText(String.valueOf((int)totalGamesPlayed), mGameViewport.getWidth()*2.3f, mGameViewport.getHeight()*3.5f, textPaint); //draw the text of the total games played
 
+
+        if(mGetPreferences.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
     }
 }

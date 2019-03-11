@@ -91,7 +91,6 @@ public class EndGameScreen extends GameScreen {
 
         //Set up the fps counter - Scott Barham
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) { };
-
     }
 
     //Getters and setters for most recent results

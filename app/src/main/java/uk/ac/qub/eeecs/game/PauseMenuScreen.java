@@ -1,6 +1,9 @@
 package uk.ac.qub.eeecs.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
+import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -22,9 +26,15 @@ public class PauseMenuScreen extends GameScreen {
     // /////////////////////////////////////////////////////////////////////////
 
     private List<PushButton> mButtons = new ArrayList<>();
-
     private PushButton mMenuScreen, mResume, mOptions, mMainMenu, mConcede, mStatsButton, mHTPButton;
     private LayerViewport mMenuViewport;
+
+    //Information needed to set Music/SFX/FPS Preferences:
+    private Context mContext = mGame.getActivity();
+    private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
+
+    FPSCounter fpsCounter;
 
     public PauseMenuScreen(Game game)
     {
@@ -93,6 +103,8 @@ public class PauseMenuScreen extends GameScreen {
                 spacingX * 4.5f, spacingY * 0.4f, spacingX*0.8f, spacingY*0.5f,
                 "HTPButton", "HTPButtonSelected",this);
         mButtons.add(mHTPButton);
+
+        fpsCounter = new FPSCounter( mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f , this) { };
     }
 
     @Override
@@ -137,5 +149,8 @@ public class PauseMenuScreen extends GameScreen {
         for (PushButton button : mButtons) //Draw all the buttons stored in "mButtons"
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
+        if(mGetPreference.getBoolean("FPS", true)) {
+            fpsCounter.draw(elapsedTime, graphics2D);
+        }
     }
 }
