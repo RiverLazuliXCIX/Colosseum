@@ -374,6 +374,24 @@ public class colosseumDemoScreen extends GameScreen {
                     enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
                 }
 
+                //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
+                for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
+                    playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+
+                    // Updates both regions for all cards
+                    playerActiveRegion.update(playerDeck.getmCardHand().get(i));
+                    playerHandRegion.update(playerDeck.getmCardHand().get(i));
+                }
+
+                //This next for loop is to prevent the opponent's cards from slotting into the player's card slots - Diarmuid Toal
+                for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
+                    enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+
+                    // Updates both regions for all cards
+                    opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
+                    opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
+                }
+                
                 for (PushButton button : mButtons)
                     button.update(elapsedTime);
 
