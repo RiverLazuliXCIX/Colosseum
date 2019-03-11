@@ -46,17 +46,15 @@ public class colosseumDemoScreen extends GameScreen {
     //Array List to hold the Push Buttons
     private List<PushButton> mButtons = new ArrayList<>();
 
-    //Push buttons for ending player's turn
-    private PushButton mEndTurnButton, mEndTurnButtonOff;
-
-    //Push Button for pausing the game
-    private PushButton mPauseButton;
+    //Push buttons for ending player's turn and for pausing the game:
+    private PushButton mEndTurnButton, mEndTurnButtonOff, mPauseButton;
 
     //Turn object that stores all data about the current turn:
     private Turn mCurrentTurn = new Turn();
 
     //Define a test player
     private Player p2;
+
     // Define a test Opponent
     private AIOpponent opponent;
 
@@ -91,7 +89,7 @@ public class colosseumDemoScreen extends GameScreen {
     private List<GameObject> mGameObjs = new ArrayList<>();
 
     //Denarius - single coin
-    private GameObject pDenarius, eDenarius, mPlayerDeckImg;
+    private GameObject pDenarius, eDenarius, mPlayerDeckImg, mEnemyDeckImg;
 
     //Test region
     ActiveRegion playerActiveRegion, opponentActiveRegion;
@@ -157,13 +155,12 @@ public class colosseumDemoScreen extends GameScreen {
                 spacingX * 4.7f, spacingY * 2.7f, spacingX * 0.4f, spacingY * 0.4f, "Cog", "CogSelected", this);
         mButtons.add(mPauseButton);
 
+        //Setting up FPS counter:
+        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
+
         //Setting up demo player:
         p2 = new Player(this, "Meridia");
         opponent = new AIOpponent(this, "EmperorCommodus");
-
-        //Create denarius objects
-        Bitmap denarius = getGame()
-                .getAssetManager().getBitmap("Denarius");
 
         p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
@@ -171,7 +168,8 @@ public class colosseumDemoScreen extends GameScreen {
         opponent.setCurrentMana(4);
         opponent.setCurrentManaCap(4);
 
-        //SINGLE COIN
+        //Create denarius objects
+        Bitmap denarius = getGame().getAssetManager().getBitmap("Denarius");
         pDenarius = new GameObject(spacingX * 3.7f, spacingY * 0.2f, 30, 30, denarius, this);
         mGameObjs.add(pDenarius);
         eDenarius = new GameObject(spacingX * 3.7f, spacingY * 2.79f, 30, 30, denarius, this);
@@ -181,16 +179,14 @@ public class colosseumDemoScreen extends GameScreen {
         Bitmap deckImg = getGame().getAssetManager().getBitmap("CardDeckImg");
         mPlayerDeckImg = new GameObject(spacingX * 0.4f, spacingY * 0.4f, spacingX * 0.6f, spacingY * 0.6f, deckImg, this);
         mGameObjs.add(mPlayerDeckImg);
+        mEnemyDeckImg = new GameObject(spacingX * 0.4f, spacingY * 2.2f, spacingX * 0.6f, spacingY * 0.6f, deckImg, this);
+        mGameObjs.add(mEnemyDeckImg);
 
         //Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
         playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() / 2.0f, mDefaultLayerViewport.getBottom() + p2.position.y + (p2.getPortraitHeight() / 2));
         opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() - (p2.position.y + (p2.getPortraitHeight() / 2)), mDefaultLayerViewport.getTop() / 2.0f);
-
         playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), p2.position.y - (p2.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), opponent.position.y + (opponent.getPortraitHeight() / 2));
-
-        fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
-
     }
 
     private void setupViewports() {

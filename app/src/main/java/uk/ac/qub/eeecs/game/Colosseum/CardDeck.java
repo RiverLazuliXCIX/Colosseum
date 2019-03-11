@@ -26,6 +26,12 @@ public class CardDeck {
     //Random, to be used to 'choose' type of deck:
     private static final Random RANDOM = new Random();
 
+    //Integer variables to be used to determine deck 'type':
+    private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
+
+    // Corresponds to the associated hand region where cards will be drawn to
+    private HandRegion mHandRegion;
+
     //Values for positioning re cards:
     private static final float X_POSITION = 160f, Y_POSITION = 25f;
     float x = X_POSITION;
@@ -36,12 +42,6 @@ public class CardDeck {
     private int coinCost = 0, attack = 0, health = 0, magnitude = 0, damage = 0, charges = 0;;
     private Effect effect;
     private Boolean enemyDeck = false;
-
-    //Integer variables to be used to determine deck 'type':
-    private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
-
-    // Corresponds to the associated hand region where cards will be drawn to
-    private HandRegion mHandRegion;
 
      /**
      /CardDeck Constructors:
@@ -102,9 +102,6 @@ public class CardDeck {
     }
 
     //TODO: change x and y pos to use screen widths - Sean
-    //TODO: Major refactoring to remove redundant code - Dearbhaile
-
-
     public void setMinionValues(String cardName, int costToPlay, int attackVal, int healthVal) {
         name = cardName;
         coinCost = costToPlay;
@@ -119,9 +116,7 @@ public class CardDeck {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            Random rand = new Random();
-
-            int no = rand.nextInt(7);
+            int no = RANDOM.nextInt(7);
             switch (no) {
                 case 0:
                     setMinionValues("Card_Archer", 2, 3, 2);
@@ -166,9 +161,7 @@ public class CardDeck {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            Random rand = new Random();
-            int no = rand.nextInt(8);
-
+            int no = RANDOM.nextInt(8);
             switch (no) {
                 case 0:
                     setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
@@ -217,8 +210,7 @@ public class CardDeck {
                 y *= 9.8f;
             }
 
-            Random rand = new Random();
-            int no = rand.nextInt(3);
+            int no = RANDOM.nextInt(3);
             switch (no) {
                 case 0:
                     setWeaponValues("Card_Hasta", 4, 3, 2);
@@ -259,6 +251,14 @@ public class CardDeck {
                 mCardHand.remove(cardOver);
             }
         }
+    }
+
+    public void discardCard(Card cardToDiscard) {
+        trackRemovalOfCards();
+        mCardHand.remove(cardToDiscard);
+
+        mSizeOfDiscard++;
+        mDiscardPile.add(cardToDiscard);
     }
 
     //Method that returns true if deck is empty - to be used when applying fatigue
