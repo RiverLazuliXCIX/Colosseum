@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 
 public class CardDeck {
 
@@ -39,6 +40,9 @@ public class CardDeck {
     int mNumOfSpells;
     int mNumOfWeapons;
 
+    // Corresponds to the associated hand region where cards will be drawn to
+    private HandRegion mHandRegion;
+
      /**
      /CardDeck Constructors:
      **/
@@ -51,7 +55,7 @@ public class CardDeck {
         mCardHand = new ArrayList<>(0);
     }
 
-    public CardDeck(int id, String name, GameScreen gameScreen, boolean isAIDeck) {
+    public CardDeck(int id, String name, GameScreen gameScreen, boolean isAIDeck, HandRegion handRegion) {
         //Fully constructed deck, with random assortments of minion, spell and weapon cards
         mDeck = new ArrayList<>(0);
         mDiscardPile = new ArrayList<>(0);
@@ -61,6 +65,7 @@ public class CardDeck {
         this.mDeckName = name;
         this.mGameScreen = gameScreen;
         this.mIsAIDeck = isAIDeck;
+        this.mHandRegion = handRegion;
         this.buildDeck();
     }
 
@@ -217,6 +222,7 @@ public class CardDeck {
             trackAdditionOfCardsToHand();
             mDeck.remove(mDeck.size() - 1);
             mCardHand.add(topCard);
+            mHandRegion.addCard(topCard);
             return topCard;
         }
         return null;

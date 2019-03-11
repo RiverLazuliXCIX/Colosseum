@@ -15,6 +15,7 @@ import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 import static org.junit.Assert.assertFalse;
@@ -61,7 +62,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckCreate_WithData() {
         //This test is to ensure that when the extended CardDeck constructor is called, a Deck ArrayList is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertNotNull(newDeck.getDeck());
     }
@@ -69,7 +71,8 @@ public class CardDeckTest {
     @Test
     public void cardHandCreate() {
         //This test is to ensure that when the empty CardDeck constructor is called, a Hand ArrayList is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertNotNull(newDeck.getmCardHand());
     }
@@ -77,7 +80,8 @@ public class CardDeckTest {
     @Test
     public void cardHandCreate_WithData() {
         //This test is to ensure that when the extended CardDeck constructor is called, a Hand ArrayList is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertNotNull(newDeck.getmCardHand());
     }
@@ -85,7 +89,8 @@ public class CardDeckTest {
     @Test
     public void DiscardCreate() {
         //This test is to ensure that when the empty CardDeck constructor is called, a Discard ArrayList is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertNotNull(newDeck.getmDiscardPile());
     }
@@ -93,7 +98,8 @@ public class CardDeckTest {
     @Test
     public void DiscardCreate_WithData() {
         //This test is to ensure that when the extended CardDeck constructor is called, a Discard ArrayList is created:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertNotNull(newDeck.getmDiscardPile());
     }
@@ -101,7 +107,8 @@ public class CardDeckTest {
     @Test
     public void cardDeck_30Cards() {
         //Test to ensure that 30 cards are added on initializaion of the extended deck constructor:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertEquals(newDeck.getDeck().size(), 30);
     }
@@ -109,7 +116,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckCreate_CardNumsCorrect() {
         //This test is to ensure that when a new deck is created, the numOfCards variable increases to the size of the Deck ArrayList:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertEquals(newDeck.getNumOfCards(), newDeck.getDeck().size());
     }
@@ -117,7 +125,8 @@ public class CardDeckTest {
     @Test
     public void cardHandCreate_CardNumsCorrect() {
         //This test is to ensure that when a card hand is created, the sizeOfHand variable increases to the size of the Hand ArrayList:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertEquals(newDeck.getmCardHand().size(), newDeck.getmSizeOfHand());
     }
@@ -128,7 +137,8 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Minions() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getmNumOfMinions(), 0);
@@ -136,7 +146,8 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Spells() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getmNumOfSpells(), 0);
@@ -144,7 +155,8 @@ public class CardDeckTest {
 
     @Test
     public void chooseDeckType_Weapons() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
         newDeck.chooseDeckType();
 
         assertNotEquals(newDeck.getmNumOfWeapons(), 0);
@@ -158,7 +170,8 @@ public class CardDeckTest {
     @Test
     public void drawTopCard_DeckTest() {
         //Set up a deck of 30 cards:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         newDeck.drawTopCard();
 
@@ -169,7 +182,8 @@ public class CardDeckTest {
 
     @Test
     public void drawTopCard_HandTest() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         newDeck.drawTopCard();
 
@@ -181,7 +195,8 @@ public class CardDeckTest {
     @Test
     public void drawTopCard_MinDraw() {
         //Set up a deck of 30 cards:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         for (int i = 0; i < 31; i++) {
             newDeck.drawTopCard();
@@ -199,7 +214,8 @@ public class CardDeckTest {
 
     @Test
     public void destroyCardOverLimit_Success() {
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         for (int i = 0; i < 6; i++) {
             newDeck.drawTopCard();
@@ -229,7 +245,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckIsEmpty_Fails() {
         //This test is to ensure that the isEmpty() method works as expected:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
         //This deck should have loaded in 30 cards
 
         assertFalse(newDeck.checkIsEmpty());
@@ -243,7 +260,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckGetID() {
         //This test is to ensure that the CardDeck ID is set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         int expectedID = 1;
 
@@ -253,7 +271,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckGetName() {
         //This test is to ensure that the CardDeck Name is set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         String expectedName = "aCardDeck";
 
@@ -263,7 +282,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckGetScreen() {
         //This test is to ensure that the CardDeck GameScreen is set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         GameScreen expectedScreen = mDemoScreen;
 
@@ -273,7 +293,8 @@ public class CardDeckTest {
     @Test
     public void cardDeckGetIsAI() {
         //This test is to ensure that the CardDeck AI ownership settings are set correctly:
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false);
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertFalse(newDeck.getmIsAIDeck());
     }

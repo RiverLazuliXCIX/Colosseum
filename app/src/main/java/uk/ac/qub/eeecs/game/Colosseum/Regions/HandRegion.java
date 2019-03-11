@@ -31,25 +31,21 @@ public class HandRegion extends GameRegion {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Updates the position of the cards in the container, moving the card to the leftmost available
-     * position. This method will be different depending on the type of region.
+     * Handles what happens when a card is removed from hand, and dropped into an accessible region,
+     * excluding opponent regions, and the player's hand.
      *
      * @param card Card which is having its position updated
      */
 
-    public void updateCardPosition(Card card){
+    public void removeCard(Card card){
 
-        if (getNumCardsInRegion() == 0) {
-            card.setPosition(getRegionXPosLeft() + (card.getWidth()/2),getRegionYPosBottom() + (card.getHeight()/2) );
-        } else {
-            card.setPosition(getRegionXPosLeft() + (card.getWidth()/2) + (getNumCardsInRegion() * card.getWidth()), getRegionYPosBottom() + (card.getHeight()/2));
-        }
+
 
     }
 
     /**
-     * If the board region is not full, update the card position, add card to that region's active
-     * cards array set cards to not be draggable, should not be movable once they are in play.
+     * If the board region is not full, update the card position, add card to that region's card array
+     * called when drawing from deck.
      *
      * TODO Add checks for card type, minions should appear in slots, but weapons/spells cards should be consumed once dropped and appear in the graveyard etc.
      *
@@ -59,21 +55,23 @@ public class HandRegion extends GameRegion {
     public void addCard (Card card) {
 
         if (!isRegionFull()) {
-            updateCardPosition(card);
+
             getCardsInRegion().add(card);
             setNumCardsInRegion(getNumCardsInRegion() + 1);
+
+            if (getNumCardsInRegion() == 0) {
+                card.setPosition(getRegionXPosLeft() + (card.getWidth()/2),getRegionYPosBottom() + (card.getHeight()/2) );
+            } else {
+                card.setPosition(getRegionXPosLeft() + (card.getWidth()/2) + (getNumCardsInRegion() * card.getWidth()), getRegionYPosBottom() + (card.getHeight()/2));
+            }
+
+        }else{
+
+            // Hand is full, do something, eg. card shuffled back into deck etc.
+
         }
 
     }
-
-//    public void removeCard (Card card) {
-//
-//            getCardsInRegion().remove(card);
-//            setNumCardsInRegion(getNumCardsInRegion() - 1);
-//
-//
-//
-//    }
 
     /**
      * Update function for the hand. If a card is present within a region when a held card is dropped
@@ -84,16 +82,6 @@ public class HandRegion extends GameRegion {
      */
 
     public void update(Card card){
-
-        // If card is dropped and is in the region, and not currently stored in the region, add it to the region
-        if (card.isCardDropped()&& isInRegion(card) && !getCardsInRegion().contains(card)){
-            addCard(card);
-        }
-
-//        // If card was moved out of the region, remove it from the region
-//        if(card.isCardDropped()&& !isInRegion(card) && getCardsInRegion().contains(card)){
-//            removeCard(card);
-//        }
 
     }
 

@@ -224,8 +224,8 @@ public class colosseumDemoScreen extends GameScreen {
 
     public void setUpDecks() {
         //This method sets up the player and enemy decks, called when screen is loaded
-        playerDeck = new CardDeck(1, "Basic Player Deck", this, false);
-        enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true);
+        playerDeck = new CardDeck(1, "Basic Player Deck", this, false, playerHandRegion);
+        enemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true, opponentHandRegion);
 
         for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
             enemyDeck.getmCardHand().get(i).flipCard(this.mGame);
@@ -368,26 +368,10 @@ public class colosseumDemoScreen extends GameScreen {
 
                 for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
                     playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-
-                    // Updates both regions for all cards
-                    playerActiveRegion.update(playerDeck.getmCardHand().get(i));
-                    //opponentActiveRegion.update(playerDeck.getmCardHand().get(i));
-
-                    //playerHandRegion.update(playerDeck.getmCardHand().get(i));
-                    // opponentHandRegion.update(playerDeck.getmCardHand().get(i));
-
                 }
 
                 for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
                     enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
-
-                    // Updates both regions for all cards
-                    //playerActiveRegion.update(enemyDeck.getmCardHand().get(i));
-                    //opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
-
-                    //playerHandRegion.update(enemyDeck.getmCardHand().get(i));
-                    opponentHandRegion.update(enemyDeck.getmCardHand().get(i));
-
                 }
 
                 for (PushButton button : mButtons)
