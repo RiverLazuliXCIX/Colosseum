@@ -156,7 +156,7 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Button used to draw cards from deck:
         mDrawButton = new PushButton(
-                spacingX * 0.5f, spacingY * 0.5f, spacingX * 0.8f, spacingY * 0.8f, "CardDeckImg", this);
+                spacingX * 0.4f, spacingY * 0.4f, spacingX * 0.6f, spacingY * 0.6f, "CardDeckImg", this);
         mButtons.add(mDrawButton);
 
         //Setting up demo player:
@@ -169,7 +169,6 @@ public class colosseumDemoScreen extends GameScreen {
         //player
         p2.setCurrentMana(4);
         p2.setCurrentManaCap(4);
-        //p2.setCurrentHealth(28); // For testing ability only, remove later
 
         opponent.setCurrentMana(4);
         opponent.setCurrentManaCap(4);
@@ -450,6 +449,35 @@ public class colosseumDemoScreen extends GameScreen {
         p2.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         opponent.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
+        //Spacing that will be used to position everything:
+        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
+        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+
+        //PLAYER STATS BEING DRAWN:
+        //Draw player mana
+        pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 14.5f, spacingY * 11.4f, mText);
+
+        //Draw player card stats
+        int pCardsLeft = playerDeck.getDeck().size();
+        int pCardsHand = playerDeck.getmCardHand().size();
+        int pCardsDead = playerDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
+        graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 3.6f, spacingY * 11.0f, mText);
+        graphics2D.drawText("Hand: " + pCardsHand, spacingX * 3.6f, spacingY * 11.4f, mText);
+        graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 3.6f, spacingY * 11.8f, mText);
+
+        //Draw opponent mana
+        eDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+        graphics2D.drawText(opponent.getCurrentMana() + "/" + opponent.getCurrentManaCap(), spacingX * 14.5f, spacingY * 1.0f, mText);
+
+        //Draw opponent card stats
+        int eCardsLeft = enemyDeck.getDeck().size();
+        int eCardsHand = enemyDeck.getmCardHand().size();
+        int eCardsDead = enemyDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
+        graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 3.6f, spacingY * 0.6f, mText);
+        graphics2D.drawText("Hand: " + eCardsHand, spacingX * 3.6f, spacingY * 1.0f, mText);
+        graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 3.6f, spacingY * 1.4f, mText);
+
         //Draw initial 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
         if (p2.getYourTurn())
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
@@ -480,37 +508,6 @@ public class colosseumDemoScreen extends GameScreen {
         for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
             enemyDeck.getmCardHand().get(i).draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
-
-
-
-        //Spacing that will be used to position everything:
-        int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-        int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
-
-        //PLAYER STATS BEING DRAWN:
-        //Draw player mana
-        pDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        graphics2D.drawText(p2.getCurrentMana() + "/" + p2.getCurrentManaCap(), spacingX * 14.5f, spacingY * 11.4f, mText);
-
-        //Draw player card stats
-        int pCardsLeft = playerDeck.getDeck().size();
-        int pCardsHand = playerDeck.getmCardHand().size();
-        int pCardsDead = playerDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + pCardsLeft, spacingX * 3.6f, spacingY * 11.0f, mText);
-        graphics2D.drawText("Hand: " + pCardsHand, spacingX * 3.6f, spacingY * 11.4f, mText);
-        graphics2D.drawText("Graveyard: " + pCardsDead, spacingX * 3.6f, spacingY * 11.8f, mText);
-
-        //Draw opponent mana
-        eDenarius.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-        graphics2D.drawText(opponent.getCurrentMana() + "/" + opponent.getCurrentManaCap(), spacingX * 14.5f, spacingY * 1.0f, mText);
-
-        //Draw opponent card stats
-        int eCardsLeft = enemyDeck.getDeck().size();
-        int eCardsHand = enemyDeck.getmCardHand().size();
-        int eCardsDead = enemyDeck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + eCardsLeft, spacingX * 3.6f, spacingY * 0.6f, mText);
-        graphics2D.drawText("Hand: " + eCardsHand, spacingX * 3.6f, spacingY * 1.0f, mText);
-        graphics2D.drawText("Graveyard: " + eCardsDead, spacingX * 3.6f, spacingY * 1.4f, mText);
     }
 
     //Getters and setters:
