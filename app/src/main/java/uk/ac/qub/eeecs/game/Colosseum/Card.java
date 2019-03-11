@@ -234,81 +234,53 @@ public class Card extends GameObject {
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        if (this instanceof MinionCard) {
-            if (!mCardFlippedBack) {
+        if(!mCardFlippedBack) {
+
+            if (this instanceof MinionCard) {
+
                 MinionCard mc = (MinionCard) this;
 
-                //ASSUMING all stats are 2 digits or less
-
-                //TODO: REFACTOR
                 //Draw the attack on the card
-                if (mc.getAttack() < 10)   //if the value is a single digit, just draw it
-                    drawBitmap(mCardDigits[mc.getAttack()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
-                else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
-                    drawBitmap(mCardDigits[mc.getAttack() / 10], mAttackOffset.addReturn(-0.1f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                    drawBitmap(mCardDigits[mc.getAttack() % 10], mAttackOffset.addReturn(0.2f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                    mAttackOffset.add(-0.1f, 0);
-                }
+                drawStat(mc.getAttack(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
 
                 //Draw the defence on the card
-                if (mc.getHealth() < 10)
-                    drawBitmap(mCardDigits[mc.getHealth()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
-                else {
-                    drawBitmap(mCardDigits[mc.getHealth() / 10], mDefenceOffset.addReturn(-0.1f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                    drawBitmap(mCardDigits[mc.getHealth() % 10], mDefenceOffset.addReturn(0.2f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                    mDefenceOffset.add(-0.1f, 0);
-                }
+                drawStat(mc.getHealth(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
 
                 //Draw the mana on the card
-                if (mc.getCoinCost() < 10)
-                    drawBitmap(mCardDigits[mc.getCoinCost()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
-                else {
-                    drawBitmap(mCardDigits[mc.getCoinCost() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                    drawBitmap(mCardDigits[mc.getCoinCost() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                    mManaOffset.add(-0.1f, 0);
-                }
-            }
-        } else if (this instanceof WeaponCard) {
-            WeaponCard wc = (WeaponCard) this;
+                drawStat(mc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
 
-            //Draw the attack on the card
-            if (wc.getDamage() < 10)   //if the value is a single digit, just draw it
-                drawBitmap(mCardDigits[wc.getDamage()], mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
-            else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
-                drawBitmap(mCardDigits[wc.getDamage() / 10], mAttackOffset.addReturn(-0.1f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[wc.getDamage() % 10], mAttackOffset.addReturn(0.2f, 0), mAttackScale, graphics2D, layerViewport, screenViewport);
-                mAttackOffset.add(-0.1f, 0);
-            }
+            } else if (this instanceof WeaponCard) {
 
-            //Draw the charges on the card
-            if (wc.getCharges() < 10)
-                drawBitmap(mCardDigits[wc.getCharges()], mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
-            else {
-                drawBitmap(mCardDigits[wc.getCharges() / 10], mDefenceOffset.addReturn(-0.1f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[wc.getCharges() % 10], mDefenceOffset.addReturn(0.2f, 0), mDefenceScale, graphics2D, layerViewport, screenViewport);
-                mDefenceOffset.add(-0.1f, 0);
-            }
+                WeaponCard wc = (WeaponCard) this;
 
-            //Draw the mana on the card
-            if (wc.getCoinCost() < 10)
-                drawBitmap(mCardDigits[wc.getCoinCost()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
-            else {
-                drawBitmap(mCardDigits[wc.getCoinCost() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[wc.getCoinCost() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                mManaOffset.add(-0.1f, 0);
-            }
+                //Draw the attack on the card
+                drawStat(wc.getDamage(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
 
-        } else if (this instanceof SpellCard) {
-            SpellCard sc = (SpellCard) this;
+                //Draw the charges on the card
+                drawStat(wc.getCharges(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
 
-            //Draw the mana on the card
-            if (sc.getCoinCost() < 10)
-                drawBitmap(mCardDigits[sc.getCoinCost()], mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
-            else {
-                drawBitmap(mCardDigits[sc.getCoinCost() / 10], mManaOffset.addReturn(-0.1f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                drawBitmap(mCardDigits[sc.getCoinCost() % 10], mManaOffset.addReturn(0.2f, 0), mManaScale, graphics2D, layerViewport, screenViewport);
-                mManaOffset.add(-0.1f, 0);
+                //Draw the mana on the card
+                drawStat(wc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+
+            } else if (this instanceof SpellCard) {
+
+                SpellCard sc = (SpellCard) this;
+
+                //Draw the mana on the card
+                drawStat(sc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
             }
+        }
+    }
+
+    public void drawStat(int stat, Vector2 offset, Vector2 scale, IGraphics2D graphics2D, LayerViewport layerViewport, ScreenViewport screenViewport) {
+
+        //ASSUMING all stats are 2 digits or less
+        if (stat < 10)   //if the value is a single digit, just draw it
+            drawBitmap(mCardDigits[stat], offset, scale, graphics2D, layerViewport, screenViewport);
+        else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
+            drawBitmap(mCardDigits[stat / 10], offset.addReturn(-0.1f, 0), scale, graphics2D, layerViewport, screenViewport);
+            drawBitmap(mCardDigits[stat % 10], offset.addReturn(0.2f, 0), scale, graphics2D, layerViewport, screenViewport);
+            offset.add(-0.1f, 0);
         }
     }
 
