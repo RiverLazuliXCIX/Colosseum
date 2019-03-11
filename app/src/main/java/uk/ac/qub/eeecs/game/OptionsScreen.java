@@ -68,6 +68,18 @@ public class OptionsScreen extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
+    public void setUpPreferences(PushButton pushButton, String dataType, boolean start, boolean finish) {
+        if (pushButton.isPushTriggered()) {
+            if (mGetPreference.getBoolean(dataType, start)) {
+                mPrefEditor.putBoolean(dataType, finish);
+                mPrefEditor.commit();
+            } else {
+                mPrefEditor.putBoolean(dataType, start);
+                mPrefEditor.commit();
+            }
+        }
+    }
+
     private void setUpOptionScrnObjects() {
         //Load in a newly created "OptionScreenAssets.JSON" file which stores assets and their properties - Story O1 and O2 Scott Barham
         mGame.getAssetManager().loadAssets("txt/assets/OptionScreenAssets.JSON");
@@ -155,66 +167,13 @@ public class OptionsScreen extends GameScreen {
             }
 
             //Conditions for what happens when you click one of the 3 buttons.
-            //TODO: Refactor this code - too much repetition (Dearbhaile)
-            if (mMusicOn.isPushTriggered()) {
-                if (mGetPreference.getBoolean("Music", false)) {
-                    mPrefEditor.putBoolean("Music", true);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("Music", false);
-                    mPrefEditor.commit();
-                }
-            }
-
-            if (mMusicOff.isPushTriggered()) {
-                if (mGetPreference.getBoolean("Music", true)) {
-                    mPrefEditor.putBoolean("Music", false);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("Music", true);
-                    mPrefEditor.commit();
-                }
-            }
-
-            if (mSFXon.isPushTriggered()) {
-                if (mGetPreference.getBoolean("SFX", false)) {
-                    mPrefEditor.putBoolean("SFX", true);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("SFX", false);
-                    mPrefEditor.commit();
-                }
-            }
-
-            if (mSFXoff.isPushTriggered()) {
-                if (mGetPreference.getBoolean("SFX", true)) {
-                    mPrefEditor.putBoolean("SFX", false);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("SFX", true);
-                    mPrefEditor.commit();
-                }
-            }
-
-            if (mFPSon.isPushTriggered()) {
-                if (mGetPreference.getBoolean("FPS", true)) {
-                    mPrefEditor.putBoolean("FPS", false);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("FPS", true);
-                    mPrefEditor.commit();
-                }
-            }
-
-            if (mFPSoff.isPushTriggered()) {
-                if (mGetPreference.getBoolean("FPS", false)) {
-                    mPrefEditor.putBoolean("FPS", true);
-                    mPrefEditor.commit();
-                } else {
-                    mPrefEditor.putBoolean("FPS", false);
-                    mPrefEditor.commit();
-                }
-            }
+            //Refactored using a method (above) to cut down ~40 lines of code. - Dearbhaile
+            setUpPreferences(mMusicOn, "Music", false, true);
+            setUpPreferences(mMusicOff, "Music", true, false);
+            setUpPreferences(mSFXon, "SFX", false, true);
+            setUpPreferences(mSFXoff, "SFX", true, false);
+            setUpPreferences(mFPSon, "FPS", true, false);
+            setUpPreferences(mFPSoff, "FPS", false, true);
 
             //Testing a toggle button input to enable the edgecase coinflip
             for(ToggleButton button : tButtons)
