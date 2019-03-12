@@ -39,7 +39,6 @@ public class CardDeckTest {
     @Mock
     private Bitmap mBitmap;
 
-
     @Before
     public void setUp() {
         when(mDemoScreen.getGame()).thenReturn(mGame);
@@ -104,6 +103,7 @@ public class CardDeckTest {
         assertNotNull(newDeck.getmDiscardPile());
     }
 
+    //Initialisation check: Does building a deck add 30 cards to the Deck array?
     @Test
     public void cardDeck_30Cards() {
         //Test to ensure that 30 cards are added on initializaion of the extended deck constructor:
@@ -113,55 +113,15 @@ public class CardDeckTest {
         assertEquals(newDeck.getDeck().size(), 30);
     }
 
+    //Initialisation check: does the numOfCards variable increase as cards are added to the Deck array?
     @Test
     public void cardDeckCreate_CardNumsCorrect() {
-        //This test is to ensure that when a new deck is created, the numOfCards variable increases to the size of the Deck ArrayList:
+        //This test is to ensure that when a new deck is created, the NumOfCards variable increases to the size of the Deck ArrayList:
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
         assertEquals(newDeck.getNumOfCards(), newDeck.getDeck().size());
     }
-
-    @Test
-    public void cardHandCreate_CardNumsCorrect() {
-        //This test is to ensure that when a card hand is created, the sizeOfHand variable increases to the size of the Hand ArrayList:
-        HandRegion handRegion = new HandRegion(10,20,20,10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-
-        assertEquals(newDeck.getmCardHand().size(), newDeck.getmSizeOfHand());
-    }
-
-    //
-    // The following 3 tests are to check that my chooseDeckType method works as expected:
-    //
-
-    @Test
-    public void chooseDeckType_Minions() {
-        HandRegion handRegion = new HandRegion(10,20,20,10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-        newDeck.chooseDeckType();
-
-        assertNotEquals(newDeck.getmNumOfMinions(), 0);
-    }
-
-    @Test
-    public void chooseDeckType_Spells() {
-        HandRegion handRegion = new HandRegion(10,20,20,10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-        newDeck.chooseDeckType();
-
-        assertNotEquals(newDeck.getmNumOfSpells(), 0);
-    }
-
-    @Test
-    public void chooseDeckType_Weapons() {
-        HandRegion handRegion = new HandRegion(10,20,20,10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-        newDeck.chooseDeckType();
-
-        assertNotEquals(newDeck.getmNumOfWeapons(), 0);
-    }
-
 
     //
     // Tests on my 'drawTopCard()' method:
@@ -173,6 +133,7 @@ public class CardDeckTest {
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
+        //Draw one card from the deck:
         newDeck.drawTopCard();
 
         int expectedNumOfCards = 29;
@@ -185,6 +146,7 @@ public class CardDeckTest {
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
+        //Draw a card into the hand once:
         newDeck.drawTopCard();
 
         int expectedHandSize = 1;
@@ -211,7 +173,6 @@ public class CardDeckTest {
     //
     //Tests on my destroyCardOverLimit() method:
     //
-
     @Test
     public void destroyCardOverLimit_Success() {
         HandRegion handRegion = new HandRegion(10,20,20,10);
@@ -221,10 +182,12 @@ public class CardDeckTest {
             newDeck.drawTopCard();
         }
 
+        //Since 6 cards were drawn, all cards over the limit of 5, ie 1 card, should be destroyed:
         newDeck.destroyCardOverLimit();
 
         int expectedHandSize = 5;
 
+        //Thus, at the end there should only be 5 cards in the hand:
         assertEquals(expectedHandSize, newDeck.getmCardHand().size());
     }
 
@@ -250,6 +213,44 @@ public class CardDeckTest {
         //This deck should have loaded in 30 cards
 
         assertFalse(newDeck.checkIsEmpty());
+    }
+
+    //
+    // Tests on my 'drawSetNumCards()' method
+    //
+    @Test
+    public void drawSetNumCards_Success() {
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Try to draw 15 cards into an empty hand
+        newDeck.drawSetNumCards(15);
+
+        //15 cards should now be in the hand
+        int expectedNumOfCards = 15;
+
+        assertEquals(newDeck.getmCardHand().size(), expectedNumOfCards);
+    }
+
+    @Test
+    public void tryToDrawFromEmptyDeck() {
+        HandRegion handRegion = new HandRegion(10,20,20,10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Draw all 30 cards from deck
+        newDeck.drawSetNumCards(30);
+
+        //Check that deck is now empty
+        assertEquals(newDeck.getDeck().size(), 0);
+
+        //Check that 30 cards in hand
+        assertEquals(newDeck.getmCardHand().size(), 30);
+
+        //Draw one further card:
+        newDeck.drawSetNumCards(1);
+
+        //Should still only be 30 cards in hand:
+        assertEquals(newDeck.getmCardHand().size(), 30);
     }
 
 
