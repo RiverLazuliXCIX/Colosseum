@@ -76,7 +76,7 @@ public class CoinTossScreen extends GameScreen {
                 mGameViewport.getHeight(), getGame()
                 .getAssetManager().getBitmap("CTSBackground"), this);
 
-        //Set up the fps counter - Scott Barham
+        //Set up the FPS counter:
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
 
         // Spacing that will be used to position the Coin Toss Screen Objects:
