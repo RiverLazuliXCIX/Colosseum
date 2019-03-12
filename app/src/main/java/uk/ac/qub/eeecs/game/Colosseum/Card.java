@@ -138,9 +138,9 @@ public class Card extends GameObject {
 
             //Move the card - Story C1
             if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCardHeld == null)
+                    && mCardHeld == null){
                 checkCardTouched(mCards, touchLocation);
-            cardDropped = false;
+            cardDropped = false;}
 
             //if a card was touched, and the event was a drag, move it
             if (touchType == TouchEvent.TOUCH_DRAGGED
