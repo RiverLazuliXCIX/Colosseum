@@ -12,6 +12,11 @@
     },
     {
       "type": "Bitmap",
+      "name": "CardFrontSelected",
+      "file": "img/CardFrontSelected.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "Denarius",
       "file": "img/denarius.png"
     },
