@@ -50,7 +50,7 @@ public class Card extends GameObject {
     //Check if card is being held
     private Card mCardHeld = null;
     //Check if card is selected to attack with
-    private Boolean attackSelected = false;
+    private Card mAttackerSelected = null;
 
 
     //Check card is flipped
@@ -101,6 +101,8 @@ public class Card extends GameObject {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
+        this.isEnemy = isEnemy;
+
         //temp
         mCardPortrait = gameScreen.getGame().getAssetManager().getBitmap(mCardName);
 
@@ -138,26 +140,54 @@ public class Card extends GameObject {
 
             //Move the card - Story C1
             if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCardHeld == null)
+                    && mCardHeld == null){
                 checkCardTouched(mCards, touchLocation);
-            cardDropped = false;
+            cardDropped = false;}
 
             //if a card was touched, and the event was a drag, move it
             if (touchType == TouchEvent.TOUCH_DRAGGED
                     && mCardHeld != null)
-                mCardHeld.position = touchLocation;
+                mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
 
 
-            //Flip the card - Story C5
             //Edited: select card for attacking with
+            //initial selection, change card frame
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                     && mCardHeld == null)
                 checkCardTouched(mCards, touchLocation);
 
+            Bitmap base = mGame.getAssetManager().getBitmap("CardFront");
+            Bitmap selected = mGame.getAssetManager().getBitmap("CardFrontSelected");
+
+            //select
             if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                     && mCardHeld != null
-                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
-                setAttackSelected(true);
+                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                    && !mCardHeld.getIsEnemy()
+                    && mCardHeld.getBitmap() == base) {
+                setmAttackerSelected(mCardHeld);
+                getmAttackerSelected().setBitmap(selected);
+            }
+            //deselect
+            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                    && mCardHeld != null
+                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                    && getmAttackerSelected() != null
+                    && getmAttackerSelected() != mCardHeld
+                    && getmAttackerSelected().getBitmap() == selected) {
+                getmAttackerSelected().setBitmap(base);
+                setmAttackerSelected(null);
+            }
+
+
+
+            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                    && mCardHeld != null
+                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                    && mCardHeld.getIsEnemy()
+                    && getmAttackerSelected() != null
+                    && !getmAttackerSelected().getIsEnemy()) {
+                //attack logic
             }
 
             //Bound the card - Story C3
@@ -207,10 +237,7 @@ public class Card extends GameObject {
             if (b == front) {
                 this.setBitmap(back);
                 this.mCardFlippedBack = true;
-            } //else if (b == back) {
-                //this.setBitmap(front);
-                //this.mCardFlippedBack = false;
-            //}
+            }
         }
     }
 
@@ -239,33 +266,26 @@ public class Card extends GameObject {
             if (this instanceof MinionCard) {
 
                 MinionCard mc = (MinionCard) this;
-
                 //Draw the attack on the card
                 drawStat(mc.getAttack(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
-
                 //Draw the defence on the card
                 drawStat(mc.getHealth(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
-
                 //Draw the mana on the card
                 drawStat(mc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof WeaponCard) {
 
                 WeaponCard wc = (WeaponCard) this;
-
                 //Draw the attack on the card
                 drawStat(wc.getDamage(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
-
                 //Draw the charges on the card
                 drawStat(wc.getCharges(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
-
                 //Draw the mana on the card
                 drawStat(wc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof SpellCard) {
 
                 SpellCard sc = (SpellCard) this;
-
                 //Draw the mana on the card
                 drawStat(sc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
             }
@@ -361,8 +381,8 @@ public class Card extends GameObject {
 
     public Card getCard(int i) { return this; }
 
-    public Boolean getAttackSelected() { return attackSelected; }
-    public void setAttackSelected(Boolean attackSelected) { this.attackSelected = attackSelected; }
+    public Card getmAttackerSelected() { return mAttackerSelected; }
+    public void setmAttackerSelected(Card attackerSelected) { this.mAttackerSelected = attackerSelected; }
 
     public String getmCardName() { return mCardName; }
     public void setmCardName(String mCardName) { this.mCardName = mCardName; }

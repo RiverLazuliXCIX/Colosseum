@@ -21,6 +21,24 @@ public class Turn {
         }
     }
 
+    public void setUpStats_PlayerStarts(Player player, CardDeck playerDeck, AIOpponent opponent, CardDeck enemyDeck) {
+        player.setYourTurn(true);
+        opponent.setYourTurn(false);
+        opponent.setCurrentMana(5);
+        opponent.setCurrentManaCap(5);
+        playerDeck.drawSetNumCards(3);
+        enemyDeck.drawSetNumCards(4);
+    }
+
+    public void setUpStats_EnemyStarts(Player player, CardDeck playerDeck, AIOpponent opponent, CardDeck enemyDeck) {
+        opponent.setYourTurn(true);
+        player.setYourTurn(false);
+        player.setCurrentMana(5);
+        player.setCurrentManaCap(5);
+        enemyDeck.drawSetNumCards(3);
+        playerDeck.drawSetNumCards(4);
+    }
+
     public void incrementTurnNum() {
         this.mTurnNum++;
     };

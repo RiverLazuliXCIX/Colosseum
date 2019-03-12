@@ -557,7 +557,9 @@ public class Player extends GameObject {
 
     public void meridiaAbilityUsed(){
 
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
+        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn &&
+                currentHealth<MAX_HEALTH &&yourTurn) {
+
             reduceCurrentMana(HERO_ABILITY_COST);
 
             heal(2);
