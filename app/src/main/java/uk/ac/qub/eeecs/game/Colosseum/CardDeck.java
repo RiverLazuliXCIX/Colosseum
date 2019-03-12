@@ -6,6 +6,7 @@ import java.util.Random;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 
+//CardDeck class, coded by Dearbhaile Walsh
 public class CardDeck {
 
     //Variables for Card Deck
@@ -253,12 +254,20 @@ public class CardDeck {
         }
     }
 
-    public void discardCard(Card cardToDiscard) {
-        trackRemovalOfCards();
-        mCardHand.remove(cardToDiscard);
+    public void drawSetNumCards(int numToDraw) {
+        for (int i = 0; i < numToDraw; i++) {
+            drawTopCard();
+        }
+    }
 
-        mSizeOfDiscard++;
-        mDiscardPile.add(cardToDiscard);
+    public void discardCard(Card cardToDiscard) {
+            //Remove card from hand
+            trackRemovalOfCards();
+            mCardHand.remove(cardToDiscard);
+
+            //Add card to discard pile
+            mSizeOfDiscard++;
+            mDiscardPile.add(cardToDiscard);
     }
 
     //Method that returns true if deck is empty - to be used when applying fatigue

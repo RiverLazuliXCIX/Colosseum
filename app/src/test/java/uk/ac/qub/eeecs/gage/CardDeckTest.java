@@ -49,7 +49,6 @@ public class CardDeckTest {
     //
     //Tests on the Constructors:
     //
-
     @Test
     public void cardDeckCreate() {
         //This test is to ensure that when the empty CardDeck constructor is called, a Deck ArrayList is created:
@@ -110,7 +109,9 @@ public class CardDeckTest {
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
-        assertEquals(newDeck.getDeck().size(), 30);
+        int expectedNumOfCards = 30;
+
+        assertEquals(newDeck.getDeck().size(), expectedNumOfCards);
     }
 
     //Initialisation check: does the numOfCards variable increase as cards are added to the Deck array?
@@ -126,7 +127,6 @@ public class CardDeckTest {
     //
     // Tests on my 'drawTopCard()' method:
     //
-
     @Test
     public void drawTopCard_DeckTest() {
         //Set up a deck of 30 cards:
@@ -195,7 +195,6 @@ public class CardDeckTest {
     //
     //Tests on my 'checkIsEmpty()' method:
     //
-
     @Test
     public void cardDeckIsEmpty_Success() {
         //This test is to ensure that the isEmpty() method works as expected:
@@ -253,11 +252,48 @@ public class CardDeckTest {
         assertEquals(newDeck.getmCardHand().size(), 30);
     }
 
+    //
+    // Tests on my 'discardCard()' method:
+    //
+    @Test
+    public void discardCard_Test() {
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //'Draw' 5 cards to the mCardHand ArrayList:
+        newDeck.drawSetNumCards(5);
+
+        //Assert that now 5 cards are in the hand:
+        int expectedSizeOfHand = 5;
+        assertEquals(newDeck.getmCardHand().size(), expectedSizeOfHand);
+
+        //Remove the last card from the hand:
+        newDeck.discardCard(newDeck.getmCardHand().get(4));
+
+        //There should now be 4 cards in the hand:
+        expectedSizeOfHand--;
+        assertEquals(newDeck.getmCardHand().size(), expectedSizeOfHand);
+    }
+
+    @Test
+    public void discardCard_DiscardPileIncreases() {
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Draw 5 cards to the mCardHand ArrayList:
+        newDeck.drawSetNumCards(5);
+
+        //Remove the last card from the hand:
+        newDeck.discardCard(newDeck.getmCardHand().get(4));
+
+        int expectedSizeOfDiscardPile = 1;
+
+        assertEquals(newDeck.getmDiscardPile().size(), expectedSizeOfDiscardPile);
+    }
 
     //
     // Tests on the Getters & Setters:
     //
-
     @Test
     public void cardDeckGetID() {
         //This test is to ensure that the CardDeck ID is set correctly:
