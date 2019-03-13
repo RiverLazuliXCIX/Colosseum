@@ -64,6 +64,7 @@ public class Card extends GameObject {
 
     private Bitmap mCardPortrait;
     private String mCardName;
+    private String currentRegion; // Stores the current region the card is currently located
 
 
     //Set offset and scale values for positioning
@@ -389,4 +390,7 @@ public class Card extends GameObject {
 
     public Bitmap getmCardPortrait() { return mCardPortrait; }
     public void setmCardPortrait(Bitmap cardPortrait) { this.mCardPortrait = cardPortrait; }
+
+    public String getCurrentRegion() { return currentRegion; }
+    public void setCurrentRegion(String currentRegion) { this.currentRegion = currentRegion; }
 }

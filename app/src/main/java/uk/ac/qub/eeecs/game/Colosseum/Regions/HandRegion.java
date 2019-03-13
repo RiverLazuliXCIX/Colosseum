@@ -45,10 +45,11 @@ public class HandRegion extends GameRegion {
 
             getCardsInRegion().add(card);
             setCardPosition(card);
+            card.setCurrentRegion("Hand");
 
         }else{
 
-            // Hand is full, do something, eg. card shuffled back into deck etc.
+            // Hand is full, do something, eg. card shuffled back into deck, message displayed etc.
 
         }
 
@@ -64,9 +65,16 @@ public class HandRegion extends GameRegion {
 
     public void update(Card card){
 
-        if (!isInRegion(card)){
+        // If a card is moved outside of the hand region by any means, remove it from array list
+        // Note: If card is dropped in a different but valid region, card's current region is changed
+        // that of the related state, allowing for a different related method to handle it.
+        if (!isInRegion(card) && card.getCurrentRegion()=="Hand"){
 
             removeCard(card);
+            // If card is dropped to an invalid location, add the card back to the hand
+            if(card.isCardDropped()){
+                addCard(card);
+            }
 
         }
 
