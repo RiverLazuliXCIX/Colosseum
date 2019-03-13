@@ -22,7 +22,6 @@ public class GameRegion {
     private float regionWidth;
     private float regionHeight;
 
-    private int numCardsInRegion;
     private int maxNumCardsInRegion;
 
     private ArrayList <Card> cardsInRegion;
@@ -42,7 +41,6 @@ public class GameRegion {
         this.regionHeight = yTopEdge - yBottomEdge;
 
         // Sets default values related to cards within the region
-        this.numCardsInRegion = 0;
         this.maxNumCardsInRegion = 10;
         this.cardsInRegion = new ArrayList<>();
 
@@ -51,6 +49,49 @@ public class GameRegion {
     // /////////////////////////////////////////////////////////////////////////
     // Methods
     // /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Sets the card position to the leftmost available position, dependant on the number of
+     * cards already in the region. Determines xco-ordinate by multiplying the card's index, in the
+     * region array list, by the width of the card.
+     *
+     */
+
+    public void setCardPosition(Card card){
+
+        card.setPosition(getRegionXPosLeft() + (card.getWidth()/2) +
+                        (getCardsInRegion().indexOf(card) * card.getWidth()),
+                getRegionYPosBottom() + (card.getHeight()/2));
+
+    }
+
+    /**
+     * For each card still stored in the array list, repositions the card depending on its index.
+     * Use
+     *
+     */
+
+    public void updateCardPositions(){
+
+        for (int i = 0; i < getCardsInRegion().size(); i++) {
+
+            setCardPosition(getCardsInRegion().get(i));
+
+        }
+
+    }
+
+    /**
+     * Removes card from active cards and updates the card positions within that region
+     *
+     * @param card Card being removed
+     */
+    public void removeCard (Card card){
+
+        getCardsInRegion().remove(card);
+        updateCardPositions();
+
+    }
 
     /**
      * Checks if a specified card is present within the region.
@@ -74,7 +115,7 @@ public class GameRegion {
      */
 
     public boolean isRegionFull(){
-        if(numCardsInRegion == maxNumCardsInRegion) {
+        if(cardsInRegion.size() >= maxNumCardsInRegion) {
             return true;
         }
         return false;
@@ -105,9 +146,6 @@ public class GameRegion {
 
     public float getRegionHeight() { return regionHeight; }
     public void setRegionHeight(float regionHeight) { this.regionHeight = regionHeight; }
-
-    public int getNumCardsInRegion() { return numCardsInRegion; }
-    public void setNumCardsInRegion(int numCardsInRegion) { this.numCardsInRegion = numCardsInRegion; }
 
     public ArrayList<Card> getCardsInRegion() { return cardsInRegion; }
     public void setCardsInRegion(ArrayList<Card> cardsInRegion) { this.cardsInRegion = cardsInRegion; }

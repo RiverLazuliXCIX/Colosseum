@@ -30,23 +30,6 @@ public class ActiveRegion extends GameRegion {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Updates the position of the cards in the container, moving the card to the leftmost available
-     * position. This method will be different depending on the type of region.
-     *
-     * @param card Card which is having its position updated
-     */
-
-    public void updateCardPosition(Card card){
-
-        if (getNumCardsInRegion() == 0) {
-            card.setPosition(getRegionXPosLeft() + (card.getWidth()/2),getRegionYPosBottom() + (card.getHeight()/2) );
-        } else {
-            card.setPosition(getRegionXPosLeft() + (card.getWidth()/2) + (getNumCardsInRegion() * card.getWidth()), getRegionYPosBottom() + (card.getHeight()/2));
-        }
-
-    }
-
-    /**
      * If the board region is not full, update the card position, add card to that region's active
      * cards array set cards to not be draggable, should not be movable once they are in play.
      *
@@ -57,23 +40,15 @@ public class ActiveRegion extends GameRegion {
     public void addCard (Card card){
 
         if(!isRegionFull()){
-            updateCardPosition(card);
+
             getCardsInRegion().add(card);
+            setCardPosition(card);
             card.setDraggable(false);
-            setNumCardsInRegion(getNumCardsInRegion()+1);
+
         }
-
-    }
-
-    /**
-     * Removes card from active cards and decrements the number of cards on the board.
-     *
-     * @param card Card being removed
-     */
-    public void removeCard (Card card){
-
-        getCardsInRegion().remove(card);
-        setNumCardsInRegion(getNumCardsInRegion()-1);
+        else{
+            // Region full, do something
+        }
 
     }
 
@@ -85,10 +60,13 @@ public class ActiveRegion extends GameRegion {
      * @param card Card being updated
      */
     public void update(Card card){
+
         if (card.isCardDropped()&& isInRegion(card) && !isRegionFull()&& card.isDraggable()){
-            //updateCardPosition(card);
+
             addCard(card);
+
         }
+
     }
 
     // /////////////////////////////////////////////////////////////////////////

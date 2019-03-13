@@ -31,19 +31,6 @@ public class HandRegion extends GameRegion {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Handles what happens when a card is removed from hand, and dropped into an accessible region,
-     * excluding opponent regions, and the player's hand.
-     *
-     * @param card Card which is having its position updated
-     */
-
-    public void removeCard(Card card){
-
-
-
-    }
-
-    /**
      * If the board region is not full, update the card position, add card to that region's card array
      * called when drawing from deck.
      *
@@ -57,13 +44,7 @@ public class HandRegion extends GameRegion {
         if (!isRegionFull()) {
 
             getCardsInRegion().add(card);
-            setNumCardsInRegion(getNumCardsInRegion() + 1);
-
-            if (getNumCardsInRegion() == 0) {
-                card.setPosition(getRegionXPosLeft() + (card.getWidth()/2),getRegionYPosBottom() + (card.getHeight()/2) );
-            } else {
-                card.setPosition(getRegionXPosLeft() + (card.getWidth()/2) + (getNumCardsInRegion() * card.getWidth()), getRegionYPosBottom() + (card.getHeight()/2));
-            }
+            setCardPosition(card);
 
         }else{
 
@@ -82,6 +63,12 @@ public class HandRegion extends GameRegion {
      */
 
     public void update(Card card){
+
+        if (!isInRegion(card)){
+
+            removeCard(card);
+
+        }
 
     }
 
