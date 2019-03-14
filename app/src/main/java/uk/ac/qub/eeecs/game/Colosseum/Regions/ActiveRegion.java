@@ -44,6 +44,7 @@ public class ActiveRegion extends GameRegion {
             getCardsInRegion().add(card);
             setCardPosition(card);
             card.setDraggable(false);
+            card.setSelectable(true);
             card.setCurrentRegion("Active");
 
         }
@@ -62,7 +63,7 @@ public class ActiveRegion extends GameRegion {
      */
     public void update(Card card){
 
-        if (card.isCardDropped()&& isInRegion(card) && !isRegionFull()&& card.isDraggable()){
+        if (card.getCardDropped()&& isInRegion(card) && !isRegionFull()&& card.getDraggable()){
 
             // TODO add check to ensure player has enough mana to allow the card to be played
 

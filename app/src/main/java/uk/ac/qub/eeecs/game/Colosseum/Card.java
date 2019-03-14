@@ -42,10 +42,10 @@ public class Card extends GameObject {
     //Check if card is selected to attack with
     private Card mAttackerSelected = null;
 
-
     //Check card is flipped
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
     private Boolean draggable = true; // Card should not be draggable if it is locked in its region
+    private Boolean selectable = false;
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
     private Boolean isEnemy;
     //Define the attack and defence values
@@ -144,7 +144,7 @@ public class Card extends GameObject {
         //if a card was touched, and the event was a drag, move it
         if (touchType == TouchEvent.TOUCH_DRAGGED
                 && mCardHeld != null
-                && mCardHeld.isDraggable())
+                && mCardHeld.getDraggable())
             mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
     }
 
@@ -163,7 +163,8 @@ public class Card extends GameObject {
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
                 && getmAttackerSelected() != null
                 && getmAttackerSelected() != mCardHeld
-                && getmAttackerSelected().getBitmap() == selected) {
+                && getmAttackerSelected().getBitmap() == selected
+                && mCardHeld.getSelectable()) {
             getmAttackerSelected().setBitmap(base);
             setmAttackerSelected(null);
         }
@@ -172,7 +173,8 @@ public class Card extends GameObject {
                 && mCardHeld != null
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
                 && !mCardHeld.getIsEnemy()
-                && mCardHeld.getBitmap() == base) {
+                && mCardHeld.getBitmap() == base
+                && mCardHeld.getSelectable()) {
             setmAttackerSelected(mCardHeld);
             getmAttackerSelected().setBitmap(selected);
         }
@@ -182,7 +184,8 @@ public class Card extends GameObject {
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
                 && mCardHeld.getIsEnemy()
                 && getmAttackerSelected() != null
-                && !getmAttackerSelected().getIsEnemy()) {
+                && !getmAttackerSelected().getIsEnemy()
+                && mCardHeld.getSelectable()) {
             //attack logic
         }
     }
@@ -333,45 +336,16 @@ public class Card extends GameObject {
         }
     }
 
-    /*
-    public void setAttack(int attack){
-        this.attack = attack;
-    }
 
-    public void setDefence(int defence){
-        this.defence = defence;
-    }
+    //Getters and Setters
+    public boolean getSelectable(){ return selectable; }
+    public void setSelectable(boolean selectable){ this.selectable = selectable; }
 
-    public void setMana(int mana){
-        this.mana = mana;
-    }
-    */
+    public boolean getDraggable(){ return draggable; }
+    public void setDraggable(boolean draggable){ this.draggable = draggable; }
 
-    public void setDraggable(boolean draggable){
-        this.draggable = draggable;
-    }
-
+    public boolean getCardDropped(){ return cardDropped; }
     public void setCardDropped(boolean cardDropped) { this.cardDropped = cardDropped;}
-
-    /*
-    public int getAttack() {
-        return attack;
-    }
-
-    public int getDefence() {
-        return defence;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-    */
-
-    public boolean isDraggable(){
-        return draggable;
-    }
-
-    public boolean isCardDropped(){return cardDropped;}
 
     public int getCoinCost() { return this.coinCost; }
     public void setCoinCost(int coinCost) { this.coinCost = coinCost; }

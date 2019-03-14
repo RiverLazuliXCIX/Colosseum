@@ -72,7 +72,7 @@ public class HandRegion extends GameRegion {
 
             removeCard(card);
             // If card is dropped to an invalid location, add the card back to the hand
-            if(card.isCardDropped()){
+            if(card.getCardDropped()){
                 addCard(card);
             }
 
