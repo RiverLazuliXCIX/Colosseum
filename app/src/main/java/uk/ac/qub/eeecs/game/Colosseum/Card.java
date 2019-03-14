@@ -1,21 +1,11 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.icu.text.CollationKey;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
-import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -122,14 +112,13 @@ public class Card extends GameObject {
 
     /**
      * Drag and flip a card
-     *
-     * @param mCards                 card being touched
+     *  @param mCards                 card being touched
      * @param mDefaultScreenViewport default game screen viewport
      * @param mGameViewport          game screen viewport
      * @param mGame                  the game in question
      */
-    public void cardDrag(List<Card> mCards, ScreenViewport mDefaultScreenViewport,
-                         LayerViewport mGameViewport, Game mGame) {
+    public void cardEvents(List<Card> mCards, ScreenViewport mDefaultScreenViewport,
+                           LayerViewport mGameViewport, Game mGame) {
         Input mInput = mGame.getInput();
 
         for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
@@ -139,94 +128,101 @@ public class Card extends GameObject {
             ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
                     mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
 
-            //Move the card - Story C1
-            if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCardHeld == null){
-                checkCardTouched(mCards, touchLocation);
-            cardDropped = false;}
+            moveCard(touchType, mCards, touchLocation);
+            selectCard(touchType, mCards, touchLocation, mGame);
+            boundCard(mCards, mGameViewport);
+            enlargeCard(touchType, mCards, touchLocation);
+            releaseCard(touchType);
+        }
+    }
 
-            //if a card was touched, and the event was a drag, move it
-            if (touchType == TouchEvent.TOUCH_DRAGGED
-                    && mCardHeld != null)
-                mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
+    public void moveCard(int touchType, List<Card> mCards, Vector2 touchLocation){
+        //Move the card - Story C1
+        checkCardTouched(touchType, TouchEvent.TOUCH_DRAGGED, mCards, touchLocation);
+        cardDropped = false;
 
+        //if a card was touched, and the event was a drag, move it
+        if (touchType == TouchEvent.TOUCH_DRAGGED
+                && mCardHeld != null)
+            mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
+    }
 
-            //Edited: select card for attacking with
-            //initial selection, change card frame
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                    && mCardHeld == null)
-                checkCardTouched(mCards, touchLocation);
+    public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame){
+        //Edited: select card for attacking with
+        //initial selection, change card frame
+        checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, mCards, touchLocation);
 
-            Bitmap base = mGame.getAssetManager().getBitmap("CardFront");
-            Bitmap selected = mGame.getAssetManager().getBitmap("CardFrontSelected");
-
-            //select
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                    && mCardHeld != null
-                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
-                    && !mCardHeld.getIsEnemy()
-                    && mCardHeld.getBitmap() == base) {
-                setmAttackerSelected(mCardHeld);
-                getmAttackerSelected().setBitmap(selected);
-            }
-            //deselect
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                    && mCardHeld != null
-                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
-                    && getmAttackerSelected() != null
-                    && getmAttackerSelected() != mCardHeld
-                    && getmAttackerSelected().getBitmap() == selected) {
-                getmAttackerSelected().setBitmap(base);
-                setmAttackerSelected(null);
-            }
+        Bitmap base = mGame.getAssetManager().getBitmap("CardFront");
+        Bitmap selected = mGame.getAssetManager().getBitmap("CardFrontSelected");
 
 
+        //deselect
+        if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                && mCardHeld != null
+                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                && getmAttackerSelected() != null
+                && getmAttackerSelected() != mCardHeld
+                && getmAttackerSelected().getBitmap() == selected) {
+            getmAttackerSelected().setBitmap(base);
+            setmAttackerSelected(null);
+        }
+        //select
+        if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                && mCardHeld != null
+                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                && !mCardHeld.getIsEnemy()
+                && mCardHeld.getBitmap() == base) {
+            setmAttackerSelected(mCardHeld);
+            getmAttackerSelected().setBitmap(selected);
+        }
 
-            if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                    && mCardHeld != null
-                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
-                    && mCardHeld.getIsEnemy()
-                    && getmAttackerSelected() != null
-                    && !getmAttackerSelected().getIsEnemy()) {
-                //attack logic
-            }
+        if (touchType == TouchEvent.TOUCH_SINGLE_TAP
+                && mCardHeld != null
+                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                && mCardHeld.getIsEnemy()
+                && getmAttackerSelected() != null
+                && !getmAttackerSelected().getIsEnemy()) {
+            //attack logic
+        }
+    }
 
-            //Bound the card - Story C3
-            for (int j = 0; j < mCards.size(); j++) {
-                float cardHalfWidth = mCards.get(j).getBound().halfWidth, cardHalfHeight = mCards.get(j).getBound().halfHeight;
+    public void boundCard(List<Card> mCards, LayerViewport mGameViewport){
+        //Bound the card - Story C3
+        for (int j = 0; j < mCards.size(); j++) {
+            float cardHalfWidth = mCards.get(j).getBound().halfWidth, cardHalfHeight = mCards.get(j).getBound().halfHeight;
 
-                if (mCards.get(j).getBound().getLeft() < 0)
-                    mCards.get(j).position.x = cardHalfWidth;
-                if (mCards.get(j).getBound().getBottom() < 0)
-                    mCards.get(j).position.y = cardHalfHeight;
-                if (mCards.get(j).getBound().getRight() > mGameViewport.getRight())
-                    mCards.get(j).position.x = mGameViewport.getRight() - cardHalfWidth;
-                if (mCards.get(j).getBound().getTop() > mGameViewport.getTop())
-                    mCards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
-            }
+            if (mCards.get(j).getBound().getLeft() < 0)
+                mCards.get(j).position.x = cardHalfWidth;
+            if (mCards.get(j).getBound().getBottom() < 0)
+                mCards.get(j).position.y = cardHalfHeight;
+            if (mCards.get(j).getBound().getRight() > mGameViewport.getRight())
+                mCards.get(j).position.x = mGameViewport.getRight() - cardHalfWidth;
+            if (mCards.get(j).getBound().getTop() > mGameViewport.getTop())
+                mCards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
+        }
+    }
 
+    public void enlargeCard(int touchType, List<Card> mCards, Vector2 touchLocation){
+        //Enlarge the card
+        checkCardTouched(touchType, TouchEvent.TOUCH_LONG_PRESS, mCards, touchLocation);
 
+        if (touchType == TouchEvent.TOUCH_LONG_PRESS
+                && mCardHeld != null
+                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
             //Enlarge the card
-            if (touchType == TouchEvent.TOUCH_LONG_PRESS
-                    && mCardHeld == null)
-                checkCardTouched(mCards, touchLocation);
+            mCardHeld.setHeight(CARD_HEIGHT * 2.0f);
+            mCardHeld.setWidth(CARD_WIDTH * 2.0f);
+        }
+    }
 
-            if (touchType == TouchEvent.TOUCH_LONG_PRESS
-                    && mCardHeld != null
-                    && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
-                //Enlarge the card
-                mCardHeld.setHeight(CARD_HEIGHT * 2.0f);
-                mCardHeld.setWidth(CARD_WIDTH * 2.0f);
-            }
-
-            //release the card, meaning no card is now held
-            if (touchType == TouchEvent.TOUCH_UP
-                    && mCardHeld != null) {
-                cardDropped = true;
-                mCardHeld.setHeight(CARD_HEIGHT);
-                mCardHeld.setWidth(CARD_WIDTH);
-                mCardHeld = null;
-            }
+    public void releaseCard(int touchType){
+        //release the card, meaning no card is now held
+        if (touchType == TouchEvent.TOUCH_UP
+                && mCardHeld != null) {
+            cardDropped = true;
+            mCardHeld.setHeight(CARD_HEIGHT);
+            mCardHeld.setWidth(CARD_WIDTH);
+            mCardHeld = null;
         }
     }
 
@@ -242,11 +238,13 @@ public class Card extends GameObject {
         }
     }
 
-    private void checkCardTouched(List<Card> mCards, Vector2 touchLocation) {
-        //Check which card was touched, if any
-        for (int j = 0; j < mCards.size(); j++) {
-            if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)&&mCards.get(j).isDraggable()) {
-                mCardHeld = mCards.get(j);
+    private void checkCardTouched(int touchType, int touchEvent, List<Card> mCards, Vector2 touchLocation) {
+        if (touchType == touchEvent
+                && mCardHeld == null) {
+            for (int j = 0; j < mCards.size(); j++) {
+                if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y) && mCards.get(j).isDraggable()) {
+                    mCardHeld = mCards.get(j);
+                }
             }
         }
     }
