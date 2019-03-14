@@ -187,8 +187,8 @@ public class colosseumDemoScreen extends GameScreen {
 
     public void setUpRegions() {
         //Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
-        playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() / 2.0f, mDefaultLayerViewport.getBottom() + p2.position.y + (p2.getPortraitHeight() / 2));
-        opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft(), mDefaultLayerViewport.getRight(), mDefaultLayerViewport.getTop() - (p2.position.y + (p2.getPortraitHeight() / 2)), mDefaultLayerViewport.getTop() / 2.0f);
+        playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft() + 25.0f, mDefaultLayerViewport.getRight() - 25.0f, mDefaultLayerViewport.getTop() / 2.0f, mDefaultLayerViewport.getBottom() + p2.position.y + (p2.getPortraitHeight() / 2));
+        opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft() + 25.0f, mDefaultLayerViewport.getRight() - 25.0f, mDefaultLayerViewport.getTop() - (p2.position.y + (p2.getPortraitHeight() / 2)), mDefaultLayerViewport.getTop() / 2.0f);
         playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), p2.position.y - (p2.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), opponent.position.y + (opponent.getPortraitHeight() / 2));
     }
@@ -230,7 +230,7 @@ public class colosseumDemoScreen extends GameScreen {
 
     public void makeDecksDraggable(CardDeck deckRequired) {
         for (Card cards : deckRequired.getmCardHand()) {
-            cards.cardDrag(deckRequired.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+            cards.cardEvents(deckRequired.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
         }
     }
 
@@ -376,7 +376,7 @@ public class colosseumDemoScreen extends GameScreen {
 
                 //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
                 for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-                    playerDeck.getmCardHand().get(i).cardDrag(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+                    playerDeck.getmCardHand().get(i).cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards
                     playerActiveRegion.update(playerDeck.getmCardHand().get(i));
@@ -385,7 +385,7 @@ public class colosseumDemoScreen extends GameScreen {
 
                 //This next for loop is to prevent the opponent's cards from slotting into the player's card slots - Diarmuid Toal
                 for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
-                    enemyDeck.getmCardHand().get(i).cardDrag(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+                    enemyDeck.getmCardHand().get(i).cardEvents(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards
                     opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
