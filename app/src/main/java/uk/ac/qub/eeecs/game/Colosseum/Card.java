@@ -30,6 +30,9 @@ public class Card extends GameObject {
      * size and an appropriate width/height ratio.
      */
 
+    public Bitmap front = null;
+    public Bitmap back = null;
+
     // Was 50, 70
     private static final float CARD_WIDTH = 50.0f/1.5f;
     private static final float CARD_HEIGHT = 70.0f/1.5f;
@@ -92,13 +95,16 @@ public class Card extends GameObject {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
+        Bitmap front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
+        Bitmap back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
+
         this.isEnemy = isEnemy;
 
         //temp
         mCardPortrait = gameScreen.getGame().getAssetManager().getBitmap(mCardName);
 
         if(isEnemy)
-            flipCard(this.mGameScreen.getGame());
+            flipCard();
 
         setCoinCost(coinCost);
         // Store each of the damage/health digits
@@ -230,11 +236,9 @@ public class Card extends GameObject {
         }
     }
 
-    public void flipCard(Game mGame) {
+    public void flipCard() {
         if(!mCardFlippedBack) {
             Bitmap b = this.getBitmap();
-            Bitmap front = mGame.getAssetManager().getBitmap("CardFront");
-            Bitmap back = mGame.getAssetManager().getBitmap("CardBack");
             if (b == front) {
                 this.setBitmap(back);
                 this.mCardFlippedBack = true;

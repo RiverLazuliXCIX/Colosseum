@@ -46,6 +46,8 @@ public class ActiveRegion extends GameRegion {
             card.setDraggable(false);
             card.setSelectable(true);
             card.setCurrentRegion("Active");
+            if(card.getIsEnemy())
+                card.flipCard();
 
         }
         else{
