@@ -128,11 +128,29 @@ public class HTPScreen extends GameScreen {
         int screenHeight = graphics2D.getSurfaceHeight();
         float textHeight = screenHeight / 30.0f;
         textPaint.setTextSize(textHeight);
-        // Placeholder text
-        graphics2D.drawText("Colosseum: How to Play", mGameViewport.getWidth()*0.55f, mGameViewport.getHeight()*1.0f, textPaint);
+
+        drawInstructionsToScreen(graphics2D);
 
         if(mGetPreference.getBoolean("FPS", true)) {
             fpsCounter.draw(elapsedTime, graphics2D);
+
         }
+    }
+
+    public void drawInstructionsToScreen( IGraphics2D graphics2D) {
+        final float spacing = 0.55f;
+
+        graphics2D.drawText(GameInstructions.line1(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 0.82f, textPaint);
+        graphics2D.drawText(GameInstructions.line2(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 0.93f, textPaint);
+        graphics2D.drawText(GameInstructions.line3(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.04f, textPaint);
+        graphics2D.drawText(GameInstructions.line4(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.15f, textPaint);
+        graphics2D.drawText(GameInstructions.line5(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.26f, textPaint);
+
+        graphics2D.drawText(GameInstructions.line6(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.59f, textPaint);
+        graphics2D.drawText(GameInstructions.line7(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.70f, textPaint);
+        graphics2D.drawText(GameInstructions.line8(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.03f, textPaint);
+        graphics2D.drawText(GameInstructions.line9(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.14f, textPaint);
+        graphics2D.drawText(GameInstructions.line10(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.47f, textPaint);
+        graphics2D.drawText(GameInstructions.line11(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.80f, textPaint);
     }
 }
