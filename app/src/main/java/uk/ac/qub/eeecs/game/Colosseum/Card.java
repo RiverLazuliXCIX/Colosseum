@@ -30,8 +30,9 @@ public class Card extends GameObject {
      * size and an appropriate width/height ratio.
      */
 
-    public Bitmap front = null;
-    public Bitmap back = null;
+    public static Bitmap front = null;
+    public static Bitmap back = null;
+    public static Bitmap selected = null;
 
     // Was 50, 70
     private static final float CARD_WIDTH = 50.0f/1.5f;
@@ -95,15 +96,16 @@ public class Card extends GameObject {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
-        Bitmap front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
-        Bitmap back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
+        front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
+        back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
+        selected = gameScreen.getGame().getAssetManager().getBitmap("CardFrontSelected");
 
         this.isEnemy = isEnemy;
 
         //temp
         mCardPortrait = gameScreen.getGame().getAssetManager().getBitmap(mCardName);
 
-        if(isEnemy)
+        if(this.isEnemy)
             flipCard();
 
         setCoinCost(coinCost);
@@ -155,13 +157,9 @@ public class Card extends GameObject {
     }
 
     public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame){
-        //Edited: select card for attacking with
+        //Edited: select card
         //initial selection, change card frame
         checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, mCards, touchLocation);
-
-        Bitmap base = mGame.getAssetManager().getBitmap("CardFront");
-        Bitmap selected = mGame.getAssetManager().getBitmap("CardFrontSelected");
-
 
         //deselect
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
@@ -171,7 +169,7 @@ public class Card extends GameObject {
                 && getmAttackerSelected() != mCardHeld
                 && getmAttackerSelected().getBitmap() == selected
                 && mCardHeld.getSelectable()) {
-            getmAttackerSelected().setBitmap(base);
+            getmAttackerSelected().setBitmap(front);
             setmAttackerSelected(null);
         }
         //select
@@ -179,12 +177,14 @@ public class Card extends GameObject {
                 && mCardHeld != null
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
                 && !mCardHeld.getIsEnemy()
-                && mCardHeld.getBitmap() == base
+                && mCardHeld.getBitmap() == front
                 && mCardHeld.getSelectable()) {
             setmAttackerSelected(mCardHeld);
             getmAttackerSelected().setBitmap(selected);
         }
+    }
 
+    public void useCard(int touchType, Vector2 touchLocation) {
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                 && mCardHeld != null
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
@@ -238,12 +238,14 @@ public class Card extends GameObject {
 
     public void flipCard() {
         if(!mCardFlippedBack) {
-            Bitmap b = this.getBitmap();
-            if (b == front) {
-                this.setBitmap(back);
-                this.mCardFlippedBack = true;
-            }
+            this.setBitmap(back);
+            this.mCardFlippedBack = true;
         }
+        else {
+            this.setBitmap(front);
+            this.mCardFlippedBack = false;
+        }
+
     }
 
     private void checkCardTouched(int touchType, int touchEvent, List<Card> mCards, Vector2 touchLocation) {
