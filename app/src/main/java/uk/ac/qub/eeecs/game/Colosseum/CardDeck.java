@@ -117,30 +117,24 @@ public class CardDeck {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            int no = RANDOM.nextInt(7);
+            int no = RANDOM.nextInt(5);
             switch (no) {
                 case 0:
-                    setMinionValues("Card_Archer", 2, 3, 2);
-                    break;
-                case 1:
-                    setMinionValues("Card_Centurion", 3, 2, 2);
-                    break;
-                case 2:
                     setMinionValues("Card_Cerberus", 1, 2, 1);
                     break;
-                case 3:
+                case 1:
                     setMinionValues("Card_Lion", 6, 5, 4);
                     break;
-                case 4:
+                case 2:
                     setMinionValues("Card_Veles", 4, 3, 4);
                     break;
-                case 5:
+                case 3:
                     setMinionValues("Card_Veteran", 2, 1, 3);
                     break;
-                case 6:
+                case 4:
                     setMinionValues("Card_Elephant", 9, 3, 8);
                     break;
-                case 7:
+                case 5:
                     setMinionValues("Card_Hound", 1, 1, 4);
                     break;
             }
@@ -162,33 +156,27 @@ public class CardDeck {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            int no = RANDOM.nextInt(8);
+            int no = RANDOM.nextInt(6);
             switch (no) {
                 case 0:
                     setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
                     break;
                 case 1:
-                    setSpellValues("Card_Battleshout", 5, Effect.NONE, 2);
-                    break;
-                case 2:
                     setSpellValues("Card_Cavalry", 3, Effect.NONE, 2);
                     break;
-                case 3:
+                case 2:
                     setSpellValues("Card_Commander", 6, Effect.NONE, 4);
                     break;
-                case 4:
+                case 3:
                     setSpellValues("Card_Touch", 5, Effect.NONE, 4);
                     break;
-                case 5:
+                case 4:
                     setSpellValues("Card_Aurora", 2, Effect.NONE, 1);
                     break;
-                case 6:
-                    setSpellValues("Card_LionWarCry", 4, Effect.NONE, 3);
-                    break;
-                case 7:
+                case 5:
                     setSpellValues("Card_Strike", 4, Effect.NONE, 2);
                     break;
-                case 8:
+                case 6:
                     setSpellValues("Card_Rete", 6, Effect.NONE, 5);
                     break;
             }
@@ -211,18 +199,15 @@ public class CardDeck {
                 y *= 9.8f;
             }
 
-            int no = RANDOM.nextInt(3);
+            int no = RANDOM.nextInt(2);
             switch (no) {
                 case 0:
                     setWeaponValues("Card_Hasta", 4, 3, 2);
                     break;
                 case 1:
-                    setWeaponValues("Card_Axe", 5, 4, 3);
-                    break;
-                case 2:
                     setWeaponValues("Card_Scourge", 5, 5, 1);
                     break;
-                case 3:
+                case 2:
                     setWeaponValues("Card_Bow", 3, 2, 3);
                     break;
             }
