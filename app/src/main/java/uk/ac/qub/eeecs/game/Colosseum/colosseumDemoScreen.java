@@ -255,7 +255,6 @@ public class colosseumDemoScreen extends GameScreen {
             }
     }
 
-
     //Coin Flip - Scott
     private int coinFlipStart() { //Scott, User Story 16, Sprint 4
         int flip = RANDOM.nextInt(6001);

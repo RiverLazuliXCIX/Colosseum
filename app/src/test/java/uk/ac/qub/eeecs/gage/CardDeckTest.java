@@ -12,11 +12,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
+import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
+import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
+import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
+import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -31,19 +37,33 @@ public class CardDeckTest {
 
     //Mocking up various objects, screens etc, required for tests
     @Mock
-    private colosseumDemoScreen mDemoScreen;
+    private GameScreen mDemoScreen;
     @Mock
     private Game mGame;
     @Mock
     private AssetManager mAssetManager;
     @Mock
+    private ScreenManager mScreenManager;
+    @Mock
     private Bitmap mBitmap;
+    @Mock
+    private Input mInput;
+    @Mock
+    private LayerViewport mLayerViewport;
+    @Mock
+    private FatigueScreenForTesting testScreen;
 
     @Before
     public void setUp() {
-        when(mDemoScreen.getGame()).thenReturn(mGame);
+
         when(mGame.getAssetManager()).thenReturn(mAssetManager);
         when(mAssetManager.getBitmap(any(String.class))).thenReturn(mBitmap);
+        when(mGame.getScreenManager()).thenReturn(mScreenManager);
+        when(mGame.getInput()).thenReturn(mInput);
+        when(mDemoScreen.getGame()).thenReturn(mGame);
+        when(mDemoScreen.getName()).thenReturn("colosseumDemoScreen");
+        when(mDemoScreen.getDefaultLayerViewport()).thenReturn(mLayerViewport);
+
     }
 
     //
@@ -289,6 +309,85 @@ public class CardDeckTest {
         int expectedSizeOfDiscardPile = 1;
 
         assertEquals(newDeck.getmDiscardPile().size(), expectedSizeOfDiscardPile);
+    }
+
+    //
+    // Tests on drawCard() method, which adds fatigue:
+    //
+    @Test
+    public void drawCard_DeckNotEmpty() {
+        //I set up an ordinary deck of 30 cards
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+        FatigueCounter counter = new FatigueCounter();
+        Player player = new Player(mDemoScreen,"c");
+
+        //I try to draw from this deck
+        newDeck.drawCard(player, counter, mGame);
+
+        int expectedHandSize = 1;
+        int expectedDeckSize = 29;
+
+        assertEquals(newDeck.getmCardHand().size(), expectedHandSize);
+        assertEquals(newDeck.getDeck().size(), expectedDeckSize);
+    }
+
+    @Test
+    public void drawCard_DeckIsEmpty() {
+        FatigueCounter counter = new FatigueCounter();
+        Player player = new Player(mDemoScreen,"c");
+        mScreenManager.addScreen(testScreen);
+
+        //Set up an empty deck:
+        CardDeck newDeck = new CardDeck();
+
+        //Call the method, but with graphical aspects removed:
+        newDeck.drawCard_testing(player, counter, mGame);
+
+        //Fatigue should increase by 1:
+        int expectedFatigueCounter = 1;
+
+        assertEquals(counter.getmFatigueNum(), expectedFatigueCounter);
+    }
+
+    @Test
+    public void cumulativeFatigue() {
+        FatigueCounter counter = new FatigueCounter();
+        Player player = new Player(mDemoScreen,"c");
+        mScreenManager.addScreen(testScreen);
+
+        //Set up an empty deck:
+        CardDeck newDeck = new CardDeck();
+
+        //Method is called 3 times, so current fatigue number should be 3:
+        for (int i = 0; i < 3; i++) {
+            newDeck.drawCard_testing(player, counter, mGame);
+        }
+
+        int expectedFatigueCounter = 3;
+
+        //We expect that the fatigue number will be 3:
+        assertEquals(counter.getmFatigueNum(), expectedFatigueCounter);
+    }
+
+    @Test
+    public void fatigue_TakesDamage() {
+        FatigueCounter counter = new FatigueCounter();
+        Player player = new Player(mDemoScreen,"Mars");
+        mScreenManager.addScreen(testScreen);
+
+        //Set up an empty deck:
+        CardDeck newDeck = new CardDeck();
+
+        //Method is called 5 times, so 1+2+3+4+5 should be taken:
+        for (int i = 0; i < 5; i++) {
+            newDeck.drawCard_testing(player, counter, mGame);
+        }
+
+        int expectedPlayerHealth = 15;
+
+        //We expect that the player should have lost 15 health (30-15=15):
+        assertEquals(player.getCurrentHealth(), expectedPlayerHealth);
     }
 
     //

@@ -4,7 +4,7 @@ public class FatigueCounter {
 
     int mFatigueNum;
 
-    FatigueCounter() {
+    public FatigueCounter() {
         mFatigueNum = 0;
     }
 
