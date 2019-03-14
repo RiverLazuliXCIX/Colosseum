@@ -143,7 +143,8 @@ public class Card extends GameObject {
 
         //if a card was touched, and the event was a drag, move it
         if (touchType == TouchEvent.TOUCH_DRAGGED
-                && mCardHeld != null)
+                && mCardHeld != null
+                && mCardHeld.isDraggable())
             mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
     }
 
@@ -242,7 +243,7 @@ public class Card extends GameObject {
         if (touchType == touchEvent
                 && mCardHeld == null) {
             for (int j = 0; j < mCards.size(); j++) {
-                if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y) && mCards.get(j).isDraggable()) {
+                if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
                     mCardHeld = mCards.get(j);
                 }
             }
