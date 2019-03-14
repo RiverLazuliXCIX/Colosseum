@@ -3,8 +3,10 @@ package uk.ac.qub.eeecs.game.Colosseum;
 import java.util.ArrayList;
 import java.util.Random;
 
+import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
+import uk.ac.qub.eeecs.game.FatigueScreen;
 
 //CardDeck class, coded by Dearbhaile Walsh
 public class CardDeck {
@@ -253,6 +255,20 @@ public class CardDeck {
             //Add card to discard pile
             mSizeOfDiscard++;
             mDiscardPile.add(cardToDiscard);
+    }
+
+    //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
+    //On this screen, it will be displayed how much health they will lose (cumulative value)
+    //Screen then disappears after 5 seconds. - Dearbhaile
+    public void drawCard(Player player, FatigueCounter counter, Game mGame) {
+        if (!getDeck().isEmpty()) {
+            drawTopCard();
+            destroyCardOverLimit();
+        } else {
+            counter.incrementFatigue();
+            mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
+            player.receiveDamage(counter.getmFatigueNum());
+        }
     }
 
     //Method that returns true if deck is empty - to be used when applying fatigue

@@ -52,6 +52,9 @@ public class colosseumDemoScreen extends GameScreen {
     //Turn object that stores all data about the current turn:
     private Turn mCurrentTurn = new Turn();
 
+    //FatigueCounter object stores all data about what fatigue the player should take:
+    private FatigueCounter mFatigue = new FatigueCounter();
+
     //Define a test player
     private Player p2;
 
@@ -248,23 +251,11 @@ public class colosseumDemoScreen extends GameScreen {
                 p2.setYourTurn(true);
                 opponent.setYourTurn(false);
                 mCurrentTurn.newTurnFunc(p2);
-                drawCard();
+                playerDeck.drawCard(p2, mFatigue, mGame) ;
             }
     }
 
-    //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
-    //On this screen, it will be displayed how much health they will lose (cumulative value)
-    //Screen then disappears after 5 seconds. - Dearbhaile
-    public void drawCard() {
-            if (!playerDeck.getDeck().isEmpty()) {
-                playerDeck.drawTopCard();
-                playerDeck.destroyCardOverLimit();
-            } else {
-                mFatigueCounter++;
-                mGame.getScreenManager().addScreen(new FatigueScreen(mGame, mFatigueCounter));
-                p2.receiveDamage(mFatigueCounter);
-            }
-    }
+
     //Coin Flip - Scott
     private int coinFlipStart() { //Scott, User Story 16, Sprint 4
         int flip = RANDOM.nextInt(6001);
