@@ -3,8 +3,11 @@ package uk.ac.qub.eeecs.game.Colosseum;
 import java.util.ArrayList;
 import java.util.Random;
 
+import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
+import uk.ac.qub.eeecs.game.FatigueScreen;
+import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
 
 //CardDeck class, coded by Dearbhaile Walsh
 public class CardDeck {
@@ -102,7 +105,6 @@ public class CardDeck {
         }
     }
 
-    //TODO: change x and y pos to use screen widths - Sean
     public void setMinionValues(String cardName, int costToPlay, int attackVal, int healthVal) {
         name = cardName;
         coinCost = costToPlay;
@@ -229,6 +231,34 @@ public class CardDeck {
         }
         return null;
     }
+
+    //If player draws a card once their deck is at 0, they will be navigated to 'FatigueScreen'
+    //On this screen, it will be displayed how much health they will lose (cumulative value)
+    //Screen then disappears after 5 seconds
+    public void drawCard(Player player, FatigueCounter counter, Game mGame) {
+        if (!getDeck().isEmpty()) {
+            drawTopCard();
+            destroyCardOverLimit();
+        } else {
+            counter.incrementFatigue();
+            mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
+            player.receiveDamage(counter.getmFatigueNum());
+        }
+    }
+
+    //A second instance of this method that does not require the graphical aspects of FatigueScreen
+    //Will make testing a more efficient process, without having to mock up graphics/load them in differently:
+    public void drawCard_testing(Player player, FatigueCounter counter, Game mGame) {
+        if (!getDeck().isEmpty()) {
+            drawTopCard();
+            destroyCardOverLimit();
+        } else {
+            counter.incrementFatigue();
+            mGame.getScreenManager().addScreen(new FatigueScreenForTesting(mGame, counter.getmFatigueNum()));
+            player.receiveDamage(counter.getmFatigueNum());
+        }
+    }
+
     //This method destroys a card if player draws one, when their hand is already full:
     public void destroyCardOverLimit() {
         if (mCardHand.size() > MAX_HAND_CARDS) {
@@ -245,6 +275,7 @@ public class CardDeck {
         }
     }
 
+    //TODO: Create 'Discard' button on colosseumDemoScreen where this method will be used:
     public void discardCard(Card cardToDiscard) {
             //Remove card from hand
             trackRemovalOfCards();
