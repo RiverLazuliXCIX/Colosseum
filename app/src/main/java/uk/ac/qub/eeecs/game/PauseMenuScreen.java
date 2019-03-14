@@ -5,8 +5,16 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -23,12 +31,18 @@ public class PauseMenuScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
-    // /////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////t//////////////////////////////////////////
 
     private List<PushButton> mButtons = new ArrayList<>();
-    private PushButton mMenuScreen, mResume, mOptions, mMainMenu, mConcede, mStatsButton, mHTPButton;
+
+    /**
+     * Provide a list of game screen names that each button will trigger
+     */
+    private Map<PushButton, String> mScreenChanges = new HashMap<>();
+
     private LayerViewport mMenuViewport;
 
+    private  PushButton mMenuScreen, mConcede;
     //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -41,7 +55,7 @@ public class PauseMenuScreen extends GameScreen {
         super("PauseScreen",game);
         //Setting up  viewports method
         setupViewports();
-        //Settign up pause menu objects
+        //Setting up pause menu objects
         SetUpPauseMenuOpbjects();
     }
 
@@ -70,41 +84,71 @@ public class PauseMenuScreen extends GameScreen {
         //getting relevant images for this screen
         mGame.getAssetManager().loadAssets("txt/assets/PauseMenuAssets.JSON");
 
+        // Construct the menu buttons
+        constructButtons("txt/layout/PauseMenuScreenButtonLayout.JSON", mButtons);
+
         //Creating the screen
         mMenuScreen = new PushButton(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(),"Pause", this);
-        //Creating resume button
-        mResume = new PushButton(spacingX * 2.5f, spacingY * 1.95f,
-                spacingX * 0.8f,spacingY * 0.39f,"Resume",
-                "ResumeSelected",this );
-        mButtons.add(mResume);
-        //Creating the options button
-        mOptions = new PushButton(spacingX * 2.5f, spacingY * 1.45f,
-                spacingX * 0.8f,spacingY * 0.39f,"Options",
-                "OptionsSelected",this );
-        mButtons.add(mOptions);
-        //Creating the 'main menu' button
-        mMainMenu = new PushButton(spacingX * 2.5f, spacingY * 0.95f,
-                spacingX * 0.8f,spacingY * 0.39f,"MainMenu",
-                "MainMenuSelected",this );
-        mButtons.add(mMainMenu);
-        //Creating the 'concede' button
+
+        /*Creating the 'concede' button
+        * Due to how the concede button works, if was not possible to add it to the
+        * PauseMenuScreenButtonLayout.JSON file as it was not able to call @Scott Barham's
+        * Code which would add a loss and update the statistics screen when it has been clicked
+        */
         mConcede = new PushButton(spacingX * 2.5f, spacingY * 0.45f,
                 spacingX * 0.8f,spacingY * 0.39f,"Concede",
                 "ConcedeSelected",this );
-        mButtons.add(mConcede);
-        mStatsButton = new PushButton(
-                spacingX*0.5f, spacingY * 0.4f, spacingX*0.7f, spacingY*0.6f,
-                "statsButton", "statsButtonSelected",this);
-        mButtons.add(mStatsButton);
-        //Create the Quit button
-        mHTPButton = new PushButton(
-                spacingX * 4.5f, spacingY * 0.4f, spacingX*0.8f, spacingY*0.5f,
-                "HTPButton", "HTPButtonSelected",this);
-        mButtons.add(mHTPButton);
 
+        mButtons.add(mConcede);
         fpsCounter = new FPSCounter( mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f , this) { };
+    }
+
+
+
+    private void constructButtons(String buttonsToConstructJSONFile, List<PushButton> buttons) {
+
+        // Attempt to load in the JSON asset details
+        String loadedJSON;
+        try {
+            loadedJSON = mGame.getFileIO().loadJSON(buttonsToConstructJSONFile);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "DemoMenuScreen.constructButtons: Cannot load JSON [" + buttonsToConstructJSONFile + "]");
+        }
+
+        // Attempt to extract the JSON information
+        try {
+            JSONObject settings = new JSONObject(loadedJSON);
+            JSONArray buttonDetails = settings.getJSONArray("pushButtons");
+
+            // Store the game layer width and height
+            float layerWidth = mDefaultLayerViewport.getWidth();
+            float layerHeight = mDefaultLayerViewport.getHeight();
+
+            // Construct each button
+            for (int idx = 0; idx < buttonDetails.length(); idx++) {
+                float x = (float) buttonDetails.getJSONObject(idx).getDouble("x");
+                float y = (float) buttonDetails.getJSONObject(idx).getDouble("y");
+                float width = (float) buttonDetails.getJSONObject(idx).getDouble("width");
+                float height = (float) buttonDetails.getJSONObject(idx).getDouble("height");
+
+                String defaultButton = buttonDetails.getJSONObject(idx).getString("button");
+                String buttonSelected = buttonDetails.getJSONObject(idx).getString("buttonSelected");
+                String triggeredGameScreen = buttonDetails.getJSONObject(idx).getString("triggeredGameScreen");
+
+                PushButton button = new PushButton(x * layerWidth, y * layerHeight,
+                        width * layerWidth, height * layerHeight,
+                        defaultButton, buttonSelected, this);
+                buttons.add(button);
+                mScreenChanges.put(button, triggeredGameScreen);
+            }
+
+        } catch (JSONException | IllegalArgumentException e) {
+            throw new RuntimeException(
+                    "PauseMenuScreen.constructButtons: JSON parsing error [" + e.getMessage() + "]");
+        }
     }
 
     @Override
@@ -116,28 +160,38 @@ public class PauseMenuScreen extends GameScreen {
         List<TouchEvent> touchEvents = input.getTouchEvents();
 
         if (touchEvents.size() > 0) {
-            for (PushButton button : mButtons)
+            for (PushButton button : mButtons) {
                 button.update(elapsedTime);
-
-            if(mResume.isPushTriggered())
-                mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
-            else if(mOptions.isPushTriggered())
-                mGame.getScreenManager().changeScreenButton((new OptionsScreen(mGame)));
-            else if (mMainMenu.isPushTriggered()){
-                mGame.getScreenManager().changeScreenButton(new MenuScreen(mGame));
-            } else if (mStatsButton.isPushTriggered()) {
-                mGame.getScreenManager().changeScreenButton((new StatisticsScreen(mGame)));
-            } else if (mHTPButton.isPushTriggered()) {
-                mGame.getScreenManager().changeScreenButton((new HTPScreen(mGame)));
-            } else if (mConcede.isPushTriggered()) {
-                EndGameScreen.setMostRecentResult("loss");
-                EndGameScreen.setConcedeResult(true);
-                colosseumDemoScreen.setWasPaused(false); //Set this back to false for a new game
-                mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+                /*This is the if statement which allows the statistics screen to be updated
+                * using Scott Barham's code
+                */
+                if (mConcede.isPushTriggered()) {
+                    EndGameScreen.setMostRecentResult("loss");
+                    EndGameScreen.setConcedeResult(true);
+                    colosseumDemoScreen.setWasPaused(false); //Set this back to false for a new game
+                    mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+                } else if (button.isPushTriggered()) {
+                    addScreen(mScreenChanges.get(button));
+                }
             }
         }
     }
-    @Override
+
+    private void addScreen(String gameScreenToAdd) {
+        try {
+            GameScreen gameScreen =
+                    (GameScreen) Class.forName("uk.ac.qub.eeecs.game." + gameScreenToAdd)
+                            .getConstructor(Game.class).newInstance(mGame);
+            mGame.getScreenManager().addScreen(gameScreen);
+
+        } catch( ClassNotFoundException | NoSuchMethodException
+                | InstantiationException | IllegalAccessException | InvocationTargetException e ) {
+            throw new RuntimeException(
+                    "DemoMenuScreen.addScreen: Error creating [" + gameScreenToAdd + " " + e.getMessage() + "]");
+        }
+    }
+
+        @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         graphics2D.clear(Color.WHITE);
         graphics2D.clipRect(mDefaultScreenViewport.toRect());

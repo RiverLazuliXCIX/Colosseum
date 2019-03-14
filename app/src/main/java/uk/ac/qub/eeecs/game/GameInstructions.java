@@ -89,13 +89,6 @@ public class GameInstructions extends GameScreen {
         return tenthLine[0] + tenthLine[1];
     }
 
-    public  static  String line11()
-    {
-        String[] eleventhLine= new String[2];
-        eleventhLine[0] = "•To win the game, the objective is to reduce the ";
-        eleventhLine[1] = "opposing player’s health to 0 by any means.";
-        return eleventhLine[0] + eleventhLine[1];
-    }
 //,
 
     /*

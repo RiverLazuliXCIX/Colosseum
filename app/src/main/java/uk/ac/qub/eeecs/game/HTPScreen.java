@@ -151,6 +151,5 @@ public class HTPScreen extends GameScreen {
         graphics2D.drawText(GameInstructions.line8(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.03f, textPaint);
         graphics2D.drawText(GameInstructions.line9(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.14f, textPaint);
         graphics2D.drawText(GameInstructions.line10(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.47f, textPaint);
-        graphics2D.drawText(GameInstructions.line11(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.80f, textPaint);
     }
 }
