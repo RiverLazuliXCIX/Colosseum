@@ -366,7 +366,7 @@ public class colosseumDemoScreen extends GameScreen {
 
                 //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
                 for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-                    playerDeck.getmCardHand().get(i).cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+                    //playerDeck.getmCardHand().get(i).cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards
                     playerActiveRegion.update(playerDeck.getmCardHand().get(i));
@@ -375,7 +375,7 @@ public class colosseumDemoScreen extends GameScreen {
 
                 //This next for loop is to prevent the opponent's cards from slotting into the player's card slots - Diarmuid Toal
                 for (int i = 0; i < enemyDeck.getmCardHand().size(); i++) {
-                    enemyDeck.getmCardHand().get(i).cardEvents(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
+                    //enemyDeck.getmCardHand().get(i).cardEvents(enemyDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards
                     opponentActiveRegion.update(enemyDeck.getmCardHand().get(i));
