@@ -278,7 +278,7 @@ public class CardDeck {
 
     public void discardCards_EndOfTurn() {
         //Remove discarded cards from hand
-        for (int i = 0; i < mCardHand.size(); i++) {
+        for (int i = mCardHand.size()-1; i >= 0; i--) {
             if (mCardHand.get(i).gettoBeDiscarded()) {
                 discardCards(mCardHand.get(i));
             }
@@ -291,16 +291,6 @@ public class CardDeck {
         mSizeOfDiscard++;
         mDiscardPile.add(mCardToDiscard);
     }
-        //cardToDiscard.setToBeDiscarded(true);
-        /*
-            trackRemovalOfCards();
-            mCardHand.remove(cardToDiscard);
-
-            //Add card to discard pile
-            mSizeOfDiscard++;
-            mDiscardPile.add(cardToDiscard);
-            */
-
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean checkIsEmpty() {
