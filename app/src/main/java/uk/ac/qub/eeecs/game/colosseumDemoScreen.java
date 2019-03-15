@@ -413,14 +413,16 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered()) {
+                    playerDeck.discardCards_EndOfTurn();
                     endPlayerTurn();
                 }
 
+                //Calls discard function if there is a card selected AND discard button pressed:
                 if (mDiscardButton.isPushTriggered()) {
                     for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-                        if (playerDeck.getmCardHand().get(i).getmAttackerSelected() != null) {
+                        if (playerDeck.getmCardHand().get(i).getmIsSelected()) {
                             Card mCardToDiscard = playerDeck.getmCardHand().get(i);
-                            playerDeck.discardCard(mCardToDiscard);
+                            mCardToDiscard.discardCard(mCardToDiscard);
                         }
                     }
                 }
@@ -489,6 +491,7 @@ public class colosseumDemoScreen extends GameScreen {
         //OPPONENT STATS BEING DRAWN:
         float statOpponentYSpacing = 0.6f;
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, opponent, enemyDeck, statOpponentYSpacing);
+
     }
 
     public void drawPlayers(int spacingX, int spacingY, ElapsedTime elapsedTime,

@@ -33,6 +33,7 @@ public class Card extends GameObject {
     public static Bitmap front = null;
     public static Bitmap back = null;
     public static Bitmap selected = null;
+    public static Bitmap discarded = null;
 
     // Was 50, 70
     private static final float CARD_WIDTH = 50.0f/1.5f;
@@ -45,6 +46,7 @@ public class Card extends GameObject {
     private Card mCardHeld = null;
     //Check if card is selected to attack with
     private Card mAttackerSelected = null;
+    private boolean mIsSelected;
 
     //Check card is flipped
     private Boolean mCardFlippedBack = false;  //initially the card is not flipped
@@ -52,6 +54,8 @@ public class Card extends GameObject {
     private Boolean selectable = false;
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
     private Boolean isEnemy;
+    private Boolean toBeDiscarded;
+
     //Define the attack and defence values
     //private int attack, defence, mana;
     private int coinCost;
@@ -96,9 +100,12 @@ public class Card extends GameObject {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
+        this.toBeDiscarded = false;
+
         front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
         back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
         selected = gameScreen.getGame().getAssetManager().getBitmap("CardFrontSelected");
+        discarded = gameScreen.getGame().getAssetManager().getBitmap("Card_Discarded");
 
         this.isEnemy = isEnemy;
 
@@ -178,9 +185,22 @@ public class Card extends GameObject {
                 && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
                 && !mCardHeld.getIsEnemy()
                 && mCardHeld.getBitmap() == front
-                && mCardHeld.getSelectable()) {
+                && mCardHeld.getSelectable()
+        ) {
+            mCardHeld.setmIsSelected(true);
             setmAttackerSelected(mCardHeld);
             getmAttackerSelected().setBitmap(selected);
+        }
+    }
+
+    public void discardCard(Card mCard) {
+        //Set Discarded:
+        if (    !mCard.getIsEnemy()
+                && mCard.getBitmap() == selected
+                && mCard.getSelectable());
+        {
+            mCard.setBitmap(discarded);
+            mCard.setToBeDiscarded(true);
         }
     }
 
@@ -363,6 +383,12 @@ public class Card extends GameObject {
 
     public Card getmAttackerSelected() { return mAttackerSelected; }
     public void setmAttackerSelected(Card attackerSelected) { this.mAttackerSelected = attackerSelected; }
+
+    public boolean gettoBeDiscarded() {return toBeDiscarded; }
+    public void setToBeDiscarded(boolean newDiscardVal) { this.toBeDiscarded = newDiscardVal; }
+
+    public boolean getmIsSelected() { return mIsSelected; }
+    public void setmIsSelected(boolean newIsSelected) { this.mIsSelected = newIsSelected; }
 
     public String getmCardName() { return mCardName; }
     public void setmCardName(String mCardName) { this.mCardName = mCardName; }

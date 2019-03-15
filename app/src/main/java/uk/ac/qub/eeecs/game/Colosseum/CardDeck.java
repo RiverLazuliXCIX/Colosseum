@@ -276,15 +276,31 @@ public class CardDeck {
         }
     }
 
-    public void discardCard(Card cardToDiscard) {
-            //Remove card from hand
+    public void discardCards_EndOfTurn() {
+        //Remove discarded cards from hand
+        for (int i = 0; i < mCardHand.size(); i++) {
+            if (mCardHand.get(i).gettoBeDiscarded()) {
+                discardCards(mCardHand.get(i));
+            }
+        }
+    }
+
+    public void discardCards(Card mCardToDiscard) {
+        trackRemovalOfCards();
+        mCardHand.remove(mCardToDiscard);
+        mSizeOfDiscard++;
+        mDiscardPile.add(mCardToDiscard);
+    }
+        //cardToDiscard.setToBeDiscarded(true);
+        /*
             trackRemovalOfCards();
             mCardHand.remove(cardToDiscard);
 
             //Add card to discard pile
             mSizeOfDiscard++;
             mDiscardPile.add(cardToDiscard);
-    }
+            */
+
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean checkIsEmpty() {
