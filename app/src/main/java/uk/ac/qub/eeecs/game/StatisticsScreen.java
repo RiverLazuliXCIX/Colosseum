@@ -35,7 +35,7 @@ public class StatisticsScreen extends GameScreen {
     private static double recentGameTime = 0.0; //most recent game time
     private static double totalGameTime = 0.0; //total game time for this session
     private boolean winStreak = false, lossStreak = false; //used to determine if the user is on a win or loss streak
-    private static int ownMinionsKilled, enemyMinionsKilled; //for how many minions on their side, or enemy side have died (total).
+    private static int ownMinionsKilled, enemyMinionsKilled, cardsDrawn, cardsPlayed; //for how many minions on their side, or enemy side have died (total).
 
     //Shared preferences for music/SFX/FPS:
     private Context mContext = mGame.getActivity();
