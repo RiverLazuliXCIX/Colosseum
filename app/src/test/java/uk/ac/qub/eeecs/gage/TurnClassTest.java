@@ -17,7 +17,6 @@ import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

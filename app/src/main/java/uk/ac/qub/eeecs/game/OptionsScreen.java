@@ -19,7 +19,6 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.ui.FPSCounter; //Story P1
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class OptionsScreen extends GameScreen {
 

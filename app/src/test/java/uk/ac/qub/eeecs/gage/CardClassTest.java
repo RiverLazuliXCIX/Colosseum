@@ -1,25 +1,18 @@
 package uk.ac.qub.eeecs.gage;
 
-import android.graphics.Bitmap;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.List;
-
-import uk.ac.qub.eeecs.gage.engine.AssetManager;
-import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
+import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 public class CardClassTest {
 

@@ -4,24 +4,19 @@ import android.graphics.Bitmap;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.ArrayList;
 
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
 
 import static org.junit.Assert.assertFalse;

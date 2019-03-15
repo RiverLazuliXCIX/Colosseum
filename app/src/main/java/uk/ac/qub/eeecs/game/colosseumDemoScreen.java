@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.Colosseum;
+package uk.ac.qub.eeecs.game;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,8 +23,14 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.CoinTossScreen;
+import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
+import uk.ac.qub.eeecs.game.Colosseum.Card;
+import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
+import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
+import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 import uk.ac.qub.eeecs.game.FatigueScreen;

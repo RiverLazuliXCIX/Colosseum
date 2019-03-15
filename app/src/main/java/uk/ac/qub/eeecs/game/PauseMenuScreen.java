@@ -25,7 +25,6 @@ import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 public class PauseMenuScreen extends GameScreen {
 

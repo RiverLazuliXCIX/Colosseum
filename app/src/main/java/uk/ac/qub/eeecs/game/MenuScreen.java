@@ -18,12 +18,10 @@ import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.FPSCounter;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
-import uk.ac.qub.eeecs.gage.ui.ToggleButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
 
 //Menu Screen implemented by Dearbhaile.
 

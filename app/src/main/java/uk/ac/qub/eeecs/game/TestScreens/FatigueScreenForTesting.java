@@ -1,17 +1,12 @@
 package uk.ac.qub.eeecs.game.TestScreens;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
-import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.colosseumDemoScreen;
+import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 public class FatigueScreenForTesting extends GameScreen {
 
