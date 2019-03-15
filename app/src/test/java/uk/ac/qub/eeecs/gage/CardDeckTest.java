@@ -283,7 +283,7 @@ public class CardDeckTest {
         assertEquals(newDeck.getmCardHand().size(), expectedSizeOfHand);
 
         //Remove the last card from the hand:
-        newDeck.discardCard(newDeck.getmCardHand().get(4));
+        newDeck.discardCards(newDeck.getmCardHand().get(4));
 
         //There should now be 4 cards in the hand:
         expectedSizeOfHand--;
@@ -299,7 +299,7 @@ public class CardDeckTest {
         newDeck.drawSetNumCards(5);
 
         //Remove the last card from the hand:
-        newDeck.discardCard(newDeck.getmCardHand().get(4));
+        newDeck.discardCards(newDeck.getmCardHand().get(4));
 
         int expectedSizeOfDiscardPile = 1;
 

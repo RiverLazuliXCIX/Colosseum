@@ -193,7 +193,7 @@ public class Card extends GameObject {
         }
     }
 
-    public void discardCard(Card mCard) {
+    public void discardCard(Card mCard) { // - Dearbhaile
         //Set Discarded:
         if (    !mCard.getIsEnemy()
                 && mCard.getBitmap() == selected
