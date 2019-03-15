@@ -182,7 +182,7 @@ public class PauseMenuScreen extends GameScreen {
             GameScreen gameScreen =
                     (GameScreen) Class.forName("uk.ac.qub.eeecs.game." + gameScreenToAdd)
                             .getConstructor(Game.class).newInstance(mGame);
-            mGame.getScreenManager().addScreen(gameScreen);
+            mGame.getScreenManager().changeScreenButton(gameScreen);
 
         } catch( ClassNotFoundException | NoSuchMethodException
                 | InstantiationException | IllegalAccessException | InvocationTargetException e ) {
