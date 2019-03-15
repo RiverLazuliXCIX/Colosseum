@@ -62,7 +62,7 @@ public class CoinTossScreen extends GameScreen {
         setupViewports();
         setUpCTSObjects();
 
-        coin = new Coin( mGame.getScreenWidth() * 0.24f,  mGame.getScreenHeight() * 0.32f,100.0f,100.0f, this, coinToss);
+        coin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, coinToss);
 
         //This next line assigns the coinToss result from the colosseumDemoScreen
         //and assigns it for use in this screen to determine which message is displayed.
@@ -145,7 +145,7 @@ public class CoinTossScreen extends GameScreen {
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
         if (!coin.isComplete()) {
-           // coin.coinAnimation(); //TODO get this working as it currently crashes the game.
+            coin.coinAnimation();
         }
 
         if (mCurrentTime - mTimeOnCreate >= mCoinToss_Timeout) {
@@ -183,11 +183,14 @@ public class CoinTossScreen extends GameScreen {
         float SCREEN_WIDTH = mGame.getScreenWidth();
         float SCREEN_HEIGHT = mGame.getScreenWidth();
 
+        //if(mCurrentTime - mTimeOnCreate < 3000) {
+            coin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        //}
         if (mCurrentTime - mTimeOnCreate >= 3000) {
-            graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.32f, mMessageText);
-            graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.38f, mMessageText);
+            graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.42f, mMessageText);
+            graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.48f, mMessageText);
 
-            graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
+            graphics2D.drawText("Game will begin in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.52f, mTimerText);
         }
 
         if(mGetPreference.getBoolean("FPS", true)) {
