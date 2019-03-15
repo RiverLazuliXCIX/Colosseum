@@ -1,5 +1,7 @@
 package uk.ac.qub.eeecs.gage;
 
+import android.graphics.Bitmap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -29,38 +31,98 @@ public class CardClassTest {
     }
 
     @Test
-    public void setCardAttack() {
-        Card newCard = new Card(100, 100, gameScreen);
-        newCard.setAttack(5);
+    public void setSelectableTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setSelectable(true);
 
-        assertEquals(newCard.getAttack(), 5);
+        assertTrue(newCard.getSelectable());
     }
 
     @Test
-    public void setCardDefence() {
-        Card newCard = new Card(100, 100, gameScreen);
-        newCard.setDefence(2);
+    public void setDraggableTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setDraggable(true);
 
-        assertEquals(newCard.getDefence(), 2);
+        assertTrue(newCard.getDraggable());
     }
 
     @Test
-    public void setCardMana() {
-        Card newCard = new Card(100, 100, gameScreen);
-        newCard.setMana(9);
+    public void setCoinCostTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setCoinCost(9);
 
-        assertEquals(newCard.getMana(), 9);
+        assertEquals(newCard.getCoinCost(), 9);
+    }
+
+    @Test
+    public void setIsEnemyTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setIsEnemy(true);
+
+        assertTrue(newCard.getIsEnemy());
+    }
+
+    @Test
+    public void setmAttackerSelectedTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
+        newCard.setmAttackerSelected(otherCard);
+
+        assertEquals(newCard.getmAttackerSelected(), otherCard);
+    }
+
+    @Test
+    public void setmCardTouchedTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
+        newCard.setmCardTouched(otherCard);
+
+        assertEquals(newCard.getmCardTouched(), otherCard);
+    }
+
+    @Test
+    public void setmCardNameTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setmCardName("yes");
+
+        assertEquals(newCard.getmCardName(), "yes");
+    }
+
+    @Test
+    public void setmCardPortraitTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        Bitmap b = null;
+        newCard.setmCardPortrait(b);
+
+        assertEquals(newCard.getmCardPortrait(), b);
+    }
+
+    @Test
+    public void setCurrentRegionTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        newCard.setCurrentRegion("yes");
+
+        assertEquals(newCard.getCurrentRegion(), "yes");
     }
 
     @Test
     public void checkCardTouchedTest() {
         Vector2 touchLocation = new Vector2(100, 100);
-        Card newCard = new Card(100, 100, gameScreen);
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
         Boolean ok = false;
 
         if (newCard.getBound().contains(touchLocation.x, touchLocation.y))
             ok = true;
 
         assertTrue(ok);
+    }
+
+    @Test
+    public void flipCardTest() {
+        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        Bitmap b = newCard.getBitmap();
+        newCard.flipCard();
+
+        assertTrue(b != newCard.getBitmap());
     }
 }

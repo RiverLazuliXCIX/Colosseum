@@ -30,9 +30,9 @@ public class Card extends GameObject {
      * size and an appropriate width/height ratio.
      */
 
-    public static Bitmap front = null;
-    public static Bitmap back = null;
-    public static Bitmap selected = null;
+    private static Bitmap front = null;
+    private static Bitmap back = null;
+    private static Bitmap selected = null;
 
     // Was 50, 70
     private static final float CARD_WIDTH = 50.0f/1.5f;
@@ -42,7 +42,7 @@ public class Card extends GameObject {
     private Bitmap[] mCardDigits = new Bitmap[10];
 
     //Check if card is being held
-    private Card mCardHeld = null;
+    private Card mCardTouched = null;
     //Check if card is selected to attack with
     private Card mAttackerSelected = null;
 
@@ -59,7 +59,6 @@ public class Card extends GameObject {
     private Bitmap mCardPortrait;
     private String mCardName;
     private String currentRegion; // Stores the current region the card is currently located
-
 
     //Set offset and scale values for positioning
     private Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
@@ -151,9 +150,9 @@ public class Card extends GameObject {
 
         //if a card was touched, and the event was a drag, move it
         if (touchType == TouchEvent.TOUCH_DRAGGED
-                && mCardHeld != null
-                && mCardHeld.getDraggable())
-            mCardHeld.position = touchLocation.addReturn(0f, 5.0f);
+                && mCardTouched != null
+                && mCardTouched.getDraggable())
+            mCardTouched.position = touchLocation.addReturn(0f, 5.0f);
     }
 
     public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame){
@@ -163,36 +162,40 @@ public class Card extends GameObject {
 
         //deselect
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                && mCardHeld != null
-                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
+                && mCardTouched != null
+                && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
                 && getmAttackerSelected() != null
-                && getmAttackerSelected() != mCardHeld
+                && getmAttackerSelected() != mCardTouched
                 && getmAttackerSelected().getBitmap() == selected
-                && mCardHeld.getSelectable()) {
+                && mCardTouched.getSelectable()) {
             getmAttackerSelected().setBitmap(front);
             setmAttackerSelected(null);
         }
         //select
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                && mCardHeld != null
-                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
-                && !mCardHeld.getIsEnemy()
-                && mCardHeld.getBitmap() == front
-                && mCardHeld.getSelectable()) {
-            setmAttackerSelected(mCardHeld);
+                && mCardTouched != null
+                && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                && !mCardTouched.getIsEnemy()
+                && mCardTouched.getBitmap() == front
+                && mCardTouched.getSelectable()) {
+            setmAttackerSelected(mCardTouched);
             getmAttackerSelected().setBitmap(selected);
         }
     }
 
+    public void useLogic() {
+        //nothing
+    }
+
     public void useCard(int touchType, Vector2 touchLocation) {
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
-                && mCardHeld != null
-                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)
-                && mCardHeld.getIsEnemy()
+                && mCardTouched != null
+                && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                && mCardTouched.getIsEnemy() //
                 && getmAttackerSelected() != null
                 && !getmAttackerSelected().getIsEnemy()
-                && mCardHeld.getSelectable()) {
-            //attack logic
+                && mCardTouched.getSelectable()) {
+            useLogic();
         }
     }
 
@@ -213,26 +216,28 @@ public class Card extends GameObject {
     }
 
     public void enlargeCard(int touchType, List<Card> mCards, Vector2 touchLocation){
+        useCard(touchType, touchLocation);
+
         //Enlarge the card
         checkCardTouched(touchType, TouchEvent.TOUCH_LONG_PRESS, mCards, touchLocation);
 
         if (touchType == TouchEvent.TOUCH_LONG_PRESS
-                && mCardHeld != null
-                && mCardHeld.getBound().contains(touchLocation.x, touchLocation.y)) {
+                && mCardTouched != null
+                && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)) {
             //Enlarge the card
-            mCardHeld.setHeight(CARD_HEIGHT * 2.0f);
-            mCardHeld.setWidth(CARD_WIDTH * 2.0f);
+            mCardTouched.setHeight(CARD_HEIGHT * 2.0f);
+            mCardTouched.setWidth(CARD_WIDTH * 2.0f);
         }
     }
 
     public void releaseCard(int touchType){
         //release the card, meaning no card is now held
         if (touchType == TouchEvent.TOUCH_UP
-                && mCardHeld != null) {
+                && mCardTouched != null) {
             cardDropped = true;
-            mCardHeld.setHeight(CARD_HEIGHT);
-            mCardHeld.setWidth(CARD_WIDTH);
-            mCardHeld = null;
+            mCardTouched.setHeight(CARD_HEIGHT);
+            mCardTouched.setWidth(CARD_WIDTH);
+            mCardTouched = null;
         }
     }
 
@@ -250,10 +255,10 @@ public class Card extends GameObject {
 
     private void checkCardTouched(int touchType, int touchEvent, List<Card> mCards, Vector2 touchLocation) {
         if (touchType == touchEvent
-                && mCardHeld == null) {
+                && mCardTouched == null) {
             for (int j = 0; j < mCards.size(); j++) {
                 if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
-                    mCardHeld = mCards.get(j);
+                    mCardTouched = mCards.get(j);
                 }
             }
         }
@@ -363,6 +368,9 @@ public class Card extends GameObject {
 
     public Card getmAttackerSelected() { return mAttackerSelected; }
     public void setmAttackerSelected(Card attackerSelected) { this.mAttackerSelected = attackerSelected; }
+
+    public Card getmCardTouched() { return mCardTouched; }
+    public void setmCardTouched(Card mCardTouched) { this.mCardTouched = mCardTouched; }
 
     public String getmCardName() { return mCardName; }
     public void setmCardName(String mCardName) { this.mCardName = mCardName; }

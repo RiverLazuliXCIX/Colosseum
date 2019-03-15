@@ -24,6 +24,11 @@ public class WeaponCard extends Card {
         setCharges(wc.getCharges());
     }
 
+    @Override
+    public void useLogic() {
+        //do something
+    }
+
     // Will work for Player and AI
     public void play(Player p) {
         p.setWeaponEquipped(true);

@@ -54,6 +54,11 @@ public class MinionCard extends Card {
         setEffect(mc.getEffect());
     }
 
+    @Override
+    public void useLogic() {
+        //do something
+    }
+
     public void attackEnemy(MinionCard eMinionCard) {
         // add a check for any enemy minions on the board with taunts
 

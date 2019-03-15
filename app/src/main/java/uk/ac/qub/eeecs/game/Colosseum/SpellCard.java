@@ -33,6 +33,11 @@ public class SpellCard extends Card {
         setMagnitude(sc.getMagnitude());
     }
 
+    @Override
+    public void useLogic() {
+        //do something
+    }
+
     // For attacking the Player/AI
     // TODO flesh out further effects for Players
     public void play(Player p) {
