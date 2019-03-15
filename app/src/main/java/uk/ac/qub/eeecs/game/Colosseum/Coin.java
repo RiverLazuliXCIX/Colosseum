@@ -50,42 +50,34 @@ public class Coin extends Sprite  {
     public void coinAnimation() {
         if (currentCoinFrame < 10 && currentCoinFrame > 0) { //Check that the range will always be a number which can be actually output image wise
             System.out.println(currentCoinFrame);
-        if (!secondAnimationLoop) {
-            //System.out.println("b");
-            currentCoinFrame += 1;
-            coinEdge = false;
-            if (currentCoinFrame >=9){
-               // System.out.println("c");
-                secondAnimationLoop = true;
-                coinEdge = true;
-                coinFaceHeads = !coinFaceHeads;
-            }
-        } else {
-           // System.out.println("d");
-            currentCoinFrame -= 1;
-            coinEdge = false;
-            if (currentCoinFrame <= 1) {
-               // System.out.println("e");
-                secondAnimationLoop = false;
-                coinFaceHeads = !coinFaceHeads;
-            }
-        }
-
-        if (coinEdge) {
-            System.out.println("f");
-            setCoinBitmap(COIN_EDGE);
-        } else {
-            if (coinFaceHeads) {
-                System.out.println("g");
-                setCoinBitmap(COIN_HEADS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
+            if (!secondAnimationLoop) {
+                currentCoinFrame += 1;
+                coinEdge = false;
+                if (currentCoinFrame >=9){
+                    secondAnimationLoop = true;
+                    coinEdge = true;
+                    coinFaceHeads = !coinFaceHeads;
+                }
             } else {
-                System.out.println("h");
-                setCoinBitmap(COIN_TAILS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
+                currentCoinFrame -= 1;
+                coinEdge = false;
+                if (currentCoinFrame <= 1) {
+                    secondAnimationLoop = false;
+                    coinFaceHeads = !coinFaceHeads;
+                }
             }
-        }
+
+            if (coinEdge) {
+                setCoinBitmap(COIN_EDGE);
+            } else {
+                if (coinFaceHeads) {
+                    setCoinBitmap(COIN_HEADS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
+                } else {
+                    setCoinBitmap(COIN_TAILS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
+                }
+            }
         }
         framesLeft--;
-
         //Coin spins slower as it reaches the final coin decision.
         int timeToWait;
         if (framesLeft > 15) { timeToWait = 35; }
@@ -94,8 +86,6 @@ public class Coin extends Sprite  {
         //Using the timeToWait to delay the animation.
         try { Thread.sleep(timeToWait); }
         catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-
-
 
     }
 
