@@ -276,7 +276,6 @@ public class CardDeck {
         }
     }
 
-    //TODO: Create 'Discard' button on colosseumDemoScreen where this method will be used:
     public void discardCard(Card cardToDiscard) {
             //Remove card from hand
             trackRemovalOfCards();
