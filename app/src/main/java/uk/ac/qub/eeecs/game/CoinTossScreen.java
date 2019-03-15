@@ -20,6 +20,7 @@ import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.Coin;
 
 //CoinTossScreen, coded by Dearbhaile Walsh
 public class CoinTossScreen extends GameScreen {
@@ -52,6 +53,7 @@ public class CoinTossScreen extends GameScreen {
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
 
+    private Coin coin;
     // Constructor
     //Create the 'CoinTossScreen' screen
     public CoinTossScreen(Game game, int coinToss) {
@@ -59,6 +61,8 @@ public class CoinTossScreen extends GameScreen {
         mTimeOnCreate = System.currentTimeMillis();
         setupViewports();
         setUpCTSObjects();
+
+        coin = new Coin( mGame.getScreenWidth() * 0.24f,  mGame.getScreenHeight() * 0.32f,100.0f,100.0f, this, coinToss);
 
         //This next line assigns the coinToss result from the colosseumDemoScreen
         //and assigns it for use in this screen to determine which message is displayed.
@@ -126,6 +130,10 @@ public class CoinTossScreen extends GameScreen {
             mCoinTossMsg1 = "The coin landed on tails! The enemy plays first.";
             mCoinTossMsg2 = "You draw an extra card and additional mana for your troubles.";
         }
+        else if (mCoinTossResult == 2) {
+            mCoinTossMsg1 = "The coin landed on its edge!";
+            mCoinTossMsg2 = "You automatically win the game for being lucky!";
+        }
     }
 
     @Override
@@ -135,6 +143,10 @@ public class CoinTossScreen extends GameScreen {
 
         mCurrentTime = System.currentTimeMillis();
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
+
+        if (!coin.isComplete()) {
+           // coin.coinAnimation(); //TODO get this working as it currently crashes the game.
+        }
 
         if (mCurrentTime - mTimeOnCreate >= mCoinToss_Timeout) {
             mGame.getScreenManager().getCurrentScreen().dispose();

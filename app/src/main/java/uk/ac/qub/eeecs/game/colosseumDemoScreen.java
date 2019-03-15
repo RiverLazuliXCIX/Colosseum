@@ -51,8 +51,8 @@ public class colosseumDemoScreen extends GameScreen {
     //Array List to hold the Push Buttons
     private List<PushButton> mButtons = new ArrayList<>();
 
-    //Push buttons for ending player's turn and for pausing the game:
-    private PushButton mEndTurnButton, mEndTurnButtonOff, mPauseButton;
+    //Push buttons for ending player's turn, for pausing the game, and discarding a card:
+    private PushButton mEndTurnButton, mEndTurnButtonOff, mPauseButton, mDiscardButton;
 
     //Turn object that stores all data about the current turn:
     private Turn mCurrentTurn = new Turn();
@@ -60,26 +60,24 @@ public class colosseumDemoScreen extends GameScreen {
     //FatigueCounter object stores all data about what fatigue the player should take:
     private FatigueCounter mFatigue = new FatigueCounter();
 
-    //Define a test player
+    //Define the Player
     private Player p2;
 
-    // Define a test Opponent
+    // Define the Opponent
     private AIOpponent opponent;
 
-    //Define a Test Deck
+    //Define the two Decks
     private CardDeck playerDeck, enemyDeck;
 
-    //COIN TOSS VARIABLES:
     //Set up a boolean value for whether or not coin flip is finished
     private boolean coinFlipDone;
+
     //Set up an int value to hold the outcome of the coin toss
     private int mCoinTossResult;
+
     //'Edge case' coin toss variables:
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
-
-    //Set up an int value to hold the fatigue due to be taken from the player
-    private int mFatigueCounter = 0;
 
     //Variables required for the Game Timer:
     private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
@@ -201,6 +199,14 @@ public class colosseumDemoScreen extends GameScreen {
         opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), opponent.position.y + (opponent.getPortraitHeight() / 2));
     }
 
+    public void setUpPlayerAndOpponent(Player player, AIOpponent opponent) { //Kyle Corrigan
+        p2.setCurrentMana(4);
+        p2.setCurrentManaCap(4);
+
+        opponent.setCurrentMana(4);
+        opponent.setCurrentManaCap(4);
+    }
+
     public void setUpDecks() {
         //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
         playerDeck = new CardDeck(1, "Basic Player Deck", this, false, playerHandRegion);
@@ -223,6 +229,11 @@ public class colosseumDemoScreen extends GameScreen {
         mEndTurnButtonOff = new PushButton(
                 spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn2", this);
+
+        mDiscardButton = new PushButton(
+                spacingX * 4.5f, spacingY * 1.0f, spacingX * 0.5f, spacingY * 0.3f,
+                "DiscardButton", "DiscardButton_Selected", this);
+        mButtons.add(mDiscardButton);
 
         mPauseButton = new PushButton(
                 spacingX * 4.7f, spacingY * 2.7f, spacingX * 0.4f, spacingY * 0.4f, "Cog", "CogSelected", this);
@@ -402,7 +413,18 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered()) {
+                    playerDeck.discardCards_EndOfTurn();
                     endPlayerTurn();
+                }
+
+                //Calls discard function if there is a card selected AND discard button pressed:
+                if (mDiscardButton.isPushTriggered()) {
+                    for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
+                        if (playerDeck.getmCardHand().get(i).getmIsSelected()) {
+                            Card mCardToDiscard = playerDeck.getmCardHand().get(i);
+                            mCardToDiscard.discardCard(mCardToDiscard);
+                        }
+                    }
                 }
             }
         }
@@ -469,6 +491,7 @@ public class colosseumDemoScreen extends GameScreen {
         //OPPONENT STATS BEING DRAWN:
         float statOpponentYSpacing = 0.6f;
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, opponent, enemyDeck, statOpponentYSpacing);
+
     }
 
     public void drawPlayers(int spacingX, int spacingY, ElapsedTime elapsedTime,

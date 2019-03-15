@@ -276,15 +276,20 @@ public class CardDeck {
         }
     }
 
-    //TODO: Create 'Discard' button on colosseumDemoScreen where this method will be used:
-    public void discardCard(Card cardToDiscard) {
-            //Remove card from hand
-            trackRemovalOfCards();
-            mCardHand.remove(cardToDiscard);
+    public void discardCards_EndOfTurn() {
+        //Remove discarded cards from hand
+        for (int i = mCardHand.size()-1; i >= 0; i--) {
+            if (mCardHand.get(i).gettoBeDiscarded()) {
+                discardCards(mCardHand.get(i));
+            }
+        }
+    }
 
-            //Add card to discard pile
-            mSizeOfDiscard++;
-            mDiscardPile.add(cardToDiscard);
+    public void discardCards(Card mCardToDiscard) {
+        trackRemovalOfCards();
+        mCardHand.remove(mCardToDiscard);
+        mSizeOfDiscard++;
+        mDiscardPile.add(mCardToDiscard);
     }
 
     //Method that returns true if deck is empty - to be used when applying fatigue

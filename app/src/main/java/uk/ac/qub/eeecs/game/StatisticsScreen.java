@@ -34,8 +34,8 @@ public class StatisticsScreen extends GameScreen {
     private double totalGamesPlayed = 0; //create a count for total number of games played.
     private static double recentGameTime = 0.0; //most recent game time
     private static double totalGameTime = 0.0; //total game time for this session
-    private boolean winStreak = false, lossStreak = false; //used to determine if the user is on a win or loss streak
-    private static int ownMinionsKilled, enemyMinionsKilled; //for how many minions on their side, or enemy side have died (total).
+    private static int gameStreak = 0; //used to determine if the user is on a win or loss streak (positive for win streak, negative for loss streak)
+    private static int ownMinionsKilled, enemyMinionsKilled, cardsDrawn, cardsPlayed; //for how many minions on their side, or enemy side have died (total).
 
     //Shared preferences for music/SFX/FPS:
     private Context mContext = mGame.getActivity();
@@ -100,7 +100,33 @@ public class StatisticsScreen extends GameScreen {
         totalWins = winInput;
     }
 
+    //Getters and setters for win/loss streak
+    public static int getGameStreak() { return gameStreak; }
+    public static void setGameStreak(boolean gameStreak) { //true input means a win, false means a loss.
+        if(gameStreak) { //If its true...
+            if(StatisticsScreen.gameStreak>=0) {
+                StatisticsScreen.gameStreak++; //And the previous count is on a win (positive) streak then increment it.
+            } else if(StatisticsScreen.gameStreak<0) {
+                StatisticsScreen.gameStreak = 1; //And the previous count was on a loss (negative) streak then make the new 1 win into a win streak.
+            }
+        } else if (!gameStreak) { //else if its false...
+            if (StatisticsScreen.gameStreak <= 0) {
+                StatisticsScreen.gameStreak--; //And the previous count is on a loss (negative) streak then decrement it.
+            } else if (StatisticsScreen.gameStreak > 0) {
+                StatisticsScreen.gameStreak = -1; //And the previous count was on a win (positive) streak then make the new 1 loss into a loss streak.
+            }
+        }
+    }
+
+    //Getters and setters for amount of cards player has drawn
+    public static int getCardsDrawn() { return cardsDrawn; }
+    public static void setCardsDrawn(int cardsDrawn) { StatisticsScreen.cardsDrawn = cardsDrawn; }
+    //Getters and setters for amount of cards player has played
+    public static int getCardsPlayed() { return cardsPlayed; }
+    public static void setCardsPlayed(int cardsPlayed) { StatisticsScreen.cardsPlayed = cardsPlayed; }
+
     //Setter for most recent time
+    public static double getRecentGameTime() { return recentGameTime; }
     public static void setRecentGameTime(double recentTime) {recentGameTime = recentTime; }
     //Getter and setter for total game time
     public static double getTotalGameTime() { return totalGameTime; }
@@ -124,7 +150,14 @@ public class StatisticsScreen extends GameScreen {
     public static String getMostRecentResult() {
         return mostRecentResult;
     }
-    public static void setMostRecentResult(String resultInput) { mostRecentResult = resultInput; }
+    public static void setMostRecentResult(String resultInput) {
+        mostRecentResult = resultInput; //Update the most recent result
+        if (resultInput == "loss") { //If it was a loss, feed in input for loss for a loss streak
+            setGameStreak(false);
+        } else if (resultInput == "win") {  //If it was a win, feed in input for win for a win streak
+            setGameStreak(true);
+        }
+    }
 
     /**
      * Update method allowing for events on the screen to be handled
@@ -135,7 +168,7 @@ public class StatisticsScreen extends GameScreen {
     public void update(ElapsedTime elapsedTime) {
         totalGamesPlayed = totalWins + totalLosses; //calculate the total games played
 
-        if(totalGamesPlayed!=0) {
+        if(totalGamesPlayed!=0) { //if there has been a game played, update statistics
             winLossRatio = (double)totalWins/(double)totalGamesPlayed; //create a win/loss ratio for output later
             winPercent = winLossRatio*100.0; //create a win percentage for output later
         }

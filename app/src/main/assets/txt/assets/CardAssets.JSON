@@ -104,6 +104,11 @@
       "type": "Bitmap",
       "name": "Card_Hound",
       "file": "img/minions/WarHound.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "Card_Discarded",
+      "file": "img/CardFrontDiscarded.png"
     }
   ]
 }

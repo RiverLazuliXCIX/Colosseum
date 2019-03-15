@@ -37,11 +37,6 @@
     },
     {
       "type": "Bitmap",
-      "name": "ColosseumSplashScreen",
-      "file": "img/ColosseumSplashScreen.png"
-    },
-    {
-      "type": "Bitmap",
       "name": "ArenaFloor",
       "file": "img/ArenaFloor.png"
     },
@@ -130,6 +125,16 @@
       "type": "Bitmap",
       "name": "CardDeckImg",
       "file": "img/deck_img.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "DiscardButton",
+      "file": "img/DISCARD_BTN.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "DiscardButton_Selected",
+      "file": "img/red-discard.png"
     }
     ]
 }
