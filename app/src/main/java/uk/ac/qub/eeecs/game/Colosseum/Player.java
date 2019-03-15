@@ -52,6 +52,8 @@ public class Player extends GameObject {
     private int armor = 0;                 // Current armor of player character (Provides additional 'Health' that is deducted prior to the player's health pool when taking damage)
     private int attack = 0;                // Current attack of player character (Through weapons, abilities etc.)
     private int weaponDurability = 0;      // Durability of player's equipped weapon, once it reaches zero weapon is destroyed, player can no longer use it to attack
+    private Effect pEffect = Effect.NONE;
+    private int eDuration = 0;
 
     private boolean weaponEquipped = false;// Stores whether the player has equipped a weapon or not (can be equipped through abilities or cards, default is false, equipping a new weapon destroys the currently equipped one)
     private boolean abilityUsedThisTurn = false; // Stores whether an ability has been used this turn, if true, ability cannot be played for the rest of the player's turn
@@ -628,5 +630,11 @@ public class Player extends GameObject {
 
     public boolean isAbilityUsedThisTurn() { return abilityUsedThisTurn; }
     public void setAbilityUsedThisTurn(boolean abilityUsedThisTurn) { this.abilityUsedThisTurn = abilityUsedThisTurn; }
+
+    public Effect getPEffect() { return this.pEffect; }
+    public void setPEffect(Effect e) { this.pEffect = e; }
+
+    public int getEDuration() { return this.eDuration; }
+    public void setEDuration(int duration) { this.eDuration = duration; }
 
 }

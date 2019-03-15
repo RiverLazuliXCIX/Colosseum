@@ -46,17 +46,21 @@ public class SpellCard extends Card {
                 break;
             case STEALTH:
                 // give the player stealth for x turns
+                p.setPEffect(Effect.STEALTH);
+                p.setEDuration(magnitude);
                 break;
             case COMBINATION:
                 break;
             case VENOMOUS:
                 if (p.isWeaponEquipped()) {
                     // set effect to venomous
+                    p.setPEffect(Effect.VENOMOUS);
                 }
                 break;
             case LIFESTEAL:
                 if (p.isWeaponEquipped()) {
                     // set effect to lifesteal
+                    p.setPEffect(Effect.LIFESTEAL);
                 }
                 break;
             case DISABLE:
