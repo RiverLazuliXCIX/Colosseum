@@ -16,6 +16,7 @@ import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
+//FatigueScreen, coded by Dearbhaile
 public class FatigueScreen extends GameScreen {
 
     //Variables required for the Fatigue Screen:
@@ -56,7 +57,7 @@ public class FatigueScreen extends GameScreen {
         // Create the title image
         mOhNoText = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.0f, spacingX*1.5f, spacingY/2.2f, "OhNoImg",this);
 
-        //Set up the fps counter - Scott Barham
+        //Set up the fps counter
         fpsCounter = new FPSCounter( mFatigueScreenViewport.getWidth() * 0.50f, mFatigueScreenViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
 
         //PAINT OBJECT:

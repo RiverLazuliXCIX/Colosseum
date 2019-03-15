@@ -236,6 +236,7 @@ public class colosseumDemoScreen extends GameScreen {
         }
     }
 
+    //Method used to make both decks draggable (REFACTORED) - Dearbhaile
     public void makeDecksDraggable(CardDeck deckRequired) {
         for (Card cards : deckRequired.getmCardHand()) {
             cards.cardEvents(deckRequired.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);

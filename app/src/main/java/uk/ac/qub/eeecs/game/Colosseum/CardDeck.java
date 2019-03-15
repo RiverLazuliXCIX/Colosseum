@@ -79,6 +79,8 @@ public class CardDeck {
         insertMinionCard(mNumOfMinions);
         insertSpellCard(mNumOfSpells);
         insertWeaponCard(mNumOfWeapons);
+        //At present, cards load in with minions on top, then spells, then weapons.
+        //TODO: Implement a feature to shuffle cards. - Dearbhaile
     }
 
     public void setUpDeckOptions(int mMinNum, int mSpellNum, int mWeapNum) {
@@ -218,7 +220,7 @@ public class CardDeck {
             }
         }
 
-    //Methods required to draw from Deck:
+    //Method required to draw a single card from the Deck:
     public Card drawTopCard() {
         if (!mDeck.isEmpty()) {
             Card topCard = mDeck.get(mDeck.size() - 1);
@@ -253,9 +255,8 @@ public class CardDeck {
             drawTopCard();
             destroyCardOverLimit();
         } else {
-            counter.incrementFatigue();
+            counter.takeAppropriateDamage(player);
             mGame.getScreenManager().addScreen(new FatigueScreenForTesting(mGame, counter.getmFatigueNum()));
-            player.receiveDamage(counter.getmFatigueNum());
         }
     }
 

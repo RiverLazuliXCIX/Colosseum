@@ -13,6 +13,15 @@ public class FatigueCounter {
         return mFatigueNum;
     }
 
+    public void takeAppropriateDamage(Player player) {
+        incrementFatigue();
+        player.receiveDamage(mFatigueNum);
+
+        if (player.getCurrentHealth() < 0) {
+            player.setCurrentHealth(0);
+        }
+    }
+
     public int getmFatigueNum() {
         return mFatigueNum;
     }
