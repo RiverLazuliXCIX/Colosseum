@@ -1,7 +1,13 @@
 package uk.ac.qub.eeecs.game.Colosseum.Regions;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+
 import java.util.ArrayList;
 
+import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
+import uk.ac.qub.eeecs.gage.util.ViewportHelper;
+import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 
 /**
@@ -119,6 +125,33 @@ public class GameRegion {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Draws a white border around the game region
+     *
+     * @param graphics2D Graphics instance
+     * @param gameScreen Gamescreen to which this object is drawn
+     */
+    public void drawRegion(IGraphics2D graphics2D, GameScreen gameScreen){
+
+        // Setting up region paint
+        // White border without a fill
+        Paint regionPaint = new Paint();
+        regionPaint.setStyle(Paint.Style.STROKE);
+        regionPaint.setStrokeWidth(10);
+        regionPaint.setColor(Color.rgb(255, 255, 255));
+
+        // Note: To add a fill to the region, a second rectangle should be drawn, using a different paint type
+        // with style of fill without stroke
+
+        // Scaling positions to the display using viewport helper
+        float regionBorderLeft = ViewportHelper.convertXDistanceFromLayerToScreen(regionXPosLeft, gameScreen.getDefaultLayerViewport(),gameScreen.getDefaultScreenViewport());
+        float regionBorderTop = ViewportHelper.convertYDistanceFromLayerToScreen(regionYPosTop, gameScreen.getDefaultLayerViewport(),gameScreen.getDefaultScreenViewport());
+        float regionBorderWidth = ViewportHelper.convertXDistanceFromLayerToScreen(regionWidth, gameScreen.getDefaultLayerViewport(),gameScreen.getDefaultScreenViewport());
+        float regionBorderHeight= ViewportHelper.convertYDistanceFromLayerToScreen(regionHeight, gameScreen.getDefaultLayerViewport(),gameScreen.getDefaultScreenViewport());
+
+        graphics2D.drawRect(regionBorderLeft,regionBorderTop, regionBorderLeft+regionBorderWidth,regionBorderTop-regionBorderHeight, regionPaint);
     }
 
     // /////////////////////////////////////////////////////////////////////////

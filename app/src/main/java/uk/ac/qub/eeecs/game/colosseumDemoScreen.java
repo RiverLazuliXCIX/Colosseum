@@ -33,7 +33,6 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
-import uk.ac.qub.eeecs.game.FatigueScreen;
 
 
 public class colosseumDemoScreen extends GameScreen {
@@ -417,6 +416,14 @@ public class colosseumDemoScreen extends GameScreen {
 
         // Draw the background first of all
         mGameBackground.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        // Draws region boundaries for player
+        playerActiveRegion.drawRegion(graphics2D, this);
+        playerHandRegion.drawRegion(graphics2D, this);
+
+        // Draws region boundaries for opponent
+        opponentActiveRegion.drawRegion(graphics2D, this);
+        opponentHandRegion.drawRegion(graphics2D, this);
 
         //Spacing that will be used to position everything:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
