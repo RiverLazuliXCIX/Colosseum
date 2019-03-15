@@ -1,0 +1,99 @@
+{
+  "assets": [
+    {
+      "type": "Bitmap",
+      "name": "headsFace1",
+      "file": "img/CoinFlip/headsFace1.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace2",
+      "file": "img/CoinFlip/headsFace2.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace3",
+      "file": "img/CoinFlip/headsFace3.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace4",
+      "file": "img/CoinFlip/headsFace4.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace5",
+      "file": "img/CoinFlip/headsFace5.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace6",
+      "file": "img/CoinFlip/headsFace6.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace7",
+      "file": "img/CoinFlip/headsFace7.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace8",
+      "file": "img/CoinFlip/headsFace8.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "headsFace9",
+      "file": "img/CoinFlip/headsFace9.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "coinEdge",
+      "file": "img/CoinFlip/coinEdge.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace1",
+      "file": "img/CoinFlip/tailsFace1.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace2",
+      "file": "img/CoinFlip/tailsFace2.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace3",
+      "file": "img/CoinFlip/tailsFace3.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace4",
+      "file": "img/CoinFlip/tailsFace4.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace5",
+      "file": "img/CoinFlip/tailsFace5.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace6",
+      "file": "img/CoinFlip/tailsFace6.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace7",
+      "file": "img/CoinFlip/tailsFace7.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace8",
+      "file": "img/CoinFlip/tailsFace8.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "tailsFace9",
+      "file": "img/CoinFlip/tailsFace9.png"
+    }
+  ]
+}
