@@ -1,6 +1,9 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.GameRegion;
+import uk.ac.qub.eeecs.game.colosseumDemoScreen;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 
 /**
  * Created by Matthew, 05/12/2018
@@ -59,8 +62,31 @@ public class MinionCard extends Card {
         //do something
     }
 
+    public boolean hasTaunts() {
+        colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+        ActiveRegion ar;
+
+        if (!getIsEnemy()) {
+            ar = cds.getOpponentActiveRegion();
+        } else {
+            ar = cds.getPlayerActiveRegion();
+        }
+
+        MinionCard mc;
+        for (Card c : ar.getCardsInRegion()) {
+            mc = (MinionCard) c;
+            if (mc.getEffect() == Effect.TAUNT) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void attackEnemy(MinionCard eMinionCard) {
         // add a check for any enemy minions on the board with taunts
+        // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
+        if (hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
         eMinionCard.takeDamage(this.attack);
         takeDamage(eMinionCard.getAttack());
@@ -78,6 +104,8 @@ public class MinionCard extends Card {
      public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {}
      */
     public void attackEnemy(Player hero) { // uses Player as the parameter to allow for Player and AIOpponent to be passed in
+        // if there are any taunts on the board, do not attack
+        if (hasTaunts()) return;
         hero.receiveDamage(this.attack);
     }
 
@@ -92,6 +120,16 @@ public class MinionCard extends Card {
         if (health <= 0) {
             // remove card from board and add to the player's graveyard
             // player.deck.addToGraveyard(this);
+            colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+            ActiveRegion ar;
+
+            if (!getIsEnemy()) {
+                ar = cds.getOpponentActiveRegion();
+            } else {
+                ar = cds.getPlayerActiveRegion();
+            }
+
+            ar.removeCard(this);
         }
     }
 

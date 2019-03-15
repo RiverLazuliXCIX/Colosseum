@@ -529,4 +529,8 @@ public class colosseumDemoScreen extends GameScreen {
         edgeCase = edgeCaseInput;
     }
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
+
+    public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
+    public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
+
 }
