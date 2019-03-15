@@ -10,7 +10,7 @@ public class Coin extends Sprite  {
     private final String COIN_HEADS = "headsFace";
     private final String COIN_TAILS = "tailsFace";
     private final String COIN_EDGE = "coinEdge";
-    private int currentCoinFrame = 0;
+    private int currentCoinFrame = 1;
     private int framesLeft = 0;
     private boolean secondAnimationLoop = false;
     private boolean coinEdge = false;
@@ -48,42 +48,50 @@ public class Coin extends Sprite  {
     }
 
     public void coinAnimation() {
-        if(!secondAnimationLoop) {
-            currentCoinFrame+=1;
+        if (currentCoinFrame < 10 && currentCoinFrame > 0) { //Check that the range will always be a number which can be actually output image wise
+            System.out.println(currentCoinFrame);
+        if (!secondAnimationLoop) {
+            //System.out.println("b");
+            currentCoinFrame += 1;
             coinEdge = false;
-            if(currentCoinFrame>9) {
+            if (currentCoinFrame >=9){
+               // System.out.println("c");
                 secondAnimationLoop = true;
                 coinEdge = true;
                 coinFaceHeads = !coinFaceHeads;
             }
-        } else if(secondAnimationLoop) { //might be always true
-            currentCoinFrame-=1;
+        } else {
+           // System.out.println("d");
+            currentCoinFrame -= 1;
             coinEdge = false;
-            if(currentCoinFrame<1) {
+            if (currentCoinFrame <= 1) {
+               // System.out.println("e");
                 secondAnimationLoop = false;
                 coinFaceHeads = !coinFaceHeads;
             }
         }
-        if(coinEdge) {
-        setCoinBitmap(COIN_EDGE);
+
+        if (coinEdge) {
+            System.out.println("f");
+            setCoinBitmap(COIN_EDGE);
         } else {
-            if(coinFaceHeads) {
+            if (coinFaceHeads) {
+                System.out.println("g");
                 setCoinBitmap(COIN_HEADS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
-            } else if (!coinFaceHeads) {  //might be always true
+            } else {
+                System.out.println("h");
                 setCoinBitmap(COIN_TAILS + COIN_ANIMATION_IMAGES[currentCoinFrame]);
             }
         }
+        }
         framesLeft--;
 
-        // wait duration is determined based on current speed of coin spinning
+        //Coin spins slower as it reaches the final coin decision.
         int timeToWait;
-        if (framesLeft > 50) { timeToWait = 5; }
-        else if (framesLeft > 30) { timeToWait = 15; }
-        else if (framesLeft > 10) { timeToWait = 45; }
-        else if (framesLeft > 5)  { timeToWait = 60; }
-        else { timeToWait = 75; }
-
-        // wait period executed
+        if (framesLeft > 15) { timeToWait = 35; }
+        else if (framesLeft > 5)  { timeToWait = 45; }
+        else { timeToWait = 60; }
+        //Using the timeToWait to delay the animation.
         try { Thread.sleep(timeToWait); }
         catch (InterruptedException e) { Thread.currentThread().interrupt(); }
 
