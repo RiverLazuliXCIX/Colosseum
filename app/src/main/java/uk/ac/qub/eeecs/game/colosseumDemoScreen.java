@@ -94,6 +94,7 @@ public class colosseumDemoScreen extends GameScreen {
     //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
+
     private FPSCounter fpsCounter;
 
     //Array List to hold the GameObjects
@@ -116,6 +117,8 @@ public class colosseumDemoScreen extends GameScreen {
         setUpButtons();
         setUpRegions();
         setUpDecks();
+        playerDeck.shuffleCards();
+        enemyDeck.shuffleCards();
         coinFlipStart();
         coinFlipResult();
 
@@ -200,14 +203,6 @@ public class colosseumDemoScreen extends GameScreen {
         opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), opponent.position.y + (opponent.getPortraitHeight() / 2));
     }
 
-    public void setUpPlayerAndOpponent(Player player, AIOpponent opponent) { //Kyle Corrigan
-        p2.setCurrentMana(4);
-        p2.setCurrentManaCap(4);
-
-        opponent.setCurrentMana(4);
-        opponent.setCurrentManaCap(4);
-    }
-
     public void setUpDecks() {
         //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
         playerDeck = new CardDeck(1, "Basic Player Deck", this, false, playerHandRegion);
@@ -237,7 +232,8 @@ public class colosseumDemoScreen extends GameScreen {
         mButtons.add(mDiscardButton);
 
         mPauseButton = new PushButton(
-                spacingX * 4.7f, spacingY * 2.7f, spacingX * 0.4f, spacingY * 0.4f, "Cog", "CogSelected", this);
+                spacingX * 4.7f, spacingY * 2.7f, spacingX * 0.4f, spacingY * 0.4f,
+                "Cog", "CogSelected", this);
         mButtons.add(mPauseButton);
     }
 
