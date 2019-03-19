@@ -7,7 +7,7 @@ import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.FatigueScreen;
-import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
+import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
 //CardDeck class, coded by Dearbhaile Walsh
 public class CardDeck {
@@ -296,6 +296,7 @@ public class CardDeck {
         }
     }
 
+    //Method for a fixed number of cards, used at the beginning of each game to allot cards based on coin toss:
     public void drawSetNumCards(int numToDraw) {
         for (int i = 0; i < numToDraw; i++) {
             drawTopCard();
@@ -314,13 +315,18 @@ public class CardDeck {
     public void discardCards_EndOfTurn() {
         //Called at end of turn, to remove discarded cards from board:
         for (int i = mCardHand.size()-1; i >= 0; i--) {
-            discardCards_0Health(mCardHand.get(i));
-
             if (mCardHand.get(i).gettoBeDiscarded()) {
                 discardCards(mCardHand.get(i));
             }
         }
     }
+
+    public void checkForDeadCards() {
+        for (int i = mCardHand.size()-1; i >= 0; i--) {
+            discardCards_0Health(mCardHand.get(i));
+        }
+    }
+
     public void discardCards_0Health(Card card) {
         //Check for type of card:
         if (card instanceof MinionCard) {

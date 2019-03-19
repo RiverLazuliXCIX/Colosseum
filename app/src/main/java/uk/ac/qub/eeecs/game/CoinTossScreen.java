@@ -8,9 +8,11 @@ import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 
 import java.util.List;
+import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
@@ -20,12 +22,20 @@ import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
+import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.Coin;
+import uk.ac.qub.eeecs.game.Colosseum.Player;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Turn;
+import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
 
 //CoinTossScreen, coded by Dearbhaile Walsh
 public class CoinTossScreen extends GameScreen {
 
     // Properties
+    private ScreenManager mScreenManager = new ScreenManager(mGame);
+
     //Different objects required for this screen to function
     private GameObject mCTSBackground;
     private LayerViewport mGameViewport;
@@ -40,6 +50,24 @@ public class CoinTossScreen extends GameScreen {
     //Create PushButton necessary to skip animation
     PushButton mSkipButton;
 
+    //Turn object that stores all data about the current turn:
+    private Turn mCurrentTurn = new Turn();
+
+    //Define the Player
+    private Player mPlayer;
+
+    // Define the Opponent
+    private AIOpponent mOpponent;
+
+    //Define the two Decks
+    private CardDeck mPlayerDeck, mEnemyDeck;
+
+    //UserWhoStarted variable to hold data about who started in this match:
+    private UserWhoStarted mUserWhoStarted;
+
+    //Variable to store time of enemy turn beginning (if applicable):
+    private long mEnemyTurnBegins = 0;
+
     //Variables required for the message (lines 1 and 2) to display properly
     private int mCoinTossResult = 0;
     private String mCoinTossMsg1 = "";
@@ -53,24 +81,51 @@ public class CoinTossScreen extends GameScreen {
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-    private Coin coin;
+    //Create instance of Coin object:
+    private Coin mCoin;
+
     // Constructor
     //Create the 'CoinTossScreen' screen
-    public CoinTossScreen(Game game, int coinToss) {
+    public CoinTossScreen(Game game) {
         super("CoinTossScreen", game);
         mTimeOnCreate = System.currentTimeMillis();
         setupViewports();
         setUpCTSObjects();
-
-        coin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, coinToss);
-
-        //This next line assigns the coinToss result from the colosseumDemoScreen
-        //and assigns it for use in this screen to determine which message is displayed.
-        this.mCoinTossResult = coinToss;
+        setUpGameObjects();
+        coinFlipStart();
+        mCoinTossResult = coinFlipStart();
+        coinFlipResult(mCoinTossResult);
         chooseTextToDisplay();
     }
 
-    // Methods
+    public void setUpGameObjects() {
+        //This class acts as a loader class for the colosseumDemoScreen:
+        mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
+        mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
+        mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
+
+        //Setting up demo player:
+        mPlayer = new Player(this, "Meridia");
+        mOpponent = new AIOpponent(this, "EmperorCommodus");
+
+        mPlayer.setCurrentMana(4);
+        mPlayer.setCurrentManaCap(4);
+
+        mOpponent.setCurrentMana(4);
+        mOpponent.setCurrentManaCap(4);
+
+        //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
+        HandRegion playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
+        HandRegion opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
+
+        mPlayerDeck = new CardDeck(1, "Basic Player Deck", this, false, playerHandRegion);
+        mEnemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true, opponentHandRegion);
+
+        for (int i = 0; i < mEnemyDeck.getmCardHand().size(); i++) {
+            mEnemyDeck.getmCardHand().get(i).flipCard();
+        }
+    }
+
     public void setUpCTSObjects() {
         mGame.getAssetManager().loadAssets("txt/assets/CoinTossAssets.JSON");
 
@@ -81,6 +136,9 @@ public class CoinTossScreen extends GameScreen {
 
         //Set up the FPS counter:
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
+
+        //Set up Coin object for display in animation:
+        mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
 
         // Spacing that will be used to position the Coin Toss Screen Objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -121,6 +179,36 @@ public class CoinTossScreen extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
+    private int coinFlipStart() {
+        Random RANDOM = new Random();
+        int flip = RANDOM.nextInt(6001);
+        if (flip == 6000) { //side of coin (1/6000 chance to auto-win)
+            return 2;
+        } else if (flip >= 3000 && flip < 6000) { //heads (ai starts)
+            return 1;
+        } else if (flip >= 0 && flip < 3000) { //tails (user starts)
+            return 0;
+        }
+        return -1;
+    }
+
+    // Method for setting up stats based on Coin Toss:
+    private void coinFlipResult(int result) {
+        switch (result) {
+            case 0: // ie, player starts
+                mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
+                mUserWhoStarted = UserWhoStarted.PLAYERSTARTED;
+                break;
+            case 1: // ie, ai starts
+                mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
+                mUserWhoStarted = UserWhoStarted.ENEMYSTARTED;
+                break;
+            case 2: //edge of coin - set opponent health to 0, auto win game.
+                EndGameScreen.setCoinFlipResult(true);
+                break;
+        }
+    }
+
     public void chooseTextToDisplay() {
         if (mCoinTossResult == 0) {
             mCoinTossMsg1 = "The coin landed on heads! You get to play first.";
@@ -144,13 +232,18 @@ public class CoinTossScreen extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
-        if (!coin.isComplete()) {
-            coin.coinAnimation();
+        if (!mCoin.isComplete()) {
+            mCoin.coinAnimation();
         }
 
         if (mCurrentTime - mTimeOnCreate >= mCoinToss_Timeout) {
+            if (mOpponent.getYourTurn()) {
+                mEnemyTurnBegins = System.currentTimeMillis();
+            }
+
             mGame.getScreenManager().getCurrentScreen().dispose();
-            mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
+           mScreenManager.changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
+                    mUserWhoStarted, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
         }
 
         List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -183,9 +276,8 @@ public class CoinTossScreen extends GameScreen {
         float SCREEN_WIDTH = mGame.getScreenWidth();
         float SCREEN_HEIGHT = mGame.getScreenWidth();
 
-        //if(mCurrentTime - mTimeOnCreate < 3000) {
-            coin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-        //}
+        mCoin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+
         if (mCurrentTime - mTimeOnCreate >= 3000) {
             graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.42f, mMessageText);
             graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.48f, mMessageText);

@@ -9,7 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import uk.ac.qub.eeecs.game.TestScreens.CoinTossScreenForTesting;
+import uk.ac.qub.eeecs.game.TestClasses.CoinTossScreenForTesting;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoinTossScreenTest {

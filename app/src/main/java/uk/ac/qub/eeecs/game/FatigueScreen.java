@@ -31,7 +31,7 @@ public class FatigueScreen extends GameScreen {
     private Paint mText;
     private Paint mTimerText;
 
-    FPSCounter fpsCounter;
+    FPSCounter mFPSCounter;
 
     //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
@@ -58,7 +58,7 @@ public class FatigueScreen extends GameScreen {
         mOhNoText = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.0f, spacingX*1.5f, spacingY/2.2f, "OhNoImg",this);
 
         //Set up the fps counter
-        fpsCounter = new FPSCounter( mFatigueScreenViewport.getWidth() * 0.50f, mFatigueScreenViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
+        mFPSCounter = new FPSCounter( mFatigueScreenViewport.getWidth() * 0.50f, mFatigueScreenViewport.getHeight() * 0.20f , this) { }; //Story P1 Scott Barham
 
         //PAINT OBJECT:
         //Initialise Paint Objects I will use to draw text
@@ -99,8 +99,7 @@ public class FatigueScreen extends GameScreen {
         //Get current time and check for timeout
         mCurrentTime = System.currentTimeMillis();
         if (mCurrentTime - mTimeOnCreate >= FATIGUE_TIMEOUT) {
-            mGame.getScreenManager().getCurrentScreen().dispose();
-            mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mGame));
+            mGame.getScreenManager().previousScreen();
         }
     }
 
@@ -123,7 +122,7 @@ public class FatigueScreen extends GameScreen {
         graphics2D.drawText("Game will resume in " + mTimeRemaining + " seconds...", SCREEN_WIDTH * 0.46f, SCREEN_HEIGHT * 0.46f, mTimerText);
 
         if(mGetPreference.getBoolean("FPS", true)) {
-            fpsCounter.draw(elapsedTime, graphics2D);
+            mFPSCounter.draw(elapsedTime, graphics2D);
         }
     }
 

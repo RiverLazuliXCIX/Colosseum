@@ -43,12 +43,11 @@ public class MenuScreen extends GameScreen {
     AssetManager mAssetManager = mGame.getAssetManager();
 
     //Screen manager, used throughout the MenuScreen Class:
-    ScreenManager mScreenManager = mGame.getScreenManager();
+    ScreenManager mScreenManager = new ScreenManager(mGame);
 
     //Shared preferences for music:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-    private SharedPreferences.Editor mPrefEditor = mGetPreferences.edit();
 
     //Declares the background music
     private Music mBgMusicMenu;
@@ -169,7 +168,8 @@ public class MenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                newScreenButtonPress(new colosseumDemoScreen(mGame));
+                mScreenManager.changeScreenButton(new CoinTossScreen(mGame));
+                stopBackgroundMusic();
             } else if (mOptionsButton.isPushTriggered()) {
                 newScreenButtonPress(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {

@@ -1,0 +1,25 @@
+{
+  "titleImage": [
+    {
+      "x": 0.48,
+      "y": 0.75,
+      "width": 0.28,
+      "height": 0.13,
+      "image": "SplashScreenTitle"
+    },
+    {
+      "x": 0.5,
+      "y": 0.2,
+      "width": 0.35,
+      "height": 0.14,
+      "image": "TouchToContinue"
+    },
+    {
+      "x": 0.1,
+      "y": 0.9,
+      "width": 0.1,
+      "height": 0.2,
+      "image": "TeamLogo"
+    }
+  ]
+}

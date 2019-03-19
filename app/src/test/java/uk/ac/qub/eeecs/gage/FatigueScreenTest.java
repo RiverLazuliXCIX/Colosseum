@@ -7,10 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
+import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assume.assumeNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
