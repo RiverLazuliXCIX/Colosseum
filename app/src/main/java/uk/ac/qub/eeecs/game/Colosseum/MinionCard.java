@@ -55,19 +55,19 @@ public class MinionCard extends Card {
     }
 
     @Override
-    public void useLogic() {
-        //do something
+    public void useLogic(MinionCard thisCard, MinionCard eMinionCard) {
+        attackEnemy(thisCard, eMinionCard);
     }
 
-    public void attackEnemy(MinionCard eMinionCard) {
+    public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
         // add a check for any enemy minions on the board with taunts
 
-        eMinionCard.takeDamage(this.attack);
-        takeDamage(eMinionCard.getAttack());
+        eMinionCard.takeDamage(thisCard.attack);
+        thisCard.takeDamage(eMinionCard.getAttack());
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
         eMinionCard.checkHealth();
-        checkHealth();
+        thisCard.checkHealth();
     }
 
     /* Another attack method will be required for attacking the enemy hero
