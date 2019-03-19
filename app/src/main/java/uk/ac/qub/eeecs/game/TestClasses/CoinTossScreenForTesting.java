@@ -1,4 +1,4 @@
-package uk.ac.qub.eeecs.game.TestScreens;
+package uk.ac.qub.eeecs.game.TestClasses;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;

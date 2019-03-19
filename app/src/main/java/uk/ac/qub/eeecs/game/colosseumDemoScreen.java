@@ -35,9 +35,9 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
 
 public class colosseumDemoScreen extends GameScreen {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties
-    ///////////////////////////////////////////////////////////////////////////
+    //////////////////
+    //  PROPERTIES  //
+    //////////////////
     private LayerViewport mGameViewport;
     private Input mInput;
     private static final Random RANDOM = new Random();
@@ -55,8 +55,7 @@ public class colosseumDemoScreen extends GameScreen {
     private Turn mCurrentTurn = new Turn();
 
     //FatigueCounter objects store all data about what fatigue the player/enemy should take:
-    private FatigueCounter mPlayerFatigue = new FatigueCounter();
-    private FatigueCounter mEnemyFatigue = new FatigueCounter();
+    private FatigueCounter mPlayerFatigue = new FatigueCounter(), mEnemyFatigue = new FatigueCounter();
 
     //Define the Player
     private Player p2;
@@ -109,7 +108,10 @@ public class colosseumDemoScreen extends GameScreen {
     ActiveRegion playerActiveRegion, opponentActiveRegion;
     HandRegion playerHandRegion, opponentHandRegion;
 
-    // Constructors
+    //////////////////
+    // CONSTRUCTOR  //
+    //////////////////
+
     public colosseumDemoScreen(Game game) {
         super("CardScreen", game);
 
@@ -125,7 +127,10 @@ public class colosseumDemoScreen extends GameScreen {
         coinFlipResult();
     }
 
-    // Methods
+    ///////////////
+    //  METHODS  //
+    ///////////////
+
     private void setUpGameObjects() {
         // Load in the assets used by the Colosseum Game Screen:
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
@@ -246,31 +251,6 @@ public class colosseumDemoScreen extends GameScreen {
         }
     }
 
-    public void drawPlayers(int spacingX, int spacingY, ElapsedTime elapsedTime,
-                            IGraphics2D graphics2D, Player p, CardDeck deck, float ySpacing) {
-        //Method for drawing all player and enemy stats/hero images - Sean
-        //Draw player portrait
-        p.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
-
-        //Draw player mana text
-        graphics2D.drawText(p.getCurrentMana() + "/" + p.getCurrentManaCap(),
-                spacingX * 14.5f, spacingY * (ySpacing + 0.4f), mText);
-
-        //Draw player card stats
-        int cardsLeft = deck.getDeck().size();
-        int cardsHand = deck.getmCardHand().size();
-        int cardsDead = deck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + cardsLeft, spacingX * 3.6f,
-                spacingY * ySpacing, mText);
-        graphics2D.drawText("Hand: " + cardsHand, spacingX * 3.6f,
-                spacingY * (ySpacing + 0.4f), mText);
-        graphics2D.drawText("Graveyard: " + cardsDead, spacingX * 3.6f,
-                spacingY * (ySpacing + 0.8f), mText);
-
-        //Draw player hand  - Dearbhaile
-        drawCardHand(deck, elapsedTime, graphics2D);
-    }
-
     //Methods relating to stopping and starting turns - Dearbhaile
     //If enemy started, then turns increase every time enemy takes new turn.
     public void endPlayerTurn() {
@@ -356,6 +336,11 @@ public class colosseumDemoScreen extends GameScreen {
             coinFlipDone = true; //Mark coinFlipDone as true, so it will not run again.
         }
 
+        //Both decks should constantly be checking for dead cards, ie cards where health <= 0
+        //When discovered in either deck, they will be discarded immediately. - Dearbhaile
+        playerDeck.checkForDeadCards();
+        enemyDeck.checkForDeadCards();
+
         if (coinFlipDone) {//Current time should constantly be collected, for use when counting enemy's turn time - Dearbhaile
             mCurrentTime = System.currentTimeMillis(); //This data starts collecting as soon as coin flip finishes
         }
@@ -375,6 +360,11 @@ public class colosseumDemoScreen extends GameScreen {
             for (Card cards : playerDeck.getmCardHand()) {
                 cards.cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
+        }
+
+        //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
+        for (Card cards : enemyDeck.getmCardHand()) {
+            cards.cardEvents(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
         }
 
         p2.update(elapsedTime); //Update player stats - Kyle
@@ -455,7 +445,34 @@ public class colosseumDemoScreen extends GameScreen {
         }
     }
 
-    //Draw the card demo screen
+    //////////////////////////////
+    //       DRAW METHODS       //
+    //////////////////////////////
+    public void drawPlayers(int spacingX, int spacingY, ElapsedTime elapsedTime,
+                            IGraphics2D graphics2D, Player p, CardDeck deck, float ySpacing) {
+        //Method for drawing all player and enemy stats/hero images - Sean
+        //Draw player portrait
+        p.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
+
+        //Draw player mana text
+        graphics2D.drawText(p.getCurrentMana() + "/" + p.getCurrentManaCap(),
+                spacingX * 14.5f, spacingY * (ySpacing + 0.4f), mText);
+
+        //Draw player card stats
+        int cardsLeft = deck.getDeck().size();
+        int cardsHand = deck.getmCardHand().size();
+        int cardsDead = deck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
+        graphics2D.drawText("Deck: " + cardsLeft, spacingX * 3.6f,
+                spacingY * ySpacing, mText);
+        graphics2D.drawText("Hand: " + cardsHand, spacingX * 3.6f,
+                spacingY * (ySpacing + 0.4f), mText);
+        graphics2D.drawText("Graveyard: " + cardsDead, spacingX * 3.6f,
+                spacingY * (ySpacing + 0.8f), mText);
+
+        //Draw player hand  - Dearbhaile
+        drawCardHand(deck, elapsedTime, graphics2D);
+    }
+
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         // Clear the screen
@@ -480,16 +497,19 @@ public class colosseumDemoScreen extends GameScreen {
         //Draw turn number - Dearbhaile
         graphics2D.drawText("Turn #" + mCurrentTurn.getmTurnNum(), spacingX * 1.0f, spacingY * 0.6f, mText);
 
-        if (p2.getYourTurn()) //Draw 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
+        //Draw 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
+        if (p2.getYourTurn())
             mEndTurnButton.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         else
             mEndTurnButtonOff.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
 
-        for (PushButton buttons : mButtons) { //Draw the remainder of the buttons:
+        //Draw the remainder of the buttons:
+        for (PushButton buttons : mButtons) {
             buttons.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        if (edgeCase) { //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
+        //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
+        if (edgeCase) {
             int screenHeight = graphics2D.getSurfaceHeight();
             float textHeight = screenHeight / 30.0f;
             textPaint.setTextSize(textHeight); //create a appropriate sizing of text
@@ -512,7 +532,10 @@ public class colosseumDemoScreen extends GameScreen {
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, opponent, enemyDeck, statOpponentYSpacing);
     }
 
-    //Getters and setters:
+    ///////////////////////////
+    //  GETTERS AND SETTERS  //
+    ///////////////////////////
+
     public int getmCoinTossOutcome() {
         return this.mCoinTossResult;
     }
@@ -526,5 +549,4 @@ public class colosseumDemoScreen extends GameScreen {
     public UserWhoStarted getUserWhoStarted() { return this.userWhoStarted; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
-
 }

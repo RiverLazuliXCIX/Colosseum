@@ -14,13 +14,16 @@ import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
+import uk.ac.qub.eeecs.game.Colosseum.Effect;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
+import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
-import uk.ac.qub.eeecs.game.TestScreens.FatigueScreenForTesting;
+import uk.ac.qub.eeecs.game.Colosseum.SpellCard;
+import uk.ac.qub.eeecs.game.Colosseum.WeaponCard;
+import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -58,7 +61,6 @@ public class CardDeckTest {
         when(mDemoScreen.getGame()).thenReturn(mGame);
         when(mDemoScreen.getName()).thenReturn("colosseumDemoScreen");
         when(mDemoScreen.getDefaultLayerViewport()).thenReturn(mLayerViewport);
-
     }
 
     //
@@ -268,45 +270,6 @@ public class CardDeckTest {
     }
 
     //
-    // Tests on my 'discardCard()' method:
-    //
-    @Test
-    public void discardCard_Test() {
-        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-
-        //'Draw' 5 cards to the mCardHand ArrayList:
-        newDeck.drawSetNumCards(5);
-
-        //Assert that now 5 cards are in the hand:
-        int expectedSizeOfHand = 5;
-        assertEquals(newDeck.getmCardHand().size(), expectedSizeOfHand);
-
-        //Remove the last card from the hand:
-        newDeck.discardCards(newDeck.getmCardHand().get(4));
-
-        //There should now be 4 cards in the hand:
-        expectedSizeOfHand--;
-        assertEquals(newDeck.getmCardHand().size(), expectedSizeOfHand);
-    }
-
-    @Test
-    public void discardCard_DiscardPileIncreases() {
-        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-
-        //Draw 5 cards to the mCardHand ArrayList:
-        newDeck.drawSetNumCards(5);
-
-        //Remove the last card from the hand:
-        newDeck.discardCards(newDeck.getmCardHand().get(4));
-
-        int expectedSizeOfDiscardPile = 1;
-
-        assertEquals(newDeck.getmDiscardPile().size(), expectedSizeOfDiscardPile);
-    }
-
-    //
     // Tests on drawCard() method, which adds fatigue:
     //
     @Test
@@ -386,11 +349,285 @@ public class CardDeckTest {
     }
 
     //
+    // Tests on the discardCards() method:
+    //
+
+    @Test
+    public void discardCards_RemovesAndAdds() {
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Draw 5 cards to the Hand
+        for (int i = 0; i < 5; i++) {
+            newDeck.drawTopCard();
+        }
+
+        int cardsInHand = 5;
+        int cardsInGraveyard = 0;
+
+        //There should now be 5 cards in the Hand and 0 in Graveyard:
+        assertEquals(newDeck.getmCardHand().size(), cardsInHand);
+        assertEquals(newDeck.getmDiscardPile().size(), cardsInGraveyard);
+
+        //Discard last card from the Card Hand:
+        newDeck.discardCards(newDeck.getmCardHand().get(newDeck.getmCardHand().size()-1));
+
+        int newCardsInHand = 4;
+        int newCardsInGraveyard = 1;
+
+        //The last card should now have been removed from the hand, and placed into the graveyard:
+        assertEquals(newDeck.getmCardHand().size(), newCardsInHand);
+        assertEquals(newDeck.getmDiscardPile().size(), newCardsInGraveyard);
+
+    }
+
+    //
+    // Tests on 'discardCards_EndOfTurn()' method:
+    //
+
+    @Test
+    public void discardCards_EndOfTurn() {
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Draw 5 cards to the Hand
+        for (int i = 0; i < 5; i++) {
+            newDeck.drawTopCard();
+        }
+
+        //Set the first 3 cards as 'toBeDiscarded'
+        for (int i = 0; i < 3; i++) {
+            newDeck.getmCardHand().get(i).setToBeDiscarded(true);
+        }
+
+        //When this method is called, all cards in deck that are set as
+        //'to be discarded' will be discarded, ie those the player selects
+        newDeck.discardCards_EndOfTurn();
+
+        int newCardsInHand = 2;
+        int newCardsInGraveyard = 3;
+
+        //These first 3 cards in the Card Hand should now be in the Graveyard:
+        assertEquals(newDeck.getmCardHand().size(), newCardsInHand);
+        assertEquals(newDeck.getmDiscardPile().size(), newCardsInGraveyard);
+    }
+
+    @Test
+    public void discardCards_EndOfTurn_NothingSelected() {
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Draw 5 cards to the Hand
+        for (int i = 0; i < 5; i++) {
+            newDeck.drawTopCard();
+        }
+
+        //When this method is called, all cards in deck that are set as
+        //'to be discarded' will be discarded, ie those the player selects
+        newDeck.discardCards_EndOfTurn();
+
+        int newCardsInHand = 5;
+        int newCardsInGraveyard = 0;
+
+        //No cards were selected, so there should still be 5 in the hand, 0 in graveyard:
+        assertEquals(newDeck.getmCardHand().size(), newCardsInHand);
+        assertEquals(newDeck.getmDiscardPile().size(), newCardsInGraveyard);
+    }
+
+    //
+    // Tests on 'discardCards_0Health' method:
+    //
+
+    @Test
+    public void discardCards_0Health_MinionCard_HealthAbove0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Minion Card:
+        MinionCard newMinion = new MinionCard(100, 100, mDemoScreen, 3, true, "Test_Card", 3, 3);
+        newDeck.getDeck().add(0, newMinion);
+
+        //Draw the minion card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should have health of 3, and thus should not be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        //Thus there should still be 1 card in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+    }
+
+    @Test
+    public void discardCards_0Health_MinionCard_HealthAt0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Minion Card:
+        MinionCard newMinion = new MinionCard(100, 100, mDemoScreen, 3, true, "Test_Card", 3, 0);
+        newDeck.getDeck().add(0, newMinion);
+
+        //Draw the minion card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should has 0 health, and thus should be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        int newExpectedCardsInHand = 0;
+
+        //There should now be 0 cards in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), newExpectedCardsInHand);
+    }
+
+
+    @Test
+    public void discardCards_0Health_SpellCard_MagnitudeAbove0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Spell Card:
+        SpellCard newSpell = new SpellCard(100, 100, mDemoScreen, 3, true, "Test_Card", Effect.HEAL, 3);
+        newDeck.getDeck().add(0, newSpell);
+
+        //Draw the Spell Card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should have magnitude of 3, and thus should not be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        //Thus there should still be 1 card in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+    }
+
+    @Test
+    public void discardCards_0Health_SpellCard_MagnitudeAt0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Spell Card:
+        SpellCard newSpell = new SpellCard(100, 100, mDemoScreen, 3, true, "Test_Card", Effect.HEAL, 0);
+        newDeck.getDeck().add(0, newSpell);
+
+        //Draw the Spell Card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should has 0 magnitude, and thus should be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        int newExpectedCardsInHand = 0;
+
+        //There should now be 0 cards in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), newExpectedCardsInHand);
+    }
+
+    @Test
+    public void discardCards_0Health_WeaponCard_ChargesAbove0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Weapon Card:
+        WeaponCard newWeapon = new WeaponCard(0, 0, mDemoScreen, 3, true, "Test_Card",3, 3 );
+        newDeck.getDeck().add(0, newWeapon);
+
+        //Draw the Weapon Card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should have 3 charges left, and thus should not be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        //Thus there should still be 1 card in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+    }
+
+    @Test
+    public void discardCards_0Health_WeaponCard_At0() {
+        //Set up deck with 30 cards:
+        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
+        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
+
+        //Remove all cards from deck for testing purposes:
+        for (int i = newDeck.getDeck().size()-1; i >= 0; i--) {
+            newDeck.getDeck().remove(newDeck.getDeck().size() - 1);
+        }
+
+        //Add a single Weapon Card:
+        WeaponCard newWeapon = new WeaponCard(0, 0, mDemoScreen, 3, true, "Test_Card",3, 0);
+        newDeck.getDeck().add(0, newWeapon);
+
+        //Draw the weapon card to the Card Hand:
+        newDeck.drawTopCard();
+
+        int expectedCardsInHand = 1;
+        assertEquals(newDeck.getmCardHand().size(), expectedCardsInHand);
+
+        //This card should has 0 charges left, and thus should be discarded:
+        newDeck.discardCards_0Health(newDeck.getmCardHand().get(0));
+
+        int newExpectedCardsInHand = 0;
+
+        //There should now be 0 cards in the Card Hand:
+        assertEquals(newDeck.getmCardHand().size(), newExpectedCardsInHand);
+    }
+
+
+    //        //Check for type of card:
+    //        if (card instanceof WeaponCard) {
+    //            if (((WeaponCard)card).getCharges() == 0) {
+    //                discardCards(card); //Discard if weapon has no charges left
+    //            }
+    //        }
+    //    }
+
+
+    //
     // Tests on the Getters & Setters:
     //
     @Test
     public void cardDeckGetID() {
-        //This test is to ensure that the CardDeck ID is set correctly:
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
@@ -401,7 +638,6 @@ public class CardDeckTest {
 
     @Test
     public void cardDeckGetName() {
-        //This test is to ensure that the CardDeck Name is set correctly:
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
@@ -412,7 +648,6 @@ public class CardDeckTest {
 
     @Test
     public void cardDeckGetScreen() {
-        //This test is to ensure that the CardDeck GameScreen is set correctly:
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
@@ -423,7 +658,6 @@ public class CardDeckTest {
 
     @Test
     public void cardDeckGetIsAI() {
-        //This test is to ensure that the CardDeck AI ownership settings are set correctly:
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
