@@ -31,6 +31,7 @@ import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
+import uk.ac.qub.eeecs.game.Colosseum.WhoStarted;
 import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.PauseMenuScreen;
 
@@ -75,6 +76,8 @@ public class colosseumDemoScreen extends GameScreen {
     //Set up an int value to hold the outcome of the coin toss
     private int mCoinTossResult;
 
+    private WhoStarted whoStarted;
+
     //'Edge case' coin toss variables:
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
     protected static boolean edgeCase = false;
@@ -95,9 +98,10 @@ public class colosseumDemoScreen extends GameScreen {
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
 
+    //Set up FPS counter:
     private FPSCounter fpsCounter;
 
-    //Array List to hold the GameObjects
+    //Array List to hold the GameObjects:
     private List<GameObject> mGameObjs = new ArrayList<>();
 
     //Denarius - single coin
@@ -126,7 +130,7 @@ public class colosseumDemoScreen extends GameScreen {
 
     // Methods
     private void setUpGameObjects() {
-        // Load in the assets used by the steering demo
+        // Load in the assets used by the Colosseum Game Screen:
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
@@ -143,7 +147,7 @@ public class colosseumDemoScreen extends GameScreen {
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(), mBackgroundBitmap, this);
 
-        //Initialise Paint object I will use to draw text
+        //Initialise Paint object for drawing text onscreen:
         mText = new Paint();
         int screenHeight = mDefaultScreenViewport.height;
         float textHeight = screenHeight / 28.0f;
@@ -270,10 +274,14 @@ public class colosseumDemoScreen extends GameScreen {
     }
 
     //Methods relating to stopping and starting turns - Dearbhaile
+    //If enemy started, then turns increase every time enemy takes new turn.
     public void endPlayerTurn() {
         p2.setYourTurn(false);
         opponent.setYourTurn(true);
         mEnemyTurnBegins = System.currentTimeMillis();
+        if (whoStarted == WhoStarted.ENEMYSTARTED) {
+            mCurrentTurn.newTurnFunc(p2, opponent);
+        }
     }
 
     //This method checks if 5 seconds have elapsed since enemy turn began
@@ -282,8 +290,10 @@ public class colosseumDemoScreen extends GameScreen {
             if (mCurrentTime - mEnemyTurnBegins >= ENEMY_TURN_TIME) {
                 p2.setYourTurn(true);
                 opponent.setYourTurn(false);
-                mCurrentTurn.newTurnFunc(p2);
-                playerDeck.drawCard(p2, mFatigue, mGame) ;
+                playerDeck.drawCard(p2, mFatigue, mGame);
+                if (whoStarted == WhoStarted.PLAYERSTARTED) {
+                    mCurrentTurn.newTurnFunc(p2, opponent);
+                }
             }
     }
 
@@ -306,10 +316,12 @@ public class colosseumDemoScreen extends GameScreen {
         switch (mCoinTossResult) {
             case 0: // Ie, player starts
                 mCurrentTurn.setUpStats_PlayerStarts(p2, playerDeck, opponent, enemyDeck);
+                whoStarted = WhoStarted.PLAYERSTARTED;
                 break;
             case 1: // Ie, opponent starts
                 mEnemyTurnBegins = System.currentTimeMillis();
                 mCurrentTurn.setUpStats_EnemyStarts(p2, playerDeck, opponent, enemyDeck);
+                whoStarted = WhoStarted.ENEMYSTARTED;
                 break;
             case 2: // Ie, auto win
                 EndGameScreen.setCoinFlipResult(true);
@@ -339,8 +351,16 @@ public class colosseumDemoScreen extends GameScreen {
 
     @Override
     public void update(ElapsedTime elapsedTime) {
+        while (!coinFlipDone) {
+            startTime = System.currentTimeMillis();
+            mGame.getScreenManager().addScreen(new CoinTossScreen(mGame, getmCoinTossOutcome()));
+            coinFlipDone = true;
+        }
+
         //Current time should constantly be collected, for use when counting enemy's turn time - Dearbhaile
-        mCurrentTime = System.currentTimeMillis();
+        if (coinFlipDone) {
+            mCurrentTime = System.currentTimeMillis();
+        }
 
         //If opponent's turn, check when it ends - Dearbhaile
         if (opponent.getYourTurn()) {
@@ -355,13 +375,6 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Process any touch events occurring since the update
         mInput = mGame.getInput();
-
-        //Get the initial start time once at start of game - Scott
-        while (!coinFlipDone) {
-            startTime = System.currentTimeMillis();
-            mGame.getScreenManager().addScreen(new CoinTossScreen(mGame, getmCoinTossOutcome()));
-            coinFlipDone = true;
-        }
 
         //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
         if (p2.getYourTurn()) {
@@ -402,7 +415,6 @@ public class colosseumDemoScreen extends GameScreen {
 
                 //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
                 for (int i = 0; i < playerDeck.getmCardHand().size(); i++) {
-                    //playerDeck.getmCardHand().get(i).cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mGameViewport, mGame);
 
                     // Updates both regions for all cards - Kyle
                     playerActiveRegion.update(playerDeck.getmCardHand().get(i));
@@ -525,6 +537,8 @@ public class colosseumDemoScreen extends GameScreen {
         edgeCase = edgeCaseInput;
     }
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
+
+    public WhoStarted getWhoStarted() { return this.whoStarted; }
 
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
