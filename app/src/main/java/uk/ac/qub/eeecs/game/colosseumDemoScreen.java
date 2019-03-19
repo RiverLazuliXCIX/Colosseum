@@ -371,11 +371,14 @@ public class colosseumDemoScreen extends GameScreen {
 
         mInput = mGame.getInput(); //Process any touch events occurring since the update
 
-        if (p2.getYourTurn()) { //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
+        //if (p2.getYourTurn()) { //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
             for (Card cards : playerDeck.getmCardHand()) {
                 cards.cardEvents(playerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
             }
+        for (Card cards : enemyDeck.getmCardHand()) {
+            cards.cardEvents(enemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
         }
+        //}
 
         p2.update(elapsedTime); //Update player stats - Kyle
         opponent.update(elapsedTime); //Update opponent stats
