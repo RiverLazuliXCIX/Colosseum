@@ -102,16 +102,23 @@ public class TurnClassTest {
     public void newTurnFunc_Success() {
         Turn newTurn = new Turn();
         Player newPlayer = new Player(mGameScreen, "Brutalus");
+        AIOpponent newEnemy = new AIOpponent(mGameScreen, "c");
 
         newPlayer.setCurrentMana(5);
         newPlayer.setCurrentManaCap(5);
 
-        newTurn.newTurnFunc(newPlayer);
+        newEnemy.setCurrentMana(5);
+        newEnemy.setCurrentManaCap(5);
+
+        newTurn.newTurnFunc(newPlayer, newEnemy);
 
         int expectedResult = 6;
 
         assertEquals(newPlayer.getCurrentMana(), expectedResult);
         assertEquals(newPlayer.getCurrentManaCap(), expectedResult);
+
+        assertEquals(newEnemy.getCurrentMana(), expectedResult);
+        assertEquals(newEnemy.getCurrentManaCap(), expectedResult);
     }
 
     //
@@ -120,19 +127,51 @@ public class TurnClassTest {
     //
 
     @Test
-    public void newTurnFunc_ValueOverManaCap() {
+    public void newTurnFunc_ValueTooHigh() {
         Turn newTurn = new Turn();
         Player newPlayer = new Player(mGameScreen, "Brutalus");
+        AIOpponent newEnemy = new AIOpponent(mGameScreen, "c");
 
+        //Player/Enemy mana and mana cap are set to the max value:
         newPlayer.setCurrentMana(10);
         newPlayer.setCurrentManaCap(10);
 
-        newTurn.newTurnFunc(newPlayer);
+        newEnemy.setCurrentMana(10);
+        newEnemy.setCurrentManaCap(10);
 
+        //Call for new turn functionality:
+        newTurn.newTurnFunc(newPlayer, newEnemy);
+
+        //The player mana and cap should not exceed 10/10:
         int expectedResult = 10;
 
         assertEquals(newPlayer.getCurrentMana(), expectedResult);
         assertEquals(newPlayer.getCurrentManaCap(), expectedResult);
+
+        assertEquals(newEnemy.getCurrentMana(), expectedResult);
+        assertEquals(newEnemy.getCurrentManaCap(), expectedResult);
+    }
+
+    @Test
+    public void newTurnFunc_ManaCapDoesntIncrease() {
+        Turn newTurn = new Turn();
+        Player newPlayer = new Player(mGameScreen, "Brutalus");
+        AIOpponent newEnemy = new AIOpponent(mGameScreen, "c");
+
+        //Player mana is low enough to be incremented:
+        newPlayer.setCurrentMana(4);
+
+        //But mana cap is at the max already, and thus should not increase:
+        newPlayer.setCurrentManaCap(10);
+
+        //Call for new turn functionality:
+        newTurn.newTurnFunc(newPlayer, newEnemy);
+
+        int expectedMana = 5;
+        int expectedManaCap = 10;
+
+        assertEquals(newPlayer.getCurrentMana(), expectedMana);
+        assertEquals(newPlayer.getCurrentManaCap(), expectedManaCap);
     }
 
     //
