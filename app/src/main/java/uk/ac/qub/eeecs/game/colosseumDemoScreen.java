@@ -58,8 +58,9 @@ public class colosseumDemoScreen extends GameScreen {
     //Turn object that stores all data about the current turn:
     private Turn mCurrentTurn = new Turn();
 
-    //FatigueCounter object stores all data about what fatigue the player should take:
-    private FatigueCounter mFatigue = new FatigueCounter();
+    //FatigueCounter objects store all data about what fatigue the player/enemy should take:
+    private FatigueCounter mPlayerFatigue = new FatigueCounter();
+    private FatigueCounter mEnemyFatigue = new FatigueCounter();
 
     //Define the Player
     private Player p2;
@@ -76,6 +77,7 @@ public class colosseumDemoScreen extends GameScreen {
     //Set up an int value to hold the outcome of the coin toss
     private int mCoinTossResult;
 
+    //WhoStarted variable to hold data about who started in this match:
     private WhoStarted whoStarted;
 
     //'Edge case' coin toss variables:
@@ -279,18 +281,20 @@ public class colosseumDemoScreen extends GameScreen {
         p2.setYourTurn(false);
         opponent.setYourTurn(true);
         mEnemyTurnBegins = System.currentTimeMillis();
+        enemyDeck.drawCard(opponent, mEnemyFatigue, mGame);
         if (whoStarted == WhoStarted.ENEMYSTARTED) {
             mCurrentTurn.newTurnFunc(p2, opponent);
         }
     }
 
     //This method checks if 5 seconds have elapsed since enemy turn began
-    //If yes, then it triggers player turn to begin again. - Dearbhaile
+    //If yes, then it triggers player turn to begin again.
+    //If player started, then turns increase every time player takes new turn. - Dearbhaile
     public void checkIfEnemysTurn() {
             if (mCurrentTime - mEnemyTurnBegins >= ENEMY_TURN_TIME) {
                 p2.setYourTurn(true);
                 opponent.setYourTurn(false);
-                playerDeck.drawCard(p2, mFatigue, mGame);
+                playerDeck.drawCard(p2, mPlayerFatigue, mGame);
                 if (whoStarted == WhoStarted.PLAYERSTARTED) {
                     mCurrentTurn.newTurnFunc(p2, opponent);
                 }
