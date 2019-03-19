@@ -75,28 +75,10 @@ public class CardDeck {
 
      //Public methods required for CardDeck class:
     public void buildDeck() {
-        chooseDeckType();
-        insertMinionCard(mNumOfMinions);
-        insertSpellCard(mNumOfSpells);
-        insertWeaponCard(mNumOfWeapons);
-    }
-
-    public void shuffleCards() { //Method to shuffle the cards so they are no longer just weapon cards
-        //..on top of spell cards, on top of minion cards. Called after the decks are set up in the main
-        //..game screen. A temporary deck is set up for the swap, which are then randomly placed into
-        //..original card deck once again.
-
-        ArrayList<Card> tempDeck = new ArrayList<>();
-        Random r = new Random();
-
-        for (int i = 0; i < getDeck().size(); i++) {
-            tempDeck.add(i, getDeck().get(i));
-        }
-
-        for (int j = 0; j < tempDeck.size(); j++) {
-            int randomIndex = r.nextInt(tempDeck.size());
-            getDeck().set(j, tempDeck.get(randomIndex));
-        }
+        chooseDeckType(); //Use random generator to select the ratio of minion/spell/weapon cards in deck
+        insertMinionCard(mNumOfMinions); //Insert the chosen number of minion cards to deck
+        insertSpellCard(mNumOfSpells); //Insert the chosen number of spell cards to deck
+        insertWeaponCard(mNumOfWeapons); //Insert the chosen number of weapon cards to deck
     }
 
     public void setUpDeckOptions(int mMinNum, int mSpellNum, int mWeapNum) {
@@ -244,6 +226,24 @@ public class CardDeck {
             }
         }
 
+    public void shuffleCards() { //Method to shuffle the cards so they are no longer just weapon cards
+        //..on top of spell cards, on top of minion cards. Called after the decks are set up in the main
+        //..game screen. A temporary deck is set up for the swap, which are then randomly placed into
+        //..original card deck once again.
+
+        ArrayList<Card> tempDeck = new ArrayList<>();
+        Random r = new Random();
+
+        for (int i = 0; i < getDeck().size(); i++) {
+            tempDeck.add(i, getDeck().get(i));
+        }
+
+        for (int j = 0; j < tempDeck.size(); j++) {
+            int randomIndex = r.nextInt(tempDeck.size());
+            getDeck().set(j, tempDeck.get(randomIndex));
+        }
+    }
+
     //Method required to draw a single card from the Deck:
     public Card drawTopCard() {
         if (!mDeck.isEmpty()) { //Deck must contain cards
@@ -265,12 +265,12 @@ public class CardDeck {
     //Screen then disappears after 5 seconds
     public void drawCard(Player player, FatigueCounter counter, Game mGame) {
         if (!getDeck().isEmpty()) {
-            drawTopCard();
+            drawTopCard(); //If there are cards in deck, draw top card
             destroyCardOverLimit();
         } else {
-            counter.incrementFatigue();
+            counter.incrementFatigue(); //Otherwise, player takes cumulative fatigue
             mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
-            player.receiveDamage(counter.getmFatigueNum());
+            player.receiveDamage(counter.getmFatigueNum()); //Damage is taken from player
         }
     }
 
@@ -288,10 +288,10 @@ public class CardDeck {
 
     //This method destroys a card if player draws one, when their hand is already full:
     public void destroyCardOverLimit() {
-        if (mCardHand.size() > MAX_HAND_CARDS) {
+        if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
             for (int i = 5; i < mCardHand.size(); i++) {
                 Card cardOver = mCardHand.get(mCardHand.size() - 1);
-                mCardHand.remove(cardOver);
+                mCardHand.remove(cardOver); //Destroys every card above 5 in hand
             }
         }
     }
