@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
@@ -21,6 +22,7 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
 public class EndGameScreen extends GameScreen {
 
+    private ScreenManager screenManager = new ScreenManager(mGame);
     private PushButton menuButton; // Menu button to return from this screen to the menu
     private PushButton newGameButton; // New Game button to go immediately into a new game
     private List<PushButton> pushButtons = new ArrayList<>(); // List of all push buttons
@@ -159,7 +161,7 @@ public class EndGameScreen extends GameScreen {
                 changeScreen(new MenuScreen(mGame));
             }
             if(newGameButton.isPushTriggered()) { //Start a new game
-                changeScreen(new colosseumDemoScreen(mGame));
+                screenManager.changeScreenButton(new CoinTossScreen(mGame));
             }
         }
     }

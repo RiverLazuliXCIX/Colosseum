@@ -42,10 +42,10 @@ public class PauseMenuScreen extends GameScreen {
     private LayerViewport mMenuViewport;
 
     private  PushButton mMenuScreen, mConcede;
+
     //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
-    private SharedPreferences.Editor mPrefEditor = mGetPreference.edit();
 
     FPSCounter fpsCounter;
 

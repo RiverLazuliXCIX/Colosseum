@@ -169,7 +169,7 @@ public class MenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                newScreenButtonPress(new colosseumDemoScreen(mGame));
+                newScreenButtonPress(new CoinTossScreen(mGame));
             } else if (mOptionsButton.isPushTriggered()) {
                 newScreenButtonPress(new OptionsScreen(mGame));
             } else if (mQuitButton.isPushTriggered()) {
