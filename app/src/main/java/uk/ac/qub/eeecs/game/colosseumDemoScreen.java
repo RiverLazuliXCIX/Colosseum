@@ -22,7 +22,6 @@ import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
@@ -31,17 +30,14 @@ import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
-import uk.ac.qub.eeecs.game.Colosseum.WhoStarted;
-import uk.ac.qub.eeecs.game.EndGameScreen;
-import uk.ac.qub.eeecs.game.PauseMenuScreen;
+import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
 
 
 public class colosseumDemoScreen extends GameScreen {
 
-    // /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     // Properties
-    // /////////////////////////////////////////////////////////////////////////
-
+    ///////////////////////////////////////////////////////////////////////////
     private LayerViewport mGameViewport;
     private Input mInput;
     private static final Random RANDOM = new Random();
@@ -77,8 +73,8 @@ public class colosseumDemoScreen extends GameScreen {
     //Set up an int value to hold the outcome of the coin toss
     private int mCoinTossResult;
 
-    //WhoStarted variable to hold data about who started in this match:
-    private WhoStarted whoStarted;
+    //UserWhoStarted variable to hold data about who started in this match:
+    private UserWhoStarted userWhoStarted;
 
     //'Edge case' coin toss variables:
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
@@ -127,7 +123,6 @@ public class colosseumDemoScreen extends GameScreen {
         enemyDeck.shuffleCards();
         coinFlipStart();
         coinFlipResult();
-
     }
 
     // Methods
@@ -283,7 +278,7 @@ public class colosseumDemoScreen extends GameScreen {
         opponent.setYourTurn(true); // Set Opponent turn to true
         mEnemyTurnBegins = System.currentTimeMillis(); // Start timing enemy's turn
         enemyDeck.drawCard(opponent, mEnemyFatigue, mGame); // Draw card to enemy deck
-        if (whoStarted == WhoStarted.ENEMYSTARTED) { //If opponent is starting player,
+        if (userWhoStarted == UserWhoStarted.ENEMYSTARTED) { //If opponent is starting player,
             mCurrentTurn.newTurnFunc(p2, opponent); //Then increment turn number
         }
     }
@@ -296,7 +291,7 @@ public class colosseumDemoScreen extends GameScreen {
             p2.setYourTurn(true); // If enemy turn over, set Player turn to true
             opponent.setYourTurn(false); // Set Opponent turn to false
             playerDeck.drawCard(p2, mPlayerFatigue, mGame); // Player draws card
-            if (whoStarted == WhoStarted.PLAYERSTARTED) { // If player is starting player,
+            if (userWhoStarted == UserWhoStarted.PLAYERSTARTED) { // If player is starting player,
                 mCurrentTurn.newTurnFunc(p2, opponent); //Then increment turn number.
             }
         }
@@ -320,12 +315,12 @@ public class colosseumDemoScreen extends GameScreen {
         switch (mCoinTossResult) {
             case 0: // Ie, player starts
                 mCurrentTurn.setUpStats_PlayerStarts(p2, playerDeck, opponent, enemyDeck);
-                whoStarted = WhoStarted.PLAYERSTARTED;
+                userWhoStarted = UserWhoStarted.PLAYERSTARTED;
                 break;
             case 1: // Ie, opponent starts
                 mEnemyTurnBegins = System.currentTimeMillis();
                 mCurrentTurn.setUpStats_EnemyStarts(p2, playerDeck, opponent, enemyDeck);
-                whoStarted = WhoStarted.ENEMYSTARTED;
+                userWhoStarted = UserWhoStarted.ENEMYSTARTED;
                 break;
             case 2: // Ie, auto win
                 EndGameScreen.setCoinFlipResult(true);
@@ -528,7 +523,7 @@ public class colosseumDemoScreen extends GameScreen {
         edgeCase = edgeCaseInput;
     }
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
-    public WhoStarted getWhoStarted() { return this.whoStarted; }
+    public UserWhoStarted getUserWhoStarted() { return this.userWhoStarted; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
 

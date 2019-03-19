@@ -1,5 +1,5 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-public enum WhoStarted {
+public enum UserWhoStarted {
     PLAYERSTARTED, ENEMYSTARTED;
 }

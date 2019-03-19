@@ -311,12 +311,35 @@ public class CardDeck {
         mDiscardPile.add(mCardToDiscard);
     }
 
-
     public void discardCards_EndOfTurn() {
         //Called at end of turn, to remove discarded cards from board:
         for (int i = mCardHand.size()-1; i >= 0; i--) {
+            discardCards_0Health(mCardHand.get(i));
+
             if (mCardHand.get(i).gettoBeDiscarded()) {
                 discardCards(mCardHand.get(i));
+            }
+        }
+    }
+    public void discardCards_0Health(Card card) {
+        //Check for type of card:
+        if (card instanceof MinionCard) {
+            if (((MinionCard) card).getHealth() == 0) {
+                discardCards(card); //Discard if minion has no health
+            }
+        }
+
+        //Check for type of card:
+        if (card instanceof SpellCard) {
+            if(((SpellCard)card).getMagnitude() == 0) {
+                discardCards(card); //Discard if spell has no magnitude
+            }
+        }
+
+        //Check for type of card:
+        if (card instanceof WeaponCard) {
+            if (((WeaponCard)card).getCharges() == 0) {
+                discardCards(card); //Discard if weapon has no charges left
             }
         }
     }
