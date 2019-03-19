@@ -5,16 +5,20 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.qub.eeecs.gage.Game;
-import uk.ac.qub.eeecs.gage.engine.audio.Music;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
-import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
@@ -27,11 +31,8 @@ public class SplashScreen extends GameScreen {
     private long timeOnCreate, currentTime;
     private PushButton mSplashBackground;
     private LayerViewport mSplashLayerViewport;
-    private TitleImage mMenuTitle;
-    private TitleImage mTouchToContinue;
-    private TitleImage mTeamLogo;
-    private int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
-    private int spacingY = (int) mDefaultLayerViewport.getHeight() / 4;
+
+    private List<TitleImage> mImages = new ArrayList<>();
 
     //Shared preferences for music:
     private Context mContext = mGame.getActivity();
@@ -55,7 +56,9 @@ public class SplashScreen extends GameScreen {
         mPrefEditor.putBoolean("SFX", true);
         mPrefEditor.putBoolean("FPS", false);
         mPrefEditor.commit();
-    }
+
+         constructImages("txt/layout/SplashScreenImageLayout.JSON", mImages );
+        }
 
     //Methods
     private void setUpSplashScreeneObjects() {
@@ -66,12 +69,6 @@ public class SplashScreen extends GameScreen {
         mSplashBackground = new PushButton(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
                 mDefaultLayerViewport.getHeight(),"SplashScreenBackground", this);
-
-        // Create the title image for the splash screens
-        mMenuTitle = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 2.5f, spacingX*1.5f, spacingY/2.2f, "SplashScreenTitle",this);
-        mTouchToContinue = new TitleImage(mDefaultLayerViewport.getWidth() / 2.0f, spacingY * 0.5f, spacingX * 2.0f, spacingY / 2.2f, "TouchToContinue", this);
-        mTeamLogo = new TitleImage(mDefaultLayerViewport.getWidth() / 11.0f, spacingY * 3.0f,spacingX * 0.43f, spacingY / 1.5f, "TeamLogo", this);
-
     }
 
     private void setupViewports() {
@@ -84,6 +81,49 @@ public class SplashScreen extends GameScreen {
 
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mSplashLayerViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+
+
+    }
+
+    private void constructImages(String imagesToConstructJSONFile, List<TitleImage> images) {
+
+        // Attempt to load in the JSON asset details
+        String loadedJSON;
+        try {
+            loadedJSON = mGame.getFileIO().loadJSON(imagesToConstructJSONFile);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "SplashScreen.constructImages: Cannot load JSON [" + imagesToConstructJSONFile + "]");
+        }
+
+        // Attempt to extract the JSON information
+        try {
+            JSONObject settings = new JSONObject(loadedJSON);
+            JSONArray imageDetails = settings.getJSONArray("titleImage");
+
+            // Store the game layer width and height
+            float layerWidth = mDefaultLayerViewport.getWidth();
+            float layerHeight = mDefaultLayerViewport.getHeight();
+
+            // Construct each button
+            for (int idx = 0; idx < imageDetails.length(); idx++) {
+                float x = (float) imageDetails.getJSONObject(idx).getDouble("x");
+                float y = (float) imageDetails.getJSONObject(idx).getDouble("y");
+                float width = (float) imageDetails.getJSONObject(idx).getDouble("width");
+                float height = (float) imageDetails.getJSONObject(idx).getDouble("height");
+
+                String defaultImage = imageDetails.getJSONObject(idx).getString("image");
+
+                TitleImage image = new TitleImage(x * layerWidth, y * layerHeight,
+                        width * layerWidth, height * layerHeight,
+                        defaultImage, this);
+                images.add(image);
+            }
+
+        } catch (JSONException | IllegalArgumentException e) {
+            throw new RuntimeException(
+                    "SplashScreen.constructImages: JSON parsing error [" + e.getMessage() + "]");
+        }
     }
 
     /**
@@ -93,14 +133,12 @@ public class SplashScreen extends GameScreen {
     @Override
 
     public void update(ElapsedTime elapsedTime) {
-        // Process any touch events occurring since the last update
-        Input input = mGame.getInput();
-
         //Get current time and check for timeout
         currentTime = System.currentTimeMillis();
         if (currentTime - timeOnCreate >= SPLASH_TIMEOUT) {
             goToMenuScreen();
         }
+
         // Process any touch events occurring since the update
         Input touchInput = mGame.getInput();
         List<TouchEvent> touchEvents = touchInput.getTouchEvents();
@@ -131,8 +169,7 @@ public class SplashScreen extends GameScreen {
         mSplashBackground.draw(elapsedTime, graphics2D, mSplashLayerViewport,
                 mDefaultScreenViewport);
 
-        mMenuTitle.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-        mTouchToContinue.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-        mTeamLogo.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        for (TitleImage image : mImages)
+            image.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
     }
 }

@@ -104,17 +104,14 @@ public class PauseMenuScreen extends GameScreen {
         fpsCounter = new FPSCounter( mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f , this) { };
     }
 
-
-
     private void constructButtons(String buttonsToConstructJSONFile, List<PushButton> buttons) {
-
         // Attempt to load in the JSON asset details
         String loadedJSON;
         try {
             loadedJSON = mGame.getFileIO().loadJSON(buttonsToConstructJSONFile);
         } catch (IOException e) {
             throw new RuntimeException(
-                    "DemoMenuScreen.constructButtons: Cannot load JSON [" + buttonsToConstructJSONFile + "]");
+                    "PauseMenuScreen.constructButtons: Cannot load JSON [" + buttonsToConstructJSONFile + "]");
         }
 
         // Attempt to extract the JSON information
@@ -186,7 +183,7 @@ public class PauseMenuScreen extends GameScreen {
         } catch( ClassNotFoundException | NoSuchMethodException
                 | InstantiationException | IllegalAccessException | InvocationTargetException e ) {
             throw new RuntimeException(
-                    "DemoMenuScreen.addScreen: Error creating [" + gameScreenToAdd + " " + e.getMessage() + "]");
+                    "PauseMenuScreen.addScreen: Error creating [" + gameScreenToAdd + " " + e.getMessage() + "]");
         }
     }
 
