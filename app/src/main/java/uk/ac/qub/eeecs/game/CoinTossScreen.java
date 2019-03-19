@@ -12,6 +12,7 @@ import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
+import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
@@ -33,6 +34,8 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
 public class CoinTossScreen extends GameScreen {
 
     // Properties
+    private ScreenManager mScreenManager = new ScreenManager(mGame);
+
     //Different objects required for this screen to function
     private GameObject mCTSBackground;
     private LayerViewport mGameViewport;
@@ -239,7 +242,7 @@ public class CoinTossScreen extends GameScreen {
             }
 
             mGame.getScreenManager().getCurrentScreen().dispose();
-            mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
+           mScreenManager.changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
                     mUserWhoStarted, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
         }
 
