@@ -84,6 +84,10 @@ public class CoinTossScreen extends GameScreen {
     //Create instance of Coin object:
     private Coin mCoin;
 
+    //'Edge case' coin toss variables:
+    protected static int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+    protected static boolean edgeCase = false;
+
     // Constructor
     //Create the 'CoinTossScreen' screen
     public CoinTossScreen(Game game) {
@@ -103,6 +107,10 @@ public class CoinTossScreen extends GameScreen {
         mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
         mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");
+
+        if (edgeCase) { //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
+            edgeCaseTest();
+        }
 
         //Setting up demo player:
         mPlayer = new Player(this, "Meridia");
@@ -177,6 +185,22 @@ public class CoinTossScreen extends GameScreen {
 
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
+    }
+
+    private void edgeCaseTest() { //Testing for the edge case scenario of the coin flip, User Story 18.1, Sprint 4 - Scott
+        boolean i = true;
+        while (i) {
+            edgeCounter++;
+            switch (coinFlipStart()) {
+                case 0://tails - player starts
+                case 1: //heads - ai starts
+                default: //Shouldn't be reached
+                    break;
+                case 2: //edge of coin - set opponent health to 0, auto win game.
+                    i = false;
+                    break;
+            }
+        }
     }
 
     private int coinFlipStart() {
@@ -291,6 +315,9 @@ public class CoinTossScreen extends GameScreen {
     }
 
     //Getters and setters:
+    public static boolean getEdgeCase() { return edgeCase; }
+    public static void setEdgeCase(boolean edgeCaseInput) { edgeCase = edgeCaseInput; }
+    public static int getEdgeCounter() { return edgeCounter; }
     public int getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }

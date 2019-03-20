@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D;
@@ -127,11 +126,6 @@ public class colosseumDemoScreen extends GameScreen {
     ///////////////
 
     private void setUpGameObjects() {
-        // Load in the assets used by the Colosseum Game Screen:
-/*        mGame.getAssetManager().loadAssets("txt/assets/ColosseumAssets.JSON");
-        mGame.getAssetManager().loadAssets("txt/assets/HeroAssets.JSON");
-        mGame.getAssetManager().loadAssets("txt/assets/CardAssets.JSON");*/
-
         // Create the background
         Bitmap mBackgroundBitmap = getGame()
                 .getAssetManager().getBitmap("ArenaFloor");
@@ -440,6 +434,14 @@ public class colosseumDemoScreen extends GameScreen {
 
         float statOpponentYSpacing = 0.6f; //OPPONENT STATS BEING DRAWN:
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, mOpponent, mEnemyDeck, statOpponentYSpacing);
+
+        if (CoinTossScreen.getEdgeCase()) {
+            int screenHeight = graphics2D.getSurfaceHeight();
+            float textHeight = screenHeight / 30.0f;
+            textPaint.setTextSize(textHeight); //create a appropriate sizing of text
+            graphics2D.drawText("Iterations to reach Edge Case:", 100.0f, 50.0f, textPaint); //draw the text "Iterations to reach Edge Case:"
+            graphics2D.drawText(String.valueOf(CoinTossScreen.getEdgeCounter()), 100.0f, 100.0f, textPaint); //Output the number of iterations.
+        }
     }
 
     ///////////////////////////
