@@ -161,7 +161,7 @@ public class EndGameScreen extends GameScreen {
                 changeScreen(new MenuScreen(mGame));
             }
             if(newGameButton.isPushTriggered()) { //Start a new game
-                screenManager.changeScreenButton(new CoinTossScreen(mGame));
+                changeScreen(new CoinTossScreen(mGame));
             }
         }
     }

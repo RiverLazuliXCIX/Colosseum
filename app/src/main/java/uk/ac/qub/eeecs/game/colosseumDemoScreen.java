@@ -286,7 +286,7 @@ public class colosseumDemoScreen extends GameScreen {
         //'EndGameScreen' code - Scott
         if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
             try {
-                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
+                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
             } catch (InterruptedException e) { }
 
             EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
@@ -295,7 +295,7 @@ public class colosseumDemoScreen extends GameScreen {
 
         } else if (mPlayer.getCurrentHealth() <= 0 || mOpponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
             try {
-                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
+                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
             } catch (InterruptedException e) { }
 
             if (mPlayer.getCurrentHealth() <= 0 && mOpponent.getCurrentHealth() <= 0) //if both sides health is 0 or less, the game ends in a draw
@@ -452,4 +452,5 @@ public class colosseumDemoScreen extends GameScreen {
     public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
+    public static boolean wasPaused() { return wasPaused; } //Used to resume the game from the main menu without having to see a coinflip again
 }

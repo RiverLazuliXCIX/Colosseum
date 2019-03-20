@@ -30,7 +30,7 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
-//CoinTossScreen, coded by Dearbhaile Walsh
+//CoinTossScreen, coded by Dearbhaile Walsh & Scott Barham
 public class CoinTossScreen extends GameScreen {
 
     // Properties
@@ -145,7 +145,7 @@ public class CoinTossScreen extends GameScreen {
         //Set up the FPS counter:
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
 
-        //Set up Coin object for display in animation:
+        //Set up Coin object for display in animation: Scott
         mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
 
         // Spacing that will be used to position the Coin Toss Screen Objects:
@@ -203,7 +203,7 @@ public class CoinTossScreen extends GameScreen {
         }
     }
 
-    private int coinFlipStart() {
+    private int coinFlipStart() { //Initialise the coin flip for a random result - Scott
         Random RANDOM = new Random();
         int flip = RANDOM.nextInt(6001);
         if (flip == 6000) { //side of coin (1/6000 chance to auto-win)
@@ -219,18 +219,24 @@ public class CoinTossScreen extends GameScreen {
     // Method for setting up stats based on Coin Toss:
     private void coinFlipResult(int result) {
         switch (result) {
-            case 0: // ie, player starts
+            case 0: // ie, player starts - Dearbhaile
                 mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.PLAYERSTARTS;
                 break;
-            case 1: // ie, ai starts
+            case 1: // ie, ai starts - Dearbhaile
                 mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
-            case 2: //edge of coin - set opponent health to 0, auto win game.
+            case 2: //edge of coin - set opponent health to 0, auto win game - Scott
                 EndGameScreen.setCoinFlipResult(true);
                 break;
         }
+    }
+
+    private void changeScreens() { //Method to remove the current screen and move to the main game screen
+        mGame.getScreenManager().removeScreen(CoinTossScreen.this);
+        mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
+                mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
     }
 
     public void chooseTextToDisplay() {
@@ -256,7 +262,11 @@ public class CoinTossScreen extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
-        if (!mCoin.isComplete()) {
+        if(colosseumDemoScreen.wasPaused()) { //If the player used the "main menu" button from inside a game, allow them to resume instantly. Scott
+            changeScreens();
+        }
+
+        if (!mCoin.isComplete()) { //If the coin animation isnt complete, continue updating the animation until it completes. - Scott
             mCoin.coinAnimation();
         }
 
@@ -264,10 +274,7 @@ public class CoinTossScreen extends GameScreen {
             if (mOpponent.getYourTurn()) {
                 mEnemyTurnBegins = System.currentTimeMillis();
             }
-
-            mGame.getScreenManager().getCurrentScreen().dispose();
-           mScreenManager.changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
-                    mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
+            changeScreens(); //Call the change screens method to change to the main game screen.
         }
 
         List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -300,6 +307,7 @@ public class CoinTossScreen extends GameScreen {
         float SCREEN_WIDTH = mGame.getScreenWidth();
         float SCREEN_HEIGHT = mGame.getScreenWidth();
 
+        //Draw the coin sprite, used for the coin animation - Scott
         mCoin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         if (mCurrentTime - mTimeOnCreate >= 3000) {

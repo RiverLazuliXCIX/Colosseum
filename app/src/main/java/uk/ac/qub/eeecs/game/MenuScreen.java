@@ -137,7 +137,7 @@ public class MenuScreen extends GameScreen {
             mAssetManager.getSound("ButtonPress").play();
         }
         //Change screen:
-        mScreenManager.changeScreenButton(screen);
+        mGame.getScreenManager().changeScreenButton(screen);
         //If music is playing, stop it:
         if (mGetPreferences.getBoolean("Music", true)) {
             stopBackgroundMusic();
