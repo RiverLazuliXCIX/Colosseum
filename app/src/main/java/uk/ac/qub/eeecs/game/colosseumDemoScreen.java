@@ -427,15 +427,6 @@ public class colosseumDemoScreen extends GameScreen {
             buttons.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
-        if (CoinTossScreen.getEdgeCase()) {
-            int screenHeight = graphics2D.getSurfaceHeight();
-            float textHeight = screenHeight / 30.0f;
-            textPaint.setTextSize(textHeight); //create a appropriate sizing of text
-            graphics2D.drawText("Iterations to reach Edge Case:", 100.0f, 50.0f, textPaint); //draw the text "Iterations to reach Edge Case:"
-            graphics2D.drawText(String.valueOf(CoinTossScreen.getEdgeCounter()), 100.0f, 100.0f, textPaint); //Output the number of iterations.
-        }
-
         if (mGetPreference.getBoolean("FPS", true)) { //If player has switched FPS counter on
             fpsCounter.draw(elapsedTime, graphics2D); //Draw FPS counter onscreen
         }

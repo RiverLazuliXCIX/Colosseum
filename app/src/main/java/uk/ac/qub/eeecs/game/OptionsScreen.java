@@ -25,8 +25,6 @@ public class OptionsScreen extends GameScreen {
     private FPSCounter fpsCounter;
     private PushButton mBackButton;
     private List<PushButton> mButtons = new ArrayList<>();
-    private ToggleButton tEdgeCaseButton;
-    private List<ToggleButton> tButtons = new ArrayList<>();
     private GameObject mOptionBackground;
     private LayerViewport mGameViewport;
 
@@ -110,12 +108,6 @@ public class OptionsScreen extends GameScreen {
                 "BackArrow", "BackArrowSelected", this);
         mButtons.add(mBackButton);
 
-        tEdgeCaseButton = new ToggleButton(
-                mGameViewport.getWidth() * 0.15f, mGameViewport.getHeight()*0.70f,
-                mGameViewport.getWidth() * 0.095f, mGameViewport.getHeight() * 0.15f,
-                "CoinFlip", "CoinFlipSelected", this);
-        tButtons.add(tEdgeCaseButton);
-
         //Load in the background for the options menu Story O2
         mOptionBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
@@ -164,15 +156,6 @@ public class OptionsScreen extends GameScreen {
             setUpPreferences(mFPSon, "FPS", true, false);
             setUpPreferences(mFPSoff, "FPS", false, true);
 
-            //Testing a toggle button input to enable the edgecase coinflip
-            for(ToggleButton button : tButtons)
-                button.update(elapsedTime);
-
-            if(tEdgeCaseButton.isToggledOn()) {
-                CoinTossScreen.setEdgeCase(true);
-            } else {
-                CoinTossScreen.setEdgeCase(false);
-            }
         }
     }
 
@@ -203,9 +186,6 @@ public class OptionsScreen extends GameScreen {
 
         //Draw the back button (Push Button):
         mBackButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
-
-        //Draw the edge case button (Toggle Button):
-        tEdgeCaseButton.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         //Draw preference buttons using refactored method - Dearbhaile
         drawPrefButtons("Music",  mMusicOff, mMusicOn, elapsedTime, graphics2D);
