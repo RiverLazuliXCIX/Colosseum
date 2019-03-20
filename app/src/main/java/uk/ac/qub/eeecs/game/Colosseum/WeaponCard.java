@@ -1,5 +1,6 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
+import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 
 public class WeaponCard extends Card {
@@ -25,7 +26,7 @@ public class WeaponCard extends Card {
     }
 
     @Override
-    public void useLogic() {
+    public void useLogic(Card thisCard, GameObject other) {
         //do something
     }
 

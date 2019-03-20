@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -40,12 +41,12 @@ public class Card extends GameObject {
     private static final float CARD_HEIGHT = 70.0f/1.5f;
 
     //Define the card digit images
-    private Bitmap[] mCardDigits = new Bitmap[10];
+    private static Bitmap[] mCardDigits = new Bitmap[10];
 
     //Check if card is being held
     private Card mCardTouched = null;
     //Check if card is selected to attack with
-    private Card mAttackerSelected = null;
+    private static Card mAttackerSelected;
     private boolean mIsSelected;
 
     //Check card is flipped
@@ -65,15 +66,15 @@ public class Card extends GameObject {
     private String currentRegion; // Stores the current region the card is currently located
 
     //Set offset and scale values for positioning
-    private Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
-    private Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
-    private Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
-    private Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
-    private Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
-    private Vector2 mManaScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
+    private static Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
+    private static Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
+    private static Vector2 mManaScale = new Vector2(0.1f, 0.1f);
 
-    private Vector2 mPortraitOffset = new Vector2(0f, 0f);
-    private Vector2 mPortraitScale = new Vector2(1f, 1f);
+    private static Vector2 mPortraitOffset = new Vector2(0f, 0f);
+    private static Vector2 mPortraitScale = new Vector2(1f, 1f);
 
     /*ALT CARD
     private Vector2 mAttackOffset = new Vector2(-0.66f, -0.71f);
@@ -172,11 +173,11 @@ public class Card extends GameObject {
                 && mCardTouched != null
                 && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
                 && getmAttackerSelected() != null
-                && getmAttackerSelected() != mCardTouched
+                && getmAttackerSelected() == mCardTouched
                 && getmAttackerSelected().getBitmap() == selected
                 && mCardTouched.getSelectable()) {
             getmAttackerSelected().setBitmap(front);
-            setmAttackerSelected(null);
+            //setmAttackerSelected(null);
         }
         //select
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
@@ -192,14 +193,14 @@ public class Card extends GameObject {
         }
     }
 
-    public void useLogic() {
+    public void useLogic(Card thisCard, GameObject other) {
         //nothing
     }
 
     public void discardCard(Card mCard) { // - Dearbhaile
         //Set Discarded:
         if (    !mCard.getIsEnemy()
-                && mCard.getBitmap() == selected
+                && mCardTouched.getBitmap() == selected
                 && mCard.getSelectable());
         {
             mCard.setBitmap(discarded);
@@ -211,11 +212,14 @@ public class Card extends GameObject {
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP
                 && mCardTouched != null
                 && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
-                && mCardTouched.getIsEnemy() //
+                && mCardTouched.getIsEnemy()
                 && getmAttackerSelected() != null
                 && !getmAttackerSelected().getIsEnemy()
                 && mCardTouched.getSelectable()) {
-            useLogic();
+            mCardTouched.setBitmap(selected);
+
+            //useLogic causes a crash and i dont know why
+            //useLogic(getmAttackerSelected(), mCardTouched);
         }
     }
 
