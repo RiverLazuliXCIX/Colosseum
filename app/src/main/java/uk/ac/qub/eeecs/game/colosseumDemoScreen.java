@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -30,7 +29,7 @@ import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
-import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
+import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
 
 public class colosseumDemoScreen extends GameScreen {
@@ -66,7 +65,7 @@ public class colosseumDemoScreen extends GameScreen {
     private CardDeck mPlayerDeck, mEnemyDeck;
 
     //UserWhoStarted variable to hold data about who started in this match:
-    private UserWhoStarted mUserWhoStarted;
+    private UserWhoStarts mUserWhoStarts;
 
     //'Edge case' coin toss variables:
     protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
@@ -107,7 +106,7 @@ public class colosseumDemoScreen extends GameScreen {
     // CONSTRUCTOR  //
     //////////////////
 
-    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarted starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck, Game game) {
+    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck, Game game) {
         super("CardScreen", game);
 
         setUpViewports();
@@ -118,7 +117,7 @@ public class colosseumDemoScreen extends GameScreen {
         this.mPlayer = player;
         this.mOpponent = opponent;
         this.mCurrentTurn = currentTurn;
-        this.mUserWhoStarted = starter;
+        this.mUserWhoStarts = starter;
         this.mEnemyTurnBegins = EnemyTurnBegins;
         this.mPlayerDeck = playerDeck;
         this.mEnemyDeck = enemyDeck;
@@ -237,7 +236,7 @@ public class colosseumDemoScreen extends GameScreen {
         mOpponent.setYourTurn(true); // Set Opponent turn to true
         mEnemyTurnBegins = System.currentTimeMillis(); // Start timing enemy's turn
         mEnemyDeck.drawCard(mOpponent, mEnemyFatigue, mGame); // Draw card to enemy deck
-        if (mUserWhoStarted == UserWhoStarted.ENEMYSTARTED) { //If opponent is starting player,
+        if (mUserWhoStarts == UserWhoStarts.ENEMYSTARTS) { //If opponent is starting player,
             mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number
         }
     }
@@ -250,7 +249,7 @@ public class colosseumDemoScreen extends GameScreen {
             mPlayer.setYourTurn(true); // If enemy turn over, set Player turn to true
             mOpponent.setYourTurn(false); // Set Opponent turn to false
             mPlayerDeck.drawCard(mPlayer, mPlayerFatigue, mGame); // Player draws card
-            if (mUserWhoStarted == UserWhoStarted.PLAYERSTARTED) { // If player is starting player,
+            if (mUserWhoStarts == UserWhoStarts.PLAYERSTARTS) { // If player is starting player,
                 mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number.
             }
         }
@@ -466,7 +465,7 @@ public class colosseumDemoScreen extends GameScreen {
         edgeCase = edgeCaseInput;
     }
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
-    public UserWhoStarted getUserWhoStarted() { return this.mUserWhoStarted; }
+    public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
 }

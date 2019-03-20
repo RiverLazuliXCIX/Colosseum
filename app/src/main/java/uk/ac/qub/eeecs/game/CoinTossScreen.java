@@ -28,7 +28,7 @@ import uk.ac.qub.eeecs.game.Colosseum.Coin;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
-import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarted;
+import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
 //CoinTossScreen, coded by Dearbhaile Walsh
 public class CoinTossScreen extends GameScreen {
@@ -63,7 +63,7 @@ public class CoinTossScreen extends GameScreen {
     private CardDeck mPlayerDeck, mEnemyDeck;
 
     //UserWhoStarted variable to hold data about who started in this match:
-    private UserWhoStarted mUserWhoStarted;
+    private UserWhoStarts mUserWhoStarts;
 
     //Variable to store time of enemy turn beginning (if applicable):
     private long mEnemyTurnBegins = 0;
@@ -197,11 +197,11 @@ public class CoinTossScreen extends GameScreen {
         switch (result) {
             case 0: // ie, player starts
                 mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
-                mUserWhoStarted = UserWhoStarted.PLAYERSTARTED;
+                mUserWhoStarts = UserWhoStarts.PLAYERSTARTS;
                 break;
             case 1: // ie, ai starts
                 mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
-                mUserWhoStarted = UserWhoStarted.ENEMYSTARTED;
+                mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
             case 2: //edge of coin - set opponent health to 0, auto win game.
                 EndGameScreen.setCoinFlipResult(true);
@@ -243,7 +243,7 @@ public class CoinTossScreen extends GameScreen {
 
             mGame.getScreenManager().getCurrentScreen().dispose();
            mScreenManager.changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
-                    mUserWhoStarted, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
+                    mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
         }
 
         List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -294,4 +294,10 @@ public class CoinTossScreen extends GameScreen {
     public int getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
+    public Player getmPlayer() { return this.mPlayer; }
+    public AIOpponent getmOpponent() { return this.mOpponent; }
+    public CardDeck getmPlayerDeck() { return this.mPlayerDeck; }
+    public CardDeck getmEnemyDeck() { return this.mEnemyDeck; }
+    public UserWhoStarts getmUserWhoStarts() {return this.mUserWhoStarts; }
+
 }
