@@ -269,7 +269,9 @@ public class CardDeck {
             destroyCardOverLimit();
         } else {
             counter.incrementFatigue(); //Otherwise, player takes cumulative fatigue
-            mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
+            if (player instanceof AIOpponent == false) {
+                mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
+            }
             player.receiveDamage(counter.getmFatigueNum()); //Damage is taken from player
         }
     }

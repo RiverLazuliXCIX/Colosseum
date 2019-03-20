@@ -342,7 +342,7 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButton.update(elapsedTime);
                 mEndTurnButtonOff.update(elapsedTime);
 
-                if (mEndTurnButton.isPushTriggered()) {
+                if (mEndTurnButton.isPushTriggered() && mPlayer.getYourTurn()) {
                     mPlayerDeck.discardCards_EndOfTurn();
                     endPlayerTurn();
                 }
