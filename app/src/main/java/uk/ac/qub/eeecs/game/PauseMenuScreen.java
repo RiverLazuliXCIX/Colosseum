@@ -105,7 +105,7 @@ public class PauseMenuScreen extends GameScreen {
          * has been made as a solution.
          */
         mResume = new PushButton(spacingX * 2.5f, spacingY * 2.0f,
-                spacingX * 0.45f, spacingY * 0.39f, "Resume",
+                spacingX * 0.80f, spacingY * 0.39f, "Resume",
                 "ResumeSelected", this);
 
         mButtons.add(mConcede);
