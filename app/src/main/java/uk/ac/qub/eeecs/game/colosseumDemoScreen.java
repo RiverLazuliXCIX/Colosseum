@@ -67,10 +67,6 @@ public class colosseumDemoScreen extends GameScreen {
     //UserWhoStarted variable to hold data about who started in this match:
     private UserWhoStarts mUserWhoStarts;
 
-    //'Edge case' coin toss variables:
-    protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
-    protected static boolean edgeCase = false;
-
     //Variables required for the Game Timer:
     private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
     private static boolean wasPaused = false;
@@ -270,9 +266,8 @@ public class colosseumDemoScreen extends GameScreen {
         //Current time should constantly be collected, for use when counting enemy's turn time - Dearbhaile
         mCurrentTime = System.currentTimeMillis();
 
-        if (mOpponent.getYourTurn()) {
+        if (mOpponent.getYourTurn())
             checkIfEnemysTurn(); //If opponent's turn, check when it ends - Dearbhaile
-        }
 
         if (wasPaused) {
             wasPaused = false; //If the game was paused, gather the total time it was paused for - Scott
@@ -282,15 +277,13 @@ public class colosseumDemoScreen extends GameScreen {
         mInput = mGame.getInput(); //Process any touch events occurring since the update
 
         if (mPlayer.getYourTurn()) { //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
-            for (Card cards : mPlayerDeck.getmCardHand()) {
+            for (Card cards : mPlayerDeck.getmCardHand())
                 cards.cardEvents(mPlayerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-            }
         }
 
         //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
-        for (Card cards : mEnemyDeck.getmCardHand()) {
+        for (Card cards : mEnemyDeck.getmCardHand())
             cards.cardEvents(mEnemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
-        }
 
         mPlayer.update(elapsedTime); //Update player stats - Kyle
         mOpponent.update(elapsedTime); //Update opponent stats
@@ -299,32 +292,33 @@ public class colosseumDemoScreen extends GameScreen {
         if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
             try {
                 Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
-            } catch (InterruptedException e) {
-            }
+            } catch (InterruptedException e) { }
+
             EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
             EndGameScreen.setMostRecentResult("win"); //Record the result
             mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+
         } else if (mPlayer.getCurrentHealth() <= 0 || mOpponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
             try {
                 Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping
-            } catch (InterruptedException e) {
-            }
-            if (mPlayer.getCurrentHealth() <= 0 && mOpponent.getCurrentHealth() <= 0) { //if both sides health is 0 or less, the game ends in a draw
+            } catch (InterruptedException e) { }
+
+            if (mPlayer.getCurrentHealth() <= 0 && mOpponent.getCurrentHealth() <= 0) //if both sides health is 0 or less, the game ends in a draw
                 EndGameScreen.setMostRecentResult("draw"); //Record the result
-            } else if (mPlayer.getCurrentHealth() <= 0) { //if the player reaches 0 or less health, they lose
+            else if (mPlayer.getCurrentHealth() <= 0) //if the player reaches 0 or less health, they lose
                 EndGameScreen.setMostRecentResult("loss"); //Record the result
-            } else if (mOpponent.getCurrentHealth() <= 0) { //if the opponent reaches 0 or less health, the player wins
+            else if (mOpponent.getCurrentHealth() <= 0) //if the opponent reaches 0 or less health, the player wins
                 EndGameScreen.setMostRecentResult("win"); //Record the result
-            }
+
             EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
             mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //swap to the end game screen regardless of whatever outcome occurs
+
         } else {
             List<TouchEvent> touchEvents = mInput.getTouchEvents();
             if (touchEvents.size() > 0) {
 
                 //This next for loop is to prevent the player's cards from slotting into the opponent's card slots - Diarmuid Toal
                 for (int i = 0; i < mPlayerDeck.getmCardHand().size(); i++) {
-
                     // Updates both regions for all cards - Kyle
                     playerActiveRegion.update(mPlayerDeck.getmCardHand().get(i));
                     playerHandRegion.update(mPlayerDeck.getmCardHand().get(i));
@@ -434,12 +428,12 @@ public class colosseumDemoScreen extends GameScreen {
         }
 
         //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
-        if (edgeCase) {
+        if (CoinTossScreen.getEdgeCase()) {
             int screenHeight = graphics2D.getSurfaceHeight();
             float textHeight = screenHeight / 30.0f;
             textPaint.setTextSize(textHeight); //create a appropriate sizing of text
             graphics2D.drawText("Iterations to reach Edge Case:", 100.0f, 50.0f, textPaint); //draw the text "Iterations to reach Edge Case:"
-            graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
+            graphics2D.drawText(String.valueOf(CoinTossScreen.getEdgeCounter()), 100.0f, 100.0f, textPaint); //Output the number of iterations.
         }
 
         if (mGetPreference.getBoolean("FPS", true)) { //If player has switched FPS counter on
@@ -461,9 +455,7 @@ public class colosseumDemoScreen extends GameScreen {
     //  GETTERS AND SETTERS  //
     ///////////////////////////
 
-    public static void setEdgeCase(boolean edgeCaseInput) {
-        edgeCase = edgeCaseInput;
-    }
+
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
     public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }

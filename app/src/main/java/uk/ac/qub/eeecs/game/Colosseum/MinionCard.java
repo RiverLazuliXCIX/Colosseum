@@ -1,5 +1,6 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
+import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.GameRegion;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
@@ -58,8 +59,8 @@ public class MinionCard extends Card {
     }
 
     @Override
-    public void useLogic(MinionCard thisCard, MinionCard eMinionCard) {
-        attackEnemy(thisCard, eMinionCard);
+    public void useLogic(Card thisCard, GameObject other) {
+        attackEnemy((MinionCard) thisCard, (MinionCard) other);
     }
 
     public boolean hasTaunts() {
