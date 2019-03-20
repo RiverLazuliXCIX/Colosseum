@@ -41,7 +41,7 @@ public class PauseMenuScreen extends GameScreen {
 
     private LayerViewport mMenuViewport;
 
-    private  PushButton mMenuScreen, mConcede;
+    private PushButton mMenuScreen, mConcede, mResume;
 
     //Information needed to set Music/SFX/FPS Preferences:
     private Context mContext = mGame.getActivity();
@@ -49,9 +49,8 @@ public class PauseMenuScreen extends GameScreen {
 
     FPSCounter fpsCounter;
 
-    public PauseMenuScreen(Game game)
-    {
-        super("PauseScreen",game);
+    public PauseMenuScreen(Game game) {
+        super("PauseScreen", game);
         //Setting up  viewports method
         setupViewports();
         //Setting up pause menu objects
@@ -75,8 +74,7 @@ public class PauseMenuScreen extends GameScreen {
     }
 
 
-    private void SetUpPauseMenuOpbjects()
-    {
+    private void SetUpPauseMenuOpbjects() {
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
@@ -89,19 +87,31 @@ public class PauseMenuScreen extends GameScreen {
         //Creating the screen
         mMenuScreen = new PushButton(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(),"Pause", this);
+                mDefaultLayerViewport.getHeight(), "Pause", this);
 
         /*Creating the 'concede' button
-        * Due to how the concede button works, if was not possible to add it to the
-        * PauseMenuScreenButtonLayout.JSON file as it was not able to call @Scott Barham's
-        * Code which would add a loss and update the statistics screen when it has been clicked
-        */
+         * Due to how the concede button works, if was not possible to add it to the
+         * PauseMenuScreenButtonLayout.JSON file as it was not able to call @Scott Barham's
+         * Code which would add a loss and update the statistics screen when it has been clicked
+         */
         mConcede = new PushButton(spacingX * 2.5f, spacingY * 0.45f,
-                spacingX * 0.8f,spacingY * 0.39f,"Concede",
-                "ConcedeSelected",this );
+                spacingX * 0.8f, spacingY * 0.39f, "Concede",
+                "ConcedeSelected", this);
+
+        /* Creating the 'resume' button
+         * Due to the changes made by in commit 2a45e034032d75b055064c8a62b366a0747ad96e
+         * The resume button would no longer work with its current design as there are parameters in
+         * the colosseumDemoScreen class declaration that is not in other classes. This alternative
+         * has been made as a solution.
+         */
+        mResume = new PushButton(spacingX * 2.5f, spacingY * 2.0f,
+                spacingX * 0.45f, spacingY * 0.39f, "Resume",
+                "ResumeSelected", this);
 
         mButtons.add(mConcede);
-        fpsCounter = new FPSCounter( mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f , this) { };
+        mButtons.add(mResume);
+        fpsCounter = new FPSCounter(mMenuViewport.getWidth() * 0.50f, mMenuViewport.getHeight() * 0.20f, this) {
+        };
     }
 
     private void constructButtons(String buttonsToConstructJSONFile, List<PushButton> buttons) {
@@ -159,13 +169,15 @@ public class PauseMenuScreen extends GameScreen {
             for (PushButton button : mButtons) {
                 button.update(elapsedTime);
                 /*This is the if statement which allows the statistics screen to be updated
-                * using Scott Barham's code
-                */
+                 * using Scott Barham's code
+                 */
                 if (mConcede.isPushTriggered()) {
                     EndGameScreen.setMostRecentResult("loss");
                     EndGameScreen.setConcedeResult(true);
                     colosseumDemoScreen.setWasPaused(false); //Set this back to false for a new game
                     mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+                } else if (mResume.isPushTriggered()) {
+                    mGame.getScreenManager().previousScreen();
                 } else if (button.isPushTriggered()) {
                     addScreen(mScreenChanges.get(button));
                 }
@@ -180,14 +192,14 @@ public class PauseMenuScreen extends GameScreen {
                             .getConstructor(Game.class).newInstance(mGame);
             mGame.getScreenManager().changeScreenButton(gameScreen);
 
-        } catch( ClassNotFoundException | NoSuchMethodException
-                | InstantiationException | IllegalAccessException | InvocationTargetException e ) {
+        } catch (ClassNotFoundException | NoSuchMethodException
+                | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(
                     "PauseMenuScreen.addScreen: Error creating [" + gameScreenToAdd + " " + e.getMessage() + "]");
         }
     }
 
-        @Override
+    @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
         graphics2D.clear(Color.WHITE);
         graphics2D.clipRect(mDefaultScreenViewport.toRect());
@@ -199,7 +211,7 @@ public class PauseMenuScreen extends GameScreen {
         for (PushButton button : mButtons) //Draw all the buttons stored in "mButtons"
             button.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        if(mGetPreference.getBoolean("FPS", true)) {
+        if (mGetPreference.getBoolean("FPS", true)) {
             fpsCounter.draw(elapsedTime, graphics2D);
         }
     }
