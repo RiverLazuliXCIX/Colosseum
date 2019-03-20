@@ -40,7 +40,6 @@ public class CoinTossScreenTest {
     @Mock
     private LayerViewport mLayerViewport;
 
-
     @Before
     public void setUp() {
         when(mGame.getAssetManager()).thenReturn(mAssetManager);
@@ -75,15 +74,12 @@ public class CoinTossScreenTest {
     public void setUpGameObjects_Success() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        //Call method to set up Game Objects:
-        c1.setUpGameObjects();
-
         //Ensure player and opponent are initialised:
         assertNotNull(c1.getmPlayer());
         assertNotNull(c1.getmOpponent());
 
-        //Ensure mana and mana cap are set to 4/4 for all players:
-        int expectedValue = 4;
+        //Ensure mana and mana cap are set to 1/1 for all players:
+        int expectedValue = 1;
         assertEquals(c1.getmPlayer().getCurrentMana(), expectedValue);
         assertEquals(c1.getmPlayer().getCurrentManaCap(), expectedValue);
         assertEquals(c1.getmOpponent().getCurrentMana(), expectedValue);
@@ -155,7 +151,7 @@ public class CoinTossScreenTest {
         assertFalse(c1.getmOpponent().getYourTurn());
 
         //Make sure mana values are set correctly, i.e. 5/5 for opponent:
-        int expectedOpponentMana = 5;
+        int expectedOpponentMana = 2;
         assertEquals(c1.getmOpponent().getCurrentMana(), expectedOpponentMana);
         assertEquals(c1.getmOpponent().getCurrentManaCap(), expectedOpponentMana);
 
@@ -176,8 +172,8 @@ public class CoinTossScreenTest {
         assertFalse(c1.getmPlayer().getYourTurn());
         assertTrue(c1.getmOpponent().getYourTurn());
 
-        //Make sure mana values are set correctly, i.e. 5/5 for player:
-        int expectedOpponentMana = 5;
+        //Make sure mana values are set correctly, i.e. 2/2 for player:
+        int expectedOpponentMana = 2;
         assertEquals(c1.getmPlayer().getCurrentMana(), expectedOpponentMana);
         assertEquals(c1.getmPlayer().getCurrentManaCap(), expectedOpponentMana);
 
