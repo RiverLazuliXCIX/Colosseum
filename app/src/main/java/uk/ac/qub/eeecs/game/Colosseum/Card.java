@@ -173,7 +173,7 @@ public class Card extends GameObject {
                 && mCardTouched != null
                 && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
                 && getmAttackerSelected() != null
-                && getmAttackerSelected() == mCardTouched
+                && getmAttackerSelected() != mCardTouched
                 && getmAttackerSelected().getBitmap() == selected
                 && mCardTouched.getSelectable()) {
             getmAttackerSelected().setBitmap(front);
@@ -200,8 +200,8 @@ public class Card extends GameObject {
     public void discardCard(Card mCard) { // - Dearbhaile
         //Set Discarded:
         if (    !mCard.getIsEnemy()
-                && mCardTouched.getBitmap() == selected
-                && mCard.getSelectable());
+                && getmCardTouched()!= null
+                && getmCardTouched().getSelectable());
         {
             mCard.setBitmap(discarded);
             mCard.setToBeDiscarded(true);
