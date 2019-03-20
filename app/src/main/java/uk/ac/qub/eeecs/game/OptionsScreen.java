@@ -169,9 +169,9 @@ public class OptionsScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if(tEdgeCaseButton.isToggledOn()) {
-                colosseumDemoScreen.setEdgeCase(true);
+                CoinTossScreen.setEdgeCase(true);
             } else {
-                colosseumDemoScreen.setEdgeCase(false);
+                CoinTossScreen.setEdgeCase(false);
             }
         }
     }

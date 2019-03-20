@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -67,10 +66,6 @@ public class colosseumDemoScreen extends GameScreen {
 
     //UserWhoStarted variable to hold data about who started in this match:
     private UserWhoStarted mUserWhoStarted;
-
-    //'Edge case' coin toss variables:
-    protected int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
-    protected static boolean edgeCase = false;
 
     //Variables required for the Game Timer:
     private long startTime = 0, pauseTime = 0, pauseTimeTotal = 0; //Setting up variables to hold times of the game
@@ -435,12 +430,12 @@ public class colosseumDemoScreen extends GameScreen {
         }
 
         //To test for the edge case of the coin flip, User Story 18.1, Sprint 4 - Scott
-        if (edgeCase) {
+        if (CoinTossScreen.getEdgeCase()) {
             int screenHeight = graphics2D.getSurfaceHeight();
             float textHeight = screenHeight / 30.0f;
             textPaint.setTextSize(textHeight); //create a appropriate sizing of text
             graphics2D.drawText("Iterations to reach Edge Case:", 100.0f, 50.0f, textPaint); //draw the text "Iterations to reach Edge Case:"
-            graphics2D.drawText(String.valueOf(edgeCounter), 100.0f, 100.0f, textPaint);
+            graphics2D.drawText(String.valueOf(CoinTossScreen.getEdgeCounter()), 100.0f, 100.0f, textPaint); //Output the number of iterations.
         }
 
         if (mGetPreference.getBoolean("FPS", true)) { //If player has switched FPS counter on
@@ -462,9 +457,7 @@ public class colosseumDemoScreen extends GameScreen {
     //  GETTERS AND SETTERS  //
     ///////////////////////////
 
-    public static void setEdgeCase(boolean edgeCaseInput) {
-        edgeCase = edgeCaseInput;
-    }
+
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
     public UserWhoStarted getUserWhoStarted() { return this.mUserWhoStarted; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
