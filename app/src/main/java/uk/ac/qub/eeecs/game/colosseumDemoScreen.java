@@ -277,8 +277,8 @@ public class colosseumDemoScreen extends GameScreen {
         }
 
         //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
-        for (Card cards : mEnemyDeck.getmCardHand())
-            cards.cardEvents(mEnemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+        //for (Card cards : mEnemyDeck.getmCardHand())
+           // cards.cardEvents(mEnemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
 
         mPlayer.update(elapsedTime); //Update player stats - Kyle
         mOpponent.update(elapsedTime); //Update opponent stats

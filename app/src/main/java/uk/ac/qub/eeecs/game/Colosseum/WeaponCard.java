@@ -27,14 +27,14 @@ public class WeaponCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        //do something
+        play((WeaponCard)thisCard, (Player)other);
     }
 
     // Will work for Player and AI
-    public void play(Player p) {
+    public void play(WeaponCard thisCard, Player p) {
         p.setWeaponEquipped(true);
-        p.setCurrentAttack(getDamage());
-        p.setCurrentWeaponDurability(getCharges());
+        p.setCurrentAttack(thisCard.getDamage());
+        p.setCurrentWeaponDurability(thisCard.getCharges());
     }
 
     public int getDamage() { return this.damage; }
