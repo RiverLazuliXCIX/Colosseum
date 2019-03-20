@@ -163,7 +163,7 @@ public class Card extends GameObject {
             mCardTouched.position = touchLocation.addReturn(0f, 5.0f);
     }
 
-    public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame){
+    public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame) {
         //Edited: select card
         //initial selection, change card frame
         checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, mCards, touchLocation);

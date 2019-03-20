@@ -36,13 +36,16 @@ public class SpellCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        //do something
+        if (other instanceof Player)
+            play((SpellCard)thisCard, (Player)other);
+        else
+            play((SpellCard)thisCard, (MinionCard)other);
     }
 
     // For attacking the Player/AI
     // TODO flesh out further effects for Players
-    public void play(Player p) {
-        switch (effect) {
+    public void play(SpellCard thisCard, Player p) {
+        switch (thisCard.effect) {
             case NONE:
                 break;
             case STEALTH:
@@ -85,8 +88,8 @@ public class SpellCard extends Card {
         }
     }
 
-    public void play(MinionCard mc) {
-        switch (effect) {
+    public void play(SpellCard thisCard, MinionCard mc) {
+        switch (thisCard.effect) {
             case NONE:
                 break;
             case TAUNT:
