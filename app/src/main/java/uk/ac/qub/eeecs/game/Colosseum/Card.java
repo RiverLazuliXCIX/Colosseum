@@ -219,7 +219,8 @@ public class Card extends GameObject {
             mCardTouched.setBitmap(selected);
 
             //useLogic causes a crash and i dont know why
-            //useLogic(getmAttackerSelected(), mCardTouched);
+            //update: ok, i do. for some reason, this method is called multiple times for one attack
+            useLogic(getmAttackerSelected(), mCardTouched);
         }
     }
 

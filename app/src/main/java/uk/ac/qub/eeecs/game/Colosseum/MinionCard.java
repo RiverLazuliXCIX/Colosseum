@@ -87,14 +87,14 @@ public class MinionCard extends Card {
     public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
     // add a check for any enemy minions on the board with taunts
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
-        if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
+        //if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
         eMinionCard.takeDamage(thisCard.attack);
         thisCard.takeDamage(eMinionCard.getAttack());
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
-        eMinionCard.checkHealth();
-        thisCard.checkHealth();
+        //eMinionCard.checkHealth();
+        //thisCard.checkHealth();
     }
 
     /* Another attack method will be required for attacking the enemy hero
