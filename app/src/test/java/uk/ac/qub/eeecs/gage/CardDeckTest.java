@@ -13,6 +13,7 @@ import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
+import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.Effect;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
@@ -293,14 +294,14 @@ public class CardDeckTest {
     @Test
     public void drawCard_DeckIsEmpty() {
         FatigueCounter counter = new FatigueCounter();
-        Player player = new Player(mDemoScreen,"c");
+        AIOpponent player = new AIOpponent(mDemoScreen,"c");
         mScreenManager.addScreen(testScreen);
 
         //Set up an empty deck:
         CardDeck newDeck = new CardDeck();
 
-        //Call the method, but with graphical aspects removed:
-        newDeck.drawCard_testing(player, counter, mGame);
+        //Call the method to draw one card:
+        newDeck.drawCard(player, counter, mGame);
 
         //Fatigue should increase by 1:
         int expectedFatigueCounter = 1;
@@ -311,7 +312,7 @@ public class CardDeckTest {
     @Test
     public void cumulativeFatigue() {
         FatigueCounter counter = new FatigueCounter();
-        Player player = new Player(mDemoScreen,"c");
+        AIOpponent player = new AIOpponent(mDemoScreen,"c");
         mScreenManager.addScreen(testScreen);
 
         //Set up an empty deck:
@@ -319,7 +320,7 @@ public class CardDeckTest {
 
         //Method is called 3 times, so current fatigue number should be 3:
         for (int i = 0; i < 3; i++) {
-            newDeck.drawCard_testing(player, counter, mGame);
+            newDeck.drawCard(player, counter, mGame);
         }
 
         int expectedFatigueCounter = 3;
@@ -331,7 +332,7 @@ public class CardDeckTest {
     @Test
     public void fatigue_TakesDamage() {
         FatigueCounter counter = new FatigueCounter();
-        Player player = new Player(mDemoScreen,"Mars");
+        AIOpponent player = new AIOpponent(mDemoScreen,"c");
         mScreenManager.addScreen(testScreen);
 
         //Set up an empty deck:
@@ -339,7 +340,7 @@ public class CardDeckTest {
 
         //Method is called 5 times, so 1+2+3+4+5 should be taken:
         for (int i = 0; i < 5; i++) {
-            newDeck.drawCard_testing(player, counter, mGame);
+            newDeck.drawCard(player, counter, mGame);
         }
 
         int expectedPlayerHealth = 15;

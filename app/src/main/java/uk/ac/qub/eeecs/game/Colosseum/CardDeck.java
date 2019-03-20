@@ -276,18 +276,6 @@ public class CardDeck {
         }
     }
 
-    //A second instance of this method that does not require the graphical aspects of FatigueScreen
-    //Will make testing a more efficient process, without having to mock up graphics/load them in differently:
-    public void drawCard_testing(Player player, FatigueCounter counter, Game mGame) {
-        if (!getDeck().isEmpty()) {
-            drawTopCard();
-            destroyCardOverLimit();
-        } else {
-            counter.takeAppropriateDamage(player);
-            mGame.getScreenManager().addScreen(new FatigueScreenForTesting(mGame, counter.getmFatigueNum()));
-        }
-    }
-
     //This method destroys a card if player draws one, when their hand is already full:
     public void destroyCardOverLimit() {
         if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
