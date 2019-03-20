@@ -29,10 +29,7 @@ public class CoinTossScreenForTesting extends GameScreen {
 
     // Properties
     //Different objects required for this screen to function
-    private GameObject mCTSBackground;
     private LayerViewport mGameViewport;
-    private TitleImage mCoinTossTitle;
-    private FPSCounter fpsCounter;
 
     //Variables required for the time delay on this screen:
     private long mCoinToss_Timeout = 10000;
@@ -94,11 +91,11 @@ public class CoinTossScreenForTesting extends GameScreen {
         mPlayer = new Player(this, "Meridia");
         mOpponent = new AIOpponent(this, "EmperorCommodus");
 
-        mPlayer.setCurrentMana(4);
-        mPlayer.setCurrentManaCap(4);
+        mPlayer.setCurrentMana(1);
+        mPlayer.setCurrentManaCap(1);
 
-        mOpponent.setCurrentMana(4);
-        mOpponent.setCurrentManaCap(4);
+        mOpponent.setCurrentMana(1);
+        mOpponent.setCurrentManaCap(1);
 
         //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
         HandRegion playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
@@ -113,6 +110,7 @@ public class CoinTossScreenForTesting extends GameScreen {
     }
 
     public void setUpCTSObjects() {
+
         }
 
     public void setupViewports() {

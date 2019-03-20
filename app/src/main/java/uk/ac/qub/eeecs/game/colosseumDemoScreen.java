@@ -103,12 +103,12 @@ public class colosseumDemoScreen extends GameScreen {
 
     public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck, Game game) {
         super("CardScreen", game);
-
         setUpViewports();
         setUpGameObjects();
         setUpButtons();
         setUpRegions();
 
+        //Get data from the CoinTossScreen:
         this.mPlayer = player;
         this.mOpponent = opponent;
         this.mCurrentTurn = currentTurn;
@@ -117,6 +117,7 @@ public class colosseumDemoScreen extends GameScreen {
         this.mPlayerDeck = playerDeck;
         this.mEnemyDeck = enemyDeck;
 
+        //Shuffle two decks:
         playerDeck.shuffleCards();
         enemyDeck.shuffleCards();
     }
@@ -447,8 +448,6 @@ public class colosseumDemoScreen extends GameScreen {
     ///////////////////////////
     //  GETTERS AND SETTERS  //
     ///////////////////////////
-
-
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
     public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }

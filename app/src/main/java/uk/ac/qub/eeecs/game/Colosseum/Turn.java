@@ -45,8 +45,8 @@ public class Turn {
     public void setUpStats_PlayerStarts(Player player, CardDeck playerDeck, AIOpponent opponent, CardDeck enemyDeck) {
         player.setYourTurn(true); //Player's "yourTurn" value is set to true
         opponent.setYourTurn(false); //Enemy's "yourTurn" value is set to false
-        opponent.setCurrentMana(5); //Enemy gets 5 mana points, ie one more than the usual 4
-        opponent.setCurrentManaCap(5); //Mana cap is increased to accommodate the mana value
+        opponent.setCurrentMana(2); //Enemy gets 2 mana points, ie one more than the usual 4
+        opponent.setCurrentManaCap(2); //Mana cap is increased to accommodate the mana value
         playerDeck.drawSetNumCards(3); //Player draws usual number of starting cards, ie 3
         enemyDeck.drawSetNumCards(4); //Enemy draws an extra card, in compensation
     }
@@ -55,8 +55,8 @@ public class Turn {
     public void setUpStats_EnemyStarts(Player player, CardDeck playerDeck, AIOpponent opponent, CardDeck enemyDeck) {
         opponent.setYourTurn(true); //Enemy's "yourTurn" value is set to true
         player.setYourTurn(false); //Player's "yourTurn" value is set to false
-        player.setCurrentMana(5); //Player gets 5 mana points, ie one more than the usual 4
-        player.setCurrentManaCap(5); //Mana cap is increased to accommodate the mana value
+        player.setCurrentMana(2); //Player gets 5 mana points, ie one more than the usual 4
+        player.setCurrentManaCap(2); //Mana cap is increased to accommodate the mana value
         enemyDeck.drawSetNumCards(3); //Enemy draws usual number of starting cards, ie 3
         playerDeck.drawSetNumCards(4); //Enemy draws an extra card, in compensation
     }
