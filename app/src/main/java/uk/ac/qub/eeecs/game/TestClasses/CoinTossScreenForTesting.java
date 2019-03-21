@@ -51,6 +51,9 @@ public class CoinTossScreenForTesting extends GameScreen {
     //Define the two Decks
     private CardDeck mPlayerDeck, mEnemyDeck;
 
+    // Defining hand regions, (needs to be passed into colosseum screen now to prevent duplicate hand regions)
+    private HandRegion mPlayerHandRegion, mOpponentHandRegion;
+
     //UserWhoStarted variable to hold data about who started in this match:
     private UserWhoStarts mUserWhoStarts;
 
@@ -97,12 +100,13 @@ public class CoinTossScreenForTesting extends GameScreen {
         mOpponent.setCurrentMana(1);
         mOpponent.setCurrentManaCap(1);
 
-        //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
-        HandRegion playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
-        HandRegion opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
+        // Sets up player and opponent hand regions
+        mPlayerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
+        mOpponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
 
-        mPlayerDeck = new CardDeck(1, "Basic Player Deck", this, false, playerHandRegion);
-        mEnemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true, opponentHandRegion);
+        //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
+        mPlayerDeck = new CardDeck(1, "Basic Player Deck", this, false, mPlayerHandRegion);
+        mEnemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true, mOpponentHandRegion);
 
         for (int i = 0; i < mEnemyDeck.getmCardHand().size(); i++) {
             mEnemyDeck.getmCardHand().get(i).flipCard();
@@ -195,7 +199,7 @@ public class CoinTossScreenForTesting extends GameScreen {
 
             mGame.getScreenManager().getCurrentScreen().dispose();
             mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
-                    mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck, mGame));
+                    mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck,mPlayerHandRegion,mOpponentHandRegion, mGame));
         }
 
         List<TouchEvent> touchEvents = input.getTouchEvents();

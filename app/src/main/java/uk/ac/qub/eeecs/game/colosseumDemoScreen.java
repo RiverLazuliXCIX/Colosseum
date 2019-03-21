@@ -93,7 +93,9 @@ public class colosseumDemoScreen extends GameScreen {
     //Game objects being set up:
     private GameObject pDenarius, eDenarius, mPlayerDeckImg, mEnemyDeckImg;
 
-    //Test regions being set up:
+    // Hand and Active regions for opponent and player
+    // Hand region for colosseum is setup and initialised within coin toss screen and as such, must be passed
+    // via the constructor
     ActiveRegion playerActiveRegion, opponentActiveRegion;
     HandRegion playerHandRegion, opponentHandRegion;
 
@@ -101,12 +103,12 @@ public class colosseumDemoScreen extends GameScreen {
     // CONSTRUCTOR  //
     //////////////////
 
-    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck, Game game) {
+    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck,HandRegion playerHandRegion, HandRegion opponentHandRegion, Game game) {
         super("CardScreen", game);
         setUpViewports();
         setUpGameObjects();
         setUpButtons();
-        setUpRegions();
+        setUpActiveRegions();
 
         //Get data from the CoinTossScreen:
         this.mPlayer = player;
@@ -116,6 +118,8 @@ public class colosseumDemoScreen extends GameScreen {
         this.mEnemyTurnBegins = EnemyTurnBegins;
         this.mPlayerDeck = playerDeck;
         this.mEnemyDeck = enemyDeck;
+        this.playerHandRegion = playerHandRegion;
+        this.opponentHandRegion = opponentHandRegion;
 
         //Shuffle two decks:
         playerDeck.shuffleCards();
@@ -181,12 +185,10 @@ public class colosseumDemoScreen extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-    public void setUpRegions() {
+    public void setUpActiveRegions() {
         //Defining playable region width and height ( 50.0f/1.5f is the width of the cards)
         playerActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft() + 25.0f, mDefaultLayerViewport.getRight() - 25.0f, mDefaultLayerViewport.getTop() / 2.0f, mDefaultLayerViewport.getBottom() + mPlayer.position.y + (mPlayer.getPortraitHeight() / 2));
         opponentActiveRegion = new ActiveRegion(mDefaultLayerViewport.getLeft() + 25.0f, mDefaultLayerViewport.getRight() - 25.0f, mDefaultLayerViewport.getTop() - (mPlayer.position.y + (mPlayer.getPortraitHeight() / 2)), mDefaultLayerViewport.getTop() / 2.0f);
-        playerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
-        opponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
     }
 
     public void setUpButtons() {
