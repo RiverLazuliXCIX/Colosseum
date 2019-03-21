@@ -72,7 +72,7 @@ public class CoinTossScreen extends GameScreen {
     private long mEnemyTurnBegins = 0;
 
     //Variables required for the message (lines 1 and 2) to display properly
-    private int mCoinTossResult = 0;
+    private int mCoinTossResult = -1; //A state that cant be reached (error checking)
     private String mCoinTossMsg1 = "";
     private String mCoinTossMsg2 = "";
 
@@ -99,9 +99,10 @@ public class CoinTossScreen extends GameScreen {
         setupViewports();
         setUpCTSObjects();
         setUpGameObjects();
-        coinFlipStart();
         mCoinTossResult = coinFlipStart();
         coinFlipResult(mCoinTossResult);
+        //Set up Coin object for display in animation, has to be initialised after coinFlipStart otherwise it was never changed - Scott
+        mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
         chooseTextToDisplay();
     }
 
@@ -147,9 +148,6 @@ public class CoinTossScreen extends GameScreen {
 
         //Set up the FPS counter:
         fpsCounter = new FPSCounter( mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f , this) {};
-
-        //Set up Coin object for display in animation: Scott
-        mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
 
         // Spacing that will be used to position the Coin Toss Screen Objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -211,9 +209,9 @@ public class CoinTossScreen extends GameScreen {
         int flip = RANDOM.nextInt(6001);
         if (flip == 6000) { //side of coin (1/6000 chance to auto-win)
             return 2;
-        } else if (flip >= 3000 && flip < 6000) { //heads (ai starts)
+        } else if (flip >= 3000 && flip < 6000) { //tails (ai starts)
             return 1;
-        } else if (flip >= 0 && flip < 3000) { //tails (user starts)
+        } else if (flip >= 0 && flip < 3000) { //heads (user starts)
             return 0;
         }
         return -1;
@@ -222,11 +220,11 @@ public class CoinTossScreen extends GameScreen {
     // Method for setting up stats based on Coin Toss:
     private void coinFlipResult(int result) {
         switch (result) {
-            case 0: // ie, player starts - Dearbhaile
+            case 0: // ie, (heads) player starts - Dearbhaile
                 mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.PLAYERSTARTS;
                 break;
-            case 1: // ie, ai starts - Dearbhaile
+            case 1: // ie, (tails) ai starts - Dearbhaile
                 mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
@@ -313,7 +311,7 @@ public class CoinTossScreen extends GameScreen {
         //Draw the coin sprite, used for the coin animation - Scott
         mCoin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        if (mCurrentTime - mTimeOnCreate >= 3000) {
+        if (mCurrentTime - mTimeOnCreate >= 4000) {
             graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.42f, mMessageText);
             graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.48f, mMessageText);
 
