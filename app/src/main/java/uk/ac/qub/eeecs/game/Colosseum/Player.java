@@ -74,7 +74,7 @@ public class Player extends GameObject {
     // call the draw methods of those objects within the draw call of the player class.
     // Add an additional screen to allow players to select a hero
 
-    // Portrait drawn at midpoint on default layer viewport X axis to ~Hopefully~ keep it centred on different screens
+    // Portrait drawn at midpoint on default layer viewport X axis to keep it centred on different screens
     public Player(GameScreen gameScreen, String hero){
         super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2)+(70.0f/1.5f),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);

@@ -103,7 +103,10 @@ public class colosseumDemoScreen extends GameScreen {
     // CONSTRUCTOR  //
     //////////////////
 
-    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter, long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck,HandRegion playerHandRegion, HandRegion opponentHandRegion, Game game) {
+    public colosseumDemoScreen(Player player, AIOpponent opponent, Turn currentTurn, UserWhoStarts starter,
+                               long EnemyTurnBegins, CardDeck playerDeck, CardDeck enemyDeck,
+                               HandRegion playerHandRegion, HandRegion opponentHandRegion, Game game) {
+
         super("CardScreen", game);
         setUpViewports();
         setUpGameObjects();
