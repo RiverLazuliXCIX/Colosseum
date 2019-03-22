@@ -247,7 +247,7 @@ public class colosseumDemoScreen extends GameScreen {
             }
         }
     }
-
+    boolean goOnce = true;
     @Override
     public void update(ElapsedTime elapsedTime) {
         if (startTimeRecorded == false) {
@@ -263,8 +263,14 @@ public class colosseumDemoScreen extends GameScreen {
         //Current time should constantly be collected, for use when counting enemy's turn time - Dearbhaile
         mCurrentTime = System.currentTimeMillis();
 
-        if (mOpponent.getYourTurn())
+        if (mOpponent.getYourTurn()) {
+            if (goOnce) {
+                opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
+                opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
+                goOnce = false;
+            }
             checkIfEnemysTurn(); //If opponent's turn, check when it ends - Dearbhaile
+        }
 
         if (wasPaused) {
             wasPaused = false; //If the game was paused, gather the total time it was paused for - Scott
