@@ -24,7 +24,7 @@ public class Coin extends Sprite  { //Authored by Scott
     private boolean coinFaceHeads = true;
 
 
-    public Coin(float startX, float startY, float width, float height, GameScreen gameScreen, int coinToss) {
+    public Coin(float startX, float startY, float width, float height, GameScreen gameScreen, String coinToss) {
         super(startX, startY, width, height, null, gameScreen);
         mGameScreen.getGame().getAssetManager().loadAssets("txt/assets/CoinAssets.JSON");
         setCoinBitmap(COIN_HEADS + 1);
@@ -38,17 +38,17 @@ public class Coin extends Sprite  { //Authored by Scott
         }
     }
 
-    private void setupCoinAnimation(int coinToss) { //Setup how many frames the animation will go through depending on what side it must end on.
+    private void setupCoinAnimation(String coinToss) { //Setup how many frames the animation will go through depending on what side it must end on.
         switch(coinToss){
-            case 0: //Player gets heads
+            case "Heads": //Player gets tails
                 //Calculate the amount of heads frames
                 framesLeft = calculateCoinFrames(COIN_ANIM_IMAGE_LENGTH+2)-1;
                 break;
-            case 1: //Player gets tails
+            case "Tails": //Player gets tails
                 //Calculate the amount of tails frames
                 framesLeft =calculateCoinFrames(COIN_ANIM_IMAGE_LENGTH)+1;
                 break;
-            case 2: //Player gets edge
+            case "Edge": //Player gets edge
                 //Calculate the amount of edge frames (adding one as it ends on the edgeImage)
                 framesLeft = calculateCoinFrames(COIN_ANIM_IMAGE_LENGTH+1);
                 break;

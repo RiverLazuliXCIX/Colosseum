@@ -94,22 +94,22 @@ public class CoinTossScreenTest {
     public void coinToss_PromptsCorrectMessage() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        int result = c1.setResult();
+        String result = c1.setResult();
         c1.chooseTextToDisplay();
 
-        if (result == 0) { // Ie, heads, player starts
+        if (result == "Heads") { // Ie, player starts
             String expectedLine1 = "The coin landed on heads! You get to play first.";
             String expectedLine2 = "The other player draws 4 cards, and gets 1 additional mana.";
 
             assertEquals(expectedLine1, c1.getmCoinTossMsg1());
             assertEquals(expectedLine2, c1.getmCoinTossMsg2());
-        } else if (result == 1) {// Ie, tails, enemy starts
+        } else if (result == "Tails") {// Ie, enemy starts
             String expectedLine1 = "The coin landed on tails! The enemy plays first.";
             String expectedLine2 = "You draw an extra card and additional mana for your troubles.";
 
             assertEquals(expectedLine1, c1.getmCoinTossMsg1());
             assertEquals(expectedLine2, c1.getmCoinTossMsg2());
-        } else if (result == 2) {
+        } else if (result == "Edge") { //Ie, auto-win game
             String expectedLine1 = "The coin landed on its edge!";
             String expectedLine2 = "You automatically win the game for being lucky!";
 
@@ -122,7 +122,7 @@ public class CoinTossScreenTest {
     public void coinFlipResult_SetsWhoStartsCorrectly_Player() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        c1.coinFlipResult(0); // Ie, heads, player starts
+        c1.coinFlipResult("Heads"); // Ie, heads, player starts
 
         UserWhoStarts expectedStarter = UserWhoStarts.PLAYERSTARTS;
 
@@ -133,7 +133,7 @@ public class CoinTossScreenTest {
     public void coinFlipResult_SetsWhoStartsCorrectly_Enemy() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        c1.coinFlipResult(1); // Ie, heads, player starts
+        c1.coinFlipResult("Tails"); // Ie, heads, player starts
 
         UserWhoStarts expectedStarter = UserWhoStarts.ENEMYSTARTS;
 
@@ -144,7 +144,7 @@ public class CoinTossScreenTest {
     public void coinFlipResult_GeneratesStatsCorrectly_PlayerStarts() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        c1.coinFlipResult(0); // Heads, i.e., player starts
+        c1.coinFlipResult("Heads"); // Heads, i.e., player starts
 
         //Make sure 'yourTurn' values are set correctly:
         assertTrue(c1.getmPlayer().getYourTurn());
@@ -166,7 +166,7 @@ public class CoinTossScreenTest {
     public void coinFlipResult_GeneratesStatsCorrectly_EnemyStarts() {
         CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
 
-        c1.coinFlipResult(1); // Tails, i.e., enemy starts
+        c1.coinFlipResult("Tails"); // Tails, i.e., enemy starts
 
         //Make sure 'yourTurn' values are set correctly:
         assertFalse(c1.getmPlayer().getYourTurn());
