@@ -255,6 +255,7 @@ public class CardDeck {
         }
     }
 
+    //CODE HIGHLIGHT 1 - DRAWING AND DESTROYING CARDS
     //Method required to draw a single card from the Deck:
     public Card drawTopCard() {
         //You cannot draw from an empty deck:
@@ -278,7 +279,7 @@ public class CardDeck {
     public void drawCard(Player player, FatigueCounter counter, Game mGame) {
         if (!getDeck().isEmpty()) {
             drawTopCard(); //If there are cards in deck, draw top card
-            destroyCardOverLimit();
+            destroyCardOverLimit(); //If there are already 5 cards in hand, destroy new card
         } else {
             counter.incrementFatigue(); //Otherwise, player takes cumulative fatigue
             if (player instanceof AIOpponent == false) { //Screen should not be displayed when enemy's card
@@ -306,7 +307,9 @@ public class CardDeck {
             drawTopCard();
         }
     }
+// END OF CODE HIGHLIGHT 1
 
+// CODE HIGHLIGHT 2: DISCARDING CARDS:
     public void discardCards(Card mCardToDiscard) {
         trackRemovalOfCards();
         //Remove card from hand:
@@ -338,14 +341,12 @@ public class CardDeck {
                 discardCards(card); //Discard if minion has no health
             }
         }
-
         //Check for type of card:
         if (card instanceof SpellCard) {
             if(((SpellCard)card).getMagnitude() == 0) {
                 discardCards(card); //Discard if spell has no magnitude
             }
         }
-
         //Check for type of card:
         if (card instanceof WeaponCard) {
             if (((WeaponCard)card).getCharges() == 0) {
@@ -353,6 +354,7 @@ public class CardDeck {
             }
         }
     }
+//END OF CODE HIGHLIGHT 2
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean checkIsEmpty() {

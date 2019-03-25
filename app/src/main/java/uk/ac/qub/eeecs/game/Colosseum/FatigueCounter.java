@@ -8,15 +8,17 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 public class FatigueCounter {
     //Coded by Dearbhaile Walsh
-
+    //Properties:
     private int mFatigueNum;
 
+    //Constructor
     public FatigueCounter() {
 
         mFatigueNum = 0;
         //FatigueNum is initially set up at 0
     }
 
+    //Methods:
     public int incrementFatigue() {
         mFatigueNum += 1;
         return mFatigueNum;
@@ -31,6 +33,7 @@ public class FatigueCounter {
         }
     }
 
+    //Getters and setters
     public int getmFatigueNum() {
         return mFatigueNum;
     }

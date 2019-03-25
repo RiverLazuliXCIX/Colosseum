@@ -218,6 +218,7 @@ public class CoinTossScreen extends GameScreen {
         return "Fail";
     }
 
+    //CODE HIGHLIGHT 4 - 'COINTOSS SCREEN' - Dearbhaile
     // Method for setting up stats based on Coin Toss:
     private void coinFlipResult(String result) {
         switch (result) {
@@ -235,12 +236,14 @@ public class CoinTossScreen extends GameScreen {
         }
     }
 
+    //NOT THIS
     private void changeScreens() { //Method to remove the current screen and move to the main game screen
         mGame.getScreenManager().removeScreen(CoinTossScreen.this);
         mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
                 mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck,mPlayerHandRegion,mOpponentHandRegion, mGame));
     }
 
+    //CODE HIGHLIGHT 4 CONTINUES - Dearbhaile
     public void chooseTextToDisplay() { //- Dearbhaile
         if (mCoinTossResult == "Heads") {
             mCoinTossMsg1 = "The coin landed on heads! You get to play first.";
@@ -255,6 +258,7 @@ public class CoinTossScreen extends GameScreen {
             mCoinTossMsg2 = "You automatically win the game for being lucky!";
         }
     }
+    //END OF CODE HIGHLIGHT 4
 
     @Override
     public void update(ElapsedTime elapsedTime) {

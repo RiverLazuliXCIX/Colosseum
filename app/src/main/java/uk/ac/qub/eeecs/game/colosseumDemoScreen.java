@@ -36,6 +36,7 @@ public class colosseumDemoScreen extends GameScreen {
     //////////////////
     //  PROPERTIES  //
     //////////////////
+
     private LayerViewport mGameViewport;
     private Input mInput;
 
@@ -250,7 +251,9 @@ public class colosseumDemoScreen extends GameScreen {
             }
         }
     }
+
     boolean goOnce = true;
+
     @Override
     public void update(ElapsedTime elapsedTime) {
         if (startTimeRecorded == false) {
@@ -286,10 +289,6 @@ public class colosseumDemoScreen extends GameScreen {
             for (Card cards : mPlayerDeck.getmCardHand())
                 cards.cardEvents(mPlayerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
         }
-
-        //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
-        //for (Card cards : mEnemyDeck.getmCardHand())
-           // cards.cardEvents(mEnemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
 
         mPlayer.update(elapsedTime); //Update player stats - Kyle
         mOpponent.update(elapsedTime); //Update opponent stats
@@ -354,6 +353,7 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered() && mPlayer.getYourTurn()) {
+                    mPlayerDeck.checkForDeadCards();
                     mPlayerDeck.discardCards_EndOfTurn();
                     endPlayerTurn();
                 }
