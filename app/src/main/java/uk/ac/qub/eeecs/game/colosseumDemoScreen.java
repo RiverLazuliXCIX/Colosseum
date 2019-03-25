@@ -353,7 +353,6 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered() && mPlayer.getYourTurn()) {
-                    mPlayerDeck.checkForDeadCards();
                     mPlayerDeck.discardCards_EndOfTurn();
                     endPlayerTurn();
                 }

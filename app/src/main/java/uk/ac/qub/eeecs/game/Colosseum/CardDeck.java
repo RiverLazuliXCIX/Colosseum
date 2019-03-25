@@ -322,15 +322,16 @@ public class CardDeck {
     public void discardCards_EndOfTurn() {
         //Called at end of turn, to remove discarded cards from board:
         for (int i = mCardHand.size()-1; i >= 0; i--) {
+            //All cards with the 'toBeDiscarded' flag set to true get removed:
             if (mCardHand.get(i).gettoBeDiscarded()) {
                 discardCards(mCardHand.get(i));
             }
         }
     }
 
-    public void checkForDeadCards() { //Called at the end of the player's turn
+    public void checkForDeadCards() { //Called constantly on both decks throughout game
         for (int i = mCardHand.size()-1; i >= 0; i--) {
-            discardCards_0Health(mCardHand.get(i));
+            discardCards_0Health(mCardHand.get(i)); //If health hits 0, card is immediately discarded
         }
     }
 
