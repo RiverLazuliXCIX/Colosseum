@@ -61,7 +61,7 @@ public class CoinTossScreenForTesting extends GameScreen {
     private long mEnemyTurnBegins = 0;
 
     //Variables required for the message (lines 1 and 2) to display properly
-    private int mCoinTossResult = 0;
+    private String mCoinTossResult = "";
     private String mCoinTossMsg1 = "";
     private String mCoinTossMsg2 = "";
 
@@ -81,7 +81,7 @@ public class CoinTossScreenForTesting extends GameScreen {
         setupViewports();
         setUpCTSObjects();
         setUpGameObjects();
-        if (ifTesting == false) {
+        if (ifTesting == false) { //If testing, don't run these methods automatically
             coinFlipStart();
             mCoinTossResult = coinFlipStart();
             coinFlipResult(mCoinTossResult);
@@ -129,52 +129,52 @@ public class CoinTossScreenForTesting extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-    public int coinFlipStart() {
+    public String coinFlipStart() {
         Random RANDOM = new Random();
         int flip = RANDOM.nextInt(6001);
         if (flip == 6000) { //side of coin (1/6000 chance to auto-win)
-            return 2;
+            return "Edge";
         } else if (flip >= 3000 && flip < 6000) { //heads (ai starts)
-            return 1;
+            return "Heads";
         } else if (flip >= 0 && flip < 3000) { //tails (user starts)
-            return 0;
+            return "Tails";
         }
-        return -1;
+        return "Fail";
     }
 
     //For testing purposes only:
-    public int setResult() {
+    public String setResult() {
         mCoinTossResult = coinFlipStart();
         return mCoinTossResult;
     }
 
     // Method for setting up stats based on Coin Toss:
-    public void coinFlipResult(int result) {
+    public void coinFlipResult(String result) {
         switch (result) {
-            case 0: // ie, player starts
+            case "Heads": // ie, player starts
                 mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.PLAYERSTARTS;
                 break;
-            case 1: // ie, ai starts
+            case "Tails": // ie, ai starts
                 mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
-            case 2: //edge of coin - set opponent health to 0, auto win game.
+            case "Edge": //edge of coin - set opponent health to 0, auto win game.
                 EndGameScreen.setCoinFlipResult(true);
                 break;
         }
     }
 
     public void chooseTextToDisplay() {
-        if (mCoinTossResult == 0) {
+        if (mCoinTossResult == "Heads") {
             mCoinTossMsg1 = "The coin landed on heads! You get to play first.";
             mCoinTossMsg2 = "The other player draws 4 cards, and gets 1 additional mana.";
         }
-        else if (mCoinTossResult == 1) {
+        else if (mCoinTossResult == "Tails") {
             mCoinTossMsg1 = "The coin landed on tails! The enemy plays first.";
             mCoinTossMsg2 = "You draw an extra card and additional mana for your troubles.";
         }
-        else if (mCoinTossResult == 2) {
+        else if (mCoinTossResult == "Edge") {
             mCoinTossMsg1 = "The coin landed on its edge!";
             mCoinTossMsg2 = "You automatically win the game for being lucky!";
         }
@@ -219,7 +219,7 @@ public class CoinTossScreenForTesting extends GameScreen {
     }
 
     //Getters and setters:
-    public int getmCoinTossResult() { return this.mCoinTossResult; }
+    public String getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
 

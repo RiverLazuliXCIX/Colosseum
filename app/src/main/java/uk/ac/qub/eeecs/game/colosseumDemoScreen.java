@@ -36,6 +36,7 @@ public class colosseumDemoScreen extends GameScreen {
     //////////////////
     //  PROPERTIES  //
     //////////////////
+
     private LayerViewport mGameViewport;
     private Input mInput;
 
@@ -250,7 +251,9 @@ public class colosseumDemoScreen extends GameScreen {
             }
         }
     }
+
     boolean goOnce = true;
+
     @Override
     public void update(ElapsedTime elapsedTime) {
         if (startTimeRecorded == false) {

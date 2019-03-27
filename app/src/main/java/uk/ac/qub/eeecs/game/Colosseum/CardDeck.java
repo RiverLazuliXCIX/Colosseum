@@ -12,7 +12,11 @@ import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 //CardDeck class, coded by Dearbhaile Walsh
 public class CardDeck {
 
-    //Variables required for Card Deck
+    //
+    // The 'CardDeck' Class represents the player's (either the User or the AI Opponent's) Deck of Cards in the Game.
+    //
+
+    //Variables required for Card Deck:
     private int mDeckID;
     private String mDeckName;
     private int mNumOfCards = 0, mSizeOfHand = 0, mSizeOfDiscard = 0;
@@ -23,7 +27,7 @@ public class CardDeck {
     float x = X_POSITION;
     float y = Y_POSITION;
 
-    //Variables required for Card values, initialised:
+    //Variables required for Initialising Card Values:
     private String name = "";
     private int coinCost = 0, attack = 0, health = 0, magnitude = 0, damage = 0, charges = 0;;
     private Effect effect;
@@ -32,7 +36,7 @@ public class CardDeck {
     //Final values relating to Card Deck and Hand:
     public static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 5;
 
-    //ArrayList to hold the deck of cards, and the card graveyard:
+    //ArrayList to hold the deck of cards, player hand, and the card graveyard:
     private ArrayList<Card> mDeck, mDiscardPile, mCardHand;
 
     //Boolean values required to discern the functionality of the deck:
@@ -61,6 +65,7 @@ public class CardDeck {
 
     public CardDeck(int id, String name, GameScreen gameScreen, boolean isAIDeck, HandRegion handRegion) {
         //Fully constructed deck, with random assortments of minion, spell and weapon cards
+        //BuildDeck method is called to populate the deck, as shown below:
         mDeck = new ArrayList<>(0);
         mDiscardPile = new ArrayList<>(0);
         mCardHand = new ArrayList<>(0);
@@ -82,7 +87,7 @@ public class CardDeck {
     }
 
     public void setUpDeckOptions(int mMinNum, int mSpellNum, int mWeapNum) {
-        //Updates number of cards/number of minion/spell/weapon cards:
+        //Updates number of cards/number of minion/spell/weapon cards
         mNumOfMinions = mMinNum;
         mNumOfCards += mNumOfMinions;
         mNumOfSpells = mSpellNum;
@@ -120,11 +125,14 @@ public class CardDeck {
         for (int i = 0; i < cardAmt; i++) {
 
             if (getDeckID() == 2) {
+                //Enemy cards are positioned differently, and
+                //have different attributes than the player's:
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            int no = RANDOM.nextInt(5);
-            switch (no) {
+            int randomNum = RANDOM.nextInt(6);
+            switch (randomNum) {
+                //Inserts random minion cards into the deck:
                 case 0:
                     setMinionValues("Card_Cerberus", 1, 2, 1);
                     break;
@@ -165,8 +173,9 @@ public class CardDeck {
                 enemyDeck = true;
                 y *= 9.8f;
             }
-            int no = RANDOM.nextInt(6);
-            switch (no) {
+            int randomNum = RANDOM.nextInt(7);
+            switch (randomNum) {
+                //Inserts random Spell Cards into the deck:
                 case 0:
                     setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
                     break;
@@ -205,12 +214,14 @@ public class CardDeck {
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             if (getDeckID() == 2) {
+                //Enemy cards are positioned differently, and
+                //have different attributes than the player's:
                 enemyDeck = true;
                 y *= 9.8f;
             }
 
-            int no = RANDOM.nextInt(2);
-            switch (no) {
+            int randomNum = RANDOM.nextInt(3);
+            switch (randomNum) {
                 case 0:
                     setWeaponValues("Card_Hasta", 4, 3, 2);
                     break;
@@ -244,10 +255,12 @@ public class CardDeck {
         }
     }
 
+    //CODE HIGHLIGHT 1 - DRAWING AND DESTROYING CARDS
     //Method required to draw a single card from the Deck:
     public Card drawTopCard() {
-        if (!mDeck.isEmpty()) { //Deck must contain cards
-            //Top card is chosen from top of deck:
+        //You cannot draw from an empty deck:
+        if (!mDeck.isEmpty()) {
+            //If deck contains cards, draw the last card:
             Card topCard = mDeck.get(mDeck.size() - 1);
             trackRemovalOfCards();
             trackAdditionOfCardsToHand();
@@ -266,17 +279,19 @@ public class CardDeck {
     public void drawCard(Player player, FatigueCounter counter, Game mGame) {
         if (!getDeck().isEmpty()) {
             drawTopCard(); //If there are cards in deck, draw top card
-            destroyCardOverLimit();
+            destroyCardOverLimit(); //If there are already 5 cards in hand, destroy new card
         } else {
             counter.incrementFatigue(); //Otherwise, player takes cumulative fatigue
-            if (player instanceof AIOpponent == false) {
+            if (player instanceof AIOpponent == false) { //Screen should not be displayed when enemy's card
+                //numbers drop below 0. This is not information the user needs to see.
                 mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
             }
-            player.receiveDamage(counter.getmFatigueNum()); //Damage is taken from player
+            player.receiveDamage(counter.getmFatigueNum()); //Appropriate damage is taken from player
         }
     }
 
-    //This method destroys a card if player draws one, when their hand is already full:
+    //This method destroys a card if player draws one when their hand is already full
+    //Player hand can be of max size 5, and any additional cards drawn are an unfair advantage:
     public void destroyCardOverLimit() {
         if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
             for (int i = 5; i < mCardHand.size(); i++) {
@@ -292,7 +307,9 @@ public class CardDeck {
             drawTopCard();
         }
     }
+// END OF CODE HIGHLIGHT 1
 
+// CODE HIGHLIGHT 2: DISCARDING CARDS:
     public void discardCards(Card mCardToDiscard) {
         trackRemovalOfCards();
         //Remove card from hand:
@@ -305,15 +322,16 @@ public class CardDeck {
     public void discardCards_EndOfTurn() {
         //Called at end of turn, to remove discarded cards from board:
         for (int i = mCardHand.size()-1; i >= 0; i--) {
+            //All cards with the 'toBeDiscarded' flag set to true get removed:
             if (mCardHand.get(i).gettoBeDiscarded()) {
                 discardCards(mCardHand.get(i));
             }
         }
     }
 
-    public void checkForDeadCards() {
+    public void checkForDeadCards() { //Called constantly on both decks throughout game
         for (int i = mCardHand.size()-1; i >= 0; i--) {
-            discardCards_0Health(mCardHand.get(i));
+            discardCards_0Health(mCardHand.get(i)); //If health hits 0, card is immediately discarded
         }
     }
 
@@ -324,14 +342,12 @@ public class CardDeck {
                 discardCards(card); //Discard if minion has no health
             }
         }
-
         //Check for type of card:
         if (card instanceof SpellCard) {
             if(((SpellCard)card).getMagnitude() == 0) {
                 discardCards(card); //Discard if spell has no magnitude
             }
         }
-
         //Check for type of card:
         if (card instanceof WeaponCard) {
             if (((WeaponCard)card).getCharges() == 0) {
@@ -339,6 +355,7 @@ public class CardDeck {
             }
         }
     }
+//END OF CODE HIGHLIGHT 2
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean checkIsEmpty() {
@@ -351,7 +368,6 @@ public class CardDeck {
     private void trackAdditionOfCardsToHand () {
         mSizeOfHand ++;
     }
-
     private void trackRemovalOfCards() {
         mNumOfCards --;
     }

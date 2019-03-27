@@ -8,12 +8,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
+import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.Effect;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
@@ -613,16 +616,6 @@ public class CardDeckTest {
         //There should now be 0 cards in the Card Hand:
         assertEquals(newDeck.getmCardHand().size(), newExpectedCardsInHand);
     }
-
-
-    //        //Check for type of card:
-    //        if (card instanceof WeaponCard) {
-    //            if (((WeaponCard)card).getCharges() == 0) {
-    //                discardCards(card); //Discard if weapon has no charges left
-    //            }
-    //        }
-    //    }
-
 
     //
     // Tests on the Getters & Setters:

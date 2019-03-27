@@ -195,7 +195,7 @@ public class TurnClassTest {
 
     //
     // The following test is on the 'setUpStats_PlayerStarts()' method, which is supposed to
-    // give an extra mana (ie totalling 5 mana points) to whoever does not start first.
+    // give an extra mana (ie totalling 2 mana points) to whoever does not start first.
     // This test is to see does it change the appropriate values correctly:
     //
     @Test
@@ -209,8 +209,8 @@ public class TurnClassTest {
 
         newTurn.setUpStats_PlayerStarts(newPlayer, playerDeck, enemyPlayer, enemyDeck);
 
-        int expectedEnemyMana = 5;
-        int expectedEnemyManaCap = 5;
+        int expectedEnemyMana = 2;
+        int expectedEnemyManaCap = 2;
 
         assertEquals(enemyPlayer.getCurrentMana(), expectedEnemyMana);
         assertEquals(enemyPlayer.getCurrentManaCap(), expectedEnemyManaCap);
@@ -260,7 +260,7 @@ public class TurnClassTest {
 
     //
     // The following test is on the 'setUpStats_EnemyStarts()' method, which is supposed to
-    // give an extra mana (ie totalling 5 mana points) to whoever does not start first.
+    // give an extra mana (ie totalling 2 mana points) to whoever does not start first.
     // This test is to see does it change the appropriate values correctly:
     //
     @Test
@@ -274,8 +274,8 @@ public class TurnClassTest {
 
         newTurn.setUpStats_EnemyStarts(newPlayer, playerDeck, enemyPlayer, enemyDeck);
 
-        int expectedPlayerMana = 5;
-        int expectedPlayerManaCap = 5;
+        int expectedPlayerMana = 2;
+        int expectedPlayerManaCap = 2;
 
         assertEquals(newPlayer.getCurrentMana(), expectedPlayerMana);
         assertEquals(newPlayer.getCurrentManaCap(), expectedPlayerManaCap);

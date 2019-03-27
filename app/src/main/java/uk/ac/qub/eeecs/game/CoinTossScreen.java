@@ -33,9 +33,6 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 //CoinTossScreen, coded by Dearbhaile Walsh & Scott Barham
 public class CoinTossScreen extends GameScreen {
 
-    // Properties
-    private ScreenManager mScreenManager = new ScreenManager(mGame);
-
     //Different objects required for this screen to function
     private GameObject mCTSBackground;
     private LayerViewport mGameViewport;
@@ -62,7 +59,7 @@ public class CoinTossScreen extends GameScreen {
     //Define the two Decks
     private CardDeck mPlayerDeck, mEnemyDeck;
 
-    // Defining hand regions, (needs to be passed into colosseum screen now to prevent duplicate hand regions)
+    // Defining hand regions (needs to be passed into colosseum screen now to prevent duplicate hand regions)
     private HandRegion mPlayerHandRegion, mOpponentHandRegion;
 
     //UserWhoStarted variable to hold data about who started in this match:
@@ -72,7 +69,7 @@ public class CoinTossScreen extends GameScreen {
     private long mEnemyTurnBegins = 0;
 
     //Variables required for the message (lines 1 and 2) to display properly
-    private int mCoinTossResult = -1; //A state that cant be reached (error checking)
+    private String mCoinTossResult = "";
     private String mCoinTossMsg1 = "";
     private String mCoinTossMsg2 = "";
 
@@ -101,8 +98,10 @@ public class CoinTossScreen extends GameScreen {
         setUpGameObjects();
         mCoinTossResult = coinFlipStart();
         coinFlipResult(mCoinTossResult);
+
         //Set up Coin object for display in animation, has to be initialised after coinFlipStart otherwise it was never changed - Scott
         mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
+
         chooseTextToDisplay();
     }
 
@@ -120,27 +119,29 @@ public class CoinTossScreen extends GameScreen {
         mPlayer = new Player(this, "Meridia");
         mOpponent = new AIOpponent(this, "EmperorCommodus");
 
+        //Set up initial PLAYER and ENEMY stats:
         mPlayer.setCurrentMana(1);
         mPlayer.setCurrentManaCap(1);
-
         mOpponent.setCurrentMana(1);
         mOpponent.setCurrentManaCap(1);
 
+        //Set up Hand Regions to be passed in to new screen:
         mPlayerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         mOpponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
 
-        //This method sets up the player and enemy decks, called when screen is loaded. - Dearbhaile
+        //This method sets up the player and enemy decks, called when screen is loaded
         mPlayerDeck = new CardDeck(1, "Basic Player Deck", this, false, mPlayerHandRegion);
         mEnemyDeck = new CardDeck(2, "Basic Enemy Deck", this, true, mOpponentHandRegion);
 
         for (int i = 0; i < mEnemyDeck.getmCardHand().size(); i++) {
-            mEnemyDeck.getmCardHand().get(i).flipCard();
+            mEnemyDeck.getmCardHand().get(i).flipCard(); //Enemy cards are initially flipped
         }
     }
 
     public void setUpCTSObjects() {
         mGame.getAssetManager().loadAssets("txt/assets/CoinTossAssets.JSON");
 
+        //Background game object is created:
         mCTSBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
                 mGameViewport.getHeight()/ 2.0f, mGameViewport.getWidth(),
                 mGameViewport.getHeight(), getGame()
@@ -193,67 +194,71 @@ public class CoinTossScreen extends GameScreen {
         while (i) {
             edgeCounter++;
             switch (coinFlipStart()) {
-                case 0://tails - player starts
-                case 1: //heads - ai starts
+                case "Tails"://Tails - player starts
+                case "Heads": //Heads - ai starts
                 default: //Shouldn't be reached
                     break;
-                case 2: //edge of coin - set opponent health to 0, auto win game.
+                case "Edge": //Edge of coin - set opponent health to 0, auto win game.
                     i = false;
                     break;
             }
         }
     }
 
-    private int coinFlipStart() { //Initialise the coin flip for a random result - Scott
+    private String coinFlipStart() { //Initialise the coin flip for a random result - Scott
         Random RANDOM = new Random();
         int flip = RANDOM.nextInt(6001);
         if (flip == 6000) { //side of coin (1/6000 chance to auto-win)
-            return 2;
+            return "Edge";
         } else if (flip >= 3000 && flip < 6000) { //tails (ai starts)
-            return 1;
+            return "Tails";
         } else if (flip >= 0 && flip < 3000) { //heads (user starts)
-            return 0;
+            return "Heads";
         }
-        return -1;
+        return "Fail";
     }
 
+    //CODE HIGHLIGHT 4 - 'COINTOSS SCREEN' - Dearbhaile
     // Method for setting up stats based on Coin Toss:
-    private void coinFlipResult(int result) {
+    private void coinFlipResult(String result) {
         switch (result) {
-            case 0: // ie, (heads) player starts - Dearbhaile
+            case "Heads": // ie, player starts - Dearbhaile
                 mCurrentTurn.setUpStats_PlayerStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.PLAYERSTARTS;
                 break;
-            case 1: // ie, (tails) ai starts - Dearbhaile
+            case "Tails": // ie, AI starts - Dearbhaile
                 mCurrentTurn.setUpStats_EnemyStarts(mPlayer, mPlayerDeck, mOpponent, mEnemyDeck);
                 mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
-            case 2: //edge of coin - set opponent health to 0, auto win game - Scott
+            case "Edge": //Edge of coin: opponent health to 0, auto win game - Scott
                 EndGameScreen.setCoinFlipResult(true);
                 break;
         }
     }
 
+    //NOT THIS
     private void changeScreens() { //Method to remove the current screen and move to the main game screen
         mGame.getScreenManager().removeScreen(CoinTossScreen.this);
         mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
                 mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck,mPlayerHandRegion,mOpponentHandRegion, mGame));
     }
 
-    public void chooseTextToDisplay() {
-        if (mCoinTossResult == 0) {
+    //CODE HIGHLIGHT 4 CONTINUES - Dearbhaile
+    public void chooseTextToDisplay() { //- Dearbhaile
+        if (mCoinTossResult == "Heads") {
             mCoinTossMsg1 = "The coin landed on heads! You get to play first.";
             mCoinTossMsg2 = "The other player draws 4 cards, and gets 1 additional mana.";
         }
-        else if (mCoinTossResult == 1) {
+        else if (mCoinTossResult == "Tails") {
             mCoinTossMsg1 = "The coin landed on tails! The enemy plays first.";
             mCoinTossMsg2 = "You draw an extra card and additional mana for your troubles.";
         }
-        else if (mCoinTossResult == 2) {
+        else if (mCoinTossResult == "Edge") {
             mCoinTossMsg1 = "The coin landed on its edge!";
             mCoinTossMsg2 = "You automatically win the game for being lucky!";
         }
     }
+    //END OF CODE HIGHLIGHT 4
 
     @Override
     public void update(ElapsedTime elapsedTime) {
@@ -271,10 +276,10 @@ public class CoinTossScreen extends GameScreen {
             mCoin.coinAnimation();
         }
 
+        //Timer checks how long screen has been running, and changes screen after 10 seconds - Dearbhaile
         if (mCurrentTime - mTimeOnCreate >= mCoinToss_Timeout) {
-            if (mOpponent.getYourTurn()) {
+            if (mOpponent.getYourTurn()) //If opponent starts, then start counting their turn time, so that it ends after 5secs. - Dearbhaile
                 mEnemyTurnBegins = System.currentTimeMillis();
-            }
             changeScreens(); //Call the change screens method to change to the main game screen.
         }
 
@@ -283,7 +288,7 @@ public class CoinTossScreen extends GameScreen {
             mSkipButton.update(elapsedTime);
 
             //If the 'skip animation' button is pressed, then go straight to game:
-            if (mSkipButton.isPushTriggered()) {
+            if (mSkipButton.isPushTriggered()) { //Dearbhaile
                 mCoinToss_Timeout = 0;
             }
         }
@@ -311,7 +316,7 @@ public class CoinTossScreen extends GameScreen {
         //Draw the coin sprite, used for the coin animation - Scott
         mCoin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
-        if (mCurrentTime - mTimeOnCreate >= 4000) {
+        if (mCurrentTime - mTimeOnCreate >= 4000) { //Display message according to which outcome user received. - Dearbhaile
             graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.42f, mMessageText);
             graphics2D.drawText(mCoinTossMsg2, SCREEN_WIDTH * 0.18f, SCREEN_HEIGHT * 0.48f, mMessageText);
 
@@ -327,7 +332,7 @@ public class CoinTossScreen extends GameScreen {
     public static boolean getEdgeCase() { return edgeCase; }
     public static void setEdgeCase(boolean edgeCaseInput) { edgeCase = edgeCaseInput; }
     public static int getEdgeCounter() { return edgeCounter; }
-    public int getmCoinTossResult() { return this.mCoinTossResult; }
+    public String getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
     public Player getmPlayer() { return this.mPlayer; }

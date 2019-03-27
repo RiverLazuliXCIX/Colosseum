@@ -1,6 +1,13 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
+//CODE HIGHLIGHT 3 - 'TURN' CLASS:
+
+//
+// 'Turn' Class is used to hold information about the current turn happening in the game.
+//
+
 public class Turn {
+    //Coded by Dearbhaile Walsh
 
     //int required to hold turn number:
     private int mTurnNum;
@@ -13,10 +20,11 @@ public class Turn {
         mTurnNum = 1; // Initially set to 1
     }
 
+    //Called each time there is a new turn:
     public void newTurnFunc(Player player, AIOpponent opponent) {
         incrementTurnNum(); //Turn number is incremented by 1, in order to count the turns
-        increasePlayerMana_NewTurn(player);
-        increaseEnemyMana_NewTurn(opponent);
+        increasePlayerMana_NewTurn(player); //Increase Player Mana
+        increasePlayerMana_NewTurn(opponent); //Increase Opponent Mana
     }
 
     public void increasePlayerMana_NewTurn(Player player) {
@@ -24,17 +32,6 @@ public class Turn {
             player.increaseCurrentMana(1); //Otherwise, increase mana by 1
             if (player.getCurrentManaCap() < MANA_CAP) {
                 player.increaseCurrentManaCap(); //Again, check that the Mana Cap is below 10 before increasing it.
-                //Otherwise, if player mana is increased e.g. from 4 to 5, but mana cap was already at 10, mana cap
-                //Should not increase to 11 and so on and so forth. It should *always* be capped at 10.
-            }
-        }
-    }
-
-    public void increaseEnemyMana_NewTurn(AIOpponent opponent) {
-        if (opponent.getCurrentMana() < MANA_CAP) { //If mana/mana cap are at 10, it cannot increase further
-            opponent.increaseCurrentMana(1); //Otherwise, increase mana by 1
-            if (opponent.getCurrentManaCap() < MANA_CAP) {
-                opponent.increaseCurrentManaCap(); //Again, check that the Mana Cap is below 10 before increasing it.
                 //Otherwise, if player mana is increased e.g. from 4 to 5, but mana cap was already at 10, mana cap
                 //Should not increase to 11 and so on and so forth. It should *always* be capped at 10.
             }
@@ -68,3 +65,4 @@ public class Turn {
     //Getters and setters:
     public int getmTurnNum() {return this.mTurnNum;}
 }
+//END OF CODE HIGHLIGHT 3
