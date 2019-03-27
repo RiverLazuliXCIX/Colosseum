@@ -284,12 +284,12 @@ public class colosseumDemoScreen extends GameScreen {
 
         if (mPlayer.getYourTurn()) { //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
             for (Card cards : mPlayerDeck.getmCardHand())
-                cards.cardEvents(mPlayerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+                cards.cardEvents(mPlayerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame, false);
         }
 
         //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
-        //for (Card cards : mEnemyDeck.getmCardHand())
-           // cards.cardEvents(mEnemyDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame);
+        for (Card cards : opponentActiveRegion.getCardsInRegion())
+            cards.cardEvents(opponentActiveRegion.getCardsInRegion(), mDefaultScreenViewport, mDefaultLayerViewport, mGame, true);
 
         mPlayer.update(elapsedTime); //Update player stats - Kyle
         mOpponent.update(elapsedTime); //Update opponent stats
