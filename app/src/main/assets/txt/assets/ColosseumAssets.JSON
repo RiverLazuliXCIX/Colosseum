@@ -17,6 +17,16 @@
     },
     {
       "type": "Bitmap",
+      "name": "CardFrontAttacked",
+      "file": "img/CardFrontAttacked.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "CardFrontDiscarded",
+      "file": "img/CardFrontDiscarded.png"
+    },
+    {
+      "type": "Bitmap",
       "name": "Denarius",
       "file": "img/denarius.png"
     },

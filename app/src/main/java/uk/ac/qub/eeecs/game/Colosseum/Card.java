@@ -107,7 +107,7 @@ public class Card extends GameObject {
         back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
         selected = gameScreen.getGame().getAssetManager().getBitmap("CardFrontSelected");
         attacked = gameScreen.getGame().getAssetManager().getBitmap("CardFrontAttacked");
-        discarded = gameScreen.getGame().getAssetManager().getBitmap("Card_Discarded");
+        discarded = gameScreen.getGame().getAssetManager().getBitmap("CardFrontDiscarded");
 
         this.isEnemy = isEnemy;
 
