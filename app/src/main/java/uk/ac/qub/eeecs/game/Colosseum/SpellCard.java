@@ -29,7 +29,7 @@ public class SpellCard extends Card {
 
     // Copy Constructor
     public SpellCard(float x, float y, SpellCard sc) {
-        super(x, y, sc.getGameScreen(), sc.getCoinCost(), sc.getIsEnemy(), sc.getmCardName());
+        super(x, y, sc.getGameScreen(), sc.getCoinCost(), sc.getIsEnemy(), sc.getCardName());
         setEffect(sc.getEffect());
         setMagnitude(sc.getMagnitude());
     }

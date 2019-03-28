@@ -2,7 +2,6 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
-import uk.ac.qub.eeecs.game.Colosseum.Regions.GameRegion;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 
@@ -51,7 +50,7 @@ public class MinionCard extends Card {
 
     // Copy Constructor
     public MinionCard(float x, float y, MinionCard mc) {
-        super(x, y, mc.getGameScreen(), mc.getCoinCost(), mc.getIsEnemy(), mc.getmCardName());
+        super(x, y, mc.getGameScreen(), mc.getCoinCost(), mc.getIsEnemy(), mc.getCardName());
         setAttack(mc.getAttack());
         setMaxHealth(mc.getMaxHealth());
         setHealth(mc.getHealth());

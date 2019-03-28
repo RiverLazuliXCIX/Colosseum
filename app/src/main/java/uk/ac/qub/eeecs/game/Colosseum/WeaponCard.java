@@ -20,7 +20,7 @@ public class WeaponCard extends Card {
 
     // Copy Constructor
     public WeaponCard(float x, float y, WeaponCard wc) {
-        super(x, y, wc.getGameScreen(), wc.getCoinCost(), wc.getIsEnemy(), wc.getmCardName());
+        super(x, y, wc.getGameScreen(), wc.getCoinCost(), wc.getIsEnemy(), wc.getCardName());
         setDamage(wc.getDamage());
         setCharges(wc.getCharges());
     }

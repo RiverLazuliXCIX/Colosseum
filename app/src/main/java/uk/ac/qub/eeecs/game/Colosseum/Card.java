@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
@@ -34,6 +33,7 @@ public class Card extends GameObject {
     private static Bitmap front = null;
     private static Bitmap back = null;
     private static Bitmap selected = null;
+    private static Bitmap attacked = null;
     private static Bitmap discarded = null;
 
     // Was 50, 70
@@ -41,17 +41,17 @@ public class Card extends GameObject {
     private static final float CARD_HEIGHT = 70.0f/1.5f;
 
     //Define the card digit images
-    private static Bitmap[] mCardDigits = new Bitmap[10];
+    private static Bitmap[] cardDigits = new Bitmap[10];
 
     //Check if card is being held
-    private Card mCardTouched = null;
-    private AIOpponent mOpponentTouched = null;
+    private Card cardTouched = null;
+    private AIOpponent opponentTouched = null;
     //Check if card is selected to attack with
-    private static Card mAttackerSelected;
-    private boolean mIsSelected;
+    private static Card attackerSelected;
+    private boolean isSelected;
 
     //Check card is flipped
-    private Boolean mCardFlippedBack = false;  //initially the card is not flipped
+    private Boolean flippedBack = false;  //initially the card is not flipped
     private Boolean draggable = true; // Card should not be draggable if it is locked in its region
     private Boolean selectable = false;
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
@@ -62,28 +62,28 @@ public class Card extends GameObject {
     //private int attack, defence, mana;
     private int coinCost;
 
-    private Bitmap mCardPortrait;
-    private String mCardName;
+    private Bitmap cardPortrait;
+    private String cardName;
     private String currentRegion; // Stores the current region the card is currently located
 
     //Set offset and scale values for positioning
-    private static Vector2 mAttackOffset = new Vector2(-0.8f, -0.84f);
-    private static Vector2 mAttackScale = new Vector2(0.1f, 0.1f);
-    private static Vector2 mDefenceOffset = new Vector2(0.8f, -0.84f);
-    private static Vector2 mDefenceScale = new Vector2(0.1f, 0.1f);
-    private static Vector2 mManaOffset = new Vector2(0.72f, 0.8f);
-    private static Vector2 mManaScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 attackOffset = new Vector2(-0.8f, -0.84f);
+    private static Vector2 attackScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 defenceOffset = new Vector2(0.8f, -0.84f);
+    private static Vector2 defenceScale = new Vector2(0.1f, 0.1f);
+    private static Vector2 manaOffset = new Vector2(0.72f, 0.8f);
+    private static Vector2 manaScale = new Vector2(0.1f, 0.1f);
 
-    private static Vector2 mPortraitOffset = new Vector2(0f, 0f);
-    private static Vector2 mPortraitScale = new Vector2(1f, 1f);
+    private static Vector2 portraitOffset = new Vector2(0f, 0f);
+    private static Vector2 portraitScale = new Vector2(1f, 1f);
 
     /*ALT CARD
-    private Vector2 mAttackOffset = new Vector2(-0.66f, -0.71f);
-    private Vector2 mAttackScale = new Vector2(0.12f, 0.12f);
-    private Vector2 mDefenceOffset = new Vector2(0.65f, -0.71f);
-    private Vector2 mDefenceScale = new Vector2(0.12f, 0.12f);
-    private Vector2 mManaOffset = new Vector2(0.69f, 0.78f);
-    private Vector2 mManaScale = new Vector2(0.12f, 0.12f);
+    private Vector2 attackOffset = new Vector2(-0.66f, -0.71f);
+    private Vector2 attackScale = new Vector2(0.12f, 0.12f);
+    private Vector2 defenceOffset = new Vector2(0.65f, -0.71f);
+    private Vector2 defenceScale = new Vector2(0.12f, 0.12f);
+    private Vector2 manaOffset = new Vector2(0.69f, 0.78f);
+    private Vector2 manaScale = new Vector2(0.12f, 0.12f);
     */
 
     // /////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ public class Card extends GameObject {
      * @param startY     y location of the player card
      * @param gameScreen Gamescreen to which card belongs
      */
-    public Card(float startX, float startY, GameScreen gameScreen, int coinCost, Boolean isEnemy, String mCardName) {
+    public Card(float startX, float startY, GameScreen gameScreen, int coinCost, Boolean isEnemy, String cardName) {
         super(startX, startY, CARD_WIDTH, CARD_HEIGHT, gameScreen.getGame()
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
@@ -106,12 +106,13 @@ public class Card extends GameObject {
         front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
         back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
         selected = gameScreen.getGame().getAssetManager().getBitmap("CardFrontSelected");
+        attacked = gameScreen.getGame().getAssetManager().getBitmap("CardFrontAttacked");
         discarded = gameScreen.getGame().getAssetManager().getBitmap("Card_Discarded");
 
         this.isEnemy = isEnemy;
 
         //temp
-        mCardPortrait = gameScreen.getGame().getAssetManager().getBitmap(mCardName);
+        cardPortrait = gameScreen.getGame().getAssetManager().getBitmap(cardName);
 
         if(this.isEnemy)
             flipCard();
@@ -119,7 +120,7 @@ public class Card extends GameObject {
         setCoinCost(coinCost);
         // Store each of the damage/health digits
         for(int digit = 0; digit <= 9; digit++)
-            mCardDigits[digit] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(digit));
+            cardDigits[digit] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(digit));
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -128,152 +129,153 @@ public class Card extends GameObject {
 
     /**
      * Drag and flip a card
-     *  @param mCards                 card being touched
-     * @param mDefaultScreenViewport default game screen viewport
-     * @param mGameViewport          game screen viewport
-     * @param mGame                  the game in question
+     *  @param cards                 card being touched
+     * @param defaultScreenViewport default game screen viewport
+     * @param gameViewport          game screen viewport
+     * @param game                  the game in question
      */
-    public void cardEvents(List<Card> mCards, ScreenViewport mDefaultScreenViewport,
-                           LayerViewport mGameViewport, Game mGame, boolean opponent) {
-        Input mInput = mGame.getInput();
+    public void cardEvents(List<Card> cards, AIOpponent opponent, ScreenViewport defaultScreenViewport,
+                           LayerViewport gameViewport, Game game, boolean isOpponent) {
+        Input input = game.getInput();
 
-        for (int i = 0; i < mInput.getTouchEvents().size(); i++) {
+        for (int i = 0; i < input.getTouchEvents().size(); i++) {
             Vector2 touchLocation = new Vector2(0, 0);
 
-            int touchType = mInput.getTouchEvents().get(i).type;
-            ViewportHelper.convertScreenPosIntoLayer(mDefaultScreenViewport, mInput.getTouchEvents().get(i).x,
-                    mInput.getTouchEvents().get(i).y, mGameViewport, touchLocation);
+            int touchType = input.getTouchEvents().get(i).type;
+            ViewportHelper.convertScreenPosIntoLayer(defaultScreenViewport, input.getTouchEvents().get(i).x,
+                    input.getTouchEvents().get(i).y, gameViewport, touchLocation);
 
             //List of all touch methods
-            if(!opponent)
-                playerTouchMethods(touchType, mCards, touchLocation, mGame, mGameViewport);
+            if(!isOpponent)
+                playerTouchMethods(touchType, cards, opponent, touchLocation, game, gameViewport);
             else
-                opponentTouchMethods(touchType, mCards, touchLocation, mGame, mGameViewport);
+                opponentTouchMethods(touchType, cards, opponent, touchLocation, game, gameViewport);
         }
     }
 
-    public void playerTouchMethods(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
-        moveCard(touchType, mCards, touchLocation);
-        selectCard(touchType, mCards, touchLocation, mGame);
-        useCard(touchType, mCards, touchLocation);
-        boundCard(mCards, mGameViewport);
-        enlargeCard(touchType, mCards, touchLocation);
+    public void playerTouchMethods(int touchType, List<Card> cards, AIOpponent opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
+        moveCard(touchType, cards, touchLocation);
+        selectCard(touchType, cards, touchLocation, mGame);
+        useCard(touchType, cards, opponent, touchLocation);
+        boundCard(cards, mGameViewport);
+        enlargeCard(touchType, cards, touchLocation);
         releaseCard(touchType);
     }
 
-    public void opponentTouchMethods(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
-        //moveCard(touchType, mCards, touchLocation);
-        useCard(touchType, mCards, touchLocation);
-        enlargeCard(touchType, mCards, touchLocation);
+    public void opponentTouchMethods(int touchType, List<Card> cards, AIOpponent opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
+        //moveCard(touchType, cards, touchLocation);
+        useCard(touchType, cards, opponent, touchLocation);
+        enlargeCard(touchType, cards, touchLocation);
         releaseCard(touchType);
     }
 
-    public void moveCard(int touchType, List<Card> mCards, Vector2 touchLocation){
+    public void moveCard(int touchType, List<Card> cards, Vector2 touchLocation){
         //Move the card - Story C1
         if (touchType == TouchEvent.TOUCH_DRAGGED) {
-            checkCardTouched(touchType, TouchEvent.TOUCH_DRAGGED, mCards, touchLocation);
+            checkCardTouched(touchType, TouchEvent.TOUCH_DRAGGED, cards, touchLocation);
             cardDropped = false;
 
             //if a card was touched, and the event was a drag, move it
-            if (mCardTouched != null
-                    && mCardTouched.getDraggable())
-                mCardTouched.position = touchLocation.addReturn(0f, 5.0f);
+            if (cardTouched != null
+                    && cardTouched.getDraggable())
+                cardTouched.position = touchLocation.addReturn(0f, 5.0f);
         }
     }
 
-    public void selectCard(int touchType, List<Card> mCards, Vector2 touchLocation, Game mGame) {
+    public void selectCard(int touchType, List<Card> cards, Vector2 touchLocation, Game mGame) {
         //Edited: select card
         //initial selection, change card frame
         if(touchType == TouchEvent.TOUCH_SINGLE_TAP) {
-            checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, mCards, touchLocation);
+            checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, cards, touchLocation);
 
             //deselect
-            if (mCardTouched != null
-                    && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
-                    && getmAttackerSelected() != null
-                    && getmAttackerSelected() != mCardTouched
-                    && getmAttackerSelected().getBitmap() == selected
-                    && mCardTouched.getSelectable()) {
-                getmAttackerSelected().setBitmap(front);
+            if (cardTouched != null
+                    && cardTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                    && getAttackerSelected() != null
+                    && getAttackerSelected() != cardTouched
+                    && getAttackerSelected().getBitmap() == selected
+                    && cardTouched.getSelectable()) {
+                getAttackerSelected().setBitmap(front);
                 //setmAttackerSelected(null);
             }
             //select
-            else if (mCardTouched != null
-                        && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
-                        && !mCardTouched.getIsEnemy()
-                        && mCardTouched.getBitmap() == front
-                        && mCardTouched.getSelectable()) {
-                mCardTouched.setmIsSelected(true);
-                setmAttackerSelected(mCardTouched);
-                getmAttackerSelected().setBitmap(selected);
+            else if (cardTouched != null
+                        && cardTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                        && !cardTouched.getIsEnemy()
+                        && cardTouched.getBitmap() == front
+                        && cardTouched.getSelectable()) {
+                cardTouched.setSelected(true);
+                setAttackerSelected(cardTouched);
+                getAttackerSelected().setBitmap(selected);
             }
         }
     }
 
     public void useLogic(Card thisCard, GameObject other) {
-        //nothing
+        //do nothing
+        //method is overridden in child classes (Minion/Weapon/Spell)
     }
 
-    public void useCard(int touchType, List<Card> mCards, Vector2 touchLocation) {
+    public void useCard(int touchType, List<Card> cards, AIOpponent opponent, Vector2 touchLocation) {
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP) {
-            checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, mCards, touchLocation);
+            checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, cards, touchLocation);
+            checkOpponentTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, opponent, touchLocation);
 
-            if (mCardTouched != null
-                    && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)
-                    && mCardTouched.getIsEnemy()
-                    && getmAttackerSelected() != null
-                    && !getmAttackerSelected().getIsEnemy()
-                    && mCardTouched.getSelectable()) {
-                mCardTouched.setBitmap(selected);
-                useLogic(getmAttackerSelected(), mCardTouched);
+            if (cardTouched != null
+                    && cardTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                    && cardTouched.getIsEnemy()
+                    && getAttackerSelected() != null
+                    && !getAttackerSelected().getIsEnemy()
+                    && cardTouched.getSelectable()) {
+                cardTouched.setBitmap(attacked);
+                useLogic(getAttackerSelected(), cardTouched);
             }
-            else if (mOpponentTouched != null
-                        && mOpponentTouched.getBound().contains(touchLocation.x, touchLocation.y)
-                        && getmAttackerSelected() != null
-                        && !getmAttackerSelected().getIsEnemy()) {
-                //yeet
-                useLogic(getmAttackerSelected(), mOpponentTouched);
+            else if (opponentTouched != null
+                        && opponentTouched.getBound().contains(touchLocation.x, touchLocation.y)
+                        && getAttackerSelected() != null
+                        && !getAttackerSelected().getIsEnemy()) {
+                useLogic(getAttackerSelected(), opponentTouched);
             }
         }
     }
 
-    public void discardCard(Card mCard) { // - Dearbhaile
+    public void discardCard(Card card) { // - Dearbhaile
         //Set Discarded:
-        if (    !mCard.getIsEnemy()
-                && getmCardTouched()!= null
-                && getmCardTouched().getSelectable());
+        if (    !card.getIsEnemy()
+                && getCardTouched()!= null
+                && getCardTouched().getSelectable());
         {
-            mCard.setBitmap(discarded);
-            mCard.setToBeDiscarded(true);
+            card.setBitmap(discarded);
+            card.setToBeDiscarded(true);
         }
     }
 
-    public void boundCard(List<Card> mCards, LayerViewport mGameViewport){
+    public void boundCard(List<Card> cards, LayerViewport mGameViewport){
         //Bound the card - Story C3
-        for (int j = 0; j < mCards.size(); j++) {
-            float cardHalfWidth = mCards.get(j).getBound().halfWidth, cardHalfHeight = mCards.get(j).getBound().halfHeight;
+        for (int j = 0; j < cards.size(); j++) {
+            float cardHalfWidth = cards.get(j).getBound().halfWidth, cardHalfHeight = cards.get(j).getBound().halfHeight;
 
-            if (mCards.get(j).getBound().getLeft() < 0)
-                mCards.get(j).position.x = cardHalfWidth;
-            if (mCards.get(j).getBound().getBottom() < 0)
-                mCards.get(j).position.y = cardHalfHeight;
-            if (mCards.get(j).getBound().getRight() > mGameViewport.getRight())
-                mCards.get(j).position.x = mGameViewport.getRight() - cardHalfWidth;
-            if (mCards.get(j).getBound().getTop() > mGameViewport.getTop())
-                mCards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
+            if (cards.get(j).getBound().getLeft() < 0)
+                cards.get(j).position.x = cardHalfWidth;
+            if (cards.get(j).getBound().getBottom() < 0)
+                cards.get(j).position.y = cardHalfHeight;
+            if (cards.get(j).getBound().getRight() > mGameViewport.getRight())
+                cards.get(j).position.x = mGameViewport.getRight() - cardHalfWidth;
+            if (cards.get(j).getBound().getTop() > mGameViewport.getTop())
+                cards.get(j).position.y = mGameViewport.getTop() - cardHalfHeight;
         }
     }
 
-    public void enlargeCard(int touchType, List<Card> mCards, Vector2 touchLocation){
+    public void enlargeCard(int touchType, List<Card> cards, Vector2 touchLocation){
         //Enlarge the card
         if(touchType == TouchEvent.TOUCH_LONG_PRESS) {
-            checkCardTouched(touchType, TouchEvent.TOUCH_LONG_PRESS, mCards, touchLocation);
+            checkCardTouched(touchType, TouchEvent.TOUCH_LONG_PRESS, cards, touchLocation);
 
-            if (mCardTouched != null
-                    && mCardTouched.getBound().contains(touchLocation.x, touchLocation.y)) {
+            if (cardTouched != null
+                    && cardTouched.getBound().contains(touchLocation.x, touchLocation.y)) {
                 //Enlarge the card
-                mCardTouched.setHeight(CARD_HEIGHT * 2.0f);
-                mCardTouched.setWidth(CARD_WIDTH * 2.0f);
+                cardTouched.setHeight(CARD_HEIGHT * 2.0f);
+                cardTouched.setWidth(CARD_WIDTH * 2.0f);
             }
         }
     }
@@ -281,31 +283,31 @@ public class Card extends GameObject {
     public void releaseCard(int touchType){
         //release the card, meaning no card is now held
         if (touchType == TouchEvent.TOUCH_UP
-                && mCardTouched != null) {
+                && cardTouched != null) {
             cardDropped = true;
-            mCardTouched.setHeight(CARD_HEIGHT);
-            mCardTouched.setWidth(CARD_WIDTH);
-            mCardTouched = null;
+            cardTouched.setHeight(CARD_HEIGHT);
+            cardTouched.setWidth(CARD_WIDTH);
+            cardTouched = null;
         }
     }
 
     public void flipCard() {
-        if(!mCardFlippedBack) {
+        if(!flippedBack) {
             this.setBitmap(back);
-            this.mCardFlippedBack = true;
+            this.flippedBack = true;
         }
         else {
             this.setBitmap(front);
-            this.mCardFlippedBack = false;
+            this.flippedBack = false;
         }
     }
 
-    private void checkCardTouched(int touchType, int touchEvent, List<Card> mCards, Vector2 touchLocation) {
+    private void checkCardTouched(int touchType, int touchEvent, List<Card> cards, Vector2 touchLocation) {
         if (touchType == touchEvent
-                && mCardTouched == null) {
-            for (int j = 0; j < mCards.size(); j++) {
-                if (mCards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
-                    mCardTouched = mCards.get(j);
+                && cardTouched == null) {
+            for (int j = 0; j < cards.size(); j++) {
+                if (cards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
+                    cardTouched = cards.get(j);
                 }
             }
         }
@@ -313,9 +315,9 @@ public class Card extends GameObject {
 
     private void checkOpponentTouched(int touchType, int touchEvent, AIOpponent opponent, Vector2 touchLocation) {
         if (touchType == touchEvent
-                && mOpponentTouched == null) {
+                && opponentTouched == null) {
             if (opponent.getBound().contains(touchLocation.x, touchLocation.y)){
-                    mOpponentTouched = opponent;
+                    opponentTouched = opponent;
             }
         }
     }
@@ -325,39 +327,39 @@ public class Card extends GameObject {
                      LayerViewport layerViewport, ScreenViewport screenViewport) {
 
         // Draw the portrait
-        drawBitmap(mCardPortrait, mPortraitOffset, mPortraitScale,
+        drawBitmap(cardPortrait, portraitOffset, portraitScale,
                 graphics2D, layerViewport, screenViewport);
 
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
-        if(!mCardFlippedBack) {
+        if(!flippedBack) {
 
             if (this instanceof MinionCard) {
 
                 MinionCard mc = (MinionCard) this;
                 //Draw the attack on the card
-                drawStat(mc.getAttack(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+                drawStat(mc.getAttack(), attackOffset, attackScale, graphics2D, layerViewport, screenViewport);
                 //Draw the defence on the card
-                drawStat(mc.getHealth(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+                drawStat(mc.getHealth(), defenceOffset, defenceScale, graphics2D, layerViewport, screenViewport);
                 //Draw the mana on the card
-                drawStat(mc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+                drawStat(mc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof WeaponCard) {
 
                 WeaponCard wc = (WeaponCard) this;
                 //Draw the attack on the card
-                drawStat(wc.getDamage(), mAttackOffset, mAttackScale, graphics2D, layerViewport, screenViewport);
+                drawStat(wc.getDamage(), attackOffset, attackScale, graphics2D, layerViewport, screenViewport);
                 //Draw the charges on the card
-                drawStat(wc.getCharges(), mDefenceOffset, mDefenceScale, graphics2D, layerViewport, screenViewport);
+                drawStat(wc.getCharges(), defenceOffset, defenceScale, graphics2D, layerViewport, screenViewport);
                 //Draw the mana on the card
-                drawStat(wc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+                drawStat(wc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof SpellCard) {
 
                 SpellCard sc = (SpellCard) this;
                 //Draw the mana on the card
-                drawStat(sc.getCoinCost(), mManaOffset, mManaScale, graphics2D, layerViewport, screenViewport);
+                drawStat(sc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
             }
         }
     }
@@ -366,10 +368,10 @@ public class Card extends GameObject {
 
         //ASSUMING all stats are 2 digits or less
         if (stat < 10)   //if the value is a single digit, just draw it
-            drawBitmap(mCardDigits[stat], offset, scale, graphics2D, layerViewport, screenViewport);
+            drawBitmap(cardDigits[stat], offset, scale, graphics2D, layerViewport, screenViewport);
         else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
-            drawBitmap(mCardDigits[stat / 10], offset.addReturn(-0.1f, 0), scale, graphics2D, layerViewport, screenViewport);
-            drawBitmap(mCardDigits[stat % 10], offset.addReturn(0.2f, 0), scale, graphics2D, layerViewport, screenViewport);
+            drawBitmap(cardDigits[stat / 10], offset.addReturn(-0.1f, 0), scale, graphics2D, layerViewport, screenViewport);
+            drawBitmap(cardDigits[stat % 10], offset.addReturn(0.2f, 0), scale, graphics2D, layerViewport, screenViewport);
             offset.add(-0.1f, 0);
         }
     }
@@ -422,23 +424,23 @@ public class Card extends GameObject {
 
     public Card getCard(int i) { return this; }
 
-    public Card getmAttackerSelected() { return mAttackerSelected; }
-    public void setmAttackerSelected(Card attackerSelected) { this.mAttackerSelected = attackerSelected; }
+    public Card getAttackerSelected() { return attackerSelected; }
+    public void setAttackerSelected(Card attackerSelected) { this.attackerSelected = attackerSelected; }
 
-    public Card getmCardTouched() { return mCardTouched; }
-    public void setmCardTouched(Card mCardTouched) { this.mCardTouched = mCardTouched; }
+    public Card getCardTouched() { return cardTouched; }
+    public void setCardTouched(Card cardTouched) { this.cardTouched = cardTouched; }
 
     public boolean gettoBeDiscarded() {return toBeDiscarded; }
     public void setToBeDiscarded(boolean newDiscardVal) { this.toBeDiscarded = newDiscardVal; }
 
-    public boolean getmIsSelected() { return mIsSelected; }
-    public void setmIsSelected(boolean newIsSelected) { this.mIsSelected = newIsSelected; }
+    public boolean getSelected() { return isSelected; }
+    public void setSelected(boolean newIsSelected) { this.isSelected = newIsSelected; }
 
-    public String getmCardName() { return mCardName; }
-    public void setmCardName(String mCardName) { this.mCardName = mCardName; }
+    public String getCardName() { return cardName; }
+    public void setCardName(String cardName) { this.cardName = cardName; }
 
-    public Bitmap getmCardPortrait() { return mCardPortrait; }
-    public void setmCardPortrait(Bitmap cardPortrait) { this.mCardPortrait = cardPortrait; }
+    public Bitmap getCardPortrait() { return cardPortrait; }
+    public void setCardPortrait(Bitmap cardPortrait) { this.cardPortrait = cardPortrait; }
 
     public String getCurrentRegion() { return currentRegion; }
     public void setCurrentRegion(String currentRegion) { this.currentRegion = currentRegion; }

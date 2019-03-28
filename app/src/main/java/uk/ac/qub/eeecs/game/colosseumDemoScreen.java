@@ -287,12 +287,12 @@ public class colosseumDemoScreen extends GameScreen {
 
         if (mPlayer.getYourTurn()) { //Player's cards can be dragged when it is their turn, otherwise they cannot - Dearbhaile
             for (Card cards : mPlayerDeck.getmCardHand())
-                cards.cardEvents(mPlayerDeck.getmCardHand(), mDefaultScreenViewport, mDefaultLayerViewport, mGame, false);
+                cards.cardEvents(mPlayerDeck.getmCardHand(), mOpponent, mDefaultScreenViewport, mDefaultLayerViewport, mGame, false);
         }
 
-        //Temporary: Enemy cards made draggable for testing purposes. TODO: Remove this.
+        //Temporary: Enemy cards made draggable for testing purposes.
         for (Card cards : opponentActiveRegion.getCardsInRegion())
-            cards.cardEvents(opponentActiveRegion.getCardsInRegion(), mDefaultScreenViewport, mDefaultLayerViewport, mGame, true);
+            cards.cardEvents(opponentActiveRegion.getCardsInRegion(), mOpponent, mDefaultScreenViewport, mDefaultLayerViewport, mGame, true);
 
         mPlayer.update(elapsedTime); //Update player stats - Kyle
         mOpponent.update(elapsedTime); //Update opponent stats
@@ -363,7 +363,7 @@ public class colosseumDemoScreen extends GameScreen {
 
                 if (mDiscardButton.isPushTriggered()) { //Calls discard function if there is a card selected and discard button pressed - Dearbhaile
                     for (int i = 0; i < mPlayerDeck.getmCardHand().size(); i++) {
-                        if (mPlayerDeck.getmCardHand().get(i).getmIsSelected()) {
+                        if (mPlayerDeck.getmCardHand().get(i).getSelected()) {
                             Card mCardToDiscard = mPlayerDeck.getmCardHand().get(i);
                             mCardToDiscard.discardCard(mCardToDiscard);
                         }

@@ -66,35 +66,35 @@ public class CardClassTest {
     public void setmAttackerSelectedTest() {
         Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
         Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
-        newCard.setmAttackerSelected(otherCard);
+        newCard.setAttackerSelected(otherCard);
 
-        assertEquals(newCard.getmAttackerSelected(), otherCard);
+        assertEquals(newCard.getAttackerSelected(), otherCard);
     }
 
     @Test
     public void setmCardTouchedTest() {
         Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
         Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
-        newCard.setmCardTouched(otherCard);
+        newCard.setCardTouched(otherCard);
 
-        assertEquals(newCard.getmCardTouched(), otherCard);
+        assertEquals(newCard.getCardTouched(), otherCard);
     }
 
     @Test
     public void setmCardNameTest() {
         Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        newCard.setmCardName("yes");
+        newCard.setCardName("yes");
 
-        assertEquals(newCard.getmCardName(), "yes");
+        assertEquals(newCard.getCardName(), "yes");
     }
 
     @Test
     public void setmCardPortraitTest() {
         Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
         Bitmap b = null;
-        newCard.setmCardPortrait(b);
+        newCard.setCardPortrait(b);
 
-        assertEquals(newCard.getmCardPortrait(), b);
+        assertEquals(newCard.getCardPortrait(), b);
     }
 
     @Test
