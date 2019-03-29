@@ -5,9 +5,35 @@
       "y": 0.7,
       "width": 0.2,
       "height": 0.3,
+      "defaultBitmap": "HeroMeridia",
+      "pushBitmap": "HeroMeridiaPushed",
+      "triggeredHeroName": "Meridia"
+	},
+	{
+	  "x": 0.5,
+      "y": 0.7,
+      "width": 0.2,
+      "height": 0.3,
+      "defaultBitmap": "HeroMars",
+      "pushBitmap": "HeroMarsPushed",
+      "triggeredHeroName": "Mars"
+	},
+	{
+	  "x": 0.8,
+      "y": 0.7,
+      "width": 0.2,
+      "height": 0.3,
       "defaultBitmap": "HeroHircine",
-      "pushBitmap": "HeroHircine",
+      "pushBitmap": "HeroHircinePushed",
       "triggeredHeroName": "Hircine"
 	}
-  ]
+  ],
+  	"assets":[
+	{
+	  "type": "Bitmap",
+      "name": "HeroSelectBG",
+      "file": "img/HeroSelectBG.jpg"
+	}
+	]
+  
 }

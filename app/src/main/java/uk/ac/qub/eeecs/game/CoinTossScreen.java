@@ -56,6 +56,9 @@ public class CoinTossScreen extends GameScreen {
     // Define the Opponent
     private AIOpponent mOpponent;
 
+    // Used to store the selected heroes from the hero select screen
+    private String mPlayerHero, mOpponentHero;
+
     //Define the two Decks
     private CardDeck mPlayerDeck, mEnemyDeck;
 
@@ -90,8 +93,10 @@ public class CoinTossScreen extends GameScreen {
 
     // Constructor
     //Create the 'CoinTossScreen' screen
-    public CoinTossScreen(Game game) {
+    public CoinTossScreen(Game game, String playerHero, String opponentHero) {
         super("CoinTossScreen", game);
+        mPlayerHero = playerHero;
+        mOpponentHero = opponentHero;
         mTimeOnCreate = System.currentTimeMillis();
         setupViewports();
         setUpCTSObjects();
@@ -116,8 +121,8 @@ public class CoinTossScreen extends GameScreen {
         }
 
         //Setting up demo player:
-        mPlayer = new Player(this, "Meridia");
-        mOpponent = new AIOpponent(this, "EmperorCommodus");
+        mPlayer = new Player(this, mPlayerHero);
+        mOpponent = new AIOpponent(this, mOpponentHero);
 
         //Set up initial PLAYER and ENEMY stats:
         mPlayer.setCurrentMana(1);

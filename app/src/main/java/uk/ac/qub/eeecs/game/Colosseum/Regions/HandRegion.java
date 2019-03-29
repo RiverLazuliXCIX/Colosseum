@@ -3,8 +3,9 @@ package uk.ac.qub.eeecs.game.Colosseum.Regions;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 
 /**
+ * Created by Kyle Corrigan
+ *
  * Class used to define the hand region of the game board, within which, cards are drawn to
- * TODO Method to return card to hand if chosen position is invalid
  */
 
 public class HandRegion extends GameRegion {
