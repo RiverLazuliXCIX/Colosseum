@@ -55,19 +55,19 @@
 	},
 	{
 	  "type": "Bitmap",
-      "name": "BackArrow",
-      "file": "img/hero/HeroSelectUI/BackArrow.png"
+      "name": "ReturnArrow",
+      "file": "img/hero/HeroSelectUI/ReturnArrow.png"
 	},
 	{
 	  "type": "Bitmap",
-      "name": "BackArrowPushed",
-      "file": "img/hero/HeroSelectUI/BackArrowPushed.png"
+      "name": "ReturnArrowPushed",
+      "file": "img/hero/HeroSelectUI/ReturnArrowPushed.png"
 	},
 	{
 	  "type": "Bitmap",
       "name": "SelectionFrame",
-      "file": "img/hero/HeroSelectUI/selectionFrame.png"
-	}	
+      "file": "img/hero/HeroSelectUI/SelectionFrame.png"
+	}
 	]
   
 }

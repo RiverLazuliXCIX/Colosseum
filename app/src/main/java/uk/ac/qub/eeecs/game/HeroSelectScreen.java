@@ -212,7 +212,7 @@ public class HeroSelectScreen extends GameScreen {
         //              is selecting their own hero, return to the main menu
         PushButton backButton = new PushButton(mDefaultLayerViewport.getLeft()+uiButtonWidth,
                 mDefaultLayerViewport.getBottom()+uiButtonHeight,uiButtonWidth,uiButtonHeight,
-                "BackArrow","BackArrowPushed",this);
+                "ReturnArrow","ReturnArrowPushed",this);
 
         // Adding the created buttons to the uiButton arraylist
         uiButtons.add(confirmationButton);
