@@ -7,7 +7,10 @@
       "height": 0.3,
       "defaultBitmap": "HeroMeridia",
       "pushBitmap": "HeroMeridiaPushed",
-      "triggeredHeroName": "Meridia"
+      "triggeredHeroName": "Meridia",
+      "manaCost": "2",
+      "abilityName": "Holy Healing",
+      "abilityDescription": "Restores 2 health to your hero"
 	},
 	{
 	  "x": 0.5,
@@ -16,7 +19,10 @@
       "height": 0.3,
       "defaultBitmap": "HeroMars",
       "pushBitmap": "HeroMarsPushed",
-      "triggeredHeroName": "Mars"
+      "triggeredHeroName": "Mars",
+	  "manaCost": "2",
+      "abilityName": "Fortify",
+      "abilityDescription": "Grants your hero +2 Armor."
 	},
 	{
 	  "x": 0.8,
@@ -25,15 +31,43 @@
       "height": 0.3,
       "defaultBitmap": "HeroHircine",
       "pushBitmap": "HeroHircinePushed",
-      "triggeredHeroName": "Hircine"
+      "triggeredHeroName": "Hircine",
+	  "manaCost": "2",
+      "abilityName": "Hunt",
+      "abilityDescription": "Deals 2 damage to the opposing enemy hero"
 	}
-  ],
+	],
   	"assets":[
 	{
 	  "type": "Bitmap",
       "name": "HeroSelectBG",
-      "file": "img/HeroSelectBG.jpg"
-	}
+      "file": "img/hero/HeroSelectUI/HeroSelectBG.jpg"
+	},
+	{
+	  "type": "Bitmap",
+      "name": "ConfirmArrow",
+      "file": "img/hero/HeroSelectUI/ConfirmArrow.png"
+	},
+	{
+	  "type": "Bitmap",
+      "name": "ConfirmArrowPushed",
+      "file": "img/hero/HeroSelectUI/ConfirmArrowPushed.png"
+	},
+	{
+	  "type": "Bitmap",
+      "name": "BackArrow",
+      "file": "img/hero/HeroSelectUI/BackArrow.png"
+	},
+	{
+	  "type": "Bitmap",
+      "name": "BackArrowPushed",
+      "file": "img/hero/HeroSelectUI/BackArrowPushed.png"
+	},
+	{
+	  "type": "Bitmap",
+      "name": "SelectionFrame",
+      "file": "img/hero/HeroSelectUI/selectionFrame.png"
+	}	
 	]
   
 }

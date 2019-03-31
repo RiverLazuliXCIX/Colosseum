@@ -56,7 +56,7 @@ public class CoinTossScreen extends GameScreen {
     // Define the Opponent
     private AIOpponent mOpponent;
 
-    // Used to store the selected heroes from the hero select screen
+    // Used to store the selected heroes from the hero select screen, used in initialising the player/opponent
     private String mPlayerHero, mOpponentHero;
 
     //Define the two Decks
