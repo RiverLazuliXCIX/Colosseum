@@ -128,6 +128,7 @@ public class colosseumDemoScreen extends GameScreen {
         //Shuffle two decks:
         playerDeck.shuffleCards();
         enemyDeck.shuffleCards();
+        mOpponent = new AIOpponent(this, "EmperorCommodus", playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
     }
 
     ///////////////
@@ -156,7 +157,7 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Setting up demo player:
         mPlayer = new Player(this, "Meridia");
-        mOpponent = new AIOpponent(this, "EmperorCommodus");
+        mOpponent = new AIOpponent(this, "EmperorCommodus", playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
 
         //Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -254,6 +255,16 @@ public class colosseumDemoScreen extends GameScreen {
 
     boolean goOnce = true;
 
+    private void endOfGame(String gameResult) {
+        try {
+            Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
+        } catch (InterruptedException e) { }
+
+        EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
+        EndGameScreen.setMostRecentResult(gameResult); //Record the result
+        mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //Change the screen to the new EndGameScreen
+    }
+
     @Override
     public void update(ElapsedTime elapsedTime) {
         if (startTimeRecorded == false) {
@@ -271,8 +282,9 @@ public class colosseumDemoScreen extends GameScreen {
 
         if (mOpponent.getYourTurn()) {
             if (goOnce) {
-                opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
-                opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
+                //opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
+                //opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
+                mOpponent.playRandom();
                 goOnce = false;
             }
             checkIfEnemysTurn(); //If opponent's turn, check when it ends - Dearbhaile
@@ -299,28 +311,15 @@ public class colosseumDemoScreen extends GameScreen {
 
         //'EndGameScreen' code - Scott
         if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
-            try {
-                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
-            } catch (InterruptedException e) { }
-
-            EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
-            EndGameScreen.setMostRecentResult("win"); //Record the result
-            mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
+            endOfGame("win");
 
         } else if (mPlayer.getCurrentHealth() <= 0 || mOpponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
-            try {
-                Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
-            } catch (InterruptedException e) { }
-
             if (mPlayer.getCurrentHealth() <= 0 && mOpponent.getCurrentHealth() <= 0) //if both sides health is 0 or less, the game ends in a draw
-                EndGameScreen.setMostRecentResult("draw"); //Record the result
+                endOfGame("draw");
             else if (mPlayer.getCurrentHealth() <= 0) //if the player reaches 0 or less health, they lose
-                EndGameScreen.setMostRecentResult("loss"); //Record the result
+                endOfGame("loss");//Record the result
             else if (mOpponent.getCurrentHealth() <= 0) //if the opponent reaches 0 or less health, the player wins
-                EndGameScreen.setMostRecentResult("win"); //Record the result
-
-            EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
-            mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //swap to the end game screen regardless of whatever outcome occurs
+                endOfGame("win");
 
         } else {
             List<TouchEvent> touchEvents = mInput.getTouchEvents();
