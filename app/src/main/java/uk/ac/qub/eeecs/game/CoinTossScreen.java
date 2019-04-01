@@ -125,7 +125,7 @@ public class CoinTossScreen extends GameScreen {
 
         //Setting up demo player:
         mPlayer = new Player(this, mPlayerHero);
-        mOpponent = new AIOpponent(this, "EmperorCommodus", mPlayerHandRegion, mOpponentHandRegion, mPlayerActiveRegion, mOpponentActiveRegion);
+        mOpponent = new AIOpponent(this, mOpponentHero);
 
         //Set up initial PLAYER and ENEMY stats:
         mPlayer.setCurrentMana(1);

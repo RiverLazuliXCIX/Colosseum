@@ -128,7 +128,6 @@ public class colosseumDemoScreen extends GameScreen {
         //Shuffle two decks:
         playerDeck.shuffleCards();
         enemyDeck.shuffleCards();
-        mOpponent = new AIOpponent(this, "EmperorCommodus", playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
     }
 
     ///////////////
@@ -157,7 +156,7 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Setting up demo player:
         mPlayer = new Player(this, "Meridia");
-        mOpponent = new AIOpponent(this, "EmperorCommodus", playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
+        mOpponent = new AIOpponent(this, "EmperorCommodus");
 
         //Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -284,7 +283,7 @@ public class colosseumDemoScreen extends GameScreen {
             if (goOnce) {
                 //opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
                 //opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
-                mOpponent.playRandom();
+                mOpponent.playRandom(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
                 goOnce = false;
             }
             checkIfEnemysTurn(); //If opponent's turn, check when it ends - Dearbhaile

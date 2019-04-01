@@ -30,7 +30,7 @@ public class AIOpponent extends Player {
     private int[] playerCardValues = {0, 0}, aiBoardCardValues = {0, 0}; //List of the values of played card values with notation of {attack,health}. -Scott
     private int[] cardInHandCategory = {0,0,0}; //different card types, in order of "minion", "spell", "weapon" for cards in hand/board. -Scott
 
-    public AIOpponent(GameScreen gameScreen, String hero, HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion){
+    public AIOpponent(GameScreen gameScreen, String hero){
         super(gameScreen, hero); //-Kyle
 
         setPortraitYPos(opponentPortraitYPos); //-Kyle
@@ -38,13 +38,18 @@ public class AIOpponent extends Player {
         createHeroAbilityButton(hero); //-Kyle
 
         //Rest of code after this by Scott
+        /*this.playerHandRegion = playerHandRegion;
+        this.opponentHandRegion = opponentHandRegion;
+        this.playerActiveRegion = playerActiveRegion;
+        this.opponentActiveRegion = opponentActiveRegion;*/
+    }
+
+    public void playRandom(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion) { //Temporary code to play a random minion to test attacking functionality - Scott
         this.playerHandRegion = playerHandRegion;
         this.opponentHandRegion = opponentHandRegion;
         this.playerActiveRegion = playerActiveRegion;
         this.opponentActiveRegion = opponentActiveRegion;
-    }
 
-    public void playRandom() { //Temporary code to play a random minion to test attacking functionality - Scott
         opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
         opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
     }
@@ -75,11 +80,15 @@ public class AIOpponent extends Player {
         }
     }
 
-    private void aiTurnSetup() { //Setup an up to date version of all the information the AI will use to make decisions upon what moves it takes - Scott
+    private void aiTurnSetup(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion) { //Setup an up to date version of all the information the AI will use to make decisions upon what moves it takes - Scott
 
         //reset these to default values to prevent carry over values
         resetValues(playerCardValues); resetValues(aiBoardCardValues); resetValues(cardInHandCategory);
 
+        this.playerHandRegion = playerHandRegion; //Get a capture of all the current regions
+        this.opponentHandRegion = opponentHandRegion;
+        this.playerActiveRegion = playerActiveRegion;
+        this.opponentActiveRegion = opponentActiveRegion;
 
         cardsInAIHandRegion = opponentHandRegion.getCardsInRegion(); //get a copy of all the cards the AI has in hand
         cardsInAIBoardRegion = opponentActiveRegion.getCardsInRegion(); //get a copy of all the cards the AI has in play
@@ -91,9 +100,9 @@ public class AIOpponent extends Player {
         handspaceRemaining = opponentHandRegion.getMaxNumCardsInRegion()-cardsInAIHandRegion.size(); //calculate how many cards you can draw before they burn
         manaRemaining = getCurrentMana(); //get the current amount of mana the ai has
 
-        cardLists(cardsInAIBoardRegion,aiBoardCardValues, false);
-        cardLists(cardsInPlayerBoardRegion,playerCardValues, false);
-        cardLists(cardsInAIHandRegion,cardInHandCategory, true);
+        cardLists(cardsInAIBoardRegion, aiBoardCardValues, false); //Create a list of cards values for ai board
+        cardLists(cardsInPlayerBoardRegion, playerCardValues, false); //Create a list of cards values for player board
+        cardLists(cardsInAIHandRegion, cardInHandCategory, true); //Create a list of cards values for ai hand
 
 
     }
@@ -107,8 +116,8 @@ public class AIOpponent extends Player {
         }
     }
 
-    public void aiTurn() { // Scott
-        aiTurnSetup();
+    public void aiTurn(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion) { // Scott
+        aiTurnSetup(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
         //cards that can be played (weapons if no weapon slot filled, spells always unless mana)
         //cards that can attack
         //any taunt minions in the way

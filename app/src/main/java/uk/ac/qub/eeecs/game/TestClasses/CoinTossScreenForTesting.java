@@ -96,7 +96,7 @@ public class CoinTossScreenForTesting extends GameScreen {
     public void setUpGameObjects() {
         //Setting up demo player:
         mPlayer = new Player(this, "Meridia");
-        mOpponent = new AIOpponent(this, "EmperorCommodus", mPlayerHandRegion, mOpponentHandRegion, mPlayerActiveRegion, mOpponentActiveRegion);
+        mOpponent = new AIOpponent(this, "EmperorCommodus");
 
         mPlayer.setCurrentMana(1);
         mPlayer.setCurrentManaCap(1);
