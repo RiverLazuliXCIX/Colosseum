@@ -62,11 +62,6 @@
 	  "type": "Bitmap",
       "name": "ReturnArrowPushed",
       "file": "img/hero/HeroSelectUI/ReturnArrowPushed.png"
-	},
-	{
-	  "type": "Bitmap",
-      "name": "SelectionFrame",
-      "file": "img/hero/HeroSelectUI/SelectionFrame.png"
 	}
 	]
   
