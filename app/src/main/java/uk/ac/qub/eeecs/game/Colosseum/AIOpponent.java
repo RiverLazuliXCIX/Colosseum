@@ -29,6 +29,7 @@ public class AIOpponent extends Player {
     private int playerHealth, aiHealth, boardspaceRemaining, handspaceRemaining, manaRemaining; //Values of current player and ai attributes. -Scott
     private int[] playerCardValues = {0, 0}, aiBoardCardValues = {0, 0}; //List of the values of played card values with notation of {attack,health}. -Scott
     private int[] cardInHandCategory = {0,0,0}; //different card types, in order of "minion", "spell", "weapon" for cards in hand/board. -Scott
+    private int[][] playerTauntMinionsList, aiTauntMinionsList; //Used to keep a track of taunt minions, in order of "player/ai", "board position", "attack value", "health value" - Scott
 
     public AIOpponent(GameScreen gameScreen, String hero){
         super(gameScreen, hero); //-Kyle
@@ -54,13 +55,42 @@ public class AIOpponent extends Player {
         opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
     }
 
-    private void cardLists(ArrayList<Card> cardsInRegion, int[] cardValues, boolean handRegion) { //Create lists of cards values, depending on regions chosen  - Scott
-        for(int i=0; i<cardsInRegion.size(); i++){ //If it is from the board region, handCategory is false, else if hand region, its true.
+    private void addtauntMinions(int[][] tauntMinionsList, int cardPosition, int minionAttack, int minionHealth) { //Method to add a list of all taunt minions - Scott
+        boolean empty = false;
+        for(int i=0;i<tauntMinionsList.length;i++) { //First find an empty position in the 2d array
+            for(int j=0; j<3; j++) {
+                if ((tauntMinionsList[i][j] == 0 && j==2)) {
+                    empty=true;
+                }
+            }
+            if(empty) { //When an empty position is found, fill out the new details
+                tauntMinionsList[i][0] = cardPosition;
+                tauntMinionsList[i][1] = minionAttack;
+                tauntMinionsList[i][2] = minionHealth;
+                }
+            }
+        }
+
+
+    private void cardLists(ArrayList<Card> cardsInRegion, int[] cardValues, boolean handRegion, boolean gatherTauntData, boolean isPlayer) { //Create lists of cards values, depending on regions chosen  - Scott
+        //If it is from the board region, handCategory is false, else if hand region, its true.
+        for(int i=0; i<cardsInRegion.size(); i++){ //Go through each card in the region
             if(cardsInRegion.get(i) instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
+                MinionCard minion = (MinionCard) cardsInRegion.get(i); //Get the card as a minion
+                int minionAttack = minion.getAttack();
+                int minionHealth = minion.getHealth();
+                if(gatherTauntData) { //if we need to gather taunt data
+                    if(minion.getEffect() == Effect.TAUNT) { //Check if the minion is a taunt minion
+                        if(isPlayer) { //if this is player board list then add to playerTauntMinionList
+                            addtauntMinions(playerTauntMinionsList, minionAttack,minionHealth,i);
+                        } else { //else its ai board list, so add to aiTauntMinionList
+                            addtauntMinions(aiTauntMinionsList, minionAttack,minionHealth,i);
+                        }
+                    }
+                }
                 if(!handRegion) { //If we are looking at the board region..
-                    MinionCard minion = (MinionCard) cardsInRegion.get(i); //Get the card as a minion
-                    cardValues[0] += minion.getAttack(); //calculate the total attack values for all minions that player controls
-                    cardValues[1] += minion.getHealth(); //calculate the total health values for all minions that player controls
+                    cardValues[0] += minionAttack; //calculate the total attack values for all minions that player controls
+                    cardValues[1] += minionHealth; //calculate the total health values for all minions that player controls
                 } else { //Else we are looking at hand region
                     cardValues[0]++; //Increase the amount of minion card count
                 }
@@ -85,7 +115,7 @@ public class AIOpponent extends Player {
         //reset these to default values to prevent carry over values
         resetValues(playerCardValues); resetValues(aiBoardCardValues); resetValues(cardInHandCategory);
 
-        this.playerHandRegion = playerHandRegion; //Get a capture of all the current regions
+        this.playerHandRegion = playerHandRegion; //Get a capture of data from all the current regions
         this.opponentHandRegion = opponentHandRegion;
         this.playerActiveRegion = playerActiveRegion;
         this.opponentActiveRegion = opponentActiveRegion;
@@ -94,16 +124,19 @@ public class AIOpponent extends Player {
         cardsInAIBoardRegion = opponentActiveRegion.getCardsInRegion(); //get a copy of all the cards the AI has in play
         cardsInPlayerBoardRegion = playerActiveRegion.getCardsInRegion(); //get a copy of all the cards the player has in play
 
+        //Create a 2d array, that at maximum can have the amount of all cards in play (always <=20) and then 3 parameters in order of "board position", "attack value", "health value".
+        playerTauntMinionsList = new int[cardsInPlayerBoardRegion.size()][3];
+        aiTauntMinionsList = new int[cardsInAIBoardRegion.size()][3];
+
         playerHealth = Player.getCurrentHealth(); //get the players health
         aiHealth = getCurrentHealth(); //get the ai health
         boardspaceRemaining = opponentActiveRegion.getMaxNumCardsInRegion()-cardsInAIBoardRegion.size(); //calculate how many cards the ai can play
         handspaceRemaining = opponentHandRegion.getMaxNumCardsInRegion()-cardsInAIHandRegion.size(); //calculate how many cards you can draw before they burn
         manaRemaining = getCurrentMana(); //get the current amount of mana the ai has
 
-        cardLists(cardsInAIBoardRegion, aiBoardCardValues, false); //Create a list of cards values for ai board
-        cardLists(cardsInPlayerBoardRegion, playerCardValues, false); //Create a list of cards values for player board
-        cardLists(cardsInAIHandRegion, cardInHandCategory, true); //Create a list of cards values for ai hand
-
+        cardLists(cardsInAIBoardRegion, aiBoardCardValues, false, true, false); //Create a list of cards values for ai board
+        cardLists(cardsInPlayerBoardRegion, playerCardValues, false, true, true); //Create a list of cards values for player board
+        cardLists(cardsInAIHandRegion, cardInHandCategory, true, false, false); //Create a list of cards values for ai hand
 
     }
 
