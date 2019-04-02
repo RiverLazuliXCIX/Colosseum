@@ -351,7 +351,6 @@ public class CardDeck {
             }
         }
     }
-//END OF CODE HIGHLIGHT 2
 
     //Method that returns true if deck is empty - to be used when applying fatigue
     public boolean checkIsEmpty() {

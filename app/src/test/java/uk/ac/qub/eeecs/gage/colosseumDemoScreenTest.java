@@ -100,7 +100,6 @@ public class colosseumDemoScreenTest {
         assertEquals(testScreen.getmEnemyDeck(), enemyDeck);
         assertEquals(testScreen.getPlayerHandRegion(), hRegion);
         assertEquals(testScreen.getOpponentHandRegion(), hRegion);
-
     }
 
     @Test
@@ -129,7 +128,7 @@ public class colosseumDemoScreenTest {
     //Tests on the endPlayerTurn() method:
 
     @Test
-    public void endPlayerTurn_Success() {
+    public void endPlayerTurn_ENEMYSTARTS() {
         Player testPlayer = new Player(mDemoScreen, "Sagira");
         AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Sagira");
         Turn testTurn = new Turn();
@@ -159,4 +158,34 @@ public class colosseumDemoScreenTest {
         assertEquals(testTurn.getmTurnNum(), 2);
     }
 
+    @Test
+    public void endPlayerTurn_PLAYERSTARTS() {
+        Player testPlayer = new Player(mDemoScreen, "Sagira");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Sagira");
+        Turn testTurn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.PLAYERSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        HandRegion hRegion = new HandRegion(0, 0, 0, 0);
+        CardDeck playerDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+        CardDeck enemyDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, testTurn, enemyStarts,
+                enemyStartTime, playerDeck, enemyDeck, hRegion, hRegion, mGame);
+
+        //Turn is set to being player's turn
+        testPlayer.setYourTurn(true);
+        testOpponent.setYourTurn(false);
+
+        testScreen.endPlayerTurn();
+
+        //endPlayerTurn method should switch to being enemy's turn
+        assertFalse(testPlayer.getYourTurn());
+        assertTrue(testOpponent.getYourTurn());
+        //...should update the enemy's "turn begins" time
+        Assert.assertNotEquals(testScreen.getmEnemyTurnBegins(), enemyStartTime);
+        //...should give the enemy an extra card, as it's the beginning of their turn:
+        assertEquals(enemyDeck.getmCardHand().size(), 1);
+        //and SINCE THE PLAYER STARTED, the turn num should still be 1:
+        assertEquals(testTurn.getmTurnNum(), 1);
+    }
 }

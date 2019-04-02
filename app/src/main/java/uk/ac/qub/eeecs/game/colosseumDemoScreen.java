@@ -464,4 +464,14 @@ public class colosseumDemoScreen extends GameScreen {
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
     public static boolean wasPaused() { return wasPaused; } //Used to resume the game from the main menu without having to see a coinflip again
+    public Player getmPlayer() { return this.mPlayer; }
+    public AIOpponent getmOpponent() { return this.mOpponent; }
+    public Turn getmCurrentTurn() { return this.mCurrentTurn; }
+    public long getmEnemyTurnBegins() { return this.mEnemyTurnBegins; }
+    public CardDeck getmPlayerDeck() { return this.mPlayerDeck; }
+    public CardDeck getmEnemyDeck() { return this.mEnemyDeck; }
+    public HandRegion getOpponentHandRegion() { return opponentHandRegion; }
+    public HandRegion getPlayerHandRegion() { return playerHandRegion; }
+    public FPSCounter getFpsCounter() { return fpsCounter; }
+
 }
