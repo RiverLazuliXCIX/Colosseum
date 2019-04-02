@@ -168,7 +168,7 @@ public class MenuScreen extends GameScreen {
                 button.update(elapsedTime);
 
             if (mPlayGameButton.isPushTriggered()) {
-                mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame));
+                mGame.getScreenManager().changeScreenButton(new HeroSelectScreen(mGame));
                 stopBackgroundMusic();
             } else if (mOptionsButton.isPushTriggered()) {
                 newScreenButtonPress(new OptionsScreen(mGame));

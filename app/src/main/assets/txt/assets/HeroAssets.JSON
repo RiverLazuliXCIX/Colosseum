@@ -5,30 +5,60 @@
       "name": "HeroBrutalus",
       "file": "img/hero/BrutalusBarbarian.png"
     },
+	{
+      "type": "Bitmap",
+      "name": "HeroBrutalusPushed",
+      "file": "img/hero/BrutalusBarbarianPushed.png"
+    },
     {
       "type": "Bitmap",
       "name": "HeroEmperorCommodus",
       "file": "img/hero/EmperorCommodusRogue.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HeroEmperorCommodusPushed",
+      "file": "img/hero/EmperorCommodusRoguePushed.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroHircine",
       "file": "img/hero/HircineHunter.png"
     },
+	{
+      "type": "Bitmap",
+      "name": "HeroHircinePushed",
+      "file": "img/hero/HircineHunterPushed.png"
+    },
     {
       "type": "Bitmap",
       "name": "HeroMars",
       "file": "img/hero/MarsWarrior.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HeroMarsPushed",
+      "file": "img/hero/MarsWarriorPushed.png"
     },
     {
       "type": "Bitmap",
       "name": "HeroMeridia",
       "file": "img/hero/MeridiaPriest.png"
     },
+	{
+      "type": "Bitmap",
+      "name": "HeroMeridiaPushed",
+      "file": "img/hero/MeridiaPriestPushed.png"
+    },
     {
       "type": "Bitmap",
       "name": "HeroSagira",
       "file": "img/hero/SagiraGuardian.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "HeroSagiraPushed",
+      "file": "img/hero/SagiraGuardianPushed.png"
     },
 	{
       "type": "Bitmap",
@@ -54,6 +84,16 @@
       "type": "Bitmap",
       "name": "HuntPushed",
       "file": "img/hero/Abilities/HuntPushed.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "Fortify",
+      "file": "img/hero/Abilities/Fortify.png"
+    },
+	{
+      "type": "Bitmap",
+      "name": "FortifyPushed",
+      "file": "img/hero/Abilities/FortifyPushed.png"
     },
 	{
       "type": "Bitmap",

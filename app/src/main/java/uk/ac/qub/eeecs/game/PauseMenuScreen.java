@@ -177,7 +177,7 @@ public class PauseMenuScreen extends GameScreen {
                     colosseumDemoScreen.setWasPaused(false); //Set this back to false for a new game
                     mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame));
                 } else if (mResume.isPushTriggered()) {
-                    mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame));
+                    mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame,"Meridia","Hircine"));
                 } else if (button.isPushTriggered()) {
                     addScreen(mScreenChanges.get(button));
                 }

@@ -161,7 +161,7 @@ public class EndGameScreen extends GameScreen {
                 changeScreen(new MenuScreen(mGame));
             }
             if(newGameButton.isPushTriggered()) { //Start a new game
-                changeScreen(new CoinTossScreen(mGame));
+                changeScreen(new HeroSelectScreen(mGame));
             }
         }
     }
@@ -169,6 +169,7 @@ public class EndGameScreen extends GameScreen {
     private void changeScreen(GameScreen gameScreen) { //Refactoring when a button is pressed for reusability
         addStatstics(); //Add the recent statistics to the statistics screen
         mGame.getScreenManager().removeScreen("CardScreen"); //remove the card game screen, so new games can be started
+        mGame.getScreenManager().removeScreen("HeroSelectScreen"); //remove the hero select screen, to allow for new heroes to be selected
         mGame.getScreenManager().changeScreenButton(gameScreen); //Change the screen to the input screen.
     }
 

@@ -1,6 +1,5 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -12,11 +11,14 @@ import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.util.GraphicsHelper;
-import uk.ac.qub.eeecs.gage.util.ViewportHelper;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
+
+/**
+ * Created by Kyle Corrigan
+ */
 
 public class Player extends GameObject {
 
@@ -46,7 +48,7 @@ public class Player extends GameObject {
     private static final int MAX_MANA = 10;
     private static final int HERO_ABILITY_COST = 2; // All hero abilities have a mana cost of 2 by default
 
-    private int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
+    private static int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
     private int currentManaCap = 1;        // Initial mana cap should be set to one, and will increase by one each turn, until it reaches maxMana upon which it stops increasing (outside of potential card effects).
     private int currentMana = 1;           // Initial mana should be set to current mana cap on start
     private int armor = 0;                 // Current armor of player character (Provides additional 'Health' that is deducted prior to the player's health pool when taking damage)
@@ -325,13 +327,10 @@ public class Player extends GameObject {
         switch(hero){
             case "EmperorCommodus":
                 heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"KnifeBelt","KnifeBeltPushed",getGameScreen());
-
                 break;
 
             case "Mars":
-
-                // I'll stick some ability related stuff in these sections
-
+                heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"Fortify","FortifyPushed",getGameScreen());
                 break;
 
             case "Brutalus":
@@ -348,12 +347,10 @@ public class Player extends GameObject {
 
             case "Hircine":
                 heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"Hunt","HuntPushed",getGameScreen());
-
                 break;
 
             case "Meridia":
                 heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"HolyHealing","HolyHealingPushed",getGameScreen());
-
                 break;
 
             default:
@@ -456,15 +453,16 @@ public class Player extends GameObject {
         }
 
         if(hero.equals("Brutalus")){
-            // TODO add temporary attack boost field
+            brutalusAbilityUsed();
         }
 
         if(hero.equals("Sagira")){
             // Updated when playing cards are developed further
+            //sagiraAbilityUsed();
         }
 
         if(hero.equals("Hircine")){
-            // TODO obtain player's opponent to use as target
+            //hircineAbilityUsed();
         }
 
         if(hero.equals("Meridia")){
@@ -579,7 +577,7 @@ public class Player extends GameObject {
      * Getter and setter methods for each of the appropriate private variables
      */
 
-    public int getCurrentHealth(){return currentHealth;}
+    public static int getCurrentHealth(){return currentHealth;}
     public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
 
     public int getCurrentManaCap(){return currentManaCap;}
@@ -618,8 +616,6 @@ public class Player extends GameObject {
     public float getAbilityFrameYPos() {return abilityFrameYPos;}
     public void setAbilityFrameYPos(float abilityFrameYPos) {this.abilityFrameYPos = abilityFrameYPos;}
 
-    // As these elements are "final", setters are not currently required, however, other elements of
-    // the game may use their dimensions for alignment and positioning, (ie. board regions etc.)
     public float getPortraitHeight() {return PORTRAIT_HEIGHT;}
     public float getPortraitWidth() {return PORTRAIT_WIDTH;}
     public float getAbilityFrameHeight(){return  ABILITY_FRAME_HEIGHT;}

@@ -18,6 +18,7 @@ import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.Coin;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
@@ -53,6 +54,9 @@ public class CoinTossScreenForTesting extends GameScreen {
 
     // Defining hand regions, (needs to be passed into colosseum screen now to prevent duplicate hand regions)
     private HandRegion mPlayerHandRegion, mOpponentHandRegion;
+
+    private ActiveRegion mPlayerActiveRegion, mOpponentActiveRegion;
+
 
     //UserWhoStarted variable to hold data about who started in this match:
     private UserWhoStarts mUserWhoStarts;

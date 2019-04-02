@@ -58,7 +58,7 @@ public class FatigueScreenForTesting extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
         if (mCurrentTime - mTimeOnCreate >= FATIGUE_TIMEOUT) {
             mGame.getScreenManager().getCurrentScreen().dispose();
-            mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame));
+            mGame.getScreenManager().changeScreenButton(new CoinTossScreen(mGame,"Meridia","Hircine"));
         }
     }
 

@@ -11,6 +11,8 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 
 /**
+ * Created by Kyle Corrigan
+ *
  * Class used to define regions of the game board, which may be used as playable regions, hand regions
  * deck regions etc.
  */

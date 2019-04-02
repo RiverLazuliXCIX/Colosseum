@@ -3,6 +3,8 @@ package uk.ac.qub.eeecs.game.Colosseum.Regions;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 
 /**
+ * Created by Kyle Corrigan
+ *
  * Class used to define the region of the game board, within which, cards can be played
  */
 
