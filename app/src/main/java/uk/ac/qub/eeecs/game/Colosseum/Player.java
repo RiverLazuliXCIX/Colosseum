@@ -17,7 +17,9 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 
 /**
- * Created by Kyle Corrigan
+ * Created by Kyle Corrigan. Class handles the player object along with its associated
+ *
+ * @author Kyle Corrigan
  */
 
 public class Player extends GameObject {
@@ -39,8 +41,6 @@ public class Player extends GameObject {
     private float abilityFrameYPos = portraitYPos - (PORTRAIT_HEIGHT/2) + (ABILITY_FRAME_HEIGHT/2);
 
     private PushButton heroAbility; // Push button handling the hero abilities
-
-    private Input playerInput; // Input for the player class
 
     private String hero; // Currently selected hero
     // Sets a cap on the maximum health and mana a player can have at once
@@ -81,10 +81,11 @@ public class Player extends GameObject {
         super(gameScreen.getDefaultLayerViewport().halfWidth, gameScreen.getDefaultLayerViewport().getBottom()+(PORTRAIT_HEIGHT/2)+(70.0f/1.5f),
                 PORTRAIT_WIDTH, PORTRAIT_HEIGHT, gameScreen.getGame().getAssetManager().getBitmap("Hero"+hero), gameScreen);
 
-        // Creates the relevant push buttons for the hero abilities
-        createHeroAbilityButton(hero);
-
         this.hero = hero;
+        // Creates the relevant push buttons for the hero abilities
+        createHeroAbilityButton();
+
+
 
     }
 
@@ -130,15 +131,10 @@ public class Player extends GameObject {
     /**
      * Method to deduct mana. If the mana attempting to be deducted exceeds the current player mana
      * the action can not be completed.
-     *  TODO Add functionality to prevent cards being played if the mana cost cant be covered
      *
      * @param manaReduction amount of mana attempting to be reduced.
      */
     public void reduceCurrentMana(int manaReduction){
-
-        // Currently, mana will only be reduced if the mana reduction can be covered by the player's
-        // current mana, but until further card functionality is added (card costs, ability to play cards etc.)
-        // this method is limited.
 
         if(manaReduction <= currentMana ){
             currentMana-=manaReduction;
@@ -234,16 +230,14 @@ public class Player extends GameObject {
                 }
 
             }
-            // Else if durability is zero or less display message or some sort of feedback to the
-            // player. Destroys the currently equipped weapon if, after attacking, weapon durability
-            // reaches 0 (Used in the event a card reduces weapon durability outside of this method)
+            // Else if durability is zero or less destroy the currently equipped weapon if, after attacking,
+            // weapon durability reaches 0 (Used in the event a card reduces weapon durability outside
+            // of this method)
             else if (weaponDurability <= 0) { // in case durability is somehow less than 0
                 setCurrentAttack(0);
                 weaponEquipped = false;
-                // Display message that no weapon is equipped, cannot attack
             }
         }
-        // TODO If player attempts to deal weapon damage with no weapon equipped, display feedback
 
     }
 
@@ -293,8 +287,8 @@ public class Player extends GameObject {
             graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect, null);
 
         }
+
         drawStats(elapsedTime, graphics2D, layerViewport,screenViewport);
-        // Drawing ability frame
         drawAbilityFrame(elapsedTime, graphics2D, layerViewport,screenViewport);
 
 
@@ -318,11 +312,10 @@ public class Player extends GameObject {
         heroAbility.draw(elapsedTime,graphics2D, layerViewport,screenViewport);
     }
 
-    /** Changes the hero ability image based on what hero is being played
-     *
-     * @param hero The hero that the player has selected to play as
+    /**
+     * Changes the hero ability image based on what hero is being played
      */
-    public void createHeroAbilityButton(String hero){
+    public void createHeroAbilityButton(){
 
         switch(hero){
             case "EmperorCommodus":
@@ -331,18 +324,6 @@ public class Player extends GameObject {
 
             case "Mars":
                 heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"Fortify","FortifyPushed",getGameScreen());
-                break;
-
-            case "Brutalus":
-
-                // I'll stick some ability related stuff in these sections
-
-                break;
-
-            case "Sagira":
-
-                // I'll stick some ability related stuff in these sections
-
                 break;
 
             case "Hircine":
@@ -355,8 +336,8 @@ public class Player extends GameObject {
 
             default:
                 // Error handling / default hero hircine etc.
-                // I'll stick some ability related stuff in these sections
-
+                heroAbility = new PushButton(abilityFrameXPos,abilityFrameYPos,ABILITY_FRAME_WIDTH-10,ABILITY_FRAME_HEIGHT-10,"Hunt","HuntPushed",getGameScreen());
+                break;
         }
 
 
@@ -421,6 +402,7 @@ public class Player extends GameObject {
     public void update(ElapsedTime elapsedTime){
 
         // Process any touch events occurring since the update
+        Input playerInput;
         playerInput = getGameScreen().getGame().getInput();
         List<TouchEvent> touchEvents = playerInput.getTouchEvents();
 
@@ -431,7 +413,7 @@ public class Player extends GameObject {
                 heroAbility.update(elapsedTime);
 
                 if (heroAbility.isPushTriggered()) {
-                    updateHeroAbilities();
+                    useHeroAbilities();
                 }
             }
 
@@ -441,141 +423,62 @@ public class Player extends GameObject {
 
     /**
      *Determines what action is executed when user taps on their hero ability
-     */
-    public void updateHeroAbilities(){
-
-        if(hero.equals("EmperorCommodus")){
-            commodusAbilityUsed();
-        }
-
-        if(hero.equals("Mars")){
-            marsAbilityUsed();
-        }
-
-        if(hero.equals("Brutalus")){
-            brutalusAbilityUsed();
-        }
-
-        if(hero.equals("Sagira")){
-            // Updated when playing cards are developed further
-            //sagiraAbilityUsed();
-        }
-
-        if(hero.equals("Hircine")){
-            //hircineAbilityUsed();
-        }
-
-        if(hero.equals("Meridia")){
-            meridiaAbilityUsed();
-        }
-    }
-
-    // /////////////////////////////////////////////////////////////////////////
-    // Hero Ability methods
-    // /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Methods that define the different hero abilities
      *
      * Heroes and associated abilities (Default 2 mana cost)
      * +-------------------------------------------------------------------------------------------
      * Emperor Commodus : Dagger Belt – Equip a 1 damage 2 durability weapon.
      * Mars : Fortify - Grants the hero +2 Armor.
-     * Brutalus : Engage – Gain +1 attack this turn and +1 armour.
-     * Sagira : Eyes Up – Able to give any minion +1 health.
      * Hircine : Hunt - Deals 2 damage to the opposing enemy hero.
      * Meridia : Holy Healing: Restore 2 Health to Player Hero
      * +-------------------------------------------------------------------------------------------
      */
 
-    // Note: Equipping a new weapon replaces the player's currently equipped weapon
-    public void commodusAbilityUsed(){
+    public void useHeroAbilities(){
 
+        // If player has enough mana to cover ability cost, they haven't used an ability this turn,
+        // and it is their turn to play, use the hero's ability
+        // Note: reduce current mana and abilityUsedThisTurn are set within each case, as opposed to
+        // after executing the switch, to ensure that only if the abilities have an effect, will
+        // players need to cover the cost.
         if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
-            reduceCurrentMana(HERO_ABILITY_COST);
-            setCurrentAttack(1);
-            setCurrentWeaponDurability(2);
-            weaponEquipped = true;
-            abilityUsedThisTurn = true;
+
+            switch(hero) {
+                // Note: Equipping a new weapon replaces the player's currently equipped weapon
+                case "EmperorCommodus":
+                    setCurrentAttack(1);
+                    setCurrentWeaponDurability(2);
+                    weaponEquipped = true;
+                    reduceCurrentMana(HERO_ABILITY_COST);
+                    abilityUsedThisTurn = true;
+                    break;
+
+                case "Mars":
+                    increaseArmor(2);
+                    reduceCurrentMana(HERO_ABILITY_COST);
+                    abilityUsedThisTurn = true;
+                    break;
+
+                case "Hircine":
+                    //targetOpponent.receiveDamage(2);
+                    //reduceCurrentMana(HERO_ABILITY_COST);
+                    break;
+
+                case "Meridia":
+                    if(currentHealth<MAX_HEALTH) {
+                        heal(2);
+                        reduceCurrentMana(HERO_ABILITY_COST);
+                        abilityUsedThisTurn = true;
+                    }
+                    break;
+
         }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
-    }
 
-    public void marsAbilityUsed(){
-
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
-            reduceCurrentMana(HERO_ABILITY_COST);
-            increaseArmor(2);
-            abilityUsedThisTurn = true;
         }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
-    }
-
-    public void brutalusAbilityUsed(){
-
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
-            reduceCurrentMana(HERO_ABILITY_COST);
-
-            // When turn end button pressed, return attack to what it was previously
-            increaseAttack(1);
-            increaseArmor(1);
-
-            abilityUsedThisTurn = true;
-        }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
-    }
-
-    public void sagiraAbilityUsed(MinionCard targetMinion){
-
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
-            reduceCurrentMana(HERO_ABILITY_COST);
-
-            // If healing the minion by 1 results in a health value greater than or equal to max health, set current health to max health
-            if(targetMinion.getHealth()+1>=targetMinion.getMaxHealth()){
-                targetMinion.setHealth(targetMinion.getMaxHealth());
-            }else{
-                // else increase minion health by 1
-                targetMinion.setHealth(targetMinion.getHealth()+1);
-            }
-
-            abilityUsedThisTurn = true;
-        }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
-    }
-
-    public void hircineAbilityUsed(AIOpponent targetOpponent){
-
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn && yourTurn) {
-            reduceCurrentMana(HERO_ABILITY_COST);
-
-            targetOpponent.receiveDamage(2);
-
-            abilityUsedThisTurn = true;
-        }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
-    }
-
-    public void meridiaAbilityUsed(){
-
-        if(currentMana >= HERO_ABILITY_COST && !abilityUsedThisTurn &&
-                currentHealth<MAX_HEALTH &&yourTurn) {
-
-            reduceCurrentMana(HERO_ABILITY_COST);
-
-            heal(2);
-
-            abilityUsedThisTurn = true;
-        }
-        // Action can't be performed, provide feedback to player (Message box, some form of prompt)
     }
 
     // /////////////////////////////////////////////////////////////////////////
     // Getter and setter methods
     // /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Getter and setter methods for each of the appropriate private variables
-     */
 
     public static int getCurrentHealth(){return currentHealth;}
     public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
@@ -633,4 +536,13 @@ public class Player extends GameObject {
     public int getEDuration() { return this.eDuration; }
     public void setEDuration(int duration) { this.eDuration = duration; }
 
+    public PushButton getHeroAbility() { return heroAbility; }
+    public void setHeroAbility(PushButton heroAbility) { this.heroAbility = heroAbility; }
+
+    public String getHero() { return hero; }
+    public void setHero(String hero) { this.hero = hero; }
+
+    public static int getMaxHealth() { return MAX_HEALTH; }
+    public static int getMaxMana() { return MAX_MANA; }
+    public static int getHeroAbilityCost() { return HERO_ABILITY_COST; }
 }

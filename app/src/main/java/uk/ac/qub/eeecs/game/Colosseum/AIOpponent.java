@@ -36,7 +36,7 @@ public class AIOpponent extends Player {
 
         setPortraitYPos(opponentPortraitYPos); //-Kyle
         setAbilityFrameYPos(abilityFrameYPos); //-Kyle
-        createHeroAbilityButton(hero); //-Kyle
+        createHeroAbilityButton(); //-Kyle
 
         //Rest of code after this by Scott
         /*this.playerHandRegion = playerHandRegion;
