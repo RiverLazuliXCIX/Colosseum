@@ -36,7 +36,6 @@ public class colosseumDemoScreen extends GameScreen {
     //////////////////
     //  PROPERTIES  //
     //////////////////
-
     private LayerViewport mGameViewport;
     private Input mInput;
 
@@ -254,8 +253,12 @@ public class colosseumDemoScreen extends GameScreen {
 
     boolean goOnce = true;
 
+    //////////////////////////////
+    //       UPDATE METHOD      //
+    //////////////////////////////
     @Override
     public void update(ElapsedTime elapsedTime) {
+
         if (startTimeRecorded == false) {
             startTime = System.currentTimeMillis(); //Start recording the game's start time
             startTimeRecorded = true; //Mark startTimeRecorded as true, so it will not run again.

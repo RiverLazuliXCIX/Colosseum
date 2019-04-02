@@ -9,18 +9,32 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.FatigueScreen;
 import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
-//CardDeck class, coded by Dearbhaile Walsh
-public class CardDeck {
+/**
+ * CardDeck Class, represents the player's (User/AI Opponent's) Deck of Cards in the Game.
+ * @author Dearbhaile Walsh
+ */
 
-    //
-    // The 'CardDeck' Class represents the player's (either the User or the AI Opponent's) Deck of Cards in the Game.
-    //
+public class CardDeck {
+    //ArrayList to hold the deck of cards, player hand, and the card graveyard:
+    private ArrayList<Card> mDeck, mDiscardPile, mCardHand;
 
     //Variables required for Card Deck:
     private int mDeckID;
     private String mDeckName;
     private int mNumOfCards = 0, mSizeOfHand = 0, mSizeOfDiscard = 0;
     private GameScreen mGameScreen;
+
+    //Integer variables to be used to determine deck 'type':
+    private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
+
+    //Final values relating to Card Deck and Hand:
+    private static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 5;
+
+    //Boolean values required to discern the functionality of the deck:
+    private boolean mIsEmptyFlag, mIsAIDeck = false;
+
+    //Random, to be used to 'choose' type of deck:
+    private static final Random RANDOM = new Random();
 
     //Values for positioning cards:
     private static final float X_POSITION = 160f, Y_POSITION = 25f;
@@ -32,21 +46,6 @@ public class CardDeck {
     private int coinCost = 0, attack = 0, health = 0, magnitude = 0, damage = 0, charges = 0;;
     private Effect effect;
     private Boolean enemyDeck = false;
-
-    //Final values relating to Card Deck and Hand:
-    public static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 5;
-
-    //ArrayList to hold the deck of cards, player hand, and the card graveyard:
-    private ArrayList<Card> mDeck, mDiscardPile, mCardHand;
-
-    //Boolean values required to discern the functionality of the deck:
-    private boolean mIsEmptyFlag, mIsAIDeck = false;
-
-    //Random, to be used to 'choose' type of deck:
-    private static final Random RANDOM = new Random();
-
-    //Integer variables to be used to determine deck 'type':
-    private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
 
     // Corresponds to the associated hand region where cards will be drawn to:
     private HandRegion mHandRegion;
@@ -255,7 +254,6 @@ public class CardDeck {
         }
     }
 
-    //CODE HIGHLIGHT 1 - DRAWING AND DESTROYING CARDS
     //Method required to draw a single card from the Deck:
     public Card drawTopCard() {
         //You cannot draw from an empty deck:
@@ -307,16 +305,14 @@ public class CardDeck {
             drawTopCard();
         }
     }
-// END OF CODE HIGHLIGHT 1
 
-// CODE HIGHLIGHT 2: DISCARDING CARDS:
-    public void discardCards(Card mCardToDiscard) {
+    public void discardCards(Card cardToDiscard) {
         trackRemovalOfCards();
         //Remove card from hand:
-        mCardHand.remove(mCardToDiscard);
+        mCardHand.remove(cardToDiscard);
         mSizeOfDiscard++;
         //...and add to discard pile:
-        mDiscardPile.add(mCardToDiscard);
+        mDiscardPile.add(cardToDiscard);
     }
 
     public void discardCards_EndOfTurn() {

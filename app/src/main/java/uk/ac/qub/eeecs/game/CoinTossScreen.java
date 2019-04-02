@@ -30,7 +30,11 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
-//CoinTossScreen, coded by Dearbhaile Walsh & Scott Barham
+/**
+ * CoinTossScreen Class, displays outcome & effects of coin toss
+ * @author Dearbhaile Walsh & Scott Barham
+ */
+
 public class CoinTossScreen extends GameScreen {
 
     //Different objects required for this screen to function
@@ -85,7 +89,7 @@ public class CoinTossScreen extends GameScreen {
     private SharedPreferences mGetPreference = PreferenceManager.getDefaultSharedPreferences(mContext);
 
     //Create instance of Coin object:
-    private Coin mCoin;
+    private Coin coin;
 
     //'Edge case' coin toss variables:
     protected static int edgeCounter = 0; //Used for edge case scenario of coin flip, User Story 18.1, Sprint 4 - Scott
@@ -105,7 +109,7 @@ public class CoinTossScreen extends GameScreen {
         coinFlipResult(mCoinTossResult);
 
         //Set up Coin object for display in animation, has to be initialised after coinFlipStart otherwise it was never changed - Scott
-        mCoin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
+        coin = new Coin( mDefaultLayerViewport.getRight() / 2.f, mDefaultLayerViewport.getTop() / 2.f,100.0f,100.0f, this, getmCoinTossResult());
 
         chooseTextToDisplay();
     }
@@ -277,8 +281,8 @@ public class CoinTossScreen extends GameScreen {
             changeScreens();
         }
 
-        if (!mCoin.isComplete()) { //If the coin animation isnt complete, continue updating the animation until it completes. - Scott
-            mCoin.coinAnimation();
+        if (!coin.isComplete()) { //If the coin animation isnt complete, continue updating the animation until it completes. - Scott
+            coin.coinAnimation();
         }
 
         //Timer checks how long screen has been running, and changes screen after 10 seconds - Dearbhaile
@@ -319,7 +323,7 @@ public class CoinTossScreen extends GameScreen {
         float SCREEN_HEIGHT = mGame.getScreenWidth();
 
         //Draw the coin sprite, used for the coin animation - Scott
-        mCoin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+        coin.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
 
         if (mCurrentTime - mTimeOnCreate >= 4000) { //Display message according to which outcome user received. - Dearbhaile
             graphics2D.drawText(mCoinTossMsg1, SCREEN_WIDTH * 0.24f, SCREEN_HEIGHT * 0.42f, mMessageText);

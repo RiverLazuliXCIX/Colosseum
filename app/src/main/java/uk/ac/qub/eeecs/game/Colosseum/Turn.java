@@ -1,13 +1,11 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-//CODE HIGHLIGHT 3 - 'TURN' CLASS:
-
-//
-// 'Turn' Class is used to hold information about the current turn happening in the game.
-//
+/**
+ *  'Turn' Class is used to hold information about the current turn happening in the game.
+ *  @author Dearbhaile Walsh
+ */
 
 public class Turn {
-    //Coded by Dearbhaile Walsh
 
     //int required to hold turn number:
     private int mTurnNum;
@@ -15,9 +13,12 @@ public class Turn {
     //final int required to put a cap on mana:
     private final int MANA_CAP = 10;
 
+    //final int required to set initial value
+    private final int STARTING_VALUE = 1;
+
     //Constructor for Turn Class:
     public Turn() {
-        mTurnNum = 1; // Initially set to 1
+        mTurnNum = STARTING_VALUE; // Initially set to 1
     }
 
     //Called each time there is a new turn:
@@ -62,7 +63,7 @@ public class Turn {
         this.mTurnNum++; // Method to increase current turn number
     };
 
-    //Getters and setters:
+    //Accessor and Mutator Methods:
     public int getmTurnNum() {return this.mTurnNum;}
+
 }
-//END OF CODE HIGHLIGHT 3
