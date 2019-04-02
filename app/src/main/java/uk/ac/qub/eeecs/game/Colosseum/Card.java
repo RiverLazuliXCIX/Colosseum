@@ -19,6 +19,9 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 
+//Created and coded by Sean McCloskey
+//Contributions from Dearbhaile Walsh
+
 public class Card extends GameObject {
 
     // /////////////////////////////////////////////////////////////////////////
@@ -77,15 +80,6 @@ public class Card extends GameObject {
     private static Vector2 portraitOffset = new Vector2(0f, 0f);
     private static Vector2 portraitScale = new Vector2(1f, 1f);
 
-    /*ALT CARD
-    private Vector2 attackOffset = new Vector2(-0.66f, -0.71f);
-    private Vector2 attackScale = new Vector2(0.12f, 0.12f);
-    private Vector2 defenceOffset = new Vector2(0.65f, -0.71f);
-    private Vector2 defenceScale = new Vector2(0.12f, 0.12f);
-    private Vector2 manaOffset = new Vector2(0.69f, 0.78f);
-    private Vector2 manaScale = new Vector2(0.12f, 0.12f);
-    */
-
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
     // /////////////////////////////////////////////////////////////////////////
@@ -102,26 +96,27 @@ public class Card extends GameObject {
                 .getAssetManager().getBitmap("CardFront"), gameScreen);
 
         this.toBeDiscarded = false;
+        this.coinCost = coinCost;
+        this.isEnemy = isEnemy;
 
+        if(this.isEnemy)
+            flipCard();
+
+        //set the card portrait to the cardName, the name of the bitmap to draw
+        cardPortrait = gameScreen.getGame().getAssetManager().getBitmap(cardName);
+
+        //set up the static card bitmaps for all cards
         front = gameScreen.getGame().getAssetManager().getBitmap("CardFront");
         back = gameScreen.getGame().getAssetManager().getBitmap("CardBack");
         selected = gameScreen.getGame().getAssetManager().getBitmap("CardFrontSelected");
         attacked = gameScreen.getGame().getAssetManager().getBitmap("CardFrontAttacked");
         discarded = gameScreen.getGame().getAssetManager().getBitmap("CardFrontDiscarded");
 
-        this.isEnemy = isEnemy;
-
-        //temp
-        cardPortrait = gameScreen.getGame().getAssetManager().getBitmap(cardName);
-
-        if(this.isEnemy)
-            flipCard();
-
-        setCoinCost(coinCost);
         // Store each of the damage/health digits
         for(int digit = 0; digit <= 9; digit++)
             cardDigits[digit] = gameScreen.getGame().getAssetManager().getBitmap("no" + Integer.toString(digit));
     }
+
 
     // /////////////////////////////////////////////////////////////////////////
     // Methods
@@ -129,11 +124,12 @@ public class Card extends GameObject {
 
     /**
      * Drag and flip a card
-     *  @param cards                 card being touched
+     * @param cards                 card being touched
      * @param defaultScreenViewport default game screen viewport
      * @param gameViewport          game screen viewport
      * @param game                  the game in question
      */
+    //All touch methods inspired by past project "Ragnarok", and heavily modified to allow further functionality
     public void cardEvents(List<Card> cards, AIOpponent opponent, ScreenViewport defaultScreenViewport,
                            LayerViewport gameViewport, Game game, boolean isOpponent) {
         Input input = game.getInput();
@@ -163,7 +159,6 @@ public class Card extends GameObject {
     }
 
     public void opponentTouchMethods(int touchType, List<Card> cards, AIOpponent opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
-        //moveCard(touchType, cards, touchLocation);
         useCard(touchType, cards, opponent, touchLocation);
         enlargeCard(touchType, cards, touchLocation);
         releaseCard(touchType);
@@ -204,6 +199,7 @@ public class Card extends GameObject {
                         && !cardTouched.getIsEnemy()
                         && cardTouched.getBitmap() == front
                         && cardTouched.getSelectable()) {
+                //set the attacker and change the bit map to be selected
                 cardTouched.setSelected(true);
                 setAttackerSelected(cardTouched);
                 getAttackerSelected().setBitmap(selected);
@@ -255,6 +251,8 @@ public class Card extends GameObject {
         for (int j = 0; j < cards.size(); j++) {
             float cardHalfWidth = cards.get(j).getBound().halfWidth, cardHalfHeight = cards.get(j).getBound().halfHeight;
 
+            //if the bound of the card is outside the edges of the viewport
+            //set the position of the card to the half width/height away from the edges
             if (cards.get(j).getBound().getLeft() < 0)
                 cards.get(j).position.x = cardHalfWidth;
             if (cards.get(j).getBound().getBottom() < 0)
@@ -303,10 +301,14 @@ public class Card extends GameObject {
     }
 
     private void checkCardTouched(int touchType, int touchEvent, List<Card> cards, Vector2 touchLocation) {
+        //if the touchTupe is any touch event (drag, tap, etc), and the hasn't been a touched card yet
         if (touchType == touchEvent
                 && cardTouched == null) {
+            //loop to check all the cards in the List
             for (int j = 0; j < cards.size(); j++) {
+                //if the touch location is within the bounds of the card
                 if (cards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
+                    //set the carrdTouched to that card from the List
                     cardTouched = cards.get(j);
                 }
             }
@@ -314,14 +316,17 @@ public class Card extends GameObject {
     }
 
     private void checkOpponentTouched(int touchType, int touchEvent, AIOpponent opponent, Vector2 touchLocation) {
+        //similar to above
         if (touchType == touchEvent
                 && opponentTouched == null) {
+            //checks to see if the opponent hero has ben touched
             if (opponent.getBound().contains(touchLocation.x, touchLocation.y)){
                     opponentTouched = opponent;
             }
         }
     }
 
+    //Based partially on the code sent out via email by Dr Philip Hanna
     @Override
     public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
                      LayerViewport layerViewport, ScreenViewport screenViewport) {
@@ -365,7 +370,6 @@ public class Card extends GameObject {
     }
 
     public void drawStat(int stat, Vector2 offset, Vector2 scale, IGraphics2D graphics2D, LayerViewport layerViewport, ScreenViewport screenViewport) {
-
         //ASSUMING all stats are 2 digits or less
         if (stat < 10)   //if the value is a single digit, just draw it
             drawBitmap(cardDigits[stat], offset, scale, graphics2D, layerViewport, screenViewport);
@@ -376,7 +380,7 @@ public class Card extends GameObject {
         }
     }
 
-
+    //Based partially on the code sent out via email by Dr Philip Hanna
     private BoundingBox bound;
     private void drawBitmap(Bitmap bitmap, Vector2 offset, Vector2 scale, IGraphics2D graphics2D,
                             LayerViewport layerViewport, ScreenViewport screenViewport) {
@@ -406,7 +410,10 @@ public class Card extends GameObject {
     }
 
 
-    //Getters and Setters
+    // /////////////////////////////////////////////////////////////////////////
+    // Methods
+    // /////////////////////////////////////////////////////////////////////////
+
     public boolean getSelectable(){ return selectable; }
     public void setSelectable(boolean selectable){ this.selectable = selectable; }
 
