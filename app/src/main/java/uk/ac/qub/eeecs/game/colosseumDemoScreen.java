@@ -30,7 +30,6 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
-
 public class colosseumDemoScreen extends GameScreen {
 
     //////////////////
