@@ -63,7 +63,7 @@ public class Card extends GameObject {
 
     //Define the attack and defence values
     //private int attack, defence, mana;
-    private int coinCost;
+    private int coinCost; // Coins are the player's resource used to play cards, this holds the number required to play a given card
 
     private Bitmap cardPortrait;
     private String cardName;
@@ -340,31 +340,35 @@ public class Card extends GameObject {
 
         if(!flippedBack) {
 
+            // Matthew: updated the draw method to include draw functionality for Weapon and Spell cards
+            // By using instanceof and casting, the different get methods can be called from each Card subclass
             if (this instanceof MinionCard) {
 
+                // Cast the card to a Minion to access the methods
                 MinionCard mc = (MinionCard) this;
-                //Draw the attack on the card
+                // Draw the attack of the minion on the card
                 drawStat(mc.getAttack(), attackOffset, attackScale, graphics2D, layerViewport, screenViewport);
-                //Draw the defence on the card
+                // Draw the health of the minion on the card
                 drawStat(mc.getHealth(), defenceOffset, defenceScale, graphics2D, layerViewport, screenViewport);
-                //Draw the mana on the card
+                // Draw the coin cost of the minion on the card
                 drawStat(mc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof WeaponCard) {
 
+                // Cast the card to a Weapon to access the methods
                 WeaponCard wc = (WeaponCard) this;
-                //Draw the attack on the card
+                // Draw the damage the weapon deals on the card
                 drawStat(wc.getDamage(), attackOffset, attackScale, graphics2D, layerViewport, screenViewport);
-                //Draw the charges on the card
+                // Draw the number of charges the weapon has on the card
                 drawStat(wc.getCharges(), defenceOffset, defenceScale, graphics2D, layerViewport, screenViewport);
-                //Draw the mana on the card
+                // Draw the coin cost of the card
                 drawStat(wc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
 
             } else if (this instanceof SpellCard) {
 
-                SpellCard sc = (SpellCard) this;
-                //Draw the mana on the card
-                drawStat(sc.getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
+                // Casting here isn't required since getCoinCost() is a member of the Card class
+                // Draw the coin cost of the spell on the card
+                drawStat(getCoinCost(), manaOffset, manaScale, graphics2D, layerViewport, screenViewport);
             }
         }
     }

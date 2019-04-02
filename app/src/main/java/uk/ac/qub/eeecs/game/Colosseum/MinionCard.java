@@ -6,16 +6,22 @@ import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 
 /**
- * Created by Matthew, 05/12/2018
+ * MinionCard class used to represent minions placed on the board to attack against the opponent
+ * @author Matthew, 05/12/2018
  */
 public class MinionCard extends Card {
 
-    private int attack;
-    private int maxHealth;
-    private int health;
-    private Effect mEffect;
+    private int attack; // The damage dealt to enemy minions or opponents
+    private int maxHealth; // The maximum amount of health a minion can have
+    private int health; // The current health a minion has
+    private Effect mEffect; // Any effect a minion has
 
-    // 'Default' Constructor
+    /**
+     * 'Default' Constructor
+     * while not strictly default, it is as close as it can be
+     *
+     * @param gs The gamescreen the card is on
+     */
     public MinionCard(GameScreen gs) {
         super(0, 0, gs, 1, false, "");
         setAttack(1);
@@ -48,7 +54,13 @@ public class MinionCard extends Card {
         setEffect(mEffect);
     }
 
-    // Copy Constructor
+    /**
+     * Copy Constructor
+     *
+     * @param x x coordinate of the card
+     * @param y y coordinate of the card
+     * @param mc card to copy
+     */
     public MinionCard(float x, float y, MinionCard mc) {
         super(x, y, mc.getGameScreen(), mc.getCoinCost(), mc.getIsEnemy(), mc.getCardName());
         setAttack(mc.getAttack());
@@ -62,29 +74,42 @@ public class MinionCard extends Card {
         attackEnemy((MinionCard) thisCard, (MinionCard) other);
     }
 
+    /**
+     * This method will be used to determine if there are any enemy taunts on the board to allow for
+     * attacks to be prevented on minions without the taunt effect
+     *
+     * @return boolean: whether or not there are enemy taunts on the board
+     */
     public boolean hasTaunts() {
+        // Get the game screen to access the correct regions
         colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
         ActiveRegion ar;
 
-        if (!getIsEnemy()) {
-            ar = cds.getOpponentActiveRegion();
-        } else {
-            ar = cds.getPlayerActiveRegion();
-        }
+        // if the current card is a friendly card get the opponent's region
+        if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
+        // if the card is an enemy card get the player's region
+        else ar = cds.getPlayerActiveRegion();
 
         MinionCard mc;
+        // search the region for taunts
         for (Card c : ar.getCardsInRegion()) {
             mc = (MinionCard) c;
-            if (mc.getEffect() == Effect.TAUNT) {
-                return true;
-            }
+            // if a taunt is found, return true
+            if (mc.getEffect() == Effect.TAUNT) return true;
         }
 
+        // otherwise return false
         return false;
     }
 
+    /**
+     * This method will be used to allow for a minion to attack another minion
+     *
+     * @param thisCard Attacking card
+     * @param eMinionCard Defending card
+     */
     public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
-    // add a check for any enemy minions on the board with taunts
+        // add a check for any enemy minions on the board with taunts
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
         //if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
@@ -97,48 +122,71 @@ public class MinionCard extends Card {
     }
 
     /* Another attack method will be required for attacking the enemy hero
-     Check for taunts on the board
-     Enemy hero will take the minions attack as damage
-     MinionCard will take damage for any weapon the enemy has equipped
-     Check both healths
-     public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {}
+       Check for taunts on the board
+       Enemy hero will take the minions attack as damage
+       MinionCard will take damage for any weapon the enemy has equipped
+       Check both healths
+       public void attackEnemy([Enemy/Player/Hero etc.] [enemy/player/hero]) {} */
+
+    /**
+     * This method will allow for minions to be able to attack the enemy hero
+     *
+     * @param hero Hero to be attacked (allows for Player and AIOpponent)
      */
-    public void attackEnemy(Player hero) { // uses Player as the parameter to allow for Player and AIOpponent to be passed in
+    public void attackEnemy(Player hero) {
         // if there are any taunts on the board, do not attack
         if (hasTaunts()) return;
         hero.receiveDamage(this.attack);
     }
 
-    public void takeDamage(int damage) { this.health -= damage; }
+    /**
+     * This will allow the minion to take damage from a variety of sources
+     * HEALTH IS NOT CHECKED HERE, this is to ensure that both cards will still be available to attack
+     * HEALTH SHOULD BE CHECKED IN INDIVIDUAL DAMAGING METHODS
+     *
+     * @param damage amount of damage to be taken
+     */
+    public void takeDamage(int damage) {
+        this.health -= damage;
+    }
 
+    /**
+     * This method will heal a minion but it will not exceed its maximum health
+     *
+     * @param healAmount the amount the minion should be healed by
+     */
     public void heal(int healAmount) {
+        // do not exceed max health
         if (health + healAmount > maxHealth) health = maxHealth;
         else health += healAmount;
     }
 
+    /**
+     * This method will check a minions health to see if it should be removed from play
+     */
     public void checkHealth(){
         if (health <= 0) {
             // remove card from board and add to the player's graveyard
             // player.deck.addToGraveyard(this);
+
+            // Get the game screen to fetch the correct region
             colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
             ActiveRegion ar;
 
-            if (!getIsEnemy()) {
-                ar = cds.getOpponentActiveRegion();
-            } else {
-                ar = cds.getPlayerActiveRegion();
-            }
+            if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
+            else ar = cds.getPlayerActiveRegion();
 
+            // remove the card from the region
             ar.removeCard(this);
         }
     }
 
-    public int getAttack() {
-        return this.attack;
-    }
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
+    /////////////////////////////////////////////////////////////////////
+    // ACCESSOR AND MUTATOR METHODS
+    /////////////////////////////////////////////////////////////////////
+
+    public int getAttack() { return this.attack; }
+    public void setAttack(int attack) { this.attack = attack; }
 
     public int getMaxHealth() { return this.maxHealth; }
     public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
