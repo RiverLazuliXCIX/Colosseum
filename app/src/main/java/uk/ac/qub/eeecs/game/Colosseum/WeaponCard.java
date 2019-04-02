@@ -9,7 +9,7 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
  */
 public class WeaponCard extends Card {
 
-    private int damage, charges;
+    private int damage, charges; // Damage a weapon deals and number of charges it has
 
     /**
      * 'Default' Constructor
@@ -55,6 +55,8 @@ public class WeaponCard extends Card {
         p.setWeaponEquipped(true);
         p.setCurrentAttack(thisCard.getDamage());
         p.setCurrentWeaponDurability(thisCard.getCharges());
+
+        removeCard();
     }
 
     /////////////////////////////////////////////////////////////////////

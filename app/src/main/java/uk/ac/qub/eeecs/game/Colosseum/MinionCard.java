@@ -169,15 +169,7 @@ public class MinionCard extends Card {
             // remove card from board and add to the player's graveyard
             // player.deck.addToGraveyard(this);
 
-            // Get the game screen to fetch the correct region
-            colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
-            ActiveRegion ar;
-
-            if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
-            else ar = cds.getPlayerActiveRegion();
-
-            // remove the card from the region
-            ar.removeCard(this);
+            removeCard();
         }
     }
 

@@ -18,6 +18,8 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
+import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 //Created and coded by Sean McCloskey
 //Contributions from Dearbhaile Walsh
@@ -411,6 +413,21 @@ public class Card extends GameObject {
             // Draw the bitmap
             graphics2D.drawBitmap(bitmap, drawMatrix, null);
         }
+    }
+
+    /**
+     * Matthew: Allows a card to be removed from within the card classes
+     */
+    protected void removeCard() {
+        // Get the game screen to fetch the correct region
+        colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+        ActiveRegion ar;
+
+        if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
+        else ar = cds.getPlayerActiveRegion();
+
+        // remove the card from the region
+        ar.removeCard(this);
     }
 
 

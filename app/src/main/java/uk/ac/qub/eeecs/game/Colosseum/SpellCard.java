@@ -110,6 +110,8 @@ public class SpellCard extends Card {
             default:
                 break;
         }
+
+        removeCard();
     }
 
     /**
@@ -165,6 +167,8 @@ public class SpellCard extends Card {
             default:
                 break;
         }
+
+        removeCard();
     }
 
     /////////////////////////////////////////////////////////////////////
