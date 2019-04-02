@@ -3,12 +3,21 @@ package uk.ac.qub.eeecs.game.Colosseum;
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 
+/**
+ * SpellCard class used to represent a spell with a variety of effects to choose from
+ * @author Matthew, 05/12/2018
+ */
 public class SpellCard extends Card {
 
-    private Effect effect;
-    private int magnitude;
+    private Effect effect; // Effect the spell has
+    private int magnitude; // The size of whatever effect is being applied, i.e. Damage will be the damage to be taken by a target
 
-    // 'Default' Constructor
+    /**
+     * 'Default' Constructor
+     * while not strictly default, it is as close as it can be
+     *
+     * @param gs The gamescreen the card is on
+     */
     public SpellCard(GameScreen gs) {
         super(0, 0, gs, 1, false, "");
         setEffect(Effect.DAMAGE);
@@ -27,7 +36,13 @@ public class SpellCard extends Card {
         setMagnitude(magnitude);
     }
 
-    // Copy Constructor
+    /**
+     * Copy Constructor
+     *
+     * @param x x coordinate of the card
+     * @param y y coordinate of the card
+     * @param sc card to copy
+     */
     public SpellCard(float x, float y, SpellCard sc) {
         super(x, y, sc.getGameScreen(), sc.getCoinCost(), sc.getIsEnemy(), sc.getCardName());
         setEffect(sc.getEffect());
@@ -44,6 +59,13 @@ public class SpellCard extends Card {
 
     // For attacking the Player/AI
     // TODO flesh out further effects for Players
+
+    /**
+     * This play method will allow for a spell effect to be used on a player or ai
+     *
+     * @param thisCard Card being used
+     * @param p Player/AI to affect
+     */
     public void play(SpellCard thisCard, Player p) {
         switch (thisCard.effect) {
             case NONE:
@@ -78,16 +100,26 @@ public class SpellCard extends Card {
             case DOUBLESTRIKE:
                 break;
             case HEAL:
+                // heal the player
                 p.heal(getMagnitude());
                 break;
             case DAMAGE:
+                // damage the player
                 p.receiveDamage(getMagnitude());
                 break;
             default:
                 break;
         }
+
+        removeCard();
     }
 
+    /**
+     * This play method will allow for a spell effect to be used on a minion
+     *
+     * @param thisCard Card being used
+     * @param mc minion to be affected
+     */
     public void play(SpellCard thisCard, MinionCard mc) {
         switch (thisCard.effect) {
             case NONE:
@@ -130,11 +162,18 @@ public class SpellCard extends Card {
                 break;
             case DAMAGE:
                 mc.takeDamage(getMagnitude());
+                mc.checkHealth();
                 break;
             default:
                 break;
         }
+
+        removeCard();
     }
+
+    /////////////////////////////////////////////////////////////////////
+    // ACCESSOR AND MUTATOR METHODS
+    /////////////////////////////////////////////////////////////////////
 
     public Effect getEffect() { return this.effect; }
     public void setEffect(Effect effect) { this.effect = effect; }

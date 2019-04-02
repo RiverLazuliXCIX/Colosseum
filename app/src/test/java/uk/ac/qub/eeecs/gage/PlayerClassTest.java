@@ -1,10 +1,14 @@
 package uk.ac.qub.eeecs.gage;
 
 import android.graphics.Bitmap;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -63,6 +67,7 @@ public class PlayerClassTest {
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
+        player.setCurrentHealth(30);
 
         // Damage the player character, from default health of 30
         player.receiveDamage(6);
@@ -110,7 +115,7 @@ public class PlayerClassTest {
 
         // Create a new player instance
         Player player = new Player(gameScreen,hero);
-
+        player.setCurrentHealth(30);
         // Increases player armor by 3 from it's default value of 0
         player.increaseArmor(3);
         // Damage the player character, from default health of 30
@@ -681,7 +686,7 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.commodusAbilityUsed();
+        player.useHeroAbilities();
 
         // Test that mana has been reduced by 2, a weapon has been equipped, player attack and weapon
         // durability are set to 1 and 2 respectively and ability used is set to true
@@ -721,7 +726,7 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.commodusAbilityUsed();
+        player.useHeroAbilities();
 
         // Test that mana has been reduced by 2, a weapon has been equipped, player attack and weapon
         // durability are set to 1 and 2 respectively and ability used is set to true
@@ -760,7 +765,7 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.commodusAbilityUsed();
+        player.useHeroAbilities();
 
         // Test that mana has not been deducted, ability has not been used, and weapon has not been equipped
         assertEquals(expectedCurrentMana,player.getCurrentMana());
@@ -798,7 +803,7 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.commodusAbilityUsed();
+        player.useHeroAbilities();
 
         // Test that mana has not been deducted, ability has not been used, and weapon has not been equipped
         assertEquals(expectedCurrentMana,player.getCurrentMana());
@@ -832,7 +837,7 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.marsAbilityUsed();
+        player.useHeroAbilities();
 
         // Test that mana has been reduced by 2, armor has been increased by 2 and ability used this
         // turn is true
@@ -844,7 +849,7 @@ public class PlayerClassTest {
 
     /*
      * Using Mars' ability with insufficient mana should not increase player armor, and the ability
-     * should not be expected.
+     * should not be used.
      */
     @Test
     public void player_marsAbilityInsufficientMana() {
@@ -864,24 +869,144 @@ public class PlayerClassTest {
         player.setAbilityUsedThisTurn(false);
 
         // Executing the method to be tested
-        player.marsAbilityUsed();
+        player.useHeroAbilities();
 
-        // Test that mana has been reduced by 2, armor has been increased by 2 and ability used this
-        // turn is true
+        // Test that mana has been not reduced by 2, armor has not been increased by 2 and ability used this
+        // turn is false
         assertEquals(expectedCurrentMana,player.getCurrentMana());
         assertEquals(expectedArmor,player.getCurrentArmor());
         assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
 
     }
 
-    /**
-     * ----REPLACE BRUTALUS ABILITY TESTS HERE WHEN FULLY IMPLEMENTED----
+    /*
+     * Using Meridia's ability with insufficient mana should not increase player current health, and the ability
+     * should not be used.
      */
+    @Test
+    public void player_meridiaAbilityInsufficientMana() {
+        // Define expected properties
+        int expectedCurrentMana = 1;
+        int expectedHealth = 30;
+        boolean expectedAbilityUsed = false;
 
-    /**
-     * ----REPLACE SAGIRA ABILITY TESTS HERE WHEN FULLY IMPLEMENTED----
+        // Create a new player instance
+        String hero = "Meridia";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentHealth(30);
+        player.setCurrentMana(1);
+        player.setCurrentManaCap(1);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.useHeroAbilities();
+
+        // Test that mana has not been reduced by 2, health has not been increased by 2 and ability used this
+        // turn is false
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedHealth,player.getCurrentHealth());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Meridia's ability with sufficient mana should increase player current health to cap, and the ability
+     * should be used. Meridia heals by 2, unless health is at cap, or will reach cap after use, at which point
+     * it will stay at cap. (Ability doesn't cast at max health)
      */
+    @Test
+    public void player_meridiaAbilitySufficientManaUndamaged() {
+        // Define expected properties
+        int expectedCurrentMana = 2;
+        int expectedHealth = 30;
+        boolean expectedAbilityUsed = false;
 
+        // Create a new player instance
+        String hero = "Meridia";
+        Player player = new Player(gameScreen,hero);
 
+        // Initialising test player variables
+        player.setCurrentMana(2);
+        player.setCurrentManaCap(2);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.useHeroAbilities();
+
+        // Test that mana has not been reduced by 2, health has not been increased by 2 and ability used this
+        // turn is false
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedHealth,player.getCurrentHealth());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Meridia's ability with sufficient mana should increase player current health to cap, and the ability
+     * should be used. Meridia heals by 2, unless health is at cap, or will reach cap after use, at which point
+     * it will stay at cap. (Checks to ensure there is no over-heal)
+     */
+    @Test
+    public void player_meridiaAbilitySufficientManaDamagedBy1() {
+        // Define expected properties
+        int expectedCurrentMana = 0;
+        int expectedHealth = 30;
+        boolean expectedAbilityUsed = true;
+
+        // Create a new player instance
+        String hero = "Meridia";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(2);
+        player.setCurrentManaCap(2);
+        player.setCurrentHealth(29);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.useHeroAbilities();
+
+        // Test that mana has been reduced by 2, health has been increased by 2 and ability used this
+        // turn is true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedHealth,player.getCurrentHealth());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
+
+    /*
+     * Using Meridia's ability with sufficient mana should increase player current health to cap, and the ability
+     * should be used. Meridia heals by 2, unless health is at cap, or will reach cap after use, at which point
+     * it will stay at cap. (Checks to ensure it heals to cap)
+     */
+    @Test
+    public void player_meridiaAbilitySufficientManaDamagedBy2() {
+        // Define expected properties
+        int expectedCurrentMana = 0;
+        int expectedHealth = 30;
+        boolean expectedAbilityUsed = true;
+
+        // Create a new player instance
+        String hero = "Meridia";
+        Player player = new Player(gameScreen,hero);
+
+        // Initialising test player variables
+        player.setCurrentMana(2);
+        player.setCurrentManaCap(2);
+        player.setCurrentHealth(28);
+        player.setAbilityUsedThisTurn(false);
+
+        // Executing the method to be tested
+        player.useHeroAbilities();
+
+        // Test that mana has been reduced by 2, health has been increased by 2 and ability used this
+        // turn is true
+        assertEquals(expectedCurrentMana,player.getCurrentMana());
+        assertEquals(expectedHealth,player.getCurrentHealth());
+        assertEquals(expectedAbilityUsed,player.isAbilityUsedThisTurn());
+
+    }
 
 }
