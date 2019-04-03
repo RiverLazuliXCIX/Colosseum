@@ -372,10 +372,10 @@ public class colosseumDemoScreen extends GameScreen {
                     endPlayerTurn();
                 }
 
-                if (mDiscardButton.isPushTriggered()) { //Calls discard function if there is a card selected and discard button pressed - Dearbhaile
+                if (mDiscardButton.isPushTriggered()) { //Calls discard function if there is a card selected and discard button pressed - Dearbhaile, modified by Sean 3/4/19
                     for (int i = 0; i < mPlayerDeck.getmCardHand().size(); i++) {
-                        if (mPlayerDeck.getmCardHand().get(i).getSelected()) {
-                            Card mCardToDiscard = mPlayerDeck.getmCardHand().get(i);
+                        if (mPlayerDeck.getmCardHand().get(i).getAttackerSelected() != null) {
+                            Card mCardToDiscard = mPlayerDeck.getmCardHand().get(i).getAttackerSelected();
                             mCardToDiscard.discardCard(mCardToDiscard);
                         }
                     }

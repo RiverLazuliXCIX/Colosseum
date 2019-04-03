@@ -88,7 +88,6 @@ public class GameRegion {
             setCardPosition(getCardsInRegion().get(i));
 
         }
-
     }
 
     /**

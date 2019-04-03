@@ -20,6 +20,7 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.GameRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
@@ -195,6 +196,7 @@ public class Card extends GameObject{
                     && getAttackerSelected().getBitmap() == selected
                     && cardTouched.getSelectable()) {
                 getAttackerSelected().setBitmap(front);
+                getAttackerSelected().setToBeDiscarded(false);
                 //setmAttackerSelected(null);
             }
             //select

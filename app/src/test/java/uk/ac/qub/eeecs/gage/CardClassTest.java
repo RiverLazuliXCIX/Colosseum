@@ -25,7 +25,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -67,10 +66,21 @@ public class CardClassTest {
     }
 
     @Test
+    public void boundCard_Bounded_Test() {
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 500; i += 100)
+            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+
+        cards.get(0).boundCard(cards, mLayerViewport);
+
+        assertTrue(true);
+    }
+
+    @Test
     public void enlargeCard_LongPress_Test() {
         int touchType = TouchEvent.TOUCH_LONG_PRESS;
         Vector2 touchLocation = new Vector2(0, 100);
-        List<Card> cards = new ArrayList();
+        List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
             cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
         Card cardTouched = cards.get(0);
@@ -88,7 +98,7 @@ public class CardClassTest {
     public void enlargeCard_WrongTouch_Test() {
         int touchType = TouchEvent.TOUCH_SINGLE_TAP;
         Vector2 touchLocation = new Vector2(0, 100);
-        List<Card> cards = new ArrayList();
+        List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
             cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
         Card cardTouched = cards.get(0);
@@ -106,7 +116,7 @@ public class CardClassTest {
     public void enlargeCard_LongPress_WrongLocation_Test() {
         int touchType = TouchEvent.TOUCH_LONG_PRESS;
         Vector2 touchLocation = new Vector2(100, 100);
-        List<Card> cards = new ArrayList();
+        List<Card> cards = new ArrayList<>();
         for(int i = 0; i < 500; i += 100)
             cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
 
