@@ -24,6 +24,7 @@ import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
+import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
@@ -96,8 +97,8 @@ public class colosseumDemoScreen extends GameScreen {
     // Hand and Active regions for opponent and player
     // Hand region for colosseum is setup and initialised within coin toss screen and as such, must be passed
     // via the constructor
-    ActiveRegion playerActiveRegion, opponentActiveRegion;
-    HandRegion playerHandRegion, opponentHandRegion;
+    private ActiveRegion playerActiveRegion, opponentActiveRegion;
+    private HandRegion playerHandRegion, opponentHandRegion;
 
     //////////////////
     // CONSTRUCTOR  //
@@ -108,10 +109,6 @@ public class colosseumDemoScreen extends GameScreen {
                                HandRegion playerHandRegion, HandRegion opponentHandRegion, Game game) {
 
         super("CardScreen", game);
-        setUpViewports();
-        setUpGameObjects();
-        setUpButtons();
-        setUpActiveRegions();
 
         //Get data from the CoinTossScreen:
         this.mPlayer = player;
@@ -123,6 +120,11 @@ public class colosseumDemoScreen extends GameScreen {
         this.mEnemyDeck = enemyDeck;
         this.playerHandRegion = playerHandRegion;
         this.opponentHandRegion = opponentHandRegion;
+
+        setUpViewports();
+        setUpGameObjects();
+        setUpButtons();
+        setUpActiveRegions();
 
         //Shuffle two decks:
         playerDeck.shuffleCards();
@@ -152,10 +154,6 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Setting up FPS counter:
         fpsCounter = new FPSCounter(mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f, this) {};
-
-        //Setting up demo player:
-        mPlayer = new Player(this, "Meridia");
-        mOpponent = new AIOpponent(this, "EmperorCommodus");
 
         //Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
@@ -235,6 +233,14 @@ public class colosseumDemoScreen extends GameScreen {
         if (mUserWhoStarts == UserWhoStarts.ENEMYSTARTS) { //If opponent is starting player,
             mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number
         }
+
+        // Matthew: allow the enemies minions on the board to attack on their new turn
+        for (Card c : opponentActiveRegion.getCardsInRegion()) {
+            if (c instanceof MinionCard) {
+                MinionCard mc = (MinionCard) c;
+                mc.setCanAttack(true);
+            }
+        }
     }
 
     //This method checks if 5 seconds have elapsed since enemy turn began
@@ -247,6 +253,14 @@ public class colosseumDemoScreen extends GameScreen {
             mPlayerDeck.drawCard(mPlayer, mPlayerFatigue, mGame); // Player draws card
             if (mUserWhoStarts == UserWhoStarts.PLAYERSTARTS) { // If player is starting player,
                 mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number.
+            }
+
+            // Matthew: allow the players minions on the board to attack on their new turn
+            for (Card c : playerActiveRegion.getCardsInRegion()) {
+                if (c instanceof MinionCard) {
+                    MinionCard mc = (MinionCard) c;
+                    mc.setCanAttack(true);
+                }
             }
         }
     }
@@ -464,4 +478,14 @@ public class colosseumDemoScreen extends GameScreen {
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
     public static boolean wasPaused() { return wasPaused; } //Used to resume the game from the main menu without having to see a coinflip again
+    public Player getmPlayer() { return this.mPlayer; }
+    public AIOpponent getmOpponent() { return this.mOpponent; }
+    public Turn getmCurrentTurn() { return this.mCurrentTurn; }
+    public long getmEnemyTurnBegins() { return this.mEnemyTurnBegins; }
+    public CardDeck getmPlayerDeck() { return this.mPlayerDeck; }
+    public CardDeck getmEnemyDeck() { return this.mEnemyDeck; }
+    public HandRegion getOpponentHandRegion() { return opponentHandRegion; }
+    public HandRegion getPlayerHandRegion() { return playerHandRegion; }
+    public FPSCounter getFpsCounter() { return fpsCounter; }
+
 }
