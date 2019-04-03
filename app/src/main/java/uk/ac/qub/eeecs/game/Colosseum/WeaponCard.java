@@ -42,7 +42,8 @@ public class WeaponCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        play((WeaponCard)thisCard, (Player)other);
+        if (thisCard instanceof WeaponCard && other instanceof Player)
+            play((WeaponCard)thisCard, (Player)other);
     }
 
     /**

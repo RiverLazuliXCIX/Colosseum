@@ -51,9 +51,9 @@ public class SpellCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        if (other instanceof Player)
+        if (thisCard instanceof SpellCard && other instanceof Player)
             play((SpellCard)thisCard, (Player)other);
-        else
+        else if (thisCard instanceof SpellCard && other instanceof MinionCard)
             play((SpellCard)thisCard, (MinionCard)other);
     }
 
