@@ -78,7 +78,10 @@ public class MinionCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        attackEnemy((MinionCard) thisCard, (MinionCard) other);
+        if(other instanceof Card)
+            attackEnemy((MinionCard) thisCard, (MinionCard) other);
+        else
+            attackEnemy((Player)other);
     }
 
     /**
