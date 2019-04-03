@@ -81,7 +81,7 @@ public class ActiveRegion extends GameRegion {
             if (card.getIsEnemy()) p = cts.getCds().getmPlayer();
             else p = cts.getCds().getmOpponent();
 
-            if (p.getCurrentMana() <= cost) {
+            if (p.getCurrentMana() >= cost) {
                 p.reduceCurrentMana(cost);
                 addCard(card);
             }
