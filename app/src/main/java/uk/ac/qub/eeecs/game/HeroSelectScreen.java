@@ -36,6 +36,8 @@ import uk.ac.qub.eeecs.gage.world.Sprite;
 /**
  *  Screen to allow players to select the hero they will play as, as well as the opponent they will
  *  play against.
+ *
+ * @author Kyle Corrigan
  */
 
 public class HeroSelectScreen extends GameScreen {
@@ -144,14 +146,14 @@ public class HeroSelectScreen extends GameScreen {
     private void createHeroButtonsFromJSON(String buttonJSON){
 
         String loadedJSON;
-       // Try catch method for handling loading/configuring buttons from a JSON file
-       try{
-           loadedJSON = mGame.getFileIO().loadJSON(buttonJSON);
-       } catch (IOException e){
-           throw new RuntimeException("HeroSelectScreen.createHeroButtonsFromJSON: Cannot load JSON (" + buttonJSON +" )");
-       }
+        // Try catch method for handling loading/configuring buttons from a JSON file
+        try{
+            loadedJSON = mGame.getFileIO().loadJSON(buttonJSON);
+        } catch (IOException e){
+            throw new RuntimeException("HeroSelectScreen.createHeroButtonsFromJSON: Cannot load JSON (" + buttonJSON +" )");
+        }
 
-       // Retrieving the information from the JSON file
+        // Retrieving the information from the JSON file
         try{
             JSONObject settings = new JSONObject(loadedJSON);
             JSONArray buttonSettings = settings.getJSONArray("heroButtons");

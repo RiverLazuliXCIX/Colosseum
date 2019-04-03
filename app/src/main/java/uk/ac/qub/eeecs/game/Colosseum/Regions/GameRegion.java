@@ -15,6 +15,8 @@ import uk.ac.qub.eeecs.game.Colosseum.Card;
  *
  * Class used to define regions of the game board, which may be used as playable regions, hand regions
  * deck regions etc.
+ *
+ * @author Kyle Corrigan
  */
 
 public class GameRegion {
@@ -110,7 +112,7 @@ public class GameRegion {
     public boolean isInRegion(Card card){
 
         if (card.position.x < regionXPosRight && card.position.x > regionXPosLeft
-            && card.position.y < regionYPosTop && card.position.y > regionYPosBottom){
+                && card.position.y < regionYPosTop && card.position.y > regionYPosBottom){
 
             return true;
         }
@@ -159,10 +161,6 @@ public class GameRegion {
     // /////////////////////////////////////////////////////////////////////////
     // Getter and Setter Methods
     // /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Getter and setter methods for each of the appropriate private variables
-     */
 
     public float getRegionXPosLeft() { return regionXPosLeft; }
     public void setRegionXPosLeft(float regionXPosLeft) { this.regionXPosLeft = regionXPosLeft; }

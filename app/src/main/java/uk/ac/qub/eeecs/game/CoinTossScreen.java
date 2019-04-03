@@ -248,11 +248,14 @@ public class CoinTossScreen extends GameScreen {
         }
     }
 
+    private colosseumDemoScreen cds;
+
     //NOT THIS
     private void changeScreens() { //Method to remove the current screen and move to the main game screen
         mGame.getScreenManager().removeScreen(CoinTossScreen.this);
-        mGame.getScreenManager().changeScreenButton(new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
-                mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck,mPlayerHandRegion,mOpponentHandRegion, mGame));
+        cds = new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
+                mUserWhoStarts, mEnemyTurnBegins, mPlayerDeck, mEnemyDeck,mPlayerHandRegion,mOpponentHandRegion, mGame);
+        mGame.getScreenManager().changeScreenButton(cds);
     }
 
     //CODE HIGHLIGHT 4 CONTINUES - Dearbhaile
@@ -352,5 +355,10 @@ public class CoinTossScreen extends GameScreen {
     public CardDeck getmPlayerDeck() { return this.mPlayerDeck; }
     public CardDeck getmEnemyDeck() { return this.mEnemyDeck; }
     public UserWhoStarts getmUserWhoStarts() {return this.mUserWhoStarts; }
+    public ActiveRegion getPlayerActiveRegion() { return this.mPlayerActiveRegion; }
+    public ActiveRegion getOpponentActiveRegion() { return this.mOpponentActiveRegion; }
+    public HandRegion getOpponentHandRegion() { return mOpponentHandRegion; }
+    public HandRegion getPlayerHandRegion() { return mPlayerHandRegion; }
+    public colosseumDemoScreen getCds() { return this.cds; }
 
 }

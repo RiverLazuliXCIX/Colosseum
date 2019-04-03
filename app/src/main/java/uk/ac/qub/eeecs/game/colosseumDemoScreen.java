@@ -24,6 +24,7 @@ import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.CardDeck;
 import uk.ac.qub.eeecs.game.Colosseum.FatigueCounter;
+import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
@@ -232,6 +233,14 @@ public class colosseumDemoScreen extends GameScreen {
         if (mUserWhoStarts == UserWhoStarts.ENEMYSTARTS) { //If opponent is starting player,
             mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number
         }
+
+        // Matthew: allow the enemies minions on the board to attack on their new turn
+        for (Card c : opponentActiveRegion.getCardsInRegion()) {
+            if (c instanceof MinionCard) {
+                MinionCard mc = (MinionCard) c;
+                mc.setCanAttack(true);
+            }
+        }
     }
 
     //This method checks if 5 seconds have elapsed since enemy turn began
@@ -244,6 +253,14 @@ public class colosseumDemoScreen extends GameScreen {
             mPlayerDeck.drawCard(mPlayer, mPlayerFatigue, mGame); // Player draws card
             if (mUserWhoStarts == UserWhoStarts.PLAYERSTARTS) { // If player is starting player,
                 mCurrentTurn.newTurnFunc(mPlayer, mOpponent); //Then increment turn number.
+            }
+
+            // Matthew: allow the players minions on the board to attack on their new turn
+            for (Card c : playerActiveRegion.getCardsInRegion()) {
+                if (c instanceof MinionCard) {
+                    MinionCard mc = (MinionCard) c;
+                    mc.setCanAttack(true);
+                }
             }
         }
     }

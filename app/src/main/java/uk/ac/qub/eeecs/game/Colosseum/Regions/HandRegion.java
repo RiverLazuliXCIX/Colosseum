@@ -1,3 +1,4 @@
+
 package uk.ac.qub.eeecs.game.Colosseum.Regions;
 
 import uk.ac.qub.eeecs.game.Colosseum.Card;
@@ -6,15 +7,10 @@ import uk.ac.qub.eeecs.game.Colosseum.Card;
  * Created by Kyle Corrigan
  *
  * Class used to define the hand region of the game board, within which, cards are drawn to
+ * @author Kyle Corrigan
  */
 
 public class HandRegion extends GameRegion {
-
-    // /////////////////////////////////////////////////////////////////////////
-    // Properties
-    // /////////////////////////////////////////////////////////////////////////
-
-
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -35,8 +31,6 @@ public class HandRegion extends GameRegion {
      * If the board region is not full, update the card position, add card to that region's card array
      * called when drawing from deck.
      *
-     * TODO Add checks for card type, minions should appear in slots, but weapons/spells cards should be consumed once dropped and appear in the graveyard etc.
-     *
      * @param card Card which is having its position updated
      */
 
@@ -47,10 +41,6 @@ public class HandRegion extends GameRegion {
             getCardsInRegion().add(card);
             setCardPosition(card);
             card.setCurrentRegion("Hand");
-
-        }else{
-
-            // Hand is full, do something, eg. card shuffled back into deck, message displayed etc.
 
         }
 

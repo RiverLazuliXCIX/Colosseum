@@ -2,6 +2,7 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 
@@ -15,6 +16,7 @@ public class MinionCard extends Card {
     private int maxHealth; // The maximum amount of health a minion can have
     private int health; // The current health a minion has
     private Effect mEffect; // Any effect a minion has
+    private boolean canAttack; // This will be set to false when played and after attacks
 
     /**
      * 'Default' Constructor
@@ -28,6 +30,7 @@ public class MinionCard extends Card {
         setMaxHealth(1);
         setHealth(1);
         mEffect = Effect.NONE;
+        setCanAttack(false);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int health) {
@@ -36,6 +39,7 @@ public class MinionCard extends Card {
         setMaxHealth(health);
         setHealth(health);
         setEffect(Effect.NONE);
+        setCanAttack(false);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int health, Effect mEffect) {
@@ -44,6 +48,7 @@ public class MinionCard extends Card {
         setMaxHealth(health);
         setHealth(health);
         setEffect(mEffect);
+        setCanAttack(mEffect == Effect.RUSH);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int maxHealth, int health, Effect mEffect) {
@@ -52,6 +57,7 @@ public class MinionCard extends Card {
         setMaxHealth(maxHealth);
         setHealth(health);
         setEffect(mEffect);
+        setCanAttack(mEffect == Effect.RUSH);
     }
 
     /**
@@ -67,11 +73,15 @@ public class MinionCard extends Card {
         setMaxHealth(mc.getMaxHealth());
         setHealth(mc.getHealth());
         setEffect(mc.getEffect());
+        setCanAttack(mc.getCanAttack());
     }
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        attackEnemy((MinionCard) thisCard, (MinionCard) other);
+        if(thisCard instanceof MinionCard && other instanceof MinionCard)
+            attackEnemy((MinionCard) thisCard, (MinionCard) other);
+        else if (thisCard instanceof MinionCard && other instanceof Player)
+            attackEnemy((MinionCard) thisCard, (Player)other);
     }
 
     /**
@@ -82,13 +92,13 @@ public class MinionCard extends Card {
      */
     public boolean hasTaunts() {
         // Get the game screen to access the correct regions
-        colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+        CoinTossScreen cts = (CoinTossScreen) mGameScreen;
         ActiveRegion ar;
 
         // if the current card is a friendly card get the opponent's region
-        if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
+        if (!getIsEnemy()) ar = cts.getCds().getOpponentActiveRegion();
         // if the card is an enemy card get the player's region
-        else ar = cds.getPlayerActiveRegion();
+        else ar = cts.getCds().getPlayerActiveRegion();
 
         MinionCard mc;
         // search the region for taunts
@@ -109,16 +119,21 @@ public class MinionCard extends Card {
      * @param eMinionCard Defending card
      */
     public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
+        // if the card cannot attack, do not let it
+        if (!thisCard.getCanAttack()) return;
         // add a check for any enemy minions on the board with taunts
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
-        //if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
+        if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
         eMinionCard.takeDamage(thisCard.attack);
         thisCard.takeDamage(eMinionCard.getAttack());
 
+        // once the card has attacked, don't let it attack again
+        thisCard.setCanAttack(false);
+
         // check health after attacks so the enemy object can still exist if its health falls below 0
-        //eMinionCard.checkHealth();
-        //thisCard.checkHealth();
+        eMinionCard.checkHealth();
+        thisCard.checkHealth();
     }
 
     /* Another attack method will be required for attacking the enemy hero
@@ -133,10 +148,13 @@ public class MinionCard extends Card {
      *
      * @param hero Hero to be attacked (allows for Player and AIOpponent)
      */
-    public void attackEnemy(Player hero) {
+    public void attackEnemy(MinionCard thisCard, Player hero) {
+        // If the minion has already attacked, don't let it attack again
+        if (!thisCard.getCanAttack()) return;
         // if there are any taunts on the board, do not attack
         if (hasTaunts()) return;
-        hero.receiveDamage(this.attack);
+        hero.receiveDamage(thisCard.attack);
+        thisCard.setCanAttack(false);
     }
 
     /**
@@ -169,6 +187,7 @@ public class MinionCard extends Card {
             // remove card from board and add to the player's graveyard
             // player.deck.addToGraveyard(this);
 
+            setHealth(0);
             removeCard();
         }
     }
@@ -188,5 +207,8 @@ public class MinionCard extends Card {
 
     public Effect getEffect() { return this.mEffect; }
     public void setEffect(Effect mEffect) { this.mEffect = mEffect; }
+
+    public boolean getCanAttack() { return this.canAttack; }
+    public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
 
 }

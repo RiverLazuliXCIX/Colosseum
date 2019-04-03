@@ -18,13 +18,15 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.world.ScreenViewport;
+import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 //Created and coded by Sean McCloskey
 //Contributions from Dearbhaile Walsh
 
-public class Card extends GameObject {
+public class Card extends GameObject{
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
@@ -303,14 +305,14 @@ public class Card extends GameObject {
     }
 
     private void checkCardTouched(int touchType, int touchEvent, List<Card> cards, Vector2 touchLocation) {
-        //if the touchTupe is any touch event (drag, tap, etc), and the hasn't been a touched card yet
+        //if the touchType is any touch event (drag, tap, etc), and the hasn't been a touched card yet
         if (touchType == touchEvent
                 && cardTouched == null) {
             //loop to check all the cards in the List
             for (int j = 0; j < cards.size(); j++) {
                 //if the touch location is within the bounds of the card
                 if (cards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
-                    //set the carrdTouched to that card from the List
+                    //set the cardTouched to that card from the List
                     cardTouched = cards.get(j);
                 }
             }
@@ -377,7 +379,10 @@ public class Card extends GameObject {
 
     public void drawStat(int stat, Vector2 offset, Vector2 scale, IGraphics2D graphics2D, LayerViewport layerViewport, ScreenViewport screenViewport) {
         //ASSUMING all stats are 2 digits or less
-        if (stat < 10)   //if the value is a single digit, just draw it
+        if (stat < 0) { // if the stat does not exist, remove the card
+            System.out.println("NEGATIVE STAT REACHED");
+            removeCard();
+        } else if (stat < 10)   //if the value is a single digit, just draw it
             drawBitmap(cardDigits[stat], offset, scale, graphics2D, layerViewport, screenViewport);
         else {  //otherwise, draw the number divided by 10 (the tens) and the remainder (the units)
             drawBitmap(cardDigits[stat / 10], offset.addReturn(-0.1f, 0), scale, graphics2D, layerViewport, screenViewport);
@@ -420,14 +425,24 @@ public class Card extends GameObject {
      */
     protected void removeCard() {
         // Get the game screen to fetch the correct region
-        colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+        CoinTossScreen cts = (CoinTossScreen) mGameScreen;
         ActiveRegion ar;
+        HandRegion hr;
 
-        if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
-        else ar = cds.getPlayerActiveRegion();
+        if (!getIsEnemy()) ar = cts.getCds().getOpponentActiveRegion();
+        else ar = cts.getCds().getPlayerActiveRegion();
 
-        // remove the card from the region
-        ar.removeCard(this);
+        if (!getIsEnemy()) hr = cts.getCds().getOpponentHandRegion();
+        else hr = cts.getCds().getPlayerHandRegion();
+
+        try {
+            // remove the card from the region
+            ar.removeCard(this);
+            hr.removeCard(this);
+            System.out.println("CARD REMOVED");
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + " TRYING TO REMOVE NON EXISTENT CARD");
+        }
     }
 
 

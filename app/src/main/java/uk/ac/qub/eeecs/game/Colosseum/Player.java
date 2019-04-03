@@ -48,7 +48,7 @@ public class Player extends GameObject {
     private static final int MAX_MANA = 10;
     private static final int HERO_ABILITY_COST = 2; // All hero abilities have a mana cost of 2 by default
 
-    private static int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
+    private int currentHealth = MAX_HEALTH; // Current health at initialisation should be set to max.
     private int currentManaCap = 1;        // Initial mana cap should be set to one, and will increase by one each turn, until it reaches maxMana upon which it stops increasing (outside of potential card effects).
     private int currentMana = 1;           // Initial mana should be set to current mana cap on start
     private int armor = 0;                 // Current armor of player character (Provides additional 'Health' that is deducted prior to the player's health pool when taking damage)
@@ -148,11 +148,9 @@ public class Player extends GameObject {
      * the current mana cap, which would be common with the use of the coin card, allowing players to
      * play more expensive cards earlier, or play more cards in a turn provided their current mana can
      * cover the cost.
-     *
-     * @param manaAdded amount of mana attempting to be increased.
      */
-    public void increaseCurrentMana(int manaAdded){
-        currentMana+=manaAdded;
+    public void increaseCurrentMana(){
+        currentMana = getCurrentManaCap();
     }
 
     /**
@@ -480,7 +478,7 @@ public class Player extends GameObject {
     // Getter and setter methods
     // /////////////////////////////////////////////////////////////////////////
 
-    public static int getCurrentHealth(){return currentHealth;}
+    public int getCurrentHealth(){return currentHealth;}
     public void setCurrentHealth(int currentHealth){this.currentHealth = currentHealth;}
 
     public int getCurrentManaCap(){return currentManaCap;}
