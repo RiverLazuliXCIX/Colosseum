@@ -2,6 +2,7 @@ package uk.ac.qub.eeecs.game.Colosseum;
 
 import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 
@@ -82,13 +83,13 @@ public class MinionCard extends Card {
      */
     public boolean hasTaunts() {
         // Get the game screen to access the correct regions
-        colosseumDemoScreen cds = (colosseumDemoScreen) mGameScreen;
+        CoinTossScreen cts = (CoinTossScreen) mGameScreen;
         ActiveRegion ar;
 
         // if the current card is a friendly card get the opponent's region
-        if (!getIsEnemy()) ar = cds.getOpponentActiveRegion();
+        if (!getIsEnemy()) ar = cts.getCds().getOpponentActiveRegion();
         // if the card is an enemy card get the player's region
-        else ar = cds.getPlayerActiveRegion();
+        else ar = cts.getCds().getPlayerActiveRegion();
 
         MinionCard mc;
         // search the region for taunts
@@ -111,14 +112,14 @@ public class MinionCard extends Card {
     public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
         // add a check for any enemy minions on the board with taunts
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
-        //if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
+        if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
         eMinionCard.takeDamage(thisCard.attack);
         thisCard.takeDamage(eMinionCard.getAttack());
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
-        //eMinionCard.checkHealth();
-        //thisCard.checkHealth();
+        eMinionCard.checkHealth();
+        thisCard.checkHealth();
     }
 
     /* Another attack method will be required for attacking the enemy hero
@@ -169,6 +170,7 @@ public class MinionCard extends Card {
             // remove card from board and add to the player's graveyard
             // player.deck.addToGraveyard(this);
 
+            setHealth(0);
             removeCard();
         }
     }
