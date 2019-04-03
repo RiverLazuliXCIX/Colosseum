@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -22,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -65,12 +69,56 @@ public class CardClassTest {
     @Test
     public void enlargeCard_LongPress_Test() {
         int touchType = TouchEvent.TOUCH_LONG_PRESS;
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        Card cardTouched = newCard;
+        Vector2 touchLocation = new Vector2(0, 100);
+        List<Card> cards = new ArrayList();
+        for (int i = 0; i < 500; i += 100)
+            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+        Card cardTouched = cards.get(0);
+        Boolean ok = false;
 
-        //cardTouched.enlargeCard(touchType, );
+        float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
 
-        assertNull(cardTouched);
+        cardTouched.enlargeCard(touchType, cards, touchLocation);
+
+        assertEquals(cardTouched.getWidth(), ogWidth);
+        assertEquals(cardTouched.getHeight(), ogHeight);
+    }
+
+    @Test
+    public void enlargeCard_WrongTouch_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(0, 100);
+        List<Card> cards = new ArrayList();
+        for (int i = 0; i < 500; i += 100)
+            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+        Card cardTouched = cards.get(0);
+        Boolean ok = false;
+
+        float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
+
+        cardTouched.enlargeCard(touchType, cards, touchLocation);
+
+        assertEquals(cardTouched.getWidth(), ogWidth);
+        assertEquals(cardTouched.getHeight(), ogHeight);
+    }
+
+    @Test
+    public void enlargeCard_LongPress_WrongLocation_Test() {
+        int touchType = TouchEvent.TOUCH_LONG_PRESS;
+        Vector2 touchLocation = new Vector2(100, 100);
+        List<Card> cards = new ArrayList();
+        for(int i = 0; i < 500; i += 100)
+            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+
+        Card cardTouched = cards.get(0);
+        Boolean ok = false;
+
+        float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
+
+        cardTouched.enlargeCard(touchType, cards, touchLocation);
+
+        assertEquals(cardTouched.getWidth(), ogWidth);
+        assertEquals(cardTouched.getHeight(), ogHeight);
     }
 
     @Test
