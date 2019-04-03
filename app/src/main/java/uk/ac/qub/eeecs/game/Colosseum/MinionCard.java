@@ -78,10 +78,10 @@ public class MinionCard extends Card {
 
     @Override
     public void useLogic(Card thisCard, GameObject other) {
-        if(other instanceof Card)
+        if(thisCard instanceof MinionCard && other instanceof MinionCard)
             attackEnemy((MinionCard) thisCard, (MinionCard) other);
-        else
-            attackEnemy((Player)other);
+        else if (thisCard instanceof MinionCard && other instanceof Player)
+            attackEnemy((MinionCard) thisCard, (Player)other);
     }
 
     /**
@@ -129,7 +129,7 @@ public class MinionCard extends Card {
         thisCard.takeDamage(eMinionCard.getAttack());
 
         // once the card has attacked, don't let it attack again
-        setCanAttack(false);
+        thisCard.setCanAttack(false);
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
         eMinionCard.checkHealth();
@@ -148,11 +148,13 @@ public class MinionCard extends Card {
      *
      * @param hero Hero to be attacked (allows for Player and AIOpponent)
      */
-    public void attackEnemy(Player hero) {
+    public void attackEnemy(MinionCard thisCard, Player hero) {
+        // If the minion has already attacked, don't let it attack again
+        if (!thisCard.getCanAttack()) return;
         // if there are any taunts on the board, do not attack
         if (hasTaunts()) return;
-        hero.receiveDamage(this.attack);
-        setCanAttack(false);
+        hero.receiveDamage(thisCard.attack);
+        thisCard.setCanAttack(false);
     }
 
     /**

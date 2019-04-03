@@ -8,6 +8,8 @@ import uk.ac.qub.eeecs.game.Colosseum.Player;
  * Created by Kyle Corrigan
  *
  * Class used to define the region of the game board, within which, cards can be played
+ *
+ * @author Kyle Corrigan
  */
 
 public class ActiveRegion extends GameRegion {
@@ -16,7 +18,7 @@ public class ActiveRegion extends GameRegion {
     // Properties
     // /////////////////////////////////////////////////////////////////////////
 
-    private float spacingXCards = 20.0f;
+    private float spacingXCards = 20.0f; // Defines the amount of spacing between each card in the region
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -37,8 +39,6 @@ public class ActiveRegion extends GameRegion {
      * If the board region is not full, update the card position, add card to that region's active
      * cards array set cards to not be draggable, should not be movable once they are in play.
      *
-     * TODO Add checks for card type, minions should appear in slots, but weapons/spells cards should be consumed once dropped and appear in the graveyard etc.
-     *
      * @param card Card which is having its position updated
      */
     public void addCard (Card card){
@@ -55,10 +55,6 @@ public class ActiveRegion extends GameRegion {
                 card.flipCard();
 
         }
-        else{
-            // Region full, do something
-        }
-
     }
 
     /**
@@ -72,16 +68,14 @@ public class ActiveRegion extends GameRegion {
 
         if (card.getCardDropped()&& isInRegion(card) && !isRegionFull()&& card.getDraggable()){
 
-            // TODO add check to ensure player has enough mana to allow the card to be played
-
             int cost = card.getCoinCost();
             CoinTossScreen cts = (CoinTossScreen) card.getGameScreen();
 
             Player p;
-            if (card.getIsEnemy()) p = cts.getCds().getmPlayer();
+            if (!card.getIsEnemy()) p = cts.getCds().getmPlayer();
             else p = cts.getCds().getmOpponent();
 
-            if (p.getCurrentMana() <= cost) {
+            if (p.getCurrentMana() >= cost) {
                 p.reduceCurrentMana(cost);
                 addCard(card);
             }

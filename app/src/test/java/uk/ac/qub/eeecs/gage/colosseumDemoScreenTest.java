@@ -78,6 +78,10 @@ public class colosseumDemoScreenTest {
         assertNotNull(testScreen);
     }
 
+    //
+    // Tests to ensure that the parameters passed in are set correctly:
+    //
+
     @Test
     public void parametersPassed_Success() {
         Player testPlayer = new Player(mDemoScreen, "Sagira");
@@ -147,7 +151,7 @@ public class colosseumDemoScreenTest {
 
         testScreen.endPlayerTurn();
 
-        //endPlayerTurn method should switch to being enemy's turn
+        //endPlayerTurn method should switch to being enemy's turn,
         assertFalse(testPlayer.getYourTurn());
         assertTrue(testOpponent.getYourTurn());
         //...should update the enemy's "turn begins" time
@@ -187,5 +191,62 @@ public class colosseumDemoScreenTest {
         assertEquals(enemyDeck.getmCardHand().size(), 1);
         //and SINCE THE PLAYER STARTED, the turn num should still be 1:
         assertEquals(testTurn.getmTurnNum(), 1);
+    }
+
+    @Test
+    public void checkIfEnemysTurn_True() {
+        Player testPlayer = new Player(mDemoScreen, "Sagira");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Sagira");
+        Turn testTurn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.PLAYERSTARTS;
+        long enemyStartTime = 10000;
+        HandRegion hRegion = new HandRegion(0, 0, 0, 0);
+        CardDeck playerDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+        CardDeck enemyDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, testTurn, enemyStarts,
+                enemyStartTime, playerDeck, enemyDeck, hRegion, hRegion, mGame);
+
+        //We set the time to something that will meet the criteria to run the method
+        //15000 - 10000 will give a number greater than 2000, so enemy's turn is over:
+        testScreen.setmCurrentTime(15000);
+
+        //So the method should enter the if statement:
+        testScreen.checkIfEnemysTurn();
+
+        //Setting it to be the player's turn:
+        assertTrue(testPlayer.getYourTurn());
+        assertFalse(testOpponent.getYourTurn());
+        //And drawing a card to the player's hand:
+        assertEquals(playerDeck.getmCardHand().size(), 1);
+    }
+
+    @Test
+    public void checkIfEnemysTurn_False() {
+        Player testPlayer = new Player(mDemoScreen, "Sagira");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Sagira");
+        Turn testTurn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.PLAYERSTARTS;
+        long enemyStartTime = 10000;
+        HandRegion hRegion = new HandRegion(0, 0, 0, 0);
+        CardDeck playerDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+        CardDeck enemyDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, hRegion);
+
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, testTurn, enemyStarts,
+                enemyStartTime, playerDeck, enemyDeck, hRegion, hRegion, mGame);
+
+        //We set the time to something that will not meet the criteria to run the if statement
+        //00000 - 10000 will not give a number greater than 5000, so enemy's turn is not over:
+        testScreen.setmCurrentTime(00000);
+        testPlayer.setYourTurn(false);
+        testOpponent.setYourTurn(true);
+
+        //So when we call the method, no change should have occured:
+        testScreen.checkIfEnemysTurn();
+
+        //Ie, it is still enemy's turn, and player has not drawn a card:
+        assertTrue(testOpponent.getYourTurn());
+        assertFalse(testPlayer.getYourTurn());
+        assertEquals(enemyDeck.getmCardHand().size(), 0);
     }
 }
