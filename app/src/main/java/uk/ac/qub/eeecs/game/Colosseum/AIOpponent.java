@@ -194,7 +194,7 @@ public class AIOpponent extends Player {
         if(attacker instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
             MinionCard attackingMinion = (MinionCard) attacker; //Get the card as a minion
             if(attackingHero) { //Attack the enemy hero
-                attackingMinion.attackEnemy(humanPlayer); //Attack the hero
+                attackingMinion.attackEnemy(attackingMinion, humanPlayer); //Attack the hero
             } else if(target instanceof MinionCard) { //Attack the enemy card
                 MinionCard targetMinion = (MinionCard) target; //Get the card as a minion
                 attackingMinion.attackEnemy(attackingMinion, targetMinion); //Attack the minion
