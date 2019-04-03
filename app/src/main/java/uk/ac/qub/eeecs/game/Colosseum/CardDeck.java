@@ -186,25 +186,25 @@ public class CardDeck {
             switch (randomNum) {
                 //Inserts random Spell Cards into the deck:
                 case 0:
-                    setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
+                    setSpellValues("Card_Aegis", 3, Effect.NONE, 1);
                     break;
                 case 1:
-                    setSpellValues("Card_Cavalry", 3, Effect.NONE, 2);
+                    setSpellValues("Card_Cavalry", 3, Effect.NONE, 1);
                     break;
                 case 2:
-                    setSpellValues("Card_Commander", 6, Effect.NONE, 4);
+                    setSpellValues("Card_Commander", 6, Effect.NONE, 1);
                     break;
                 case 3:
-                    setSpellValues("Card_Touch", 5, Effect.NONE, 4);
+                    setSpellValues("Card_Touch", 5, Effect.NONE, 1);
                     break;
                 case 4:
                     setSpellValues("Card_Aurora", 2, Effect.NONE, 1);
                     break;
                 case 5:
-                    setSpellValues("Card_Strike", 4, Effect.NONE, 2);
+                    setSpellValues("Card_Strike", 4, Effect.NONE, 1);
                     break;
                 case 6:
-                    setSpellValues("Card_Rete", 6, Effect.NONE, 5);
+                    setSpellValues("Card_Rete", 6, Effect.NONE, 1);
                     break;
             }
             SpellCard mSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, name, Effect.NONE, 1);
@@ -235,13 +235,13 @@ public class CardDeck {
             int randomNum = RANDOM.nextInt(3);
             switch (randomNum) {
                 case 0:
-                    setWeaponValues("Card_Hasta", 4, 3, 2);
+                    setWeaponValues("Card_Hasta", 4, 3, 1);
                     break;
                 case 1:
                     setWeaponValues("Card_Scourge", 5, 5, 1);
                     break;
                 case 2:
-                    setWeaponValues("Card_Bow", 3, 2, 3);
+                    setWeaponValues("Card_Bow", 3, 2, 1);
                     break;
             }
                 WeaponCard mWeapon = new WeaponCard(x, y, mGameScreen, coinCost, enemyDeck, name, damage, charges);
