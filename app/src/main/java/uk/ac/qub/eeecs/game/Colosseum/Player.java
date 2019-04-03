@@ -148,11 +148,9 @@ public class Player extends GameObject {
      * the current mana cap, which would be common with the use of the coin card, allowing players to
      * play more expensive cards earlier, or play more cards in a turn provided their current mana can
      * cover the cost.
-     *
-     * @param manaAdded amount of mana attempting to be increased.
      */
-    public void increaseCurrentMana(int manaAdded){
-        currentMana+=manaAdded;
+    public void increaseCurrentMana(){
+        currentMana = getCurrentManaCap();
     }
 
     /**
