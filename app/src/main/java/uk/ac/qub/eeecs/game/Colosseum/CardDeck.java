@@ -10,8 +10,9 @@ import uk.ac.qub.eeecs.game.FatigueScreen;
 import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
 /**
- * CardDeck Class, represents the player's (User/AI Opponent's) Deck of Cards in the Game.
- * @author Dearbhaile Walsh
+ * CardDeck Class, modelling the player's (User/AI Opponent's) Deck of Cards in the Game.
+ * @author Dearbhaile Walsh, with contributions from
+ * @author Sean McCloskey, said contributions are attributed
  */
 
 public class CardDeck {
@@ -36,10 +37,13 @@ public class CardDeck {
     //Random, to be used to 'choose' type of deck:
     private static final Random RANDOM = new Random();
 
-    //Values for positioning cards:
+    /**
+     /Values for positioning cards
+     @author Sean McCloskey
+     **/
     private static final float X_POSITION = 160f, Y_POSITION = 25f;
-    float x = X_POSITION;
-    float y = Y_POSITION;
+    private float x = X_POSITION;
+    private float y = Y_POSITION;
 
     //Variables required for Initialising Card Values:
     private String name = "";
@@ -124,8 +128,11 @@ public class CardDeck {
         for (int i = 0; i < cardAmt; i++) {
 
             if (getDeckID() == 2) {
+                /**
+                @author: Sean McCloskey
                 //Enemy cards are positioned differently, and
                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
@@ -167,8 +174,11 @@ public class CardDeck {
     public void insertSpellCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             if(getDeckID() == 2) {
-                //Enemy cards are positioned differently, and
-                //have different attributes than the player's:
+                /**
+                 @author: Sean McCloskey
+                 //Enemy cards are positioned differently, and
+                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
@@ -213,8 +223,11 @@ public class CardDeck {
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             if (getDeckID() == 2) {
-                //Enemy cards are positioned differently, and
-                //have different attributes than the player's:
+                /**
+                 @author: Sean McCloskey
+                 //Enemy cards are positioned differently, and
+                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
