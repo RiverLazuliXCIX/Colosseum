@@ -149,8 +149,15 @@ public class Player extends GameObject {
      * play more expensive cards earlier, or play more cards in a turn provided their current mana can
      * cover the cost.
      */
-    public void increaseCurrentMana(){
-        currentMana = getCurrentManaCap();
+    public void increaseCurrentMana(int manaAdded){
+        currentMana+=manaAdded;
+    }
+
+    /**
+     * Increases current mana to the current mana cap, for use at end turn
+     */
+    public void increaseCurrentManaToCap(){
+        currentMana=currentManaCap;
     }
 
     /**
