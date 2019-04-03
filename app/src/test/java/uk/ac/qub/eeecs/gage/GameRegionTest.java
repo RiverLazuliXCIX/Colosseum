@@ -8,14 +8,21 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.GameRegion;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +53,92 @@ public class GameRegionTest {
         when(gameScreen.getGame()).thenReturn(game);
         when(gameScreen.getName()).thenReturn("colosseumDemoScreen");
         when(gameScreen.getDefaultLayerViewport()).thenReturn(layerViewport);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing GameRegion, ActiveRegion and HandRegion constructors
+    // /////////////////////////////////////////////////////////////////////////
+    /*
+     * Test to ensure that the region constructors do create a game region
+     */
+    @Test
+    public void Regions_TestConstructors() {
+
+        // Create a new region instances
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+        HandRegion handRegion = new HandRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+        ActiveRegion activeRegion = new ActiveRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Checking to ensure that the objects have been created
+        assertNotNull(gameRegion);
+        assertNotNull(handRegion);
+        assertNotNull(activeRegion);
+
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing GameRegion, ActiveRegion and HandRegion getters and setters
+    // /////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Test to ensure that the region getters and setters modify values appropriately
+     * Getters and setters from the GameRegion Class are shared to both HandRegion and ActiveRegion,
+     */
+    @Test
+    public void Regions_TestGettersSetters() {
+
+        ArrayList<Card>testCardsInRegion = new ArrayList<>();
+
+        // Create a new region instances
+        float xLeftEdge = 100;
+        float xRightEdge = 500;
+        float yTopEdge = 500;
+        float yBottomEdge = 100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge, xRightEdge, yTopEdge, yBottomEdge);
+        HandRegion handRegion = new HandRegion(xLeftEdge, xRightEdge, yTopEdge, yBottomEdge);
+        ActiveRegion activeRegion = new ActiveRegion(xLeftEdge, xRightEdge, yTopEdge, yBottomEdge);
+
+        // Test GameRegion getters and setters
+        gameRegion.setMaxNumCardsInRegion(1);
+        gameRegion.setCardsInRegion(testCardsInRegion);
+        gameRegion.setRegionHeight(2.0f);
+        gameRegion.setRegionWidth(3.0f);
+        gameRegion.setRegionXPosLeft(4.0f);
+        gameRegion.setRegionXPosRight(5.0f);
+        gameRegion.setRegionYPosBottom(6.0f);
+        gameRegion.setRegionYPosTop(7.0f);
+
+        // Define expected GameRegion values
+        int expectedMaxNumCardsInRegion = 1;
+        ArrayList<Card> expectedCardsInRegion = testCardsInRegion;
+        float expectedRegionHeight = 2.0f;
+        float expectedRegionWidth = 3.0f;
+        float expectedRegionXPosLeft = 4.0f;
+        float expectedRegionXPosRight = 5.0f;
+        float expectedRegionYPosBottom = 6.0f;
+        float expectedRegionYPosTop = 7.0f;
+
+        // ensuring that GameRegion getters and setters work
+        assertEquals(expectedMaxNumCardsInRegion,gameRegion.getMaxNumCardsInRegion());
+        assertEquals(expectedCardsInRegion, gameRegion.getCardsInRegion());
+        assertEquals(expectedRegionHeight, gameRegion.getRegionHeight(),0.0f);
+        assertEquals(expectedRegionWidth, gameRegion.getRegionWidth(), 0.0f);
+        assertEquals(expectedRegionXPosLeft,gameRegion.getRegionXPosLeft(),0.0f);
+        assertEquals(expectedRegionXPosRight,gameRegion.getRegionXPosRight(),0.0f);
+        assertEquals(expectedRegionYPosBottom,gameRegion.getRegionYPosBottom(),0.0f);
+        assertEquals(expectedRegionYPosTop,gameRegion.getRegionYPosTop(),0.0f);
+
+        // Set values using active region setters
+        activeRegion.setSpacingXCards(2.0f);
+        // Define expected active region values
+        float expectedSpacingXCards = 2.0f;
+        // ensuring ActiveRegion getters and setters work
+        assertEquals(expectedSpacingXCards, activeRegion.getSpacingXCards(),0.0f);
+
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -131,5 +224,322 @@ public class GameRegionTest {
     // /////////////////////////////////////////////////////////////////////////
     // Testing updateCardPosition()
     // /////////////////////////////////////////////////////////////////////////
+
+     /*
+     * Sets cards to the correct position on update. In this test if we initially have 2 cards in a
+     * region, and then delete the first card added to the array list, we expect the cards following
+     * the deleted card to move back a position to fill the newly available position.
+     */
+    @Test
+    public void GameRegion_UpdateCardPositions1CardAfterRemovedCard(){
+        // Create 2 card instances to be added to the region array list
+        Card card1 = new Card(0,0,gameScreen,5,false,"Name");
+        Card card2 = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Adds card to region array list
+        gameRegion.getCardsInRegion().add(card1);
+        gameRegion.getCardsInRegion().add(card2);
+
+        // Define expected properties
+        float expectedCardXPos = xLeftEdge+card1.getWidth()/2+(gameRegion.getCardsInRegion().indexOf(card1)*card1.getWidth());
+        float expectedCardYPos = yBottomEdge+card1.getHeight()/2;
+
+        // Remove the first card from region array list
+        gameRegion.getCardsInRegion().remove(0);
+
+        // update card positions executed
+        gameRegion.updateCardPositions();
+
+        // Ensure that after executing the method, the card positions are set to the correct values
+        assertEquals(expectedCardXPos,card2.position.x,0.0f);
+        assertEquals(expectedCardYPos,card2.position.y,0.0f);
+
+    }
+
+    /*
+     * Sets cards to the correct position on update. In this test if we initially have 3 cards in a
+     * region, and then delete the first card added to the array list, we expect the cards following
+     * the deleted card to move back a position to fill the newly available position.
+     */
+    @Test
+    public void GameRegion_UpdateCardPositionsMoreThan1CardAfterRemovedCard(){
+        // Create 3 card instances to be added to the region array list
+        Card card1 = new Card(0,0,gameScreen,5,false,"Name");
+        Card card2 = new Card(0,0,gameScreen,5,false,"Name");
+        Card card3 = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Adds card to region array list
+        gameRegion.getCardsInRegion().add(card1);
+        gameRegion.getCardsInRegion().add(card2);
+        gameRegion.getCardsInRegion().add(card3);
+
+        // Define expected properties
+        float expectedCard2XPos = xLeftEdge+card1.getWidth()/2+(gameRegion.getCardsInRegion().indexOf(card1)*card1.getWidth());
+        float expectedCard2YPos = yBottomEdge+card1.getHeight()/2;
+        float expectedCard3XPos = xLeftEdge+card2.getWidth()/2+(gameRegion.getCardsInRegion().indexOf(card2)*card2.getWidth());
+        float expectedCard3YPos = yBottomEdge+card2.getHeight()/2;
+
+        // Remove the first card from region array list
+        gameRegion.getCardsInRegion().remove(0);
+
+        // update card positions executed
+        gameRegion.updateCardPositions();
+
+        // Ensure that after executing the method, the card positions are set to the correct values
+        assertEquals(expectedCard2XPos,card2.position.x,0.0f);
+        assertEquals(expectedCard2YPos,card2.position.y,0.0f);
+        assertEquals(expectedCard3XPos,card3.position.x,0.0f);
+        assertEquals(expectedCard3YPos,card3.position.y,0.0f);
+
+    }
+
+    /*
+     * Sets cards to the correct position on update. In this test if we initially have 3 cards in a
+     * region, and then delete the second card added to the array list, we expect the card following
+     * the deleted card to move back a position to fill the newly available position, and the first
+     * card to stay in its original position.
+     */
+    @Test
+    public void GameRegion_UpdateCardPositionsCardsBeforeAndAfterRemovedCard(){
+        // Create 3 card instances to be added to the region array list
+        Card card1 = new Card(0,0,gameScreen,5,false,"Name");
+        Card card2 = new Card(0,0,gameScreen,5,false,"Name");
+        Card card3 = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Adds card to region array list
+        gameRegion.getCardsInRegion().add(card1);
+        gameRegion.getCardsInRegion().add(card2);
+        gameRegion.getCardsInRegion().add(card3);
+
+        // Define expected properties
+        float expectedCard1XPos = xLeftEdge+card1.getWidth()/2+(gameRegion.getCardsInRegion().indexOf(card1)*card1.getWidth());
+        float expectedCard1YPos = yBottomEdge+card1.getHeight()/2;
+        float expectedCard3XPos = xLeftEdge+card2.getWidth()/2+(gameRegion.getCardsInRegion().indexOf(card2)*card2.getWidth());
+        float expectedCard3YPos = yBottomEdge+card2.getHeight()/2;
+
+        // Remove the second card from region array list
+        gameRegion.getCardsInRegion().remove(1);
+
+        // update card positions executed
+        gameRegion.updateCardPositions();
+
+        // Ensure that after executing the method, the card positions are set to the correct values
+        assertEquals(expectedCard1XPos,card1.position.x,0.0f);
+        assertEquals(expectedCard1YPos,card1.position.y,0.0f);
+        assertEquals(expectedCard3XPos,card3.position.x,0.0f);
+        assertEquals(expectedCard3YPos,card3.position.y,0.0f);
+
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing isInRegion()
+    // /////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Checks if a specified card is within a given region. In this test, the card is within the region
+     * boundaries, and therefore should return true
+     */
+    @Test
+    public void GameRegion_isInRegionWithinRegion(){
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        card.setPosition(200,300); // sets the card position to be within the region
+
+        // Checks if card is within the region's boundary
+        // Ensure that after executing the method, the card is registered as being within the region
+        assertTrue( gameRegion.isInRegion(card));
+    }
+
+    /*
+     * Checks if a specified card is within a given region. In this test, the card is not within the region
+     * boundaries, and therefore should return false
+     */
+    @Test
+    public void GameRegion_isInRegionNotInRegion(){
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        card.setPosition(0,0); // sets the card position to not be within the region
+
+
+        // Checks if card is within the region's boundary
+        // Ensure that after executing the method, the card is registered as not being within the region
+        assertFalse( gameRegion.isInRegion(card));
+    }
+
+    /*
+     * Checks if a specified card is within a given region. In this test, the card is on region
+     * boundaries, but should return false.
+     */
+    @Test
+    public void GameRegion_isInRegionOnLowestRegionBoundary(){
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // lowest x bound lowest y bound
+        card.setPosition(100,100); // sets the card position to be on the game region boundary
+
+
+        // Checks if card is within the region's boundary
+        // Ensure that after executing the method, the card is registered as not being within the region
+        assertFalse( gameRegion.isInRegion(card));
+    }
+
+    /*
+     * Checks if a specified card is within a given region. In this test, the card is on region
+     * boundaries, but should return false.
+     */
+    @Test
+    public void GameRegion_isInRegionOnHighestRegionBoundary(){
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // highest x bound highest y bound
+        card.setPosition(500,500); // sets the card position to be on the game region boundary
+
+
+        // Checks if card is within the region's boundary
+        // Ensure that after executing the method, the card is registered as not being within the region
+        assertFalse( gameRegion.isInRegion(card));
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing isRegionFull()
+    // /////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Checks if the region is full, returning true if true, and false if not. This test adds
+     * the maximum number of cards to the region, and as such, should return true
+     */
+    @Test
+    public void GameRegion_isRegionFullTrue(){
+
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        gameRegion.setMaxNumCardsInRegion(11);
+        // add max number of cards to region
+        for(int i= 0;i<gameRegion.getMaxNumCardsInRegion();i++){
+            gameRegion.getCardsInRegion().add(card);
+        }
+
+        // Checks if region is full
+        // Ensure that after executing the method, the region is counted as full
+        assertTrue( gameRegion.isRegionFull());
+    }
+
+    /*
+     * Checks if the region is full, returning true if true, and false if not. This test clears all
+      * cards from the region, and as such, should return false
+     */
+    @Test
+    public void GameRegion_isRegionFullFalse(){
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        gameRegion.setMaxNumCardsInRegion(11);
+
+        // remove all cards in the region
+        gameRegion.getCardsInRegion().clear();
+
+        // Checks if region is full
+        // Ensure that after executing the method, the region is not counted as full
+        assertFalse( gameRegion.isRegionFull());
+    }
+
+    /*
+     * Checks if the region is full, returning true if true, and false if not. This test adds more than
+     * the maximum number of cards to the region. Should return true (Methods within active and hand region
+     *  addCard, prevents this from happening in normal circumstances)
+     */
+    @Test
+    public void GameRegion_isRegionFullTrueExceedsBoundary(){
+
+        // Create card instance to be tested
+        Card card = new Card(0,0,gameScreen,5,false,"Name");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        GameRegion gameRegion = new GameRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        gameRegion.setMaxNumCardsInRegion(11);
+
+        // add more than max number of cards to region
+        for(int i= 0;i<gameRegion.getMaxNumCardsInRegion()+3;i++){
+            gameRegion.getCardsInRegion().add(card);
+        }
+
+        // Checks if region is full
+        // Ensure that after executing the method, the region is counted as full
+        assertTrue( gameRegion.isRegionFull());
+    }
 
 }
