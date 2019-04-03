@@ -25,7 +25,12 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 import uk.ac.qub.eeecs.game.EndGameScreen;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
-//CoinTossScreen, coded by Dearbhaile Walsh
+/**
+*NOTE: THIS IS A BAREBONES VERSION OF MY COINTOSSSCREEN FOR TESTING PURPOSES
+*      ALL GRAPHICAL ELEMENTS HAVE BEEN REMOVED FROM THE CLASS.
+ *      @author Dearbhaile Walsh
+**/
+
 public class CoinTossScreenForTesting extends GameScreen {
 
     // Properties
@@ -56,7 +61,6 @@ public class CoinTossScreenForTesting extends GameScreen {
     private HandRegion mPlayerHandRegion, mOpponentHandRegion;
 
     private ActiveRegion mPlayerActiveRegion, mOpponentActiveRegion;
-
 
     //UserWhoStarted variable to hold data about who started in this match:
     private UserWhoStarts mUserWhoStarts;
@@ -98,11 +102,14 @@ public class CoinTossScreenForTesting extends GameScreen {
         mPlayer = new Player(this, "Meridia");
         mOpponent = new AIOpponent(this, "EmperorCommodus");
 
-        mPlayer.setCurrentMana(1);
-        mPlayer.setCurrentManaCap(1);
 
-        mOpponent.setCurrentMana(1);
-        mOpponent.setCurrentManaCap(1);
+        final int STARTING_MANA = 1;
+
+        //Set up initial PLAYER and ENEMY stats:
+        mPlayer.setCurrentMana(STARTING_MANA);
+        mPlayer.setCurrentManaCap(STARTING_MANA);
+        mOpponent.setCurrentMana(STARTING_MANA);
+        mOpponent.setCurrentManaCap(STARTING_MANA);
 
         // Sets up player and opponent hand regions
         mPlayerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());

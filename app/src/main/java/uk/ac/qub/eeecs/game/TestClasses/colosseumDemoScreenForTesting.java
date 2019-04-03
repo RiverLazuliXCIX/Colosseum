@@ -20,6 +20,11 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
+/**
+*NOTE: THIS IS A BAREBONES VERSION OF THE COLOSSEUMDEMOSCREEN FOR TESTING PURPOSES
+*      ALL GRAPHICAL ELEMENTS HAVE BEEN REMOVED FROM THE CLASS
+**/
+
 public class colosseumDemoScreenForTesting extends GameScreen {
 
     //////////////////
