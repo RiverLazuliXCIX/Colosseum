@@ -29,14 +29,15 @@ public class Turn {
     }
 
     public void increasePlayerMana_NewTurn(Player player) {
-        if (player.getCurrentMana() < MANA_CAP) { //If mana/mana cap are at 10, it cannot increase further
+        if (player.getCurrentMana() < MANA_CAP) {
             player.increaseCurrentMana(1);
             if (player.getCurrentManaCap() < MANA_CAP) {
-                player.increaseCurrentManaCap(); //Again, check that the Mana Cap is below 10 before increasing it.
+                player.increaseCurrentManaCap(); //Check that the Mana Cap is below 10 before increasing it.
                 //Otherwise, if player mana is increased e.g. from 4 to 5, but mana cap was already at 10, mana cap
                 //Should not increase to 11 and so on and so forth. It should *always* be capped at 10.
                 player.increaseCurrentManaToCap(); //Otherwise, increase mana by 1
-
+            } else if (player.getCurrentManaCap() == MANA_CAP) {
+                player.increaseCurrentManaToCap();
             }
         }
     }
