@@ -22,7 +22,7 @@ import uk.ac.qub.eeecs.gage.world.ScreenViewport;
 //Created and coded by Sean McCloskey
 //Contributions from Dearbhaile Walsh
 
-public class Card extends GameObject {
+public class Card extends GameObject{
 
     // /////////////////////////////////////////////////////////////////////////
     // Properties
@@ -301,14 +301,14 @@ public class Card extends GameObject {
     }
 
     private void checkCardTouched(int touchType, int touchEvent, List<Card> cards, Vector2 touchLocation) {
-        //if the touchTupe is any touch event (drag, tap, etc), and the hasn't been a touched card yet
+        //if the touchType is any touch event (drag, tap, etc), and the hasn't been a touched card yet
         if (touchType == touchEvent
                 && cardTouched == null) {
             //loop to check all the cards in the List
             for (int j = 0; j < cards.size(); j++) {
                 //if the touch location is within the bounds of the card
                 if (cards.get(j).getBound().contains(touchLocation.x, touchLocation.y)){
-                    //set the carrdTouched to that card from the List
+                    //set the cardTouched to that card from the List
                     cardTouched = cards.get(j);
                 }
             }
