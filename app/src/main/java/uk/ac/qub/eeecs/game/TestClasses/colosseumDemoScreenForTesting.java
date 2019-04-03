@@ -52,7 +52,7 @@ public class colosseumDemoScreenForTesting extends GameScreen {
     private static boolean wasPaused = false;
 
     //Variables required for the Enemy Turn Timer:
-    private final long ENEMY_TURN_TIME = 5000;
+    private final long ENEMY_TURN_TIME = 2000;
     private long mEnemyTurnBegins, mCurrentTime;
 
     private boolean startTimeRecorded = false;
@@ -271,6 +271,9 @@ public class colosseumDemoScreenForTesting extends GameScreen {
     //  GETTERS AND SETTERS  //
     ///////////////////////////
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
+    public void setmCurrentTime(long newTime) { this.mCurrentTime = newTime; }
+    public void setmEnemyTurnBegins(long newEnemyTime) { this.mEnemyTurnBegins = newEnemyTime; }
+
     public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
     public ActiveRegion getOpponentActiveRegion() { return this.opponentActiveRegion; }
