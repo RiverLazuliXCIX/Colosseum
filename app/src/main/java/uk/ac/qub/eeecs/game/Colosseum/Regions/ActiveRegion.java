@@ -72,7 +72,7 @@ public class ActiveRegion extends GameRegion {
             CoinTossScreen cts = (CoinTossScreen) card.getGameScreen();
 
             Player p;
-            if (card.getIsEnemy()) p = cts.getCds().getmPlayer();
+            if (!card.getIsEnemy()) p = cts.getCds().getmPlayer();
             else p = cts.getCds().getmOpponent();
 
             if (p.getCurrentMana() >= cost) {
