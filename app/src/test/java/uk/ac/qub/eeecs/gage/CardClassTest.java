@@ -19,6 +19,7 @@ import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
+import uk.ac.qub.eeecs.game.TestClasses.CardClassForTesting;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 import static org.junit.Assert.assertNotNull;
@@ -61,15 +62,15 @@ public class CardClassTest {
 
     @Test
     public void cardCreate_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "CardFront");
         assertNotNull(newCard.getCard(0));
     }
 
     @Test
     public void boundCard_Bounded_Test() {
-        List<Card> cards = new ArrayList<>();
+        List<CardClassForTesting> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
-            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
 
         cards.get(0).boundCard(cards, mLayerViewport);
 
@@ -80,10 +81,10 @@ public class CardClassTest {
     public void enlargeCard_LongPress_Test() {
         int touchType = TouchEvent.TOUCH_LONG_PRESS;
         Vector2 touchLocation = new Vector2(0, 100);
-        List<Card> cards = new ArrayList<>();
+        List<CardClassForTesting> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
-            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
-        Card cardTouched = cards.get(0);
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+        CardClassForTesting cardTouched = cards.get(0);
         Boolean ok = false;
 
         float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
@@ -98,10 +99,10 @@ public class CardClassTest {
     public void enlargeCard_WrongTouch_Test() {
         int touchType = TouchEvent.TOUCH_SINGLE_TAP;
         Vector2 touchLocation = new Vector2(0, 100);
-        List<Card> cards = new ArrayList<>();
+        List<CardClassForTesting> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
-            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
-        Card cardTouched = cards.get(0);
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+        CardClassForTesting cardTouched = cards.get(0);
         Boolean ok = false;
 
         float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
@@ -116,11 +117,11 @@ public class CardClassTest {
     public void enlargeCard_LongPress_WrongLocation_Test() {
         int touchType = TouchEvent.TOUCH_LONG_PRESS;
         Vector2 touchLocation = new Vector2(100, 100);
-        List<Card> cards = new ArrayList<>();
+        List<CardClassForTesting> cards = new ArrayList<>();
         for(int i = 0; i < 500; i += 100)
-            cards.add(new Card(i, 100, gameScreen, 1, false, "asdf"));
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
 
-        Card cardTouched = cards.get(0);
+        CardClassForTesting cardTouched = cards.get(0);
         Boolean ok = false;
 
         float ogWidth = cardTouched.getWidth(), ogHeight = cardTouched.getHeight();
@@ -134,8 +135,8 @@ public class CardClassTest {
     @Test
     public void releaseCard_Released_Test() {
         int touchType = TouchEvent.TOUCH_UP;
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        Card cardTouched = newCard;
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting cardTouched = newCard;
 
         cardTouched.releaseCard(touchType);
 
@@ -145,8 +146,8 @@ public class CardClassTest {
     @Test
     public void releaseCard_NotReleased_Test() {
         int touchType = TouchEvent.TOUCH_DOWN;
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        Card cardTouched = newCard;
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting cardTouched = newCard;
 
         cardTouched.releaseCard(touchType);
 
@@ -156,7 +157,7 @@ public class CardClassTest {
     @Test
     public void checkCardTouched_Test() {
         Vector2 touchLocation = new Vector2(100, 100);
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         Boolean ok = false;
 
         if (newCard.getBound().contains(touchLocation.x, touchLocation.y))
@@ -167,7 +168,7 @@ public class CardClassTest {
 
     @Test
     public void flipCard_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         Bitmap b = newCard.getBitmap();
         newCard.flipCard();
 
@@ -176,7 +177,7 @@ public class CardClassTest {
 
     @Test
     public void setSelectable_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setSelectable(true);
 
         assertTrue(newCard.getSelectable());
@@ -184,7 +185,7 @@ public class CardClassTest {
 
     @Test
     public void setDraggable_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setDraggable(true);
 
         assertTrue(newCard.getDraggable());
@@ -192,7 +193,7 @@ public class CardClassTest {
 
     @Test
     public void setCoinCost_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setCoinCost(9);
 
         assertEquals(newCard.getCoinCost(), 9);
@@ -200,7 +201,7 @@ public class CardClassTest {
 
     @Test
     public void setIsEnemy_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setIsEnemy(true);
 
         assertTrue(newCard.getIsEnemy());
@@ -208,8 +209,8 @@ public class CardClassTest {
 
     @Test
     public void setAttackerSelected_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting otherCard = new CardClassForTesting(150, 150, gameScreen, 1, false, "asdfg");
         newCard.setAttackerSelected(otherCard);
 
         assertEquals(newCard.getAttackerSelected(), otherCard);
@@ -217,8 +218,8 @@ public class CardClassTest {
 
     @Test
     public void setCardTouched_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
-        Card otherCard = new Card(150, 150, gameScreen, 1, false, "asdfg");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting otherCard = new CardClassForTesting(150, 150, gameScreen, 1, false, "asdfg");
         newCard.setCardTouched(otherCard);
 
         assertEquals(newCard.getCardTouched(), otherCard);
@@ -226,7 +227,7 @@ public class CardClassTest {
 
     @Test
     public void setCardName_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setCardName("yes");
 
         assertEquals(newCard.getCardName(), "yes");
@@ -234,7 +235,7 @@ public class CardClassTest {
 
     @Test
     public void setCardPortrait_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         Bitmap b = null;
         newCard.setCardPortrait(b);
 
@@ -243,7 +244,7 @@ public class CardClassTest {
 
     @Test
     public void setCurrentRegion_Test() {
-        Card newCard = new Card(100, 100, gameScreen, 1, false, "asdf");
+        CardClassForTesting newCard = new CardClassForTesting(100, 100, gameScreen, 1, false, "asdf");
         newCard.setCurrentRegion("yes");
 
         assertEquals(newCard.getCurrentRegion(), "yes");

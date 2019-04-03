@@ -400,7 +400,7 @@ public class PlayerClassTest {
         player.setCurrentMana(0);
 
         // Increase player mana by 1
-        player.increaseCurrentMana();
+        player.increaseCurrentMana(1);
 
         // Test that player mana is increased to the expected amount
         assertEquals(expectedMana,player.getCurrentMana());
@@ -421,7 +421,7 @@ public class PlayerClassTest {
         player.setCurrentMana(1);
 
         // increase player mana by 3
-        player.increaseCurrentMana();
+        player.increaseCurrentMana(3);
 
         // Test that player mana is increased to the expected amount
         assertEquals(expectedMana,player.getCurrentMana());
