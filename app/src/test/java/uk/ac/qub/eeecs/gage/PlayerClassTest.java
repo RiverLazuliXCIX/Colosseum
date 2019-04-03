@@ -1,25 +1,30 @@
+
 package uk.ac.qub.eeecs.gage;
 
 import android.graphics.Bitmap;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
+import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.game.Colosseum.AIOpponent;
+import uk.ac.qub.eeecs.game.Colosseum.Effect;
 import uk.ac.qub.eeecs.game.Colosseum.MinionCard;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+
+/**
+ * @author Kyle Corrigan
+ */
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlayerClassTest {
@@ -48,6 +53,104 @@ public class PlayerClassTest {
         when(gameScreen.getGame()).thenReturn(game);
         when(gameScreen.getName()).thenReturn("colosseumDemoScreen");
         when(gameScreen.getDefaultLayerViewport()).thenReturn(layerViewport);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing player constructor
+    // /////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Test to ensure that the player constructor creates a player object
+     */
+    @Test
+    public void player_ConstructorTest() {
+
+        String hero = "c";
+        Player player = new Player(gameScreen,hero);
+
+        // Test to ensure that a player object is created
+        assertNotNull(player);
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing getters and setters
+    // /////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void player_GettersAndSettersTest() {
+
+        // Setting up player and pushbutton for testing getters and setters
+        PushButton testHeroAbility = new PushButton(1,1,1,1,"TestBitmap",gameScreen);
+        Player player = new Player(gameScreen,"TestHero");
+
+        int expectedCurrentHealth = 1;
+        int expectedCurrentManaCap = 2;
+        int expectedCurrentMana = 3;
+        int expectedCurrentArmor = 4;
+        int expectedCurrentAttack = 5;
+        int expectedCurrentWeaponDurability = 6;
+        boolean expectedYourTurn = true;
+        float expectedPortraitXPos = 7.0f;
+        float expectedPortraitYPos = 8.0f;
+        float expectedPortraitHeight = 35.0f;
+        float expectedPortraitWidth = 35.0f;
+        float expectedAbilityXPos = 9.0f;
+        float expectedAbilityYPos = 10.0f;
+        float expectedAbilityHeight = expectedPortraitHeight-15;
+        float expectedAbilityWidth = expectedPortraitWidth-15;
+        boolean expectedWeaponEquipped = true;
+        boolean expectedAbilityUsed = true;
+        Effect expectedPEffect = Effect.TAUNT;
+        int expectedEDurtion = 11;
+        PushButton expectedHeroAbility = testHeroAbility;
+        String expectedHero = "Hircine";
+        int expectedMaxHealth = 30;
+        int expectedMaxMana = 10;
+        int expectedAbilityCost = 2;
+
+        // Setting values using the setters from the player class
+        player.setCurrentHealth(1);
+        player.setCurrentManaCap(2);
+        player.setCurrentMana(3);
+        player.setCurrentArmor(4);
+        player.setCurrentAttack(5);
+        player.setCurrentWeaponDurability(6);
+        player.setYourTurn(true);
+        player.setPortraitXPos(7.0f);
+        player.setPortraitYPos(8.0f);
+        player.setAbilityFrameXPos(9.0f);
+        player.setAbilityFrameYPos(10.0f);
+        player.setWeaponEquipped(true);
+        player.setAbilityUsedThisTurn(true);
+        player.setPEffect(Effect.TAUNT);
+        player.setEDuration(11);
+        player.setHeroAbility(testHeroAbility);
+        player.setHero("Hircine");
+
+        // retrieving actual values using the getters
+        assertEquals(expectedCurrentHealth, player.getCurrentHealth());
+        assertEquals(expectedCurrentManaCap, player.getCurrentManaCap());
+        assertEquals(expectedCurrentArmor, player.getCurrentArmor());
+        assertEquals(expectedCurrentMana, player.getCurrentMana());
+        assertEquals(expectedCurrentAttack, player.getCurrentAttack());
+        assertEquals(expectedCurrentWeaponDurability, player.getCurrentWeaponDurability());
+        assertEquals(expectedYourTurn, player.getYourTurn());
+        assertEquals(expectedPortraitXPos, player.getPortraitXPos(), 0.0f);
+        assertEquals(expectedPortraitYPos, player.getPortraitYPos(),0.0f);
+        assertEquals(expectedAbilityXPos, player.getAbilityFrameXPos(),0.0f);
+        assertEquals(expectedAbilityYPos, player.getAbilityFrameYPos(),0.0f);
+        assertEquals(expectedWeaponEquipped, player.isWeaponEquipped());
+        assertEquals(expectedAbilityUsed, player.isAbilityUsedThisTurn());
+        assertEquals(expectedPEffect, player.getPEffect());
+        assertEquals(expectedEDurtion, player.getEDuration());
+        assertEquals(expectedHero, player.getHero());
+        assertEquals(expectedMaxHealth, Player.getMaxHealth());
+        assertEquals(expectedMaxMana, Player.getMaxMana());
+        assertEquals(expectedAbilityCost, Player.getHeroAbilityCost());
+        assertEquals(expectedPortraitHeight, expectedPortraitHeight,0.0f);
+        assertEquals(expectedPortraitWidth, expectedPortraitWidth,0.0f);
+        assertEquals(expectedAbilityHeight, expectedAbilityHeight,0.0f);
+        assertEquals(expectedAbilityWidth, expectedAbilityWidth,0.0f);
     }
 
     // /////////////////////////////////////////////////////////////////////////
