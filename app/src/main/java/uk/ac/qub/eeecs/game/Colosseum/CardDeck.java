@@ -279,12 +279,12 @@ public class CardDeck {
             drawTopCard(); //If there are cards in deck, draw top card
             destroyCardOverLimit(); //If there are already 5 cards in hand, destroy new card
         } else {
-            counter.incrementFatigue(); //Otherwise, player takes cumulative fatigue
+            counter.incrementFatigue();
             if (player instanceof AIOpponent == false) { //Screen should not be displayed when enemy's card
                 //numbers drop below 0. This is not information the user needs to see.
                 mGame.getScreenManager().addScreen(new FatigueScreen(mGame, counter.getmFatigueNum()));
             }
-            player.receiveDamage(counter.getmFatigueNum()); //Appropriate damage is taken from player
+            counter.takeAppropriateDamage(player); //Appropriate damage is taken from player
         }
     }
 

@@ -72,7 +72,7 @@ public class colosseumDemoScreen extends GameScreen {
     private static boolean wasPaused = false;
 
     //Variables required for the Enemy Turn Timer:
-    private final long ENEMY_TURN_TIME = 2000;
+    private final long ENEMY_TURN_TIME = 2000; //Enemy turn lasts 2 seconds
     private long mEnemyTurnBegins, mCurrentTime;
 
     private boolean startTimeRecorded = false;

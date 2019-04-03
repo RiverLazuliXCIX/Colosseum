@@ -25,7 +25,6 @@ public class FatigueCounter {
     }
 
     public void takeAppropriateDamage(Player player) {
-        incrementFatigue(); //Number is increased, to record that Fatigue has been called
         player.receiveDamage(mFatigueNum); //Player takes appropriate amount of damage
 
         if (player.getCurrentHealth() < 0) {
