@@ -1,6 +1,8 @@
 package uk.ac.qub.eeecs.game.Colosseum.Regions;
 
+import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
+import uk.ac.qub.eeecs.game.Colosseum.Player;
 
 /**
  * Created by Kyle Corrigan
@@ -72,7 +74,17 @@ public class ActiveRegion extends GameRegion {
 
             // TODO add check to ensure player has enough mana to allow the card to be played
 
-            addCard(card);
+            int cost = card.getCoinCost();
+            CoinTossScreen cts = (CoinTossScreen) card.getGameScreen();
+
+            Player p;
+            if (card.getIsEnemy()) p = cts.getCds().getmPlayer();
+            else p = cts.getCds().getmOpponent();
+
+            if (p.getCurrentMana() <= cost) {
+                p.reduceCurrentMana(cost);
+                addCard(card);
+            }
 
         }
 

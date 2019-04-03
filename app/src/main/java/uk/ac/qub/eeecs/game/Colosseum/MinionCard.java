@@ -16,6 +16,7 @@ public class MinionCard extends Card {
     private int maxHealth; // The maximum amount of health a minion can have
     private int health; // The current health a minion has
     private Effect mEffect; // Any effect a minion has
+    private boolean canAttack; // This will be set to false when played and after attacks
 
     /**
      * 'Default' Constructor
@@ -29,6 +30,7 @@ public class MinionCard extends Card {
         setMaxHealth(1);
         setHealth(1);
         mEffect = Effect.NONE;
+        setCanAttack(false);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int health) {
@@ -37,6 +39,7 @@ public class MinionCard extends Card {
         setMaxHealth(health);
         setHealth(health);
         setEffect(Effect.NONE);
+        setCanAttack(false);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int health, Effect mEffect) {
@@ -45,6 +48,7 @@ public class MinionCard extends Card {
         setMaxHealth(health);
         setHealth(health);
         setEffect(mEffect);
+        setCanAttack(mEffect == Effect.RUSH);
     }
 
     public MinionCard(float x, float y, GameScreen gs, int coinCost, boolean isEnemy, String cardName, int attack, int maxHealth, int health, Effect mEffect) {
@@ -53,6 +57,7 @@ public class MinionCard extends Card {
         setMaxHealth(maxHealth);
         setHealth(health);
         setEffect(mEffect);
+        setCanAttack(mEffect == Effect.RUSH);
     }
 
     /**
@@ -68,6 +73,7 @@ public class MinionCard extends Card {
         setMaxHealth(mc.getMaxHealth());
         setHealth(mc.getHealth());
         setEffect(mc.getEffect());
+        setCanAttack(mc.getCanAttack());
     }
 
     @Override
@@ -110,12 +116,17 @@ public class MinionCard extends Card {
      * @param eMinionCard Defending card
      */
     public void attackEnemy(MinionCard thisCard, MinionCard eMinionCard) {
+        // if the card cannot attack, do not let it
+        if (!thisCard.getCanAttack()) return;
         // add a check for any enemy minions on the board with taunts
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
         if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
         eMinionCard.takeDamage(thisCard.attack);
         thisCard.takeDamage(eMinionCard.getAttack());
+
+        // once the card has attacked, don't let it attack again
+        setCanAttack(false);
 
         // check health after attacks so the enemy object can still exist if its health falls below 0
         eMinionCard.checkHealth();
@@ -138,6 +149,7 @@ public class MinionCard extends Card {
         // if there are any taunts on the board, do not attack
         if (hasTaunts()) return;
         hero.receiveDamage(this.attack);
+        setCanAttack(false);
     }
 
     /**
@@ -190,5 +202,8 @@ public class MinionCard extends Card {
 
     public Effect getEffect() { return this.mEffect; }
     public void setEffect(Effect mEffect) { this.mEffect = mEffect; }
+
+    public boolean getCanAttack() { return this.canAttack; }
+    public void setCanAttack(boolean canAttack) { this.canAttack = canAttack; }
 
 }
