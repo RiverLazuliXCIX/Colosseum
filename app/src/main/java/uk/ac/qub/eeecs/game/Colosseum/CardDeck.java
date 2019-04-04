@@ -30,7 +30,7 @@ public class CardDeck {
     private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
 
     //Final values relating to Card Deck and Hand:
-    private static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 5;
+    private static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 8;
 
     //Boolean values required to discern the functionality of the deck:
     private boolean mIsEmptyFlag, mIsAIDeck = false;
@@ -306,7 +306,7 @@ public class CardDeck {
     //Player hand can be of max size 5, and any additional cards drawn are an unfair advantage:
     public void destroyCardOverLimit() {
         if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
-            for (int i = 5; i < mCardHand.size(); i++) {
+            for (int i = 8; i < mCardHand.size(); i++) {
                 Card cardOver = mCardHand.get(mCardHand.size() - 1);
                 mCardHand.remove(cardOver); //Destroys every card above 5 in hand
             }
