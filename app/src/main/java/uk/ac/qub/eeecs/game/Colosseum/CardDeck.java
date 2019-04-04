@@ -291,7 +291,7 @@ public class CardDeck {
     public void drawCard(Player player, FatigueCounter counter, Game mGame) {
         if (!getDeck().isEmpty()) {
             drawTopCard(); //If there are cards in deck, draw top card
-            destroyCardOverLimit(); //If there are already 5 cards in hand, destroy new card
+            destroyCardOverLimit(); //If there are already 8 cards in hand, destroy new card
         } else {
             counter.incrementFatigue();
             if (player instanceof AIOpponent == false) { //Screen should not be displayed when enemy's card
