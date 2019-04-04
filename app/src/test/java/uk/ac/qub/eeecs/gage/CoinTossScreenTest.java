@@ -10,6 +10,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -183,4 +186,38 @@ public class CoinTossScreenTest {
         assertEquals(c1.getmPlayerDeck().getmCardHand().size(), expectedPlayerCards);
         assertEquals(c1.getmEnemyDeck().getmCardHand().size(), expectedEnemyCards);
     }
+
+    @Test
+    public void coinFlipEdgeCaseResult() { //If the edge of the coin is the result, then the value should be changed to true - Scott
+        CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
+
+        c1.coinFlipResult("Edge");
+
+        assertEquals(c1.getEndGameEdgeResult(), true);
+    }
+
+    @Test
+    public void coinFlipStartResult_NotNull() { //Get the coin result, check if its not null - Scott
+        CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
+
+        assertNotNull(c1.coinFlipStart());
+    }
+
+    @Test
+    public void coinFlipStartResult_CorrectValues() { //Get the coin result, check if it is one of the correct returns - Scott
+        CoinTossScreenForTesting c1 = new CoinTossScreenForTesting(mGame);
+
+        String coinFlipResult = c1.coinFlipStart();
+
+        boolean correctValue = false;
+
+        String[] possibleResults = {"Heads","Tails", "Edge", "False"};
+        for(int i=0; i<possibleResults.length; i++) {
+            if(possibleResults[i] == coinFlipResult) {
+                correctValue = true;
+            }
+        }
+        assertTrue(correctValue);
+    }
+
 }

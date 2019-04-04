@@ -133,6 +133,10 @@ public class CoinTossScreen extends GameScreen {
         mPlayer = new Player(this, mPlayerHero);
         mOpponent = new AIOpponent(this, mOpponentHero);
 
+        //Sets up player and opponent's target heroes
+        mPlayer.setTargetOpponent(mOpponent);
+        mOpponent.setTargetOpponent(mPlayer);
+
         final int STARTING_MANA = 1;
 
         //Set up initial PLAYER and ENEMY stats:

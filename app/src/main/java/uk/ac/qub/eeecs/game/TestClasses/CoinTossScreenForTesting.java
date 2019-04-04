@@ -78,6 +78,7 @@ public class CoinTossScreenForTesting extends GameScreen {
 
     //For testing purposes!
     Boolean ifTesting;
+    boolean endGameEdgeResult;
 
     // Constructor
     //Create the 'CoinTossScreen' screen
@@ -171,7 +172,7 @@ public class CoinTossScreenForTesting extends GameScreen {
                 mUserWhoStarts = UserWhoStarts.ENEMYSTARTS;
                 break;
             case "Edge": //edge of coin - set opponent health to 0, auto win game.
-                EndGameScreen.setCoinFlipResult(true);
+                endGameEdgeResult = true; //Changed for testing
                 break;
         }
     }
@@ -233,6 +234,7 @@ public class CoinTossScreenForTesting extends GameScreen {
     public String getmCoinTossResult() { return this.mCoinTossResult; }
     public String getmCoinTossMsg1() { return this.mCoinTossMsg1; }
     public String getmCoinTossMsg2() { return this.mCoinTossMsg2; }
+    public boolean getEndGameEdgeResult() { return endGameEdgeResult; }
 
     public Player getmPlayer() { return this.mPlayer; }
     public AIOpponent getmOpponent() { return this.mOpponent; }

@@ -196,6 +196,7 @@ public class MinionCard extends Card {
             // player.deck.addToGraveyard(this);
 
             setHealth(0);
+            this.flipCard();
             removeCard();
         }
     }

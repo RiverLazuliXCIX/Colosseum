@@ -62,8 +62,6 @@ public class HeroSelectScreen extends GameScreen {
     // heroDescriptionTriggers: Hash map of Hero buttons and the hero descriptions they should display
     private Map <PushButton,String> heroButtonTriggers, uiButtonTriggers, heroDescriptionTriggers;
 
-    private GameObject heroSelectionBox; // Sprite used to represent the hero selection box
-
     private String selectedPlayerHero = ""; // The hero selected for the player (default empty value to allow for isEmpty check when continue pressed)
     private String selectedOpponentHero = ""; // The hero selected for the opponent (default empty value to allow for isEmpty check when continue pressed)
 
@@ -473,7 +471,4 @@ public class HeroSelectScreen extends GameScreen {
 
     public Map<PushButton, String> getUiButtonTriggers() { return uiButtonTriggers; }
     public void setUiButtonTriggers(Map<PushButton, String> uiButtonTriggers) { this.uiButtonTriggers = uiButtonTriggers; }
-
-    public GameObject getHeroSelectionBox() { return heroSelectionBox; }
-    public void setHeroSelectionBox(Sprite heroSelectionBox) { this.heroSelectionBox = heroSelectionBox; }
 }

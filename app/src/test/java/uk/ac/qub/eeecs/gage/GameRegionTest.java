@@ -797,7 +797,4 @@ public class GameRegionTest {
         assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
 
     }
-
-
-
 }
