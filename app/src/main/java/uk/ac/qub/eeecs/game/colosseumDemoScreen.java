@@ -378,14 +378,32 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered() && mPlayer.getYourTurn()) {
-                    CardDeck d = mPlayerDeck;
-                    //mPlayerDeck.discardCards_EndOfTurn();
                     int sizeOfRegionInit = playerActiveRegion.getCardsInRegion().size() - 1;
+                    int sizeOfEnemyRegionInit = opponentActiveRegion.getCardsInRegion().size();
+
+
+                    //loop through the player active region
                     for(int i = sizeOfRegionInit; i >= 0; i--) {
                         Card disCard = playerActiveRegion.getCardsInRegion().get(i);
+
                         if(disCard.gettoBeDiscarded()) {
                             mPlayerDeck.discardCards_EndOfTurn(disCard);
                             playerActiveRegion.removeCard(disCard);
+                        }
+
+                        if(disCard.getSelected())
+                            disCard.selectDeselect(false);
+                        if(!disCard.getSelectable())
+                            disCard.setSelectable(true);
+                    }
+
+                    //loop through the enemy active region
+                    for(int i = 0; i < sizeOfEnemyRegionInit; i++) {
+                        Card disCard = opponentActiveRegion.getCardsInRegion().get(i);
+
+                        if(disCard.getAttackedCard()) {
+                            disCard.setAttackedCard(false);
+                            disCard.setBitmap(getGame().getAssetManager().getBitmap("CardFront"));
                         }
                     }
 
