@@ -11,10 +11,11 @@ import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 public class FatigueScreenForTesting extends GameScreen {
 
-    ///////
-    //NOTE: THIS IS A BAREBONES VERSION OF MY FATIGUESCREEN FOR TESTING PURPOSES
-    //      ALL GRAPHICAL ELEMENTS HAVE BEEN REMOVED FROM THE CLASS. - Dearbhaile
-    ///////
+    /**
+     *NOTE: THIS IS A BAREBONES VERSION OF MY FATIGUESCREEN FOR TESTING PURPOSES
+     *      ALL GRAPHICAL ELEMENTS HAVE BEEN REMOVED FROM THE CLASS.
+     *      @author Dearbhaile Walsh
+     **/
 
     //Variables required for the Fatigue Screen:
     final private long FATIGUE_TIMEOUT = 3000;

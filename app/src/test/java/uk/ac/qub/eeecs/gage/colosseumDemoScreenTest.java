@@ -236,7 +236,7 @@ public class colosseumDemoScreenTest {
                 enemyStartTime, playerDeck, enemyDeck, hRegion, hRegion, mGame);
 
         //We set the time to something that will not meet the criteria to run the if statement
-        //00000 - 10000 will not give a number greater than 5000, so enemy's turn is not over:
+        //00000 - 10000 will not give a number greater than 2000, so enemy's turn is not over:
         testScreen.setmCurrentTime(00000);
         testPlayer.setYourTurn(false);
         testOpponent.setYourTurn(true);

@@ -3,6 +3,7 @@ package uk.ac.qub.eeecs.game.Colosseum.Regions;
 import uk.ac.qub.eeecs.game.CoinTossScreen;
 import uk.ac.qub.eeecs.game.Colosseum.Card;
 import uk.ac.qub.eeecs.game.Colosseum.Player;
+import uk.ac.qub.eeecs.game.Colosseum.WeaponCard;
 
 /**
  * Created by Kyle Corrigan
@@ -78,6 +79,11 @@ public class ActiveRegion extends GameRegion {
             if (p.getCurrentMana() >= cost) {
                 p.reduceCurrentMana(cost);
                 addCard(card);
+                if (card instanceof WeaponCard) {
+                    WeaponCard wc = (WeaponCard) card;
+                    wc.useLogic(card, p);
+                    wc.setCharges(0);
+                }
             }
 
         }

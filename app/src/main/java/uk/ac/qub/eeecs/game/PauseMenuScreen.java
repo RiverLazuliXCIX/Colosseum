@@ -26,6 +26,10 @@ import uk.ac.qub.eeecs.gage.ui.PushButton;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
+/*
+ * Class was craeted by @Diarmuid Toal & @Scott Barham
+ * This class was built using the splash screen as a guide
+ */
 public class PauseMenuScreen extends GameScreen {
 
     // /////////////////////////////////////////////////////////////////////////
@@ -114,6 +118,7 @@ public class PauseMenuScreen extends GameScreen {
         };
     }
 
+    //Code is based upon Dr Philip Hanna's code which is adapted from the JSON refactoring lecture
     private void constructButtons(String buttonsToConstructJSONFile, List<PushButton> buttons) {
         // Attempt to load in the JSON asset details
         String loadedJSON;

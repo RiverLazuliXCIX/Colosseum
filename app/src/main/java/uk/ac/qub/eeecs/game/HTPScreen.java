@@ -19,6 +19,11 @@ import uk.ac.qub.eeecs.gage.world.GameObject;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
+
+/*
+* Class was created by  @Matthew Brunton & @Diarmuid Toal
+* This class is used for the drawing the text from GameInstructions.Java
+*/
 public class HTPScreen extends GameScreen {
 
     private PushButton backButton; // Back button to return from this screen
@@ -137,19 +142,21 @@ public class HTPScreen extends GameScreen {
         }
     }
 
+    //Created by @Diarmuid Toal
     public void drawInstructionsToScreen( IGraphics2D graphics2D) {
-        final float spacing = 0.55f;
+        final float spacingOnXAxis = 0.55f;
 
-        graphics2D.drawText(GameInstructions.line1(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 0.82f, textPaint);
-        graphics2D.drawText(GameInstructions.line2(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 0.93f, textPaint);
-        graphics2D.drawText(GameInstructions.line3(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.04f, textPaint);
-        graphics2D.drawText(GameInstructions.line4(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.15f, textPaint);
-        graphics2D.drawText(GameInstructions.line5(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.26f, textPaint);
+        //The 'magic' numbers are representing the positioning of the text on the screen along the Y axis
+        graphics2D.drawText(GameInstructions.line1(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 0.82f, textPaint);
+        graphics2D.drawText(GameInstructions.line2(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 0.93f, textPaint);
+        graphics2D.drawText(GameInstructions.line3(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 1.04f, textPaint);
+        graphics2D.drawText(GameInstructions.line4(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 1.15f, textPaint);
+        graphics2D.drawText(GameInstructions.line5(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 1.26f, textPaint);
 
-        graphics2D.drawText(GameInstructions.line6(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.59f, textPaint);
-        graphics2D.drawText(GameInstructions.line7(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 1.70f, textPaint);
-        graphics2D.drawText(GameInstructions.line8(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.03f, textPaint);
-        graphics2D.drawText(GameInstructions.line9(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.14f, textPaint);
-        graphics2D.drawText(GameInstructions.line10(), mGameViewport.getWidth() * spacing, mGameViewport.getHeight() * 2.47f, textPaint);
+        graphics2D.drawText(GameInstructions.line6(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 1.59f, textPaint);
+        graphics2D.drawText(GameInstructions.line7(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 1.70f, textPaint);
+        graphics2D.drawText(GameInstructions.line8(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 2.03f, textPaint);
+        graphics2D.drawText(GameInstructions.line9(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 2.14f, textPaint);
+        graphics2D.drawText(GameInstructions.line10(), mGameViewport.getWidth() * spacingOnXAxis, mGameViewport.getHeight() * 2.47f, textPaint);
     }
 }

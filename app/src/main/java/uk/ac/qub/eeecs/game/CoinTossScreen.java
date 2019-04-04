@@ -33,7 +33,9 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
 /**
  * CoinTossScreen Class, displays outcome & effects of coin toss
- * @author Dearbhaile Walsh & Scott Barham
+ * @author Dearbhaile Walsh, with contributions from
+ * @author Scott Barham, where attributed
+ * @author Kyle Corrigan, where attributed
  */
 
 public class CoinTossScreen extends GameScreen {
@@ -131,13 +133,19 @@ public class CoinTossScreen extends GameScreen {
         mPlayer = new Player(this, mPlayerHero);
         mOpponent = new AIOpponent(this, mOpponentHero);
 
-        //Set up initial PLAYER and ENEMY stats:
-        mPlayer.setCurrentMana(1);
-        mPlayer.setCurrentManaCap(1);
-        mOpponent.setCurrentMana(1);
-        mOpponent.setCurrentManaCap(1);
+        final int STARTING_MANA = 1;
 
-        //Set up Hand Regions to be passed in to new screen:
+        //Set up initial PLAYER and ENEMY stats:
+        mPlayer.setCurrentMana(STARTING_MANA);
+        mPlayer.setCurrentManaCap(STARTING_MANA);
+        mOpponent.setCurrentMana(STARTING_MANA);
+        mOpponent.setCurrentManaCap(STARTING_MANA);
+
+        /**
+         * Set up Hand Regions to be passed in to new screen:
+         * @author Kyle Corrigan
+        **/
+
         mPlayerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         mOpponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
 
@@ -201,6 +209,9 @@ public class CoinTossScreen extends GameScreen {
         mGameViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
+    /**
+     * @author Scott Barham
+     */
     private void edgeCaseTest() { //Testing for the edge case scenario of the coin flip, User Story 18.1, Sprint 4 - Scott
         boolean i = true;
         while (i) {
@@ -217,6 +228,9 @@ public class CoinTossScreen extends GameScreen {
         }
     }
 
+    /**
+     * @author Scott Barham
+     */
     private String coinFlipStart() { //Initialise the coin flip for a random result - Scott
         Random RANDOM = new Random();
         int flip = RANDOM.nextInt(6001);
@@ -230,7 +244,6 @@ public class CoinTossScreen extends GameScreen {
         return "Fail";
     }
 
-    //CODE HIGHLIGHT 4 - 'COINTOSS SCREEN' - Dearbhaile
     // Method for setting up stats based on Coin Toss:
     private void coinFlipResult(String result) {
         switch (result) {
@@ -250,7 +263,9 @@ public class CoinTossScreen extends GameScreen {
 
     private colosseumDemoScreen cds;
 
-    //NOT THIS
+    /**
+     * @author Scott Barham
+     */
     private void changeScreens() { //Method to remove the current screen and move to the main game screen
         mGame.getScreenManager().removeScreen(CoinTossScreen.this);
         cds = new colosseumDemoScreen(mPlayer, mOpponent, mCurrentTurn,
@@ -258,7 +273,6 @@ public class CoinTossScreen extends GameScreen {
         mGame.getScreenManager().changeScreenButton(cds);
     }
 
-    //CODE HIGHLIGHT 4 CONTINUES - Dearbhaile
     public void chooseTextToDisplay() { //- Dearbhaile
         if (mCoinTossResult == "Heads") {
             mCoinTossMsg1 = "The coin landed on heads! You get to play first.";
@@ -273,7 +287,6 @@ public class CoinTossScreen extends GameScreen {
             mCoinTossMsg2 = "You automatically win the game for being lucky!";
         }
     }
-    //END OF CODE HIGHLIGHT 4
 
     @Override
     public void update(ElapsedTime elapsedTime) {
@@ -283,10 +296,16 @@ public class CoinTossScreen extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
         mTimeRemaining = 10 - ((mCurrentTime - mTimeOnCreate)/1000);
 
+        /**
+         *@author Scott Barham
+         **/
         if(colosseumDemoScreen.wasPaused()) { //If the player used the "main menu" button from inside a game, allow them to resume instantly. Scott
             changeScreens();
         }
 
+        /**
+         *@author Scott Barham
+         **/
         if (!coin.isComplete()) { //If the coin animation isnt complete, continue updating the animation until it completes. - Scott
             coin.coinAnimation();
         }

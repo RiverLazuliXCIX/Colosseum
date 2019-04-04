@@ -10,6 +10,11 @@
     <uses-feature
         android:name="android.hardware.touchscreen.multitouch.distinct" android:required="true" />
 
+    <!--Changes to the logo and name was done by @Diarmuid Toal
+    * And was found how to be done with the link below
+    *     https://developer.android.com/studio/write/image-asset-studio
+    -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

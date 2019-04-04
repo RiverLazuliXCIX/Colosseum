@@ -1,13 +1,12 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
-//
-//      FatigueCounter class is used to a) count how much fatigue the player is due to take
-//                                      b) take cumulative damage from the player, based upon
-//                                         how many times they've taken fatigue
-//
 
 public class FatigueCounter {
-    //Coded by Dearbhaile Walsh
+    /**
+    * The FatigueCounter Class models the counter required to monitor both player and enemy's current fatigue, and thus damage to be taken.
+    * @author Dearbhaile Walsh
+    **/
+
     //Properties:
     private int mFatigueNum;
 
@@ -25,7 +24,6 @@ public class FatigueCounter {
     }
 
     public void takeAppropriateDamage(Player player) {
-        incrementFatigue(); //Number is increased, to record that Fatigue has been called
         player.receiveDamage(mFatigueNum); //Player takes appropriate amount of damage
 
         if (player.getCurrentHealth() < 0) {
