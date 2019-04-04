@@ -22,6 +22,7 @@ import uk.ac.qub.eeecs.gage.world.LayerViewport;
 public class StatisticsScreen extends GameScreen {
 
     private PushButton backButton; // Back button to return from this screen
+    private PushButton resetButton; // Reset statistics on this screen
     private List<PushButton> pushButtons = new ArrayList<>(); // List of all push buttons
     private GameObject sBackground; // Add in the background for the statistics screen
     private LayerViewport mGameViewport;
@@ -80,6 +81,12 @@ public class StatisticsScreen extends GameScreen {
                 mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
                 "BackArrow", "BackArrowSelected", this);
         pushButtons.add(backButton);
+
+        resetButton = new PushButton(
+                mGameViewport.getWidth() * 0.18f, mGameViewport.getHeight() * 0.10f,
+                mGameViewport.getWidth() * 0.075f, mGameViewport.getHeight() * 0.10f,
+                "resetStats", "resetStatsPushed", this);
+        pushButtons.add(resetButton);
 
         // Load the background for the screen
         sBackground = new GameObject(mGameViewport.getWidth()/ 2.0f,
@@ -183,6 +190,18 @@ public class StatisticsScreen extends GameScreen {
             // Update each of the push buttons
             for (PushButton button : pushButtons)
                 button.update(elapsedTime);
+
+            if(resetButton.isPushTriggered()) { //Reset statistics if this button is pushed
+                totalWins = 0; //create a count for total number of wins
+               totalLosses = 0; //create a count for total number of losses
+                mostRecentResult = "No games played yet"; //holder for the most recent result
+                winLossRatio = 0.0; //holder for the ratio of wins/losses
+                winPercent = 0.0; //holder for win percentage
+                totalGamesPlayed = 0; //create a count for total number of games played.
+                recentGameTime = 0.0; //most recent game time
+                totalGameTime = 0.0; //total game time for this session
+                gameStreak = 0; //used to determine if the user is on a win or loss streak (positive for win streak, negative for loss streak)
+            }
 
             // If the back button is pressed, return to the previous screen
             if (backButton.isPushTriggered()) {

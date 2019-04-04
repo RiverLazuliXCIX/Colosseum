@@ -103,9 +103,12 @@ public class MinionCard extends Card {
         MinionCard mc;
         // search the region for taunts
         for (Card c : ar.getCardsInRegion()) {
-            mc = (MinionCard) c;
-            // if a taunt is found, return true
-            if (mc.getEffect() == Effect.TAUNT) return true;
+            // only check taunts on minion cards
+            if (c instanceof MinionCard) {
+                mc = (MinionCard) c;
+                // if a taunt is found, return true
+                if (mc.getEffect() == Effect.TAUNT) return true;
+            }
         }
 
         // otherwise return false

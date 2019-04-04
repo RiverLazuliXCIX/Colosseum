@@ -59,6 +59,17 @@
       "type": "Bitmap",
       "name": "FpsButtonOff",
       "file": "img/button_fps-off.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "resetStats",
+      "file": "img/resetStats.png"
+    },
+    {
+      "type": "Bitmap",
+      "name": "resetStatsPushed",
+      "file": "img/resetStatsPushed.png"
     }
+
     ]
 }

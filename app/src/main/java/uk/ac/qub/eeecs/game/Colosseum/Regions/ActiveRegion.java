@@ -69,6 +69,8 @@ public class ActiveRegion extends GameRegion {
 
         if (card.getCardDropped()&& isInRegion(card) && !isRegionFull()&& card.getDraggable()){
 
+            // Matthew: added coin check and reduction to prevent playing a card with a larger cost
+            // Weapons also get their stats added immediately to the player and are removed from the board
             int cost = card.getCoinCost();
             CoinTossScreen cts = (CoinTossScreen) card.getGameScreen();
 

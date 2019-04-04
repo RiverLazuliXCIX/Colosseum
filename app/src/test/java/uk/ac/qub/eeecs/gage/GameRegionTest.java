@@ -351,7 +351,7 @@ public class GameRegionTest {
         assertEquals(expectedCard3YPos,card3.position.y,0.0f);
 
     }
-
+    
     // /////////////////////////////////////////////////////////////////////////
     // Testing isInRegion()
     // /////////////////////////////////////////////////////////////////////////
@@ -542,4 +542,259 @@ public class GameRegionTest {
         assertTrue( gameRegion.isRegionFull());
     }
 
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Testing addCard() method
+    // /////////////////////////////////////////////////////////////////////////
+
+    // Hand region addCard();
+    /*
+     * If hand region is not full adds card to the hand region array list, sets card's region to hand
+     * and sets the added card to the next available position. Since the region is full, the card should not
+     * be added to the region
+     */
+    @Test
+    public void HandRegion_addCardHandFull(){
+
+        // Create card instance to be tested
+        Card initialCard = new Card(0,0,gameScreen,5,false,"Name");
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        HandRegion handRegion = new HandRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        handRegion.setMaxNumCardsInRegion(1);
+        // card region is now full
+        handRegion.getCardsInRegion().add(initialCard);
+
+        // Call the addCardMethod
+        handRegion.addCard(addedCard);
+
+        // Should stay at initial values
+        float expectedCardX = 0;
+        float expectedCardY = 0;
+        String expectedCardRegion = "TestDefault";
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+
+    }
+
+    /*
+     * If hand region is not full adds card to the hand region array list, sets card's region to hand
+     * and sets the added card to the next available position. Since the region is not full, the card should
+     * be added to the region
+     */
+    @Test
+    public void HandRegion_addCardHandEmpty(){
+
+        // Create card instance to be tested
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        HandRegion handRegion = new HandRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        handRegion.setMaxNumCardsInRegion(11);
+        // card region is empty
+        handRegion.getCardsInRegion().clear();
+
+        // Call the addCardMethod
+        handRegion.addCard(addedCard);
+
+        // Should update values to the next available position
+        float expectedCardX = xLeftEdge+addedCard.getWidth()/2+(handRegion.getCardsInRegion().indexOf(addedCard)*addedCard.getWidth());
+        float expectedCardY = yBottomEdge+addedCard.getHeight()/2;
+        String expectedCardRegion = "Hand";
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+
+    }
+
+    /*
+     * If hand region is not full adds card to the hand region array list, sets card's region to hand
+     * and sets the added card to the next available position. Since the region is not full, the card should
+     * be added to the region
+     */
+    @Test
+    public void HandRegion_addCardHandWithCardsPresent(){
+
+        // Create card instance to be tested
+        Card initialCard = new Card(0,0,gameScreen,5,false,"Name");
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        HandRegion handRegion = new HandRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        handRegion.setMaxNumCardsInRegion(11);
+        // card region is empty
+        handRegion.getCardsInRegion().clear();
+        // Add initial card to region
+        handRegion.addCard(initialCard);
+
+        // Call the addCardMethod on new card
+        handRegion.addCard(addedCard);
+
+        // Should update values to the next available position
+        float expectedCardX = xLeftEdge+addedCard.getWidth()/2+(handRegion.getCardsInRegion().indexOf(addedCard)*addedCard.getWidth());
+        float expectedCardY = yBottomEdge+addedCard.getHeight()/2;
+        String expectedCardRegion = "Hand";
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+
+    }
+
+    /*
+     * If active region is not full adds card to the active region array list, sets card's region to active
+     * and sets the added card to the next available position. Since the region is full, the card should not
+     * be added to the region. Cards successfully added to active region should not be draggable, but should be
+     * selectable
+     */
+    @Test
+    public void ActiveRegion_addEnemyCardActiveFull(){
+
+        // Create card instance to be tested
+        Card initialCard = new Card(0,0,gameScreen,5,false,"Name");
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+        addedCard.setDraggable(true);
+        addedCard.setSelectable(false);
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        ActiveRegion activeRegion = new ActiveRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        activeRegion.setMaxNumCardsInRegion(1);
+        // card region is now full
+        activeRegion.getCardsInRegion().add(initialCard);
+
+        // Call the addCardMethod
+        activeRegion.addCard(addedCard);
+
+        // Should stay at initial values
+        float expectedCardX = 0;
+        float expectedCardY = 0;
+        String expectedCardRegion = "TestDefault";
+        boolean expectedDraggable = true;
+        boolean expectedSelectable = false;
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+        assertTrue(expectedDraggable);
+        assertFalse(expectedSelectable);
+
+    }
+
+    /*
+     * If active region is not full adds card to the active region array list, sets card's region to active
+     * and sets the added card to the next available position. Since the region is not full, the card should
+     * be added to the region. Cards successfully added to active region should not be draggable, but should be
+     * selectable
+     */
+    @Test
+    public void ActiveRegion_addCardActiveEmpty(){
+
+        // Create card instance to be tested
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        ActiveRegion activeRegion = new ActiveRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        activeRegion.setMaxNumCardsInRegion(11);
+        // card region is empty
+        activeRegion.getCardsInRegion().clear();
+
+        // Call the addCardMethod
+        activeRegion.addCard(addedCard);
+
+        // Should update values to the next available position
+        float expectedCardX = xLeftEdge+addedCard.getWidth()/2+(activeRegion.getCardsInRegion().indexOf(addedCard)*addedCard.getWidth());
+        float expectedCardY = yBottomEdge+addedCard.getHeight()/2;
+        String expectedCardRegion = "Active";
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+
+    }
+
+    /*
+     * If hand region is not full adds card to the hand region array list, sets card's region to hand
+     * and sets the added card to the next available position. Since the region is not full, the card should
+     * be added to the region
+     */
+    @Test
+    public void ActiveRegion_addCardActiveWithCardsPresent(){
+
+        // Create card instance to be tested
+        Card initialCard = new Card(0,0,gameScreen,5,false,"Name");
+        Card addedCard = new Card(0,0,gameScreen,5,false,"Name");
+        addedCard.setCurrentRegion("TestDefault");
+
+        // Initialise test game region
+        float xLeftEdge =100;
+        float xRightEdge =500;
+        float yTopEdge =500;
+        float yBottomEdge =100;
+        ActiveRegion activeRegion = new ActiveRegion(xLeftEdge,xRightEdge,yTopEdge,yBottomEdge);
+
+        // Set max region capacity
+        activeRegion.setMaxNumCardsInRegion(11);
+        // card region is empty
+        activeRegion.getCardsInRegion().clear();
+        // Add initial card to region
+        activeRegion.addCard(initialCard);
+
+        // Call the addCardMethod on new card
+        activeRegion.addCard(addedCard);
+
+        // Should update values to the next available position
+        float expectedCardX = xLeftEdge+addedCard.getWidth()/2+(activeRegion.getCardsInRegion().indexOf(addedCard)*addedCard.getWidth());
+        float expectedCardY = yBottomEdge+addedCard.getHeight()/2;
+        String expectedCardRegion = "Active";
+
+        // Check to ensure that variables are at their expected values
+        assertEquals(expectedCardX, addedCard.position.x, 0.0f);
+        assertEquals(expectedCardY, addedCard.position.y, 0.0f);
+        assertEquals(expectedCardRegion, addedCard.getCurrentRegion());
+
+    }
 }

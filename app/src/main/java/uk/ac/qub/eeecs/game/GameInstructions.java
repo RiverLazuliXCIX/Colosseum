@@ -8,6 +8,8 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 public class GameInstructions extends GameScreen {
 
     /*
+    This Class was made by @Diarmuid Toal
+
      * Unfortunately this was not how I wanted this to be but due to time constrains
      * this was the only viable way I could do this. This class is for solely writing
      * the instructions which will be read from the HTPScreen.
@@ -89,11 +91,6 @@ public class GameInstructions extends GameScreen {
         return tenthLine[0] + tenthLine[1];
     }
 
-//,
-
-    /*
-     * . At the beginning of your turn, you’ll gain one new coin – a denarius. With a maximum of 10 denarius
-     */
     /**
      * Update method allowing for events on the screen to be handled
      *
