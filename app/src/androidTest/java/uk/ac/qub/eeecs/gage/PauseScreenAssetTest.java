@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  Performed by @Diarmuid Toal Sprint 5. */
 
 @RunWith(AndroidJUnit4.class) // Testing Pause Screen
-public class PauseScreenTest {
+public class PauseScreenAssetTest {
 
     private Context context;
     private DemoGame game;
