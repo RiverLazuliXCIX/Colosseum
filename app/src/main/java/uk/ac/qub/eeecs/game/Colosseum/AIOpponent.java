@@ -285,7 +285,7 @@ public class AIOpponent extends Player {
         if(cardsInAIHandRegion.size()!=0) //If the hand isnt empty
         {
             ArrayList<MinionCard> aiMinionsInHand = createMinionCardsList(cardsInAIHandRegion);
-            for(int i=0; i<aiMinionsInHand.size(); i++) {
+            for(int i=0; i<aiMinionsInHand.size()-1; i++) {
                 if(aiMinionsInHand.get(i).getCoinCost() <= manaRemaining) {
                     playMinion(aiMinionsInHand.get(i), i);
                 }
@@ -308,11 +308,13 @@ public class AIOpponent extends Player {
 
     private void genericAttacks(ArrayList<MinionCard> aiMinionsList) { //Used for any minions which dont have an urgent need to attack specific cards (e.g. to kill or defend hero) - Scott
         int playerCardHealth = 0;
-        for(int i=0; i<cardsInPlayerBoardRegion.size();i++) {//Go through the board of the player
-            MinionCard playerMinion =  (MinionCard) cardsInPlayerBoardRegion.get(i);
+        ArrayList<MinionCard> playerMinionsList = createMinionCardsList(cardsInPlayerBoardRegion);
+
+        for(int i=0; i<playerMinionsList.size();i++) {//Go through the board of the player
+            MinionCard playerMinion =  playerMinionsList.get(i);
             playerCardHealth = playerMinion.getHealth();//Get the health value of the players card
-            for(int j=0; j<cardsInAIBoardRegion.size();j++) {//Go through the ai board
-                MinionCard aiMinion = (MinionCard) cardsInAIBoardRegion.get(i);
+            for(int j=0; j<aiMinionsList.size();j++) {//Go through the ai board
+                MinionCard aiMinion = aiMinionsList.get(i);
                 if(playerCardHealth<= aiMinion.getAttack()){//If attack would kill the players card, attack the card.
                     aiAttack(aiMinion,playerMinion,false); //Attack the card
                 }
@@ -325,10 +327,12 @@ public class AIOpponent extends Player {
     }
 
     private void playMinion(MinionCard minion, int minionPosition) { // Scott - Code for playing a minion
-        opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Add to the next non filled position on board
-        reduceCurrentMana(minion.getCoinCost()); //Reduce ai mana by cost of card
-        manaRemaining = getCurrentMana(); //Update mana remaining
-        opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Remove the card from hand
+        if((minion.getCoinCost()<=manaRemaining)) {
+            opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Add to the next non filled position on board
+            reduceCurrentMana(minion.getCoinCost()); //Reduce ai mana by cost of card
+            manaRemaining = getCurrentMana(); //Update mana remaining
+            opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Remove the card from hand
+        }
     }
 
 
