@@ -117,6 +117,19 @@ public class CoinTest {
         assertEquals(coin1.getCurrentCoinFrame(),2 );
     }
 
+    @Test
+    public void Coin_FinishedAnimationFramesTest() {
+        String coinTossResult = "Heads";
+        CoinScreenForTesting coin1 = new CoinScreenForTesting(250.0f,250.0f,100.0f,100.0f, gameScreen, coinTossResult);
+        coin1.setupCoinAnimation(coinTossResult);
+       for(int i =0; i <96; i++) {
+           coin1.coinAnimation(); //One frame has been completed, decrease value
+       }
+        assertEquals(coin1.getFramesLeft(), 0); //If we completed the animation
+        assertEquals(coin1.getCurrentCoinFrame(),1 ); //If it landed on the heads frame
+
+    }
+
 
 }
 
