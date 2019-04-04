@@ -298,23 +298,23 @@ public class AIOpponent extends Player {
                         }
                     }
                 }
-                genericAttacks(aiMinionsList); //If no lethal oppurtunities are presented, attack with this method. Could be expanded upon if I had more time
+                genericAttacks(aiMinionsList); //If no lethal opportunities are presented, attack with this method. Could be expanded upon if I had more time
 
             }
 
         }
-
-        if(cardsInAIHandRegion.size()!=0) //If the hand isnt empty
+        updateRegionValues();
+        if(cardsInAIHandRegion.size()!=0) //If the hand isn't empty
         {
             ArrayList<MinionCard> aiMinionsInHand = createMinionCardsList(cardsInAIHandRegion);
             for(int i=0; i<aiMinionsInHand.size()-1; i++) {
-                if(aiMinionsInHand.get(i).getCoinCost() <= manaRemaining) {
+                if(aiMinionsInHand.get(i).getCoinCost() <= getCurrentMana()) {
                     playMinion(aiMinionsInHand.get(i), i);
                 }
             }
         }
 
-        if(manaRemaining>=2) { //If we have remaining mana, we can use our hero power leftover.
+        if(getCurrentMana()>=2) { //If we have remaining mana, we can use our hero power leftover.
             useHeroAbilities();
         }
 
@@ -322,7 +322,7 @@ public class AIOpponent extends Player {
         if (isWeaponEquipped()) {
             //only equip a new weapon if lethal or preventing enemy lethal.
         } else {
-            //If mana remaining is greater than or equal to weapon mana
+            //If mana remaining is greater than or equal to weapon cost mana
             //equip a weapon is a possible move
         }
 
@@ -330,12 +330,15 @@ public class AIOpponent extends Player {
 
     private void genericAttacks(ArrayList<MinionCard> aiMinionsList) { //Used for any minions which dont have an urgent need to attack specific cards (e.g. to kill or defend hero) - Scott
         int playerCardHealth = 0;
+        updateRegionValues();
         ArrayList<MinionCard> playerMinionsList = createMinionCardsList(cardsInPlayerBoardRegion); //Create a minioncard list based on the cards input
 
         for(int i=0; i<playerMinionsList.size();i++) {//Go through the board of the player
             MinionCard playerMinion =  playerMinionsList.get(i);
+            System.out.println(playerMinionsList.size() + "PM");
             playerCardHealth = playerMinion.getHealth();//Get the health value of the players card
             for(int j=0; j<aiMinionsList.size();j++) {//Go through the ai board
+                System.out.println(aiMinionsList.size() + "AM");
                 MinionCard aiMinion = aiMinionsList.get(i);
                 if(playerCardHealth<= aiMinion.getAttack()){//If attack would kill the players card, attack the card.
                     aiAttack(aiMinion,playerMinion,false); //Attack the card
@@ -344,19 +347,26 @@ public class AIOpponent extends Player {
         }
         aiCardListAttack(aiMinionsList, null, true); //Any leftover minions on AI side which didnt attack minions can attack the hero instead
 
-        cardsInAIBoardRegion = opponentActiveRegion.getCardsInRegion(); //Update these as some minions could have died since
-        cardsInPlayerBoardRegion = playerActiveRegion.getCardsInRegion();
     }
 
     private void playMinion(MinionCard minion, int minionPosition) { // Scott - Code for playing a minion
         if((minion.getCoinCost()<=manaRemaining)) {
-            opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Add to the next non filled position on board
-            reduceCurrentMana(minion.getCoinCost()); //Reduce ai mana by cost of card
-            manaRemaining = getCurrentMana(); //Update mana remaining
-            opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Remove the card from hand
+            if(boardspaceRemaining>0) { //If there is space to play the minion
+                updateRegionValues();
+                opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Add to the next non filled position on board
+                reduceCurrentMana(minion.getCoinCost()); //Reduce ai mana by cost of card
+                manaRemaining = getCurrentMana(); //Update mana remaining
+                opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(minionPosition)); //Remove the card from hand
+                actionDelay(10); //Add a small timer delay for each action
+            }
         }
     }
 
+    private void updateRegionValues() {
+        boardspaceRemaining = opponentActiveRegion.getMaxNumCardsInRegion()-opponentActiveRegion.getCardsInRegion().size(); //Update the new boardspace remaining
+        cardsInAIBoardRegion = opponentActiveRegion.getCardsInRegion(); //Update these as some minions could have died since
+        cardsInPlayerBoardRegion = playerActiveRegion.getCardsInRegion();
+    }
 
     private void attackTaunts(ArrayList<MinionCard> tauntMinions,  ArrayList<MinionCard> aiMinionsList, ArrayList<Integer> TauntMinionsHealthValues) { //Scott - Used to attack taunt minions optimally
         int position = 0;
@@ -459,13 +469,24 @@ public class AIOpponent extends Player {
     }
 
     private void aiAttack(MinionCard attacker, MinionCard target, boolean attackingHero) { //Allow you to attack heros or minions with single cards - Scott
+        actionDelay(10); //Add a small timer delay for each action
         if(attackingHero) { //Attack the enemy hero
             attacker.attackEnemy(attacker, humanPlayer); //Attack the hero
         } else { //Attack the enemy card
             attacker.attackEnemy(attacker, target); //Attack the minion
         }
+        updateRegionValues();
     }
 
+    private void actionDelay(int timeToWait) { //Add a delay for each AI action so the player can see what the moves are
+        //This small method was inspired from the 'QUBBAttle' past project in "Coin.java", method "progressAnimation()"
+        try {
+            Thread.sleep(timeToWait);
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
     public void aiTurn(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion, Player player) { //The call for the AI decision making - Scott
         aiTurnSetup(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion, player);

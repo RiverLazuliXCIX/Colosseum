@@ -155,6 +155,9 @@ public class colosseumDemoScreenForTesting extends GameScreen {
     //If player started, then turns increase every time player takes new turn. - Dearbhaile
     public void checkIfEnemysTurn() {
         if (mCurrentTime - mEnemyTurnBegins >= ENEMY_TURN_TIME) { // Current time is constantly being updated in Update method
+
+            mOpponent.aiTurn(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion, mPlayer); //Activates the AI decision making - Scott
+
             mPlayer.setYourTurn(true); // If enemy turn over, set Player turn to true
             mOpponent.setYourTurn(false); // Set Opponent turn to false
             mPlayerDeck.drawCard(mPlayer, mPlayerFatigue, mGame); // Player draws card
@@ -164,7 +167,6 @@ public class colosseumDemoScreenForTesting extends GameScreen {
         }
     }
 
-    boolean goOnce = true;
 
     public void endOfGame(String gameResult) {
         try {
@@ -196,12 +198,6 @@ public class colosseumDemoScreenForTesting extends GameScreen {
         mCurrentTime = System.currentTimeMillis();
 
         if (mOpponent.getYourTurn()) {
-            if (goOnce) {
-                //opponentActiveRegion.addCard(opponentHandRegion.getCardsInRegion().get(0));
-                //opponentHandRegion.removeCard(opponentHandRegion.getCardsInRegion().get(0));
-                mOpponent.playRandom(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion);
-                goOnce = false;
-            }
             checkIfEnemysTurn(); //If opponent's turn, check when it ends - Dearbhaile
         }
 
