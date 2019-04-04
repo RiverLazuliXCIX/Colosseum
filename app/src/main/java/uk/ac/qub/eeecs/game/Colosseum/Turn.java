@@ -63,7 +63,7 @@ public class Turn {
         opponent.setYourTurn(true); //Enemy's "yourTurn" value is set to true
         player.setYourTurn(false); //Player's "yourTurn" value is set to false
         player.setCurrentMana(EXTRA_MANA); //Player gets 2 mana points, ie one more than the usual 1
-        player.setCurrentManaCap(EXTRA_CARD); //Mana cap is increased to accommodate the mana value
+        player.setCurrentManaCap(EXTRA_MANA); //Mana cap is increased to accommodate the mana value
         enemyDeck.drawSetNumCards(NORMAL_CARD_NUM); //Enemy draws usual number of starting cards, ie 3
         playerDeck.drawSetNumCards(EXTRA_CARD); //Enemy draws an extra card, in compensation
     }

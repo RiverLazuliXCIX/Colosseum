@@ -35,6 +35,7 @@ import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
  * CoinTossScreen Class, displays outcome & effects of coin toss
  * @author Dearbhaile Walsh, with contributions from
  * @author Scott Barham, where attributed
+ * @author Kyle Corrigan, where attributed
  */
 
 public class CoinTossScreen extends GameScreen {
@@ -140,7 +141,11 @@ public class CoinTossScreen extends GameScreen {
         mOpponent.setCurrentMana(STARTING_MANA);
         mOpponent.setCurrentManaCap(STARTING_MANA);
 
-        //Set up Hand Regions to be passed in to new screen:
+        /**
+         * Set up Hand Regions to be passed in to new screen:
+         * @author Kyle Corrigan
+        **/
+
         mPlayerHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mPlayer.position.y - (mPlayer.getPortraitHeight() / 2), mDefaultLayerViewport.getBottom());
         mOpponentHandRegion = new HandRegion(mDefaultLayerViewport.getRight() / 2 - (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getRight() / 2 + (4 * (50.0f / 1.5f)), mDefaultLayerViewport.getTop(), mOpponent.position.y + (mOpponent.getPortraitHeight() / 2));
 
