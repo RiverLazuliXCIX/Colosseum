@@ -406,7 +406,7 @@ public class CardDeckTest {
 
         //When this method is called, all cards in deck that are set as
         //'to be discarded' will be discarded, ie those the player selects
-        newDeck.discardCards_EndOfTurn();
+        // newDeck.discardCards_EndOfTurn();
 
         int newCardsInHand = 2;
         int newCardsInGraveyard = 3;
@@ -428,7 +428,7 @@ public class CardDeckTest {
 
         //When this method is called, all cards in deck that are set as
         //'to be discarded' will be discarded, ie those the player selects
-        newDeck.discardCards_EndOfTurn();
+        //newDeck.discardCards_EndOfTurn();
 
         int newCardsInHand = 5;
         int newCardsInGraveyard = 0;
