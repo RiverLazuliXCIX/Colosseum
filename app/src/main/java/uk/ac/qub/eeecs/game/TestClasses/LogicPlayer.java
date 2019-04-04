@@ -35,14 +35,11 @@ public class LogicPlayer {
         if (hasTaunts(enemyMinions)) return;
         if (!weaponEquipped && charges < 1) return;
 
-        if (effect == Effect.VENOMOUS) enemyPlayer.setHealth(0);
-        else enemyPlayer.receiveDamage(this.getAttack());
+        enemyPlayer.receiveDamage(this.getAttack());
         if (effect == Effect.LIFESTEAL)
             heal(attack);
 
-        if (enemyPlayer.weaponEquipped && enemyPlayer.getPEffect() == Effect.VENOMOUS)
-            this.setHealth(0);
-        else this.receiveDamage(enemyPlayer.getAttack());
+        this.receiveDamage(enemyPlayer.getAttack());
         if (enemyPlayer.weaponEquipped && enemyPlayer.getPEffect() == Effect.LIFESTEAL)
             enemyPlayer.heal(enemyPlayer.attack);
 

@@ -446,8 +446,8 @@ public class CardLogicTests {
 
         assertEquals(true, p.checkHealth());
         assertEquals(30, p.getHealth());
-        assertEquals(false, p2.checkHealth());
-        assertEquals(0, p2.getHealth());
+        assertEquals(true, p2.checkHealth());
+        assertEquals(27, p2.getHealth());
     }
 
     @Test
