@@ -97,7 +97,7 @@ public class ScreenManager {
         return null;
     }
 
-    public void changeScreenButton(GameScreen screen) {//Used for changing game screens order (allowing for screens to be resumed rather than removed and created anew).
+    public void changeScreenButton(GameScreen screen) {//Used for changing game screens order (allowing for screens to be resumed rather than removed and created anew) - Scott
         int findScreenPosition = findScreenIterator(screen.getName()); //Find and set the position the screen is at
         if(findScreenPosition > -1) { //If the screen was found, enter statement
             //If the target screen exists already, swap the screen to top of stack (instead of a new instance)
