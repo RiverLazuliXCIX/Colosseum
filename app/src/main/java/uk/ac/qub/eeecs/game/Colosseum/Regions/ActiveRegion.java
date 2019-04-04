@@ -79,7 +79,11 @@ public class ActiveRegion extends GameRegion {
             if (p.getCurrentMana() >= cost) {
                 p.reduceCurrentMana(cost);
                 addCard(card);
-                if (card instanceof WeaponCard) card.useLogic(card, p);
+                if (card instanceof WeaponCard) {
+                    WeaponCard wc = (WeaponCard) card;
+                    wc.useLogic(card, p);
+                    wc.setCharges(0);
+                }
             }
 
         }
