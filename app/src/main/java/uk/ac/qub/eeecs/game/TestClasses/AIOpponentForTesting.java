@@ -60,8 +60,8 @@ public class AIOpponentForTesting extends PlayerForTesting {
     }
     */
 
-    /* NOT USED - Previously was used when variables were 2d arrays, but swapped variables to arraylists for easier coding.
-    private void addtauntMinions(int[][] tauntMinionsList, int cardPosition, int minionAttack, int minionHealth) { //Method to add a list of all taunt minions - Scott
+    // NOT USED - Previously was used when variables were 2d arrays, but swapped variables to arraylists for easier coding.
+    public void addtauntMinions(int[][] tauntMinionsList, int cardPosition, int minionAttack, int minionHealth) { //Method to add a list of all taunt minions - Scott
         boolean empty = false;
         for(int i=0;i<tauntMinionsList.length;i++) { //First find an empty position in the 2d array
             for(int j=0; j<3; j++) {
@@ -76,13 +76,13 @@ public class AIOpponentForTesting extends PlayerForTesting {
             }
         }
     }
-    */
+
 
 
     //THROUGHOUT AI CODE COMMENTS - I will reference the in game mana resource system of "denarius coins" as 'mana',
     // as this is more intuitive when reading comments, as opposed to "coins" which doesn't immediately seem clear.
 
-    private void cardLists(ArrayList<Card> cardsInRegion, int[] cardValues, boolean handRegion, boolean gatherTauntData, boolean isPlayer, boolean handTaunts) { //Create lists of cards values, depending on regions chosen  - Scott
+    public void cardLists(ArrayList<Card> cardsInRegion, int[] cardValues, boolean handRegion, boolean gatherTauntData, boolean isPlayer, boolean handTaunts) { //Create lists of cards values, depending on regions chosen  - Scott
         //If it is from the board region, handCategory is false, else if hand region, its true.
         for(int i=0; i<cardsInRegion.size(); i++){ //Go through each card in the region
             if(cardsInRegion.get(i) instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
@@ -119,13 +119,13 @@ public class AIOpponentForTesting extends PlayerForTesting {
         }
     }
 
-    private void resetValues(int[] valuesToReset) { //Reset values of integer arrays to prevent carried over values - Scott
+    public void resetValues(int[] valuesToReset) { //Reset values of integer arrays to prevent carried over values - Scott
         for(int i=0; i < valuesToReset.length; i++) {
             valuesToReset[i] = 0;
         }
     }
 
-    private ArrayList<Card> getCurrentlyPlayableCards(ArrayList<Card> cardsInHand) { //Create a list of cards that can be played from hand according to their mana costs - Scott
+    public ArrayList<Card> getCurrentlyPlayableCards(ArrayList<Card> cardsInHand) { //Create a list of cards that can be played from hand according to their mana costs - Scott
         ArrayList<Card> playableCardsList = new ArrayList<>();
         for(int i=0; i<cardsInHand.size(); i++) { //Go through each card in the region
             if(cardsInHand.get(i).getCoinCost() < manaRemaining) { //Only if the ai has the mana to play it, should the card be considered.
@@ -144,7 +144,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
      * @param opponentActiveRegion Contains cards in the ai board
      * @param player Contains the player implemented class
      */
-    private void aiTurnSetup(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion, Player player) {
+    public void aiTurnSetup(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion, Player player) {
 
         //reset these to default values to prevent carry over values
         resetValues(playerCardValues); resetValues(aiBoardCardValues); resetValues(cardInHandCategory);
@@ -181,7 +181,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
     /**
      * Used for the decision making and all the moves the ai will take
      */
-    private void aiMovesSetup() { // Scott
+    public void aiMovesSetup() { // Scott
         if(cardsInAIBoardRegion.size()!=0 || cardsInAIHandRegion.size()!=0) { //If the hand or board isnt empty..
             if (cardsInAIBoardRegion.size() != 0) { //If the board isnt empty
                 int usedMinionDamage = 0;
@@ -333,7 +333,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
 
     }
 
-    private void genericAttacks(ArrayList<MinionCard> aiMinionsList) { //Used for any minions which dont have an urgent need to attack specific cards (e.g. to kill or defend hero) - Scott
+    public void genericAttacks(ArrayList<MinionCard> aiMinionsList) { //Used for any minions which dont have an urgent need to attack specific cards (e.g. to kill or defend hero) - Scott
         int playerCardHealth = 0;
         updateRegionValues();
         ArrayList<MinionCard> playerMinionsList = createMinionCardsList(cardsInPlayerBoardRegion); //Create a minioncard list based on the cards input
@@ -361,7 +361,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
 
     }
 
-    private void playMinion(MinionCard minion, int minionPosition) { // Scott - Code for playing a minion
+    public void playMinion(MinionCard minion, int minionPosition) { // Scott - Code for playing a minion
         if((minion.getCoinCost()<=manaRemaining)) {
             if(boardspaceRemaining>0) { //If there is space to play the minion
                 updateRegionValues();
@@ -374,13 +374,13 @@ public class AIOpponentForTesting extends PlayerForTesting {
         }
     }
 
-    private void updateRegionValues() {
+    public void updateRegionValues() {
         boardspaceRemaining = opponentActiveRegion.getMaxNumCardsInRegion()-opponentActiveRegion.getCardsInRegion().size(); //Update the new boardspace remaining
         cardsInAIBoardRegion = opponentActiveRegion.getCardsInRegion(); //Update these as some minions could have died since
         cardsInPlayerBoardRegion = playerActiveRegion.getCardsInRegion();
     }
 
-    private void attackTaunts(ArrayList<MinionCard> tauntMinions,  ArrayList<MinionCard> aiMinionsList, ArrayList<Integer> TauntMinionsHealthValues) { //Scott - Used to attack taunt minions optimally
+    public void attackTaunts(ArrayList<MinionCard> tauntMinions,  ArrayList<MinionCard> aiMinionsList, ArrayList<Integer> TauntMinionsHealthValues) { //Scott - Used to attack taunt minions optimally
         int position = 0;
         for (int i = 0; i < TauntMinionsHealthValues.size(); i++) { //Go through all possible taunt minions on board
             position = findClosestMinionValues(aiMinionsList, TauntMinionsHealthValues.get(i)); //Find a minion that can kill the taunt in one hit with closest attack value to its health
@@ -400,7 +400,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
     }
 
 
-    private ArrayList<MinionCard> createMinionCardsList(ArrayList<Card> cardsToBeChanged) { //Scott
+    public ArrayList<MinionCard> createMinionCardsList(ArrayList<Card> cardsToBeChanged) { //Scott
         ArrayList<MinionCard> minionList = new ArrayList<>();
         for(int i=0; i<cardsToBeChanged.size();i++) {
             if(cardsToBeChanged.get(i) instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
@@ -410,7 +410,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
         return minionList;
     }
 
-    private int findClosestMinionValues(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a minion which can kill off the other minion with the most efficient damage. -Scott
+    public int findClosestMinionValues(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a minion which can kill off the other minion with the most efficient damage. -Scott
         int positionOfCard = -1, closestAttack = Integer.MAX_VALUE;
         for(int i = 0; i<minionsList.size();i++) {
             if (minionsList.get(i).getCanAttack()) { //Check the minion hasnt attacked already this turn
@@ -426,7 +426,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
         return positionOfCard; //return any cards found
     }
 
-    private ArrayList<Integer> findMinimumMinionsToKill(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a combination of minions to kill a minion efficiently, if a single minion was previously not able - Scott
+    public ArrayList<Integer> findMinimumMinionsToKill(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a combination of minions to kill a minion efficiently, if a single minion was previously not able - Scott
         ArrayList<Integer> minimumNumberOfMinionsPositions = new ArrayList<>(); //Create a list for minion positions
         ArrayList<Integer> cardAttackValues = new ArrayList<>(); //Create a list of all cards attack values
         int closestAttack = 0, closestAttack2 = 0; //Create the closest attacks for trying to create valueToFind
@@ -474,13 +474,13 @@ public class AIOpponentForTesting extends PlayerForTesting {
         return minimumNumberOfMinionsPositions; //When we have the list of minions positions needed, return these
     }
 
-    private void aiCardListAttack(ArrayList<MinionCard> listOfAttackingMinions, MinionCard target, boolean attackingHero){ //Scott
+    public void aiCardListAttack(ArrayList<MinionCard> listOfAttackingMinions, MinionCard target, boolean attackingHero){ //Scott
         for(int i=0; i<listOfAttackingMinions.size(); i++){ //If there is an arraylist of cards to attack with, attack with the list for reusability.
             aiAttack(listOfAttackingMinions.get(i), target, attackingHero);
         }
     }
 
-    private void aiAttack(MinionCard attacker, MinionCard target, boolean attackingHero) { //Allow you to attack heros or minions with single cards - Scott
+    public void aiAttack(MinionCard attacker, MinionCard target, boolean attackingHero) { //Allow you to attack heros or minions with single cards - Scott
         actionDelay(10); //Add a small timer delay for each action
         if(attackingHero) { //Attack the enemy hero
             attacker.attackEnemy(attacker, humanPlayer); //Attack the hero
@@ -490,7 +490,7 @@ public class AIOpponentForTesting extends PlayerForTesting {
         updateRegionValues();
     }
 
-    private void actionDelay(int timeToWait) { //Add a delay for each AI action so the player can see what the moves are
+    public void actionDelay(int timeToWait) { //Add a delay for each AI action so the player can see what the moves are
         //This small method was inspired from the 'QUBBAttle' past project in "Coin.java", method "progressAnimation()"
         try {
             Thread.sleep(timeToWait);
@@ -515,4 +515,140 @@ public class AIOpponentForTesting extends PlayerForTesting {
     public void setHandspaceRemaining(int handspaceRemaining) { this.handspaceRemaining = handspaceRemaining; }
     public int getManaRemaining() { return manaRemaining; }
     public void setManaRemaining(int manaRemaining) { this.manaRemaining = manaRemaining; }
+
+    public HandRegion getPlayerHandRegion() {
+        return playerHandRegion;
+    }
+
+    public void setPlayerHandRegion(HandRegion playerHandRegion) {
+        this.playerHandRegion = playerHandRegion;
+    }
+
+    public HandRegion getOpponentHandRegion() {
+        return opponentHandRegion;
+    }
+
+    public void setOpponentHandRegion(HandRegion opponentHandRegion) {
+        this.opponentHandRegion = opponentHandRegion;
+    }
+
+    public ActiveRegion getPlayerActiveRegion() {
+        return playerActiveRegion;
+    }
+
+    public void setPlayerActiveRegion(ActiveRegion playerActiveRegion) {
+        this.playerActiveRegion = playerActiveRegion;
+    }
+
+    public ActiveRegion getOpponentActiveRegion() {
+        return opponentActiveRegion;
+    }
+
+    public void setOpponentActiveRegion(ActiveRegion opponentActiveRegion) {
+        this.opponentActiveRegion = opponentActiveRegion;
+    }
+
+    public Player getHumanPlayer() {
+        return humanPlayer;
+    }
+
+    public void setHumanPlayer(Player humanPlayer) {
+        this.humanPlayer = humanPlayer;
+    }
+
+    public ArrayList<Card> getCardsInAIHandRegion() {
+        return cardsInAIHandRegion;
+    }
+
+    public void setCardsInAIHandRegion(ArrayList<Card> cardsInAIHandRegion) {
+        this.cardsInAIHandRegion = cardsInAIHandRegion;
+    }
+
+    public ArrayList<Card> getCardsInAIBoardRegion() {
+        return cardsInAIBoardRegion;
+    }
+
+    public void setCardsInAIBoardRegion(ArrayList<Card> cardsInAIBoardRegion) {
+        this.cardsInAIBoardRegion = cardsInAIBoardRegion;
+    }
+
+    public ArrayList<Card> getCardsInPlayerBoardRegion() {
+        return cardsInPlayerBoardRegion;
+    }
+
+    public void setCardsInPlayerBoardRegion(ArrayList<Card> cardsInPlayerBoardRegion) {
+        this.cardsInPlayerBoardRegion = cardsInPlayerBoardRegion;
+    }
+
+    public ArrayList<Card> getCardsPlayableInAIHand() {
+        return cardsPlayableInAIHand;
+    }
+
+    public void setCardsPlayableInAIHand(ArrayList<Card> cardsPlayableInAIHand) {
+        this.cardsPlayableInAIHand = cardsPlayableInAIHand;
+    }
+
+    public int[] getPlayerCardValues() {
+        return playerCardValues;
+    }
+
+    public void setPlayerCardValues(int[] playerCardValues) {
+        this.playerCardValues = playerCardValues;
+    }
+
+    public int[] getAiBoardCardValues() {
+        return aiBoardCardValues;
+    }
+
+    public void setAiBoardCardValues(int[] aiBoardCardValues) {
+        this.aiBoardCardValues = aiBoardCardValues;
+    }
+
+    public int[] getCardInHandCategory() {
+        return cardInHandCategory;
+    }
+
+    public void setCardInHandCategory(int[] cardInHandCategory) {
+        this.cardInHandCategory = cardInHandCategory;
+    }
+
+    public ArrayList<Card> getPlayerTauntMinionsList() {
+        return playerTauntMinionsList;
+    }
+
+    public void setPlayerTauntMinionsList(ArrayList<Card> playerTauntMinionsList) {
+        this.playerTauntMinionsList = playerTauntMinionsList;
+    }
+
+    public ArrayList<Card> getAiTauntMinionsList() {
+        return aiTauntMinionsList;
+    }
+
+    public void setAiTauntMinionsList(ArrayList<Card> aiTauntMinionsList) {
+        this.aiTauntMinionsList = aiTauntMinionsList;
+    }
+
+    public ArrayList<Card> getAiTauntMinionsHandList() {
+        return aiTauntMinionsHandList;
+    }
+
+    public void setAiTauntMinionsHandList(ArrayList<Card> aiTauntMinionsHandList) {
+        this.aiTauntMinionsHandList = aiTauntMinionsHandList;
+    }
+
+    public ArrayList<Integer> getPlayerTauntMinionsHealthValues() {
+        return playerTauntMinionsHealthValues;
+    }
+
+    public void setPlayerTauntMinionsHealthValues(ArrayList<Integer> playerTauntMinionsHealthValues) {
+        this.playerTauntMinionsHealthValues = playerTauntMinionsHealthValues;
+    }
+
+    public ArrayList<Integer> getPlayerTauntMinionsAIDefending() {
+        return playerTauntMinionsAIDefending;
+    }
+
+    public void setPlayerTauntMinionsAIDefending(ArrayList<Integer> playerTauntMinionsAIDefending) {
+        this.playerTauntMinionsAIDefending = playerTauntMinionsAIDefending;
+    }
 }
