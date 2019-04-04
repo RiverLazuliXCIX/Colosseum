@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
   Performed by @Diarmuid Toal Sprint 5. */
 
 @RunWith(AndroidJUnit4.class) // Testing Splash Screen
-public class SplashScreenTest {
+public class SplashScreenAssetTest {
     private Context context;
     private DemoGame game;
     AssetManager assetManager;
