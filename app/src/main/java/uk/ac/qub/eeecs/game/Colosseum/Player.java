@@ -293,9 +293,9 @@ public class Player extends GameObject {
 
         }
 
-        drawStats(elapsedTime, graphics2D, layerViewport,screenViewport);
-        drawAbilityFrame(elapsedTime, graphics2D, layerViewport,screenViewport);
 
+        drawAbilityFrame(elapsedTime, graphics2D, layerViewport,screenViewport);
+        drawStats(elapsedTime, graphics2D, layerViewport,screenViewport);
 
     }
     /**

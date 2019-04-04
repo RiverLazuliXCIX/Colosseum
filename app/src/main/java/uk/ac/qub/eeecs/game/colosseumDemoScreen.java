@@ -162,11 +162,13 @@ public class colosseumDemoScreen extends GameScreen {
         mText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
 
         //Setting up FPS counter:
-        fpsCounter = new FPSCounter(mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f, this) {};
+        fpsCounter = new FPSCounter(mGameViewport.getWidth() * 0.50f, mGameViewport.getHeight() * 0.20f, this) {
+        };
 
         //Spacing that will be used to position the objects:
         int spacingX = (int) mDefaultLayerViewport.getWidth() / 5;
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
+
 
         //Create denarius objects
         Bitmap denarius = getGame().getAssetManager().getBitmap("Denarius");
@@ -470,7 +472,7 @@ public class colosseumDemoScreen extends GameScreen {
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         //Draw turn number - Dearbhaile
-        graphics2D.drawText("Turn #" + mCurrentTurn.getmTurnNum(), spacingX * 1.0f, spacingY * 0.6f, mText);
+        graphics2D.drawText("Turn #" + mCurrentTurn.getmTurnNum(), spacingX * 0.8f, spacingY * 0.6f, mText);
 
         //Draw 'End Turn' button onscreen, which toggles between pressable and not pressable image - Dearbhaile
         if (mPlayer.getYourTurn())

@@ -44,6 +44,7 @@ public class SplashScreen extends GameScreen {
 
     /**
      * Creating the 'Splash Screen' screen
+     *
      * @param game Game to which this screen belongs
      */
 
@@ -60,8 +61,8 @@ public class SplashScreen extends GameScreen {
         mPrefEditor.putBoolean("FPS", false);
         mPrefEditor.commit();
 
-         constructImages("txt/layout/SplashScreenImageLayout.JSON", mImages );
-        }
+        constructImages("txt/layout/SplashScreenImageLayout.JSON", mImages);
+    }
 
     //Methods
     private void setUpSplashScreeneObjects() {
@@ -71,7 +72,7 @@ public class SplashScreen extends GameScreen {
         // Create the background
         mSplashBackground = new PushButton(mDefaultLayerViewport.getWidth() / 2.0f,
                 mDefaultLayerViewport.getHeight() / 2.0f, mDefaultLayerViewport.getWidth(),
-                mDefaultLayerViewport.getHeight(),"SplashScreenBackground", this);
+                mDefaultLayerViewport.getHeight(), "SplashScreenBackground", this);
     }
 
     private void setupViewports() {
@@ -86,8 +87,7 @@ public class SplashScreen extends GameScreen {
         mSplashLayerViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
     }
 
-
-    private  void nextScreenCountadown(){
+    public void nextScreenCountadown() {
         //Get current time and check for timeout
         //Based upon the splash screen from Ragnarok past example
         currentTime = System.currentTimeMillis();
@@ -140,6 +140,7 @@ public class SplashScreen extends GameScreen {
 
     /**
      * Update the splash screen
+     *
      * @param elapsedTime Elapsed time information
      */
     @Override
@@ -153,7 +154,7 @@ public class SplashScreen extends GameScreen {
         if (touchEvents.size() > 0) {
             mSplashBackground.update(elapsedTime);
 
-            if(mSplashBackground.isPushTriggered())
+            if (mSplashBackground.isPushTriggered())
                 goToMenuScreen();
         }
     }
@@ -164,6 +165,7 @@ public class SplashScreen extends GameScreen {
 
     /**
      * Draw the 'Splash Screen' screen
+     *
      * @param elapsedTime Elapsed time information
      * @param graphics2D  Graphics instance
      */
@@ -179,5 +181,21 @@ public class SplashScreen extends GameScreen {
 
         for (TitleImage image : mImages)
             image.draw(elapsedTime, graphics2D, mDefaultLayerViewport, mDefaultScreenViewport);
+    }
+
+    public long getTimeOnCreate() {
+        return timeOnCreate;
+    }
+
+    public void setTimeOnCreate(long timeOnCreate) {
+        this.timeOnCreate = timeOnCreate;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
     }
 }
