@@ -125,8 +125,13 @@ public class MinionCard extends Card {
         // if there are any taunts on the board and the minion being attacked doesnt have a taunt, return
         if (thisCard.hasTaunts() && eMinionCard.getEffect() != Effect.TAUNT) return;
 
-        eMinionCard.takeDamage(thisCard.attack);
-        thisCard.takeDamage(eMinionCard.getAttack());
+        if (eMinionCard.getEffect() == Effect.PARRY) eMinionCard.setEffect(Effect.NONE);
+        else if (thisCard.getEffect() == Effect.VENOMOUS) eMinionCard.setHealth(0);
+        else eMinionCard.takeDamage(thisCard.attack);
+
+        if (thisCard.getEffect() == Effect.PARRY) thisCard.setEffect(Effect.NONE);
+        else if (eMinionCard.getEffect() == Effect.VENOMOUS) thisCard.setHealth(0);
+        else thisCard.takeDamage(eMinionCard.getAttack());
 
         // once the card has attacked, don't let it attack again
         thisCard.setCanAttack(false);
