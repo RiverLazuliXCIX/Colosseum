@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
+import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
@@ -248,5 +249,105 @@ public class colosseumDemoScreenTest {
         assertTrue(testOpponent.getYourTurn());
         assertFalse(testPlayer.getYourTurn());
         assertEquals(enemyDeck.getmCardHand().size(), 0);
+    }
+
+    @Test
+    public void TestIfLostResult() {
+        Player testPlayer = new Player(mDemoScreen, "Mars");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Mars");
+        Turn turn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.ENEMYSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        CardDeck pDeck = new CardDeck();
+        CardDeck eDeck = new CardDeck();
+        HandRegion handRegion = new HandRegion(0, 0, 0, 0);
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, turn, enemyStarts,
+                enemyStartTime, pDeck, eDeck, handRegion, handRegion, mGame);
+
+        testPlayer.setCurrentHealth(0);
+       testScreen.endGameCheck();
+
+       assertEquals(testScreen.getEndGameResult(), "loss");
+
+    }
+
+    @Test
+    public void TestWhoIfDraw() {
+        Player testPlayer = new Player(mDemoScreen, "Mars");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Mars");
+        Turn turn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.ENEMYSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        CardDeck pDeck = new CardDeck();
+        CardDeck eDeck = new CardDeck();
+        HandRegion handRegion = new HandRegion(0, 0, 0, 0);
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, turn, enemyStarts,
+                enemyStartTime, pDeck, eDeck, handRegion, handRegion, mGame);
+
+        testPlayer.setCurrentHealth(0);
+        testOpponent.setCurrentHealth(0);
+        testScreen.endGameCheck();
+
+        assertEquals(testScreen.getEndGameResult(), "draw");
+    }
+
+    @Test
+    public void TestIfWinResult() {
+        Player testPlayer = new Player(mDemoScreen, "Mars");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Mars");
+        Turn turn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.ENEMYSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        CardDeck pDeck = new CardDeck();
+        CardDeck eDeck = new CardDeck();
+        HandRegion handRegion = new HandRegion(0, 0, 0, 0);
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, turn, enemyStarts,
+                enemyStartTime, pDeck, eDeck, handRegion, handRegion, mGame);
+
+        testOpponent.setCurrentHealth(0);
+        testScreen.endGameCheck();
+
+        assertEquals(testScreen.getEndGameResult(), "win");
+    }
+
+    @Test
+    public void TestTimerWorks() {
+        Player testPlayer = new Player(mDemoScreen, "Mars");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Mars");
+        Turn turn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.ENEMYSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        CardDeck pDeck = new CardDeck();
+        CardDeck eDeck = new CardDeck();
+        HandRegion handRegion = new HandRegion(0, 0, 0, 0);
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, turn, enemyStarts,
+                enemyStartTime, pDeck, eDeck, handRegion, handRegion, mGame);
+
+        testScreen.setStartTime(System.currentTimeMillis());
+        testScreen.setPauseTimeTotal(0);
+        testScreen.endOfGame("win"); //End of game has a sleep for 1 second
+
+        assertEquals(testScreen.getTimeTaken(), 1000);
+    }
+
+
+    @Test
+    public void TestTimerWithPauseTakeaway() {
+        Player testPlayer = new Player(mDemoScreen, "Mars");
+        AIOpponent testOpponent = new AIOpponent(mDemoScreen, "Mars");
+        Turn turn = new Turn();
+        UserWhoStarts enemyStarts = UserWhoStarts.ENEMYSTARTS;
+        long enemyStartTime = System.currentTimeMillis();
+        CardDeck pDeck = new CardDeck();
+        CardDeck eDeck = new CardDeck();
+        HandRegion handRegion = new HandRegion(0, 0, 0, 0);
+        colosseumDemoScreenForTesting testScreen = new colosseumDemoScreenForTesting(testPlayer, testOpponent, turn, enemyStarts,
+                enemyStartTime, pDeck, eDeck, handRegion, handRegion, mGame);
+
+        testScreen.setStartTime(System.currentTimeMillis());
+        testScreen.setPauseTimeTotal(1000);
+        testScreen.endOfGame("win"); //End of game has a sleep for 1 second
+
+        assertEquals(testScreen.getTimeTaken(), 0);
     }
 }

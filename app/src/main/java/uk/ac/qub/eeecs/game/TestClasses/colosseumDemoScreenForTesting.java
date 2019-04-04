@@ -61,6 +61,8 @@ public class colosseumDemoScreenForTesting extends GameScreen {
     private long mEnemyTurnBegins, mCurrentTime;
 
     private boolean startTimeRecorded = false;
+    private long timeTaken;
+    private String endGameResult;
 
     //Set up FPS counter:
     private FPSCounter fpsCounter;
@@ -173,14 +175,30 @@ public class colosseumDemoScreenForTesting extends GameScreen {
             Thread.sleep(1000); //Allows player to see when they have won rather than immediately jumping to the next screen
         } catch (InterruptedException e) { }
 
-        EndGameScreen.setTimePlayed((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
-        EndGameScreen.setMostRecentResult(gameResult); //Record the result
-        mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //Change the screen to the new EndGameScreen
+        timeTaken = ((System.currentTimeMillis() - startTime) - pauseTimeTotal); //Allow for a "time played" statistic
+        endGameResult = gameResult; //Record the result
+        //mGame.getScreenManager().changeScreenButton(new EndGameScreen(mGame)); //Change the screen to the new EndGameScreen
     }
 
     public void removeDeadCards() {
         mPlayerDeck.checkForDeadCards();
         mEnemyDeck.checkForDeadCards();
+    }
+
+    public void endGameCheck() {
+        //'EndGameScreen' code - Scott
+        if (EndGameScreen.getCoinFlipResult()) { //If the coin flip was on the edge, win the game go to next end game screen
+            endOfGame("win");
+
+        } else if (mPlayer.getCurrentHealth() <= 0 || mOpponent.getCurrentHealth() <= 0) { //if either of the health is below 0 enter the if statement
+            if (mPlayer.getCurrentHealth() <= 0 && mOpponent.getCurrentHealth() <= 0) //if both sides health is 0 or less, the game ends in a draw
+                endOfGame("draw");
+            else if (mPlayer.getCurrentHealth() <= 0) //if the player reaches 0 or less health, they lose
+                endOfGame("loss");//Record the result
+            else if (mOpponent.getCurrentHealth() <= 0) //if the opponent reaches 0 or less health, the player wins
+                endOfGame("win");
+
+        }
     }
 
     @Override
@@ -274,6 +292,13 @@ public class colosseumDemoScreenForTesting extends GameScreen {
     public static void setWasPaused(boolean pauseInput) { wasPaused = pauseInput; }
     public void setmCurrentTime(long newTime) { this.mCurrentTime = newTime; }
     public void setmEnemyTurnBegins(long newEnemyTime) { this.mEnemyTurnBegins = newEnemyTime; }
+
+    public void setStartTime(long startTime) { this.startTime = startTime; }
+    public void setPauseTimeTotal(long pauseTimeTotal) { this.pauseTimeTotal = pauseTimeTotal; }
+    public long getStartTime() { return startTime; }
+    public long getPauseTimeTotal() { return pauseTimeTotal; }
+    public long getTimeTaken() { return timeTaken; }
+    public String getEndGameResult() { return endGameResult; }
 
     public UserWhoStarts getUserWhoStarts() { return this.mUserWhoStarts; }
     public ActiveRegion getPlayerActiveRegion() { return this.playerActiveRegion; }
