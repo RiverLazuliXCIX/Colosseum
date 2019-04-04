@@ -61,7 +61,7 @@ public class Player extends GameObject {
     private boolean abilityUsedThisTurn = false; // Stores whether an ability has been used this turn, if true, ability cannot be played for the rest of the player's turn
     private boolean yourTurn = true; // Will be false or true depending on whether or not it is the player's turn
 
-    // Add variables for storing player's active cards, deck, hand etc.
+    private Player targetOpponent;
 
     // /////////////////////////////////////////////////////////////////////////
     // Constructors
@@ -464,8 +464,8 @@ public class Player extends GameObject {
                     break;
 
                 case "Hircine":
-                    //targetOpponent.receiveDamage(2);
-                    //reduceCurrentMana(HERO_ABILITY_COST);
+                    targetOpponent.receiveDamage(2);
+                    reduceCurrentMana(HERO_ABILITY_COST);
                     break;
 
                 case "Meridia":
@@ -550,4 +550,7 @@ public class Player extends GameObject {
     public static int getMaxHealth() { return MAX_HEALTH; }
     public static int getMaxMana() { return MAX_MANA; }
     public static int getHeroAbilityCost() { return HERO_ABILITY_COST; }
+
+    public Player getTargetOpponent() { return targetOpponent; }
+    public void setTargetOpponent(Player targetOpponent) { this.targetOpponent = targetOpponent; }
 }
