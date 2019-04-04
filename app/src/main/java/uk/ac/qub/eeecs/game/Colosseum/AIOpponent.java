@@ -332,6 +332,7 @@ public class AIOpponent extends Player {
         int playerCardHealth = 0;
         updateRegionValues();
         ArrayList<MinionCard> playerMinionsList = createMinionCardsList(cardsInPlayerBoardRegion); //Create a minioncard list based on the cards input
+        aiMinionsList = createMinionCardsList(cardsInAIBoardRegion); //Update these values
 
         for(int i=0; i<playerMinionsList.size();i++) {//Go through the board of the player
             MinionCard playerMinion =  playerMinionsList.get(i);
@@ -339,10 +340,16 @@ public class AIOpponent extends Player {
             playerCardHealth = playerMinion.getHealth();//Get the health value of the players card
             for(int j=0; j<aiMinionsList.size();j++) {//Go through the ai board
                 System.out.println(aiMinionsList.size() + "AM");
-                MinionCard aiMinion = aiMinionsList.get(i);
-                if(playerCardHealth<= aiMinion.getAttack()){//If attack would kill the players card, attack the card.
-                    aiAttack(aiMinion,playerMinion,false); //Attack the card
+                try {
+                    MinionCard aiMinion = aiMinionsList.get(i); //This causes crashes sometimes, if I had more time I would try to fix it further
+                    if(playerCardHealth<= aiMinion.getAttack()){//If attack would kill the players card, attack the card.
+                        aiAttack(aiMinion,playerMinion,false); //Attack the card
+                    }
                 }
+                catch (IndexOutOfBoundsException e) {
+                    System.out.println(e.getMessage() + "Error due to out of bounds when getting minions, Index: " + aiMinionsList.get(i) + " Size: aiMinionsList.size()");
+                }
+
             }
         }
         aiCardListAttack(aiMinionsList, null, true); //Any leftover minions on AI side which didnt attack minions can attack the hero instead
