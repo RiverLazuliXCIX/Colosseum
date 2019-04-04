@@ -18,7 +18,7 @@ import uk.ac.qub.eeecs.gage.engine.input.TouchEvent;
 import uk.ac.qub.eeecs.gage.util.Vector2;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
-import uk.ac.qub.eeecs.game.Colosseum.Card;
+import uk.ac.qub.eeecs.game.TestClasses.AIOpponentForTesting;
 import uk.ac.qub.eeecs.game.TestClasses.CardClassForTesting;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +52,7 @@ public class CardClassTest {
 
     @Before
     public void setUp() {
+        when(gameScreen.getDefaultLayerViewport()).thenReturn(mLayerViewport);
         when(mGame.getAssetManager()).thenReturn(mAssetManager);
         when(mAssetManager.getBitmap(any(String.class))).thenReturn(mBitmap);
         when(mGame.getScreenManager()).thenReturn(mScreenManager);
@@ -67,14 +69,208 @@ public class CardClassTest {
     }
 
     @Test
+    public void moveCard_Drag_Test() {
+        int touchType  = TouchEvent.TOUCH_DRAGGED;
+        Vector2 touchLocation = new Vector2(105, 105);
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = 0; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
+        CardClassForTesting cardTouched = cards.get(0);
+
+        cardTouched.moveCard(touchType, cards, touchLocation);
+
+        assertTrue(cardTouched.position.equals(touchLocation));
+    }
+
+    @Test
+    public void moveCard_WrongInput_Test() {
+        int touchType  = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(105, 105);
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = 0; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
+        CardClassForTesting cardTouched = cards.get(0);
+
+        cardTouched.moveCard(touchType, cards, touchLocation);
+
+        assertFalse(cardTouched.position.equals(touchLocation));
+    }
+
+    @Test
+    public void moveCard_WrongLocation_Test() {
+        int touchType  = TouchEvent.TOUCH_DRAGGED;
+        Vector2 touchLocation = new Vector2(200, 200);
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = 0; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
+        CardClassForTesting cardTouched = cards.get(0);
+
+        cardTouched.moveCard(touchType, cards, touchLocation);
+
+        assertFalse(cardTouched.position.equals(touchLocation));
+    }
+
+    @Test
+    public void selectCard_Select_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(100, 100);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = 0; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
+        cards.get(1).selectCard(touchType, cards, touchLocation, mGame);
+
+        assertTrue(cards.get(1).getSelected());
+    }
+
+    @Test
+    public void selectCard_Deselect_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(100, 100);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = 0; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
+        cards.get(1).selectCard(touchType, cards, touchLocation, mGame);
+
+        touchLocation = new Vector2(200, 100);
+        cards.get(2).selectCard(touchType, cards, touchLocation, mGame);
+
+        assertFalse(cards.get(1).getSelected());
+    }
+
+    //Needs modification
+    @Test
+    public void useCard_AttackEnemyCard_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(0, 100);
+
+        AIOpponentForTesting enemy = new AIOpponentForTesting(gameScreen, "asdf");
+
+        CardClassForTesting playerCard = new CardClassForTesting(0, 0, gameScreen, 1, false, "asdf");
+        CardClassForTesting enemyCard = new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf");
+        CardClassForTesting cardTouched = enemyCard;
+        cardTouched.setAttackerSelected(playerCard);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        cards.add(new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf"));
+
+
+        int ans = cardTouched.useCard(touchType, cards, enemy, touchLocation);
+
+        assertEquals((float)ans, 1.0f);
+    }
+
+    //Needs modification
+    @Test
+    public void useCard_WrongInput_Test() {
+        int touchType = TouchEvent.TOUCH_UP;
+        Vector2 touchLocation = new Vector2(0, 100);
+
+        AIOpponentForTesting enemy = new AIOpponentForTesting(gameScreen, "asdf");
+
+        CardClassForTesting playerCard = new CardClassForTesting(0, 0, gameScreen, 1, false, "asdf");
+        CardClassForTesting enemyCard = new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf");
+        CardClassForTesting cardTouched = enemyCard;
+        cardTouched.setAttackerSelected(playerCard);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        cards.add(new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf"));
+
+
+        int ans = cardTouched.useCard(touchType, cards, enemy, touchLocation);
+
+        assertEquals(ans, 0);
+    }
+
+    //Needs modification
+    @Test
+    public void useCard_WrongLocation_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+        Vector2 touchLocation = new Vector2(200, 100);
+
+        AIOpponentForTesting enemy = new AIOpponentForTesting(gameScreen, "asdf");
+
+        CardClassForTesting playerCard = new CardClassForTesting(0, 0, gameScreen, 1, false, "asdf");
+        CardClassForTesting enemyCard = new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf");
+        CardClassForTesting cardTouched = enemyCard;
+        cardTouched.setAttackerSelected(playerCard);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        cards.add(new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf"));
+
+
+        int ans = cardTouched.useCard(touchType, cards, enemy, touchLocation);
+
+        assertEquals(ans, 0);
+    }
+
+    //Needs modification
+    @Test
+    public void useCard_AttackAIOpponent_Test() {
+        int touchType = TouchEvent.TOUCH_SINGLE_TAP;
+
+        AIOpponentForTesting enemy = new AIOpponentForTesting(gameScreen, "asdf");
+
+        Vector2 touchLocation = new Vector2(enemy.position);
+
+        CardClassForTesting playerCard = new CardClassForTesting(0, 0, gameScreen, 1, false, "asdf");
+        CardClassForTesting enemyCard = new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf");
+        CardClassForTesting cardTouched = enemyCard;
+        cardTouched.setAttackerSelected(playerCard);
+
+        List<CardClassForTesting> cards = new ArrayList<>();
+        cards.add(new CardClassForTesting(100, 100, gameScreen, 1, true, "asdf"));
+
+
+        int ans = cardTouched.useCard(touchType, cards, enemy, touchLocation);
+
+        assertEquals(ans, 2);
+    }
+
+    @Test
     public void boundCard_Bounded_Test() {
+        Vector2 lowest = new Vector2(0, 0);
+        Vector2 highest = new Vector2(mLayerViewport.getRight(), mLayerViewport.getTop());
+        Boolean ok = false;
         List<CardClassForTesting> cards = new ArrayList<>();
         for (int i = 0; i < 500; i += 100)
             cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
 
+        cards.get(1).boundCard(cards, mLayerViewport);
+
+        if(cards.get(1).position.x <= highest.x
+                && cards.get(1).position.y <= highest.y
+                && cards.get(1).position.x >= lowest.x
+                && cards.get(1).position.x >= lowest.x)
+            ok = true;
+
+        assertTrue(ok);
+    }
+
+    @Test
+    public void boundCard_OOB_Test() {
+        Vector2 lowest = new Vector2(0, 0);
+        Vector2 highest = new Vector2(mLayerViewport.getRight(), mLayerViewport.getTop());
+        Boolean ok = false;
+        List<CardClassForTesting> cards = new ArrayList<>();
+        for (int i = -100; i < 400; i += 100)
+            cards.add(new CardClassForTesting(i, 100, gameScreen, 1, false, "asdf"));
+
         cards.get(0).boundCard(cards, mLayerViewport);
 
-        assertTrue(true);
+        if(cards.get(0).position.x <= highest.x
+                && cards.get(0).position.y <= highest.y
+                && cards.get(0).position.x >= lowest.x
+                && cards.get(0).position.x >= lowest.x)
+            ok = true;
+
+        assertTrue(ok);
     }
 
     @Test

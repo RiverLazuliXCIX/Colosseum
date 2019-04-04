@@ -102,7 +102,7 @@ public class FatigueCounterClassTest {
 
         FatigueCounter counter = new FatigueCounter();
 
-        //First time it is called, should take 1 away:
+        counter.incrementFatigue();
         counter.takeAppropriateDamage(newPlayer);
 
         int newHealth = startingHealth - 1;
@@ -118,6 +118,7 @@ public class FatigueCounterClassTest {
         FatigueCounter counter = new FatigueCounter();
 
         for (int i = 0; i < 8; i++) {
+            counter.incrementFatigue();
             counter.takeAppropriateDamage(newPlayer);
         }
 

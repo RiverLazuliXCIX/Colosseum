@@ -153,22 +153,23 @@ public class TurnClassTest {
     }
 
     @Test
-    public void newTurnFunc_ManaCapDoesntIncrease() {
+    public void newTurnFunc_ManaMaxes() {
         Turn newTurn = new Turn();
         Player newPlayer = new Player(mGameScreen, "Brutalus");
         AIOpponent newEnemy = new AIOpponent(mGameScreen, "c");
 
-        //Player mana is low enough to be incremented:
-        newPlayer.setCurrentMana(4);
+        //Player mana is low enough to be incremented to 4:
+        newPlayer.setCurrentMana(3);
 
-        //But mana cap is at the max already, and thus should not increase:
-        newPlayer.setCurrentManaCap(10);
+        //Mana cap is currently 5 - current mana should jump to this (5/5)
+        newPlayer.setCurrentManaCap(5);
 
         //Call for new turn functionality:
         newTurn.newTurnFunc(newPlayer, newEnemy);
 
+        //Mana should max out to 5:
         int expectedMana = 5;
-        int expectedManaCap = 10;
+        int expectedManaCap = 5;
 
         assertEquals(newPlayer.getCurrentMana(), expectedMana);
         assertEquals(newPlayer.getCurrentManaCap(), expectedManaCap);

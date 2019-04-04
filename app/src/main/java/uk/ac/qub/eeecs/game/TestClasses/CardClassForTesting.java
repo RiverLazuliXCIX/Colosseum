@@ -59,7 +59,7 @@ public class CardClassForTesting extends GameObject{
 
     //Check if card is being held
     private CardClassForTesting cardTouched = null;
-    private AIOpponent opponentTouched = null;
+    private AIOpponentForTesting opponentTouched = null;
     //Check if card is selected to attack with
     private static CardClassForTesting attackerSelected;
     private boolean isSelected;
@@ -117,7 +117,7 @@ public class CardClassForTesting extends GameObject{
      * @param game                  the game in question
      */
     //All touch methods inspired by past project "Ragnarok", and heavily modified to allow further functionality
-    public void cardEvents(List<CardClassForTesting> cards, AIOpponent opponent, ScreenViewport defaultScreenViewport,
+    public void cardEvents(List<CardClassForTesting> cards, AIOpponentForTesting opponent, ScreenViewport defaultScreenViewport,
                            LayerViewport gameViewport, Game game, boolean isOpponent) {
         Input input = game.getInput();
 
@@ -136,7 +136,7 @@ public class CardClassForTesting extends GameObject{
         }
     }
 
-    public void playerTouchMethods(int touchType, List<CardClassForTesting> cards, AIOpponent opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
+    public void playerTouchMethods(int touchType, List<CardClassForTesting> cards, AIOpponentForTesting opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
         moveCard(touchType, cards, touchLocation);
         selectCard(touchType, cards, touchLocation, mGame);
         useCard(touchType, cards, opponent, touchLocation);
@@ -145,7 +145,7 @@ public class CardClassForTesting extends GameObject{
         releaseCard(touchType);
     }
 
-    public void opponentTouchMethods(int touchType, List<CardClassForTesting> cards, AIOpponent opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
+    public void opponentTouchMethods(int touchType, List<CardClassForTesting> cards, AIOpponentForTesting opponent, Vector2 touchLocation, Game mGame, LayerViewport mGameViewport) {
         useCard(touchType, cards, opponent, touchLocation);
         enlargeCard(touchType, cards, touchLocation);
         releaseCard(touchType);
@@ -195,12 +195,15 @@ public class CardClassForTesting extends GameObject{
         }
     }
 
-    public void useLogic(CardClassForTesting thisCard, GameObject other) {
-        //do nothing
+    public int useLogic(CardClassForTesting thisCard, GameObject other) {
+        if(other instanceof CardClassForTesting)
+            return 0;
+        else
+            return 1;
         //method is overridden in child classes (Minion/Weapon/Spell)
     }
 
-    public void useCard(int touchType, List<CardClassForTesting> cards, AIOpponent opponent, Vector2 touchLocation) {
+    public int useCard(int touchType, List<CardClassForTesting> cards, AIOpponentForTesting opponent, Vector2 touchLocation) {
         if (touchType == TouchEvent.TOUCH_SINGLE_TAP) {
             checkCardTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, cards, touchLocation);
             checkOpponentTouched(touchType, TouchEvent.TOUCH_SINGLE_TAP, opponent, touchLocation);
@@ -211,16 +214,19 @@ public class CardClassForTesting extends GameObject{
                     && getAttackerSelected() != null
                     && !getAttackerSelected().getIsEnemy()
                     && cardTouched.getSelectable()) {
-                cardTouched.setBitmap(attacked);
+                return 1;
+                //cardTouched.setBitmap(attacked);
                 //useLogic(getAttackerSelected(), cardTouched);
             }
             else if (opponentTouched != null
                     && opponentTouched.getBound().contains(touchLocation.x, touchLocation.y)
                     && getAttackerSelected() != null
                     && !getAttackerSelected().getIsEnemy()) {
+                return 2;
                 //useLogic(getAttackerSelected(), opponentTouched);
             }
         }
+        return 0;
     }
 
     public void discardCard(CardClassForTesting card) { // - Dearbhaile
@@ -303,7 +309,7 @@ public class CardClassForTesting extends GameObject{
         }
     }
 
-    private void checkOpponentTouched(int touchType, int touchEvent, AIOpponent opponent, Vector2 touchLocation) {
+    private void checkOpponentTouched(int touchType, int touchEvent, AIOpponentForTesting opponent, Vector2 touchLocation) {
         //similar to above
         if (touchType == touchEvent
                 && opponentTouched == null) {

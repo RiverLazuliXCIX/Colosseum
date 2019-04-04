@@ -5,6 +5,7 @@ import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.FatigueScreen;
 import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
@@ -29,7 +30,7 @@ public class CardDeck {
     private int mNumOfMinions, mNumOfSpells, mNumOfWeapons;
 
     //Final values relating to Card Deck and Hand:
-    private static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 5;
+    private static final int MAX_DECK_CARDS = 30, MAX_HAND_CARDS = 8;
 
     //Boolean values required to discern the functionality of the deck:
     private boolean mIsEmptyFlag, mIsAIDeck = false;
@@ -290,7 +291,7 @@ public class CardDeck {
     public void drawCard(Player player, FatigueCounter counter, Game mGame) {
         if (!getDeck().isEmpty()) {
             drawTopCard(); //If there are cards in deck, draw top card
-            destroyCardOverLimit(); //If there are already 5 cards in hand, destroy new card
+            destroyCardOverLimit(); //If there are already 8 cards in hand, destroy new card
         } else {
             counter.incrementFatigue();
             if (player instanceof AIOpponent == false) { //Screen should not be displayed when enemy's card
@@ -302,12 +303,12 @@ public class CardDeck {
     }
 
     //This method destroys a card if player draws one when their hand is already full
-    //Player hand can be of max size 5, and any additional cards drawn are an unfair advantage:
+    //Player hand can be of max size 8, and any additional cards drawn are an unfair advantage:
     public void destroyCardOverLimit() {
-        if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
-            for (int i = 5; i < mCardHand.size(); i++) {
+        if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >8 cards in their hand
+            for (int i = 8; i < mCardHand.size(); i++) {
                 Card cardOver = mCardHand.get(mCardHand.size() - 1);
-                mCardHand.remove(cardOver); //Destroys every card above 5 in hand
+                mCardHand.remove(cardOver); //Destroys every card above 8 in hand
             }
         }
     }
@@ -328,14 +329,8 @@ public class CardDeck {
         mDiscardPile.add(cardToDiscard);
     }
 
-    public void discardCards_EndOfTurn() {
-        //Called at end of turn, to remove discarded cards from board:
-        for (int i = mCardHand.size()-1; i >= 0; i--) {
-            //All cards with the 'toBeDiscarded' flag set to true get removed:
-            if (mCardHand.get(i).gettoBeDiscarded()) {
-                discardCards(mCardHand.get(i));
-            }
-        }
+    public void discardCards_EndOfTurn(Card disCard) {
+        discardCards(disCard);
     }
 
     public void checkForDeadCards() { //Called constantly on both decks throughout game

@@ -62,6 +62,7 @@ public class Card extends GameObject{
     private Boolean flippedBack = false;  //initially the card is not flipped
     private Boolean draggable = true; // Card should not be draggable if it is locked in its region
     private Boolean selectable = false;
+    private Boolean attackedCard = false;
     private Boolean cardDropped = false; // Used by region when a card is dropped to place (stops card insta-locking when dragged into region)
     private Boolean isEnemy;
     private Boolean toBeDiscarded;
@@ -195,8 +196,7 @@ public class Card extends GameObject{
                     && getAttackerSelected() != cardTouched
                     && getAttackerSelected().getBitmap() == selected
                     && cardTouched.getSelectable()) {
-                getAttackerSelected().setBitmap(front);
-                getAttackerSelected().setToBeDiscarded(false);
+                selectDeselect(false);
                 //setmAttackerSelected(null);
             }
             //select
@@ -205,11 +205,21 @@ public class Card extends GameObject{
                         && !cardTouched.getIsEnemy()
                         && cardTouched.getBitmap() == front
                         && cardTouched.getSelectable()) {
-                //set the attacker and change the bit map to be selected
-                cardTouched.setSelected(true);
-                setAttackerSelected(cardTouched);
-                getAttackerSelected().setBitmap(selected);
+                selectDeselect(true);
             }
+        }
+    }
+
+    public void selectDeselect(Boolean select) {
+        if(select) {
+            //set the attacker and change the bit map to be selected
+            cardTouched.setSelected(true);
+            setAttackerSelected(cardTouched);
+            getAttackerSelected().setBitmap(selected);
+        }
+        else {
+            getAttackerSelected().setBitmap(front);
+            getAttackerSelected().setToBeDiscarded(false);
         }
     }
 
@@ -230,12 +240,16 @@ public class Card extends GameObject{
                     && !getAttackerSelected().getIsEnemy()
                     && cardTouched.getSelectable()) {
                 cardTouched.setBitmap(attacked);
+                cardTouched.setAttackedCard(true);
+                getAttackerSelected().selectDeselect(false);
+                getAttackerSelected().setSelectable(false);
                 useLogic(getAttackerSelected(), cardTouched);
             }
             else if (opponentTouched != null
                         && opponentTouched.getBound().contains(touchLocation.x, touchLocation.y)
                         && getAttackerSelected() != null
                         && !getAttackerSelected().getIsEnemy()) {
+                getAttackerSelected().setBitmap(front);
                 useLogic(getAttackerSelected(), opponentTouched);
             }
         }
@@ -471,6 +485,9 @@ public class Card extends GameObject{
 
     public Card getAttackerSelected() { return attackerSelected; }
     public void setAttackerSelected(Card attackerSelected) { this.attackerSelected = attackerSelected; }
+
+    public boolean getAttackedCard(){ return attackedCard; }
+    public void setAttackedCard(boolean attackedCard) { this.attackedCard = attackedCard;}
 
     public Card getCardTouched() { return cardTouched; }
     public void setCardTouched(Card cardTouched) { this.cardTouched = cardTouched; }
