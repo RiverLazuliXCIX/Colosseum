@@ -172,16 +172,16 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Create denarius objects
         Bitmap denarius = getGame().getAssetManager().getBitmap("Denarius");
-        pDenarius = new GameObject(spacingX * 4.18f, spacingY * 0.3f, 30, 30, denarius, this);
+        pDenarius = new GameObject(spacingX * 3.7f, spacingY * 0.2f, 30, 30, denarius, this);
         mGameObjs.add(pDenarius);
-        eDenarius = new GameObject(spacingX * 4.18f, spacingY * 2.74f, 30, 30, denarius, this);
+        eDenarius = new GameObject(spacingX * 3.7f, spacingY * 2.79f, 30, 30, denarius, this);
         mGameObjs.add(eDenarius);
 
         //Set up deck images - Dearbhaile
         Bitmap deckImg = getGame().getAssetManager().getBitmap("CardDeckImg");
-        mPlayerDeckImg = new GameObject(spacingX * 0.3f, spacingY * 0.4f, spacingX * 0.5f, spacingY * 0.6f, deckImg, this);
+        mPlayerDeckImg = new GameObject(spacingX * 0.4f, spacingY * 0.4f, spacingX * 0.6f, spacingY * 0.6f, deckImg, this);
         mGameObjs.add(mPlayerDeckImg);
-        mEnemyDeckImg = new GameObject(spacingX * 0.3f, spacingY * 2.5f, spacingX * 0.5f, spacingY * 0.6f, deckImg, this);
+        mEnemyDeckImg = new GameObject(spacingX * 0.4f, spacingY * 2.2f, spacingX * 0.6f, spacingY * 0.6f, deckImg, this);
         mGameObjs.add(mEnemyDeckImg);
     }
 
@@ -209,15 +209,15 @@ public class colosseumDemoScreen extends GameScreen {
         int spacingY = (int) mDefaultLayerViewport.getHeight() / 3;
 
         mEndTurnButton = new PushButton(
-                spacingX * 4.7f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn", this);
 
         mEndTurnButtonOff = new PushButton(
-                spacingX * 4.7f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
+                spacingX * 4.5f, spacingY * 1.5f, spacingX * 0.5f, spacingY * 0.5f,
                 "EndTurn2", this);
 
         mDiscardButton = new PushButton(
-                spacingX * 4.7f, spacingY * 1.0f, spacingX * 0.5f, spacingY * 0.3f,
+                spacingX * 4.5f, spacingY * 1.0f, spacingX * 0.5f, spacingY * 0.3f,
                 "DiscardButton", "DiscardButton_Selected", this);
         mButtons.add(mDiscardButton);
 
@@ -433,17 +433,17 @@ public class colosseumDemoScreen extends GameScreen {
 
         //Draw player mana text
         graphics2D.drawText(p.getCurrentMana() + "/" + p.getCurrentManaCap(),
-                spacingX * 18.5f, spacingY * (ySpacing + 0.4f), mText);
+                spacingX * 14.5f, spacingY * (ySpacing + 0.4f), mText);
 
         //Draw player card stats
         int cardsLeft = deck.getDeck().size();
         int cardsHand = deck.getmCardHand().size();
         int cardsDead = deck.getmDiscardPile().size(); // All stats accurate - Dearbhaile
-        graphics2D.drawText("Deck: " + cardsLeft, spacingX * 2.5f,
+        graphics2D.drawText("Deck: " + cardsLeft, spacingX * 3.6f,
                 spacingY * ySpacing, mText);
-        graphics2D.drawText("Hand: " + cardsHand, spacingX * 2.5f,
+        graphics2D.drawText("Hand: " + cardsHand, spacingX * 3.6f,
                 spacingY * (ySpacing + 0.4f), mText);
-        graphics2D.drawText("Graveyard: " + cardsDead, spacingX * 2.5f,
+        graphics2D.drawText("Graveyard: " + cardsDead, spacingX * 3.6f,
                 spacingY * (ySpacing + 0.8f), mText);
 
         //Draw player hand  - Dearbhaile
@@ -493,10 +493,10 @@ public class colosseumDemoScreen extends GameScreen {
             gObject.draw(elapsedTime, graphics2D, mGameViewport, mDefaultScreenViewport);
         }
 
-        float statPlayerYSpacing = 12.0f; //PLAYER STATS BEING DRAWN:
+        float statPlayerYSpacing = 11.0f; //PLAYER STATS BEING DRAWN:
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, mPlayer, mPlayerDeck, statPlayerYSpacing);
 
-        float statOpponentYSpacing = 1.0f; //OPPONENT STATS BEING DRAWN:
+        float statOpponentYSpacing = 0.6f; //OPPONENT STATS BEING DRAWN:
         drawPlayers(spacingX, spacingY, elapsedTime, graphics2D, mOpponent, mEnemyDeck, statOpponentYSpacing);
 
         if (CoinTossScreen.getEdgeCase()) {

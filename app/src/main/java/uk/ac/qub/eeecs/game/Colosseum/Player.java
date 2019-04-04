@@ -388,10 +388,10 @@ public class Player extends GameObject {
 
         // Drawing icons with associated health/armor text values
         healthIcon.draw(elapsedTime,graphics2D,layerViewport,screenViewport);
-        graphics2D.drawText(currentHealth+"/"+MAX_HEALTH,healthIconXPos*4.48f , getGameScreen().getDefaultScreenViewport().bottom - healthIconYPos*4.5f, textPaint);
+        graphics2D.drawText(currentHealth+"/"+MAX_HEALTH,healthIconXPos*4 , getGameScreen().getDefaultScreenViewport().bottom - healthIconYPos*4, textPaint);
 
         armorIcon.draw(elapsedTime,graphics2D,layerViewport,screenViewport);
-        graphics2D.drawText(String.valueOf(armor),armorIconXPos*4.5f , getGameScreen().getDefaultScreenViewport().bottom - armorIconYPos*4.5f, textPaint);
+        graphics2D.drawText(String.valueOf(armor),armorIconXPos*4 , getGameScreen().getDefaultScreenViewport().bottom - armorIconYPos*4, textPaint);
     }
 
     // /////////////////////////////////////////////////////////////////////////
