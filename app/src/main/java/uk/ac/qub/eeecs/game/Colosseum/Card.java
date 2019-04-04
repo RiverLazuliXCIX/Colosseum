@@ -1,7 +1,11 @@
 package uk.ac.qub.eeecs.game.Colosseum;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
 import java.util.List;
 
@@ -25,7 +29,7 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.colosseumDemoScreen;
 
 //Created and coded by Sean McCloskey
-//Contributions from Dearbhaile Walsh
+//Contributions from Dearbhaile Walsh and Matthew Brunton
 
 public class Card extends GameObject{
 
@@ -72,7 +76,7 @@ public class Card extends GameObject{
     private int coinCost; // Coins are the player's resource used to play cards, this holds the number required to play a given card
 
     private Bitmap cardPortrait;
-    private String cardName;
+    private String cardName = "";
     private String currentRegion; // Stores the current region the card is currently located
 
     //Set offset and scale values for positioning
@@ -104,6 +108,7 @@ public class Card extends GameObject{
         this.toBeDiscarded = false;
         this.coinCost = coinCost;
         this.isEnemy = isEnemy;
+        this.cardName = cardName;
 
         if(this.isEnemy)
             flipCard();
@@ -250,6 +255,7 @@ public class Card extends GameObject{
                         && getAttackerSelected() != null
                         && !getAttackerSelected().getIsEnemy()) {
                 getAttackerSelected().setBitmap(front);
+                getAttackerSelected().setSelectable(false);
                 useLogic(getAttackerSelected(), opponentTouched);
             }
         }
@@ -358,6 +364,8 @@ public class Card extends GameObject{
         //Draw the base frame
         super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 
+
+
         if(!flippedBack) {
 
             // Matthew: updated the draw method to include draw functionality for Weapon and Spell cards
@@ -433,6 +441,24 @@ public class Card extends GameObject{
 
             // Draw the bitmap
             graphics2D.drawBitmap(bitmap, drawMatrix, null);
+
+            /*
+            //draw the card name
+            //Initialise Paint object for drawing text onscreen:
+            Paint mText = new Paint();
+            float cardHeight = bound.getHeight();
+            float textHeight = cardHeight / 5.0f;
+            mText.setTextSize(textHeight);
+            mText.setColor(Color.rgb(255, 255, 255));
+            mText.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+
+            Canvas c = new Canvas();
+
+            c.setMatrix(drawMatrix);
+            c.drawText(this.cardName.substring(5), bound.x, bound.y + 5.0f, mText);
+
+            //graphics2D.drawText(this.cardName.substring(5), bound.x, bound.y, mText);
+            */
         }
     }
 
