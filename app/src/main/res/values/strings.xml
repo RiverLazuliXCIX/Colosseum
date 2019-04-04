@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- App name change was done by @Diarmuid Toal-->
     <string name="app_name"> Colosseum</string>
 
     <string name="ERROR_TAG">Gage Error: </string>

@@ -24,6 +24,9 @@ import uk.ac.qub.eeecs.gage.engine.ElapsedTime;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
 
+/*Class was based and built further upon
+* the splash screen from the ragnarok past game example
+* */
 public class SplashScreen extends GameScreen {
 
     // Properties
@@ -81,10 +84,19 @@ public class SplashScreen extends GameScreen {
 
         mDefaultLayerViewport.set(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
         mSplashLayerViewport = new LayerViewport(240.0f, layerHeight / 2.0f, 240.0f, layerHeight / 2.0f);
-
-
     }
 
+
+    private  void nextScreenCountadown(){
+        //Get current time and check for timeout
+        //Based upon the splash screen from Ragnarok past example
+        currentTime = System.currentTimeMillis();
+        if (currentTime - timeOnCreate >= SPLASH_TIMEOUT) {
+            goToMenuScreen();
+        }
+    }
+
+    //Code is based upon Dr Philip Hanna's code which is adapted from the JSON refactoring lecture
     private void constructImages(String imagesToConstructJSONFile, List<TitleImage> images) {
 
         // Attempt to load in the JSON asset details
@@ -133,11 +145,7 @@ public class SplashScreen extends GameScreen {
     @Override
 
     public void update(ElapsedTime elapsedTime) {
-        //Get current time and check for timeout
-        currentTime = System.currentTimeMillis();
-        if (currentTime - timeOnCreate >= SPLASH_TIMEOUT) {
-            goToMenuScreen();
-        }
+        nextScreenCountadown();
 
         // Process any touch events occurring since the update
         Input touchInput = mGame.getInput();
