@@ -8,8 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-
 import uk.ac.qub.eeecs.gage.engine.AssetManager;
 import uk.ac.qub.eeecs.gage.engine.ScreenManager;
 import uk.ac.qub.eeecs.gage.engine.input.Input;
@@ -199,16 +197,16 @@ public class CardDeckTest {
         HandRegion handRegion = new HandRegion(10,20,20,10);
         CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             newDeck.drawTopCard();
         }
 
-        //Since 6 cards were drawn, all cards over the limit of 5, ie 1 card, should be destroyed:
+        //Since 9 cards were drawn, all cards over the limit of 8, ie 1 card, should be destroyed:
         newDeck.destroyCardOverLimit();
 
-        int expectedHandSize = 5;
+        int expectedHandSize = 8;
 
-        //Thus, at the end there should only be 5 cards in the hand:
+        //Thus, at the end there should only be 8 cards in the hand:
         assertEquals(expectedHandSize, newDeck.getmCardHand().size());
     }
 
@@ -406,34 +404,14 @@ public class CardDeckTest {
 
         //When this method is called, all cards in deck that are set as
         //'to be discarded' will be discarded, ie those the player selects
-        // newDeck.discardCards_EndOfTurn();
+        for (int i = 0; i < newDeck.getmCardHand().size(); i++) {
+            newDeck.discardCards_EndOfTurn(newDeck.getmCardHand().get(i));
+        }
 
         int newCardsInHand = 2;
         int newCardsInGraveyard = 3;
 
         //These first 3 cards in the Card Hand should now be in the Graveyard:
-        assertEquals(newDeck.getmCardHand().size(), newCardsInHand);
-        assertEquals(newDeck.getmDiscardPile().size(), newCardsInGraveyard);
-    }
-
-    @Test
-    public void discardCards_EndOfTurn_NothingSelected() {
-        HandRegion handRegion = new HandRegion(10, 20, 20, 10);
-        CardDeck newDeck = new CardDeck(1, "aCardDeck", mDemoScreen, false, handRegion);
-
-        //Draw 5 cards to the Hand
-        for (int i = 0; i < 5; i++) {
-            newDeck.drawTopCard();
-        }
-
-        //When this method is called, all cards in deck that are set as
-        //'to be discarded' will be discarded, ie those the player selects
-        //newDeck.discardCards_EndOfTurn();
-
-        int newCardsInHand = 5;
-        int newCardsInGraveyard = 0;
-
-        //No cards were selected, so there should still be 5 in the hand, 0 in graveyard:
         assertEquals(newDeck.getmCardHand().size(), newCardsInHand);
         assertEquals(newDeck.getmDiscardPile().size(), newCardsInGraveyard);
     }

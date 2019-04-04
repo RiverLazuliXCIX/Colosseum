@@ -31,6 +31,7 @@ public class AIOpponent extends Player {
     private int[] playerCardValues = {0, 0}, aiBoardCardValues = {0, 0}; //List of the values of played card values with notation of {attack,health}. -Scott
     private int[] cardInHandCategory = {0,0,0}; //different card types, in order of "minion", "spell", "weapon" for cards in hand/board. -Scott
     private ArrayList<Card> playerTauntMinionsList, aiTauntMinionsList; //Used to keep a track of taunt minions cards - Scott
+    private ArrayList<Integer> playerTauntMinionsHealthValues;
 
     public AIOpponent(GameScreen gameScreen, String hero){
         super(gameScreen, hero); //-Kyle
@@ -105,6 +106,14 @@ public class AIOpponent extends Player {
         return playableCardsList; //return the list of playable cards
     }
 
+    /**
+     *
+     * @param playerHandRegion
+     * @param opponentHandRegion
+     * @param playerActiveRegion
+     * @param opponentActiveRegion
+     * @param player
+     */
     private void aiTurnSetup(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion, Player player) { //Setup an up to date version of all the information the AI will use to make decisions upon what moves it takes - Scott
 
         //reset these to default values to prevent carry over values
@@ -121,9 +130,10 @@ public class AIOpponent extends Player {
         cardsInPlayerBoardRegion = playerActiveRegion.getCardsInRegion(); //get a copy of all the cards the player has in play
         cardsPlayableInAIHand = getCurrentlyPlayableCards(cardsInAIHandRegion); //get a copy of the actually playable cards from hand
 
-        //Create an ArrayList, that at maximum can have the amount of all cards in play (always <=20) for minions that only have taunt. Reset to 0 here to prevent previous data interfering.
-        playerTauntMinionsList.clear();
-        aiTauntMinionsList.clear();
+        //Create an ArrayList, that at maximum can have the amount of all cards in play (always <=11) for minions that only have taunt. Also ArrayList for the different health values.
+        playerTauntMinionsList = new ArrayList<>();
+        aiTauntMinionsList  = new ArrayList<>();
+        playerTauntMinionsHealthValues  = new ArrayList<>();
 
         playerHealth = humanPlayer.getCurrentHealth() + humanPlayer.getCurrentArmor(); //get the players total "health" by combining health and armour
         aiHealth = getCurrentHealth() + getCurrentArmor(); //get the ai total "health" by combining health and armour
@@ -137,68 +147,174 @@ public class AIOpponent extends Player {
 
     }
 
+    /**
+     *
+     */
     private void aiMovesSetup() { // Scott
-        if(playerHealth <= aiBoardCardValues[0]){ //If the current minions on board have an attack that would kill the player
-            if(playerTauntMinionsList.isEmpty()) { //If the player has no minions with taunt (blocking an attack)
-                aiCardListAttack(cardsInAIBoardRegion,null,true);
-            } else {
-                int tauntMinionsHealthTotal = 0;
-                ArrayList<MinionCard> tauntMinion = createMinionCards(playerTauntMinionsList);
-                for(int i=0; i<tauntMinion.size();i++) {
-                    tauntMinionsHealthTotal += tauntMinion.get(i).getHealth();
+        if(cardsInAIBoardRegion.size()!=0 || cardsInAIHandRegion.size()!=0) { //If the hand or board isnt empty..
+            if (cardsInAIBoardRegion.size() != 0) { //If the board isnt empty
+                int usedMinionDamage = 0;
+
+                ArrayList<MinionCard> aiMinionsList = createMinionCardsList(cardsInAIHandRegion);
+                if (playerHealth <= aiBoardCardValues[0]) { //If the current minions on board have an attack that would kill the player
+                    if (playerTauntMinionsList.isEmpty()) { //If the player has no minions with taunt (blocking an attack)
+                        aiCardListAttack(aiMinionsList, null, true);
+
+                    } else {
+                        int tauntMinionsHealthTotal = 0; //A total number for the combined taunt minions health.
+                        ArrayList<MinionCard> tauntMinions = createMinionCardsList(playerTauntMinionsList); //create a list of minion cards
+                        for (int i = 0; i < tauntMinions.size(); i++) {
+                            tauntMinionsHealthTotal += tauntMinions.get(i).getHealth(); //Calculate a total number of the combined taunt minions health.
+                            playerTauntMinionsHealthValues.add(tauntMinions.get(i).getHealth()); //Create a separated list of the individual health values
+                        }
+
+                        if (tauntMinionsHealthTotal + playerHealth <= aiBoardCardValues[0]) { //If there is lethal still after health and taunt minion health
+                            //calculate minions to attack taunts, then rest to face. Make sure minions attacking taunts are closest value
+                            int position = 0;
+                            for (int i = 0; i < playerTauntMinionsHealthValues.size(); i++) { //Go through all possible taunt minions on board
+                                position = findClosestMinionValues(aiMinionsList, playerTauntMinionsHealthValues.get(i)); //Find a minion that can kill the taunt in one hit with closest attack value to its health
+
+                                if (position == -1) { //If we couldnt find a minion that could kill the taunt in one hit
+                                    ArrayList<Integer> minimumNumberOfMinions = new ArrayList<>(); //Create storage for the minimum number of minions which could kill the taunt off
+                                    minimumNumberOfMinions.addAll(findMinimumMinionsToKill(aiMinionsList, playerTauntMinionsHealthValues.get(i))); //Create a list of minions which can kill off that taunt minion effectively
+
+                                    for(int j=0; j<minimumNumberOfMinions.size(); j++) {
+                                        aiAttack(aiMinionsList.get(minimumNumberOfMinions.get(j)), tauntMinions.get(i), false); //Attack with the found minions
+                                        usedMinionDamage += aiMinionsList.get(minimumNumberOfMinions.get(j)).getAttack();  //Attack the taunt
+                                    }
+                                } else { //We found a minion which can kill the taunt in one hit
+                                    aiAttack(aiMinionsList.get(position), tauntMinions.get(i), false);
+                                    usedMinionDamage += aiMinionsList.get(position).getAttack(); //Attack the taunt
+                                }
+
+                            }
+                            if(usedMinionDamage + playerHealth <= aiBoardCardValues[0]) { //If we still have enough damage to kill (as already attacked minions cant attack again)
+                                aiCardListAttack(aiMinionsList, null, true); //Attack the hero
+                            } else {
+                                //If weapons or spells worked, checks would be added here to see if their damage applied would have caused lethal
+                                if(manaRemaining>=2 && getHero()=="Hircine") {
+                                    if(usedMinionDamage + playerHealth <= aiBoardCardValues[0]+2) { //Can we kill with the hero power which deals 2 damage to the enemy
+                                        aiCardListAttack(aiMinionsList, null, true); //Attack the hero
+                                        useHeroAbilities(); //Deals bonus 2 damage if hero is Hircine.
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                } else { //Else currently the onboard minions cannot kill the player with just their damage.
+                    //If weapons or spells worked, checks would be added here to see if their damage applied would have caused lethal
+                    if(manaRemaining>=2 && getHero()=="Hircine") {
+                        if(playerHealth <= aiBoardCardValues[0]+2) { //Can we kill with the hero power which deals 2 damage to the enemy
+                            aiCardListAttack(aiMinionsList, null, true); //Attack the hero
+                            useHeroAbilities(); //Deals bonus 2 damage if hero is Hircine.
+                        }
+                    }
                 }
-                if(tauntMinionsHealthTotal+playerHealth <= aiBoardCardValues[0]) { //If there is lethal still after health and taunt minion health
-                    //calculate minions to attack taunts, then rest to face. Make sure minions attacking taunts are closest value
-                } else {
-                    //try seeing about spell and weapon cards and hircine hero power for lethal
-                }
+
+                //next look at how to defend the most effective way against enemy minions if they have lethal, and without, including placing taunt minions, spells, hero power
             }
-        } else {
-            //try seeing about spell and weapon cards and hircine hero power for lethal
+            if(cardsInAIHandRegion.size()!=0) //If the hand isnt empty
+            {
+                //play some minions
+            }
         }
-
-        //next look at how to defend the most effective way against enemy minions if they have lethal, and without, including placing taunt minions, spells, hero power
-
-        //then after this play some new minions
+        //do hero powers and already equipped weapon stuff here
 
         //do a check if a card is a weapon
-        if(isWeaponEquipped()) {
+        if (isWeaponEquipped()) {
             //only equip a new weapon if lethal or preventing enemy lethal.
         } else {
             //equip a weapon is a possible move
         }
+
     }
 
-    private ArrayList<MinionCard> createMinionCards(ArrayList<Card> cardsToBeChanged) { //Scott
-        ArrayList<MinionCard> tauntMinion = new ArrayList<>();
-        for(int i=0; i<playerTauntMinionsList.size();i++) {
-            tauntMinion.add((MinionCard) playerTauntMinionsList.get(i));
+    private ArrayList<MinionCard> createMinionCardsList(ArrayList<Card> cardsToBeChanged) { //Scott
+        ArrayList<MinionCard> minionList = new ArrayList<>();
+        for(int i=0; i<cardsToBeChanged.size();i++) {
+            if(cardsToBeChanged.get(i) instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
+                minionList.add((MinionCard) cardsToBeChanged.get(i));
+            }
         }
-        return tauntMinion;
+        return minionList;
     }
 
-    private void findClosestMinionValues(ArrayList<Card> minionsList, int valueToFind) { //Scott
+    private int findClosestMinionValues(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a minion which can kill off the other minion with the most efficient damage. -Scott
+        int positionOfCard = -1, closestAttack = Integer.MAX_VALUE;
         for(int i = 0; i<minionsList.size();i++) {
-            //if findingvalue=value, else
-            //findingvalue < currentFound && findingvalue >= value
+            if (minionsList.get(i).getCanAttack()) { //Check the minion hasnt attacked already this turn
+                int minionAttack = minionsList.get(i).getAttack(); //Get the value of the minion attack
+                if (minionAttack == valueToFind) { //If the minion attack is equal to value to find (taunt/enemy minion health)
+                    return i; //Use this card to kill the minion
+                } else if (minionAttack > valueToFind && minionAttack < closestAttack) { //Find a value thats closest to the enemy health, but is also bigger than it so it kills in one attack
+                    closestAttack = minionAttack;
+                    positionOfCard = i;
+                }
+            }
         }
+        return positionOfCard; //return any cards found
     }
 
-    private void aiCardListAttack(ArrayList<Card> listOfAttackingMinions, Card target, boolean attackingHero){ //Scott
+    private ArrayList<Integer> findMinimumMinionsToKill(ArrayList<MinionCard> minionsList, int valueToFind) { //Find a combination of minions to kill a minion efficiently, if a single minion was previously not able.
+        ArrayList<Integer> minimumNumberOfMinionsPositions = new ArrayList<>(); //Create a list for minion positions
+        ArrayList<Integer> cardAttackValues = new ArrayList<>(); //Create a list of all cards attack values
+        int closestAttack = 0, closestAttack2 = 0; //Create the closest attacks for trying to create valueToFind
+        for (int i = 0; i < minionsList.size(); i++) {
+            cardAttackValues.add(minionsList.get(i).getAttack()); //Create a list of minions attack values
+        }
+        for (int i = 0; i < cardAttackValues.size(); i++) { //Iterate through all the values available
+            for (int j = 0; j < cardAttackValues.size(); j++) {
+                if (valueToFind != closestAttack + closestAttack2) { //If the value to find isnt already made up on closestAttacks
+                    if (j != i) { //If the searches isnt looking at same card
+                        if (minionsList.get(j).getCanAttack() && minionsList.get(i).getCanAttack()) { //Check either of the minions haven't attacked already this turn
+                            if (closestAttack + closestAttack2 < valueToFind) { //If the closest attacks are less than value to find (first iteration will go here)
+                                if (cardAttackValues.get(i) + cardAttackValues.get(i) == valueToFind) { //See if currently looked at cards are the ones we want
+                                    closestAttack = cardAttackValues.get(i); //Set the new closest attack
+                                    closestAttack2 = cardAttackValues.get(j); //Set the new closest attack2
+                                    minimumNumberOfMinionsPositions.clear(); //Clear any leftover values
+                                    minimumNumberOfMinionsPositions.add(i, j); //Add in the two new positions of values found
+                                } else if ((cardAttackValues.get(i) + cardAttackValues.get(j) > valueToFind) || (cardAttackValues.get(i) + cardAttackValues.get(j) > closestAttack + closestAttack2)) {
+                                    //If the added values are greater than the value we want to find, or are just bigger than previously held values
+                                    closestAttack = cardAttackValues.get(i); //Set the new closest attack
+                                    closestAttack2 = cardAttackValues.get(j); //Set the new closest attack2
+                                    minimumNumberOfMinionsPositions.clear(); //Clear any leftover values
+                                    minimumNumberOfMinionsPositions.add(i, j); //Add in the two new positions of values found
+                                }
+                            } else if ((cardAttackValues.get(i) + cardAttackValues.get(j) >= valueToFind) && (cardAttackValues.get(i) + cardAttackValues.get(j) < closestAttack + closestAttack2)) {
+                                //If the added values are what we are looking for, or bigger than the value, as well as being smaller than previously stored added values, then store these as they are closer
+                                closestAttack = cardAttackValues.get(i); //Set the new closest attack
+                                closestAttack2 = cardAttackValues.get(j); //Set the new closest attack2
+                                minimumNumberOfMinionsPositions.clear(); //Clear any leftover values
+                                minimumNumberOfMinionsPositions.add(i, j); //Add in the two new positions of values found
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (closestAttack + closestAttack2 < valueToFind) { //If we found values that were closer, but didnt kill off the minion, we need to find another minion to make the value equal or greater than
+            int newValueToFind = valueToFind - closestAttack + closestAttack2; //Create a new value to found
+            int position = findClosestMinionValues(minionsList, newValueToFind); //Use the single minion finding method, see if we can kill the minion with just one more minion.
+            if (position == -1) { //If we couldnt find a single minion addition to kill off the target
+                minimumNumberOfMinionsPositions.addAll(findMinimumMinionsToKill(minionsList, newValueToFind)); //Recursively call this method to find more minions until we hit the target value and kill off the minion
+            }
+        }
+        return minimumNumberOfMinionsPositions; //When we have the list of minions positions needed, return these
+    }
+
+    private void aiCardListAttack(ArrayList<MinionCard> listOfAttackingMinions, MinionCard target, boolean attackingHero){ //Scott
         for(int i=0; i<listOfAttackingMinions.size(); i++){
             aiAttack(listOfAttackingMinions.get(i), target, attackingHero);
         }
     }
 
-    private void aiAttack(Card attacker, Card target, boolean attackingHero) { //Allow you to attack heros or minions - Scott
-        if(attacker instanceof MinionCard) { //Checking if the current card looked at is an instance of "MinionCard"
-            MinionCard attackingMinion = (MinionCard) attacker; //Get the card as a minion
-            if(attackingHero) { //Attack the enemy hero
-                attackingMinion.attackEnemy(attackingMinion, humanPlayer); //Attack the hero
-            } else if(target instanceof MinionCard) { //Attack the enemy card
-                MinionCard targetMinion = (MinionCard) target; //Get the card as a minion
-                attackingMinion.attackEnemy(attackingMinion, targetMinion); //Attack the minion
-            }
+    private void aiAttack(MinionCard attacker, MinionCard target, boolean attackingHero) { //Allow you to attack heros or minions - Scott
+        if(attackingHero) { //Attack the enemy hero
+            attacker.attackEnemy(attacker, humanPlayer); //Attack the hero
+        } else { //Attack the enemy card
+            attacker.attackEnemy(attacker, target); //Attack the minion
         }
     }
 
@@ -219,6 +335,7 @@ public class AIOpponent extends Player {
     public void aiTurn(HandRegion playerHandRegion, HandRegion opponentHandRegion, ActiveRegion playerActiveRegion, ActiveRegion opponentActiveRegion, Player player) { // Scott
         aiTurnSetup(playerHandRegion, opponentHandRegion, playerActiveRegion, opponentActiveRegion, player);
         aiMovesSetup();
+
         //cards that can be played (weapons if no weapon slot filled, spells always unless mana)
         //cards that can attack
         //any taunt minions in the way
