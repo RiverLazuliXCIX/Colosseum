@@ -77,7 +77,7 @@ public class GameRegion {
 
     /**
      * For each card still stored in the array list, repositions the card depending on its index.
-     * Use
+     *
      *
      */
 
