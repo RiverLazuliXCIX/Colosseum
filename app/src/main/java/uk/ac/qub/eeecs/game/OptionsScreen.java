@@ -20,6 +20,11 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.ui.FPSCounter; //Story P1
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
+/**
+ * Options Screen
+ * @author Scott Barham
+ * @author Dearbhaile Walsh
+ */
 public class OptionsScreen extends GameScreen {
 
     private FPSCounter fpsCounter;
@@ -123,7 +128,7 @@ public class OptionsScreen extends GameScreen {
                 .getAssetManager().getBitmap("OptionsBackground"), this);
     }
 
-    //Method that can be used repeatedly when setting preferences in the Update method:
+    //Method that can be used repeatedly when setting preferences in the update method - Dearbhaile (refactoring)
     public void setUpPreferences(PushButton pushButton, String dataType, boolean start, boolean finish) {
         if (pushButton.isPushTriggered()) {
             if (mGetPreference.getBoolean(dataType, start)) {

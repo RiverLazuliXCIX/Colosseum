@@ -31,6 +31,15 @@ import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Turn;
 import uk.ac.qub.eeecs.game.Colosseum.UserWhoStarts;
 
+/**
+* The game screen itself, coded by all members of the team
+ * @author Scott Barham
+ * @author Dearbhaile Walsh
+ * @author Kyle Corrigan
+ * @author Sean McCloskey
+ * @author Matthew Brunton
+ * @author Diarmuid Toal
+**/
 public class colosseumDemoScreen extends GameScreen {
 
     //////////////////

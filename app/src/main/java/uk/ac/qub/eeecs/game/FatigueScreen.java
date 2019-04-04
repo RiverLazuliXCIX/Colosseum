@@ -16,7 +16,12 @@ import uk.ac.qub.eeecs.gage.ui.TitleImage;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 
-//FatigueScreen, coded by Dearbhaile
+/**
+ * FatigueScreen, which pops up intermittently for 3 seconds during the game, to inform user that they've
+ * taken damage due to drawing from an empty card deck, and displays their cumulative damage taken
+ * @author Dearbhaile Walsh
+ */
+
 public class FatigueScreen extends GameScreen {
 
     //Variables required for the Fatigue Screen:

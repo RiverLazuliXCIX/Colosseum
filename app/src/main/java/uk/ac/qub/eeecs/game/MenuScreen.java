@@ -23,7 +23,10 @@ import uk.ac.qub.eeecs.gage.world.GameScreen;
 import uk.ac.qub.eeecs.gage.world.LayerViewport;
 import uk.ac.qub.eeecs.gage.ui.TitleImage;
 
-//Menu Screen implemented by Dearbhaile.
+/**
+ * Menu Screen
+ * @author Dearbhaile Walsh
+ */
 
 public class MenuScreen extends GameScreen {
 

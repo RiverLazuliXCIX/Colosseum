@@ -10,8 +10,9 @@ import uk.ac.qub.eeecs.game.FatigueScreen;
 import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
 
 /**
- * CardDeck Class, represents the player's (User/AI Opponent's) Deck of Cards in the Game.
- * @author Dearbhaile Walsh
+ * CardDeck Class, modelling the player's (User/AI Opponent's) Deck of Cards in the Game.
+ * @author Dearbhaile Walsh, with contributions from
+ * @author Sean McCloskey, said contributions are attributed
  */
 
 public class CardDeck {
@@ -36,10 +37,13 @@ public class CardDeck {
     //Random, to be used to 'choose' type of deck:
     private static final Random RANDOM = new Random();
 
-    //Values for positioning cards:
+    /**
+     /Values for positioning cards
+     @author Sean McCloskey
+     **/
     private static final float X_POSITION = 160f, Y_POSITION = 25f;
-    float x = X_POSITION;
-    float y = Y_POSITION;
+    private float x = X_POSITION;
+    private float y = Y_POSITION;
 
     //Variables required for Initialising Card Values:
     private String name = "";
@@ -124,8 +128,11 @@ public class CardDeck {
         for (int i = 0; i < cardAmt; i++) {
 
             if (getDeckID() == 2) {
+                /**
+                @author: Sean McCloskey
                 //Enemy cards are positioned differently, and
                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
@@ -167,8 +174,11 @@ public class CardDeck {
     public void insertSpellCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             if(getDeckID() == 2) {
-                //Enemy cards are positioned differently, and
-                //have different attributes than the player's:
+                /**
+                 @author: Sean McCloskey
+                 //Enemy cards are positioned differently, and
+                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
@@ -176,25 +186,25 @@ public class CardDeck {
             switch (randomNum) {
                 //Inserts random Spell Cards into the deck:
                 case 0:
-                    setSpellValues("Card_Aegis", 3, Effect.NONE, 3);
+                    setSpellValues("Card_Aegis", 3, Effect.NONE, 1);
                     break;
                 case 1:
-                    setSpellValues("Card_Cavalry", 3, Effect.NONE, 2);
+                    setSpellValues("Card_Cavalry", 3, Effect.NONE, 1);
                     break;
                 case 2:
-                    setSpellValues("Card_Commander", 6, Effect.NONE, 4);
+                    setSpellValues("Card_Commander", 6, Effect.NONE, 1);
                     break;
                 case 3:
-                    setSpellValues("Card_Touch", 5, Effect.NONE, 4);
+                    setSpellValues("Card_Touch", 5, Effect.NONE, 1);
                     break;
                 case 4:
                     setSpellValues("Card_Aurora", 2, Effect.NONE, 1);
                     break;
                 case 5:
-                    setSpellValues("Card_Strike", 4, Effect.NONE, 2);
+                    setSpellValues("Card_Strike", 4, Effect.NONE, 1);
                     break;
                 case 6:
-                    setSpellValues("Card_Rete", 6, Effect.NONE, 5);
+                    setSpellValues("Card_Rete", 6, Effect.NONE, 1);
                     break;
             }
             SpellCard mSpell = new SpellCard(x, y, mGameScreen, 3, enemyDeck, name, Effect.NONE, 1);
@@ -213,8 +223,11 @@ public class CardDeck {
     public void insertWeaponCard(int cardAmt) {
         for (int i = 0; i < cardAmt; i++) {
             if (getDeckID() == 2) {
-                //Enemy cards are positioned differently, and
-                //have different attributes than the player's:
+                /**
+                 @author: Sean McCloskey
+                 //Enemy cards are positioned differently, and
+                 //have different attributes than the player's:
+                 **/
                 enemyDeck = true;
                 y *= 9.8f;
             }
@@ -222,13 +235,13 @@ public class CardDeck {
             int randomNum = RANDOM.nextInt(3);
             switch (randomNum) {
                 case 0:
-                    setWeaponValues("Card_Hasta", 4, 3, 2);
+                    setWeaponValues("Card_Hasta", 4, 3, 1);
                     break;
                 case 1:
                     setWeaponValues("Card_Scourge", 5, 5, 1);
                     break;
                 case 2:
-                    setWeaponValues("Card_Bow", 3, 2, 3);
+                    setWeaponValues("Card_Bow", 3, 2, 1);
                     break;
             }
                 WeaponCard mWeapon = new WeaponCard(x, y, mGameScreen, coinCost, enemyDeck, name, damage, charges);
