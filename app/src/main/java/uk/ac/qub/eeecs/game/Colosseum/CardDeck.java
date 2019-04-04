@@ -5,6 +5,7 @@ import java.util.Random;
 
 import uk.ac.qub.eeecs.gage.Game;
 import uk.ac.qub.eeecs.gage.world.GameScreen;
+import uk.ac.qub.eeecs.game.Colosseum.Regions.ActiveRegion;
 import uk.ac.qub.eeecs.game.Colosseum.Regions.HandRegion;
 import uk.ac.qub.eeecs.game.FatigueScreen;
 import uk.ac.qub.eeecs.game.TestClasses.FatigueScreenForTesting;
@@ -315,14 +316,8 @@ public class CardDeck {
         mDiscardPile.add(cardToDiscard);
     }
 
-    public void discardCards_EndOfTurn() {
-        //Called at end of turn, to remove discarded cards from board:
-        for (int i = mCardHand.size()-1; i >= 0; i--) {
-            //All cards with the 'toBeDiscarded' flag set to true get removed:
-            if (mCardHand.get(i).gettoBeDiscarded()) {
-                discardCards(mCardHand.get(i));
-            }
-        }
+    public void discardCards_EndOfTurn(Card disCard) {
+        discardCards(disCard);
     }
 
     public void checkForDeadCards() { //Called constantly on both decks throughout game

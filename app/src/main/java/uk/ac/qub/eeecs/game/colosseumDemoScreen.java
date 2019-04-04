@@ -279,6 +279,7 @@ public class colosseumDemoScreen extends GameScreen {
 
     @Override
     public void update(ElapsedTime elapsedTime) {
+
         if (startTimeRecorded == false) {
             startTime = System.currentTimeMillis(); //Start recording the game's start time
             startTimeRecorded = true; //Mark startTimeRecorded as true, so it will not run again.
@@ -368,7 +369,17 @@ public class colosseumDemoScreen extends GameScreen {
                 mEndTurnButtonOff.update(elapsedTime);
 
                 if (mEndTurnButton.isPushTriggered() && mPlayer.getYourTurn()) {
-                    mPlayerDeck.discardCards_EndOfTurn();
+                    CardDeck d = mPlayerDeck;
+                    //mPlayerDeck.discardCards_EndOfTurn();
+                    int sizeOfRegionInit = playerActiveRegion.getCardsInRegion().size() - 1;
+                    for(int i = sizeOfRegionInit; i >= 0; i--) {
+                        Card disCard = playerActiveRegion.getCardsInRegion().get(i);
+                        if(disCard.gettoBeDiscarded()) {
+                            mPlayerDeck.discardCards_EndOfTurn(disCard);
+                            playerActiveRegion.removeCard(disCard);
+                        }
+                    }
+
                     endPlayerTurn();
                 }
 
@@ -383,6 +394,8 @@ public class colosseumDemoScreen extends GameScreen {
             }
         }
     }
+
+
 
     //////////////////////////////
     //       DRAW METHODS       //
