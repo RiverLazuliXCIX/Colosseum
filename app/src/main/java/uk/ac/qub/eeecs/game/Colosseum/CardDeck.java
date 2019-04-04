@@ -303,12 +303,12 @@ public class CardDeck {
     }
 
     //This method destroys a card if player draws one when their hand is already full
-    //Player hand can be of max size 5, and any additional cards drawn are an unfair advantage:
+    //Player hand can be of max size 8, and any additional cards drawn are an unfair advantage:
     public void destroyCardOverLimit() {
-        if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >5 cards in their hand
+        if (mCardHand.size() > MAX_HAND_CARDS) { //Checks has player got >8 cards in their hand
             for (int i = 8; i < mCardHand.size(); i++) {
                 Card cardOver = mCardHand.get(mCardHand.size() - 1);
-                mCardHand.remove(cardOver); //Destroys every card above 5 in hand
+                mCardHand.remove(cardOver); //Destroys every card above 8 in hand
             }
         }
     }
