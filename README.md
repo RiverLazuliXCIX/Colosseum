@@ -1,5 +1,5 @@
 # Colosseum
-A card game built with Android Studio as part of our second year module CSC2044 at Queen's University Belfast.
+A card game built with Android Studio as part of our second year module CSC2044 at Queen's University Belfast. [Imported from GitLab](https://gitlab.eeecs.qub.ac.uk/csc-lvl2-1819/csc-lvl2-1819-133).
 
 ## How to Play
 ### Start of game
